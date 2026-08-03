@@ -1,23 +1,20 @@
 <!--
-  REZA JORDAAN | Shoelace Intro Loader
+  REZA JORDAAN | Premium Canvas Shoelace Intro
   قابل استفاده در وردپرس / المنتور / WPCode
 
-  پیشنهاد نصب:
-  این کد را در Header سایت قرار بدهید تا قبل از کامل دیده شدن صفحه فعال شود.
+  بهترین محل نصب: ابتدای body یا Body Start
 -->
 
 <script>
 (function () {
-  var key = "rj_shoelace_intro_seen_v1";
+  var key = "rj_shoelace_intro_seen_v2";
 
   try {
     if (window.localStorage && localStorage.getItem(key) === "1") {
       document.documentElement.setAttribute("data-rj-lace-intro", "seen");
       return;
     }
-  } catch (error) {
-    /* اگر مرورگر localStorage را محدود کرده باشد، فقط همین بازدید نمایش داده می‌شود. */
-  }
+  } catch (error) {}
 
   document.documentElement.setAttribute("data-rj-lace-intro", "new");
 })();
@@ -25,20 +22,17 @@
 
 <style>
   :root{
-    --rj-lace-bg:#07111e;
-    --rj-lace-card:rgba(8,18,32,.76);
-    --rj-lace-text:#ffffff;
-    --rj-lace-muted:rgba(255,255,255,.76);
-    --rj-lace-blue:#1097ff;
-    --rj-lace-cyan:#31d4ff;
-    --rj-lace-orange:#ff8a16;
+    --rj-lace-blue:#129cff;
+    --rj-lace-cyan:#43d7ff;
+    --rj-lace-amber:#ff9c24;
     --rj-lace-white:#f8fbff;
+    --rj-lace-ink:#07111e;
   }
 
   html[data-rj-lace-intro="new"],
   html[data-rj-lace-intro="new"] body{
-    overflow:hidden!important;
     width:100%!important;
+    overflow:hidden!important;
   }
 
   html[data-rj-lace-intro="seen"] .rj-lace-intro{
@@ -59,16 +53,16 @@
     direction:rtl;
     padding:clamp(14px,3vw,34px);
     overflow:hidden;
-    color:var(--rj-lace-text);
+    color:#fff;
     background:
-      radial-gradient(circle at 50% 38%,rgba(16,151,255,.18),transparent 34%),
-      radial-gradient(circle at 24% 82%,rgba(255,138,22,.18),transparent 30%),
-      linear-gradient(145deg,rgba(4,10,18,.68),rgba(8,18,32,.54));
+      radial-gradient(circle at 50% 35%,rgba(18,156,255,.24),transparent 34%),
+      radial-gradient(circle at 24% 82%,rgba(255,156,36,.18),transparent 30%),
+      linear-gradient(145deg,rgba(3,8,15,.72),rgba(7,17,30,.58));
     font-family:inherit;
     opacity:1;
     visibility:visible;
-    transition:opacity .55s ease,visibility .55s ease;
     isolation:isolate;
+    transition:opacity .58s ease,visibility .58s ease;
   }
 
   .rj-lace-intro::before{
@@ -76,11 +70,11 @@
     position:absolute;
     inset:0;
     z-index:-2;
-    backdrop-filter:blur(11px) saturate(1.15) brightness(.78);
-    -webkit-backdrop-filter:blur(11px) saturate(1.15) brightness(.78);
     background:
-      linear-gradient(180deg,rgba(5,11,20,.38),rgba(5,11,20,.7)),
-      rgba(3,8,14,.28);
+      linear-gradient(180deg,rgba(4,10,18,.36),rgba(4,10,18,.78)),
+      rgba(4,10,18,.22);
+    backdrop-filter:blur(12px) saturate(1.14) brightness(.8);
+    -webkit-backdrop-filter:blur(12px) saturate(1.14) brightness(.8);
   }
 
   .rj-lace-intro::after{
@@ -89,7 +83,7 @@
     inset:auto -18% -34% -18%;
     z-index:-1;
     height:52%;
-    opacity:.4;
+    opacity:.36;
     background:
       linear-gradient(90deg,transparent 0 10%,rgba(255,255,255,.08) 10% 10.7%,transparent 10.7% 18%),
       repeating-linear-gradient(135deg,rgba(255,255,255,.07) 0 2px,transparent 2px 16px);
@@ -102,23 +96,16 @@
     pointer-events:none;
   }
 
-  .rj-lace-card{
+  .rj-lace-shell{
     position:relative;
     width:min(960px,100%);
-    max-width:100%;
     min-height:min(760px,calc(100svh - 28px));
     display:grid;
     grid-template-rows:1fr auto;
     align-items:center;
     justify-items:center;
-    gap:clamp(18px,3vw,28px);
-    padding:clamp(48px,6vw,74px) clamp(18px,4vw,48px) clamp(28px,4vw,46px);
-    border:0;
-    border-radius:0;
-    background:transparent;
-    box-shadow:none;
+    padding:clamp(58px,7vw,82px) clamp(12px,4vw,48px) clamp(26px,4vw,48px);
     text-align:center;
-    overflow:visible;
   }
 
   .rj-lace-brand{
@@ -129,8 +116,8 @@
     display:inline-flex;
     align-items:center;
     gap:8px;
-    color:rgba(255,255,255,.78);
     direction:ltr;
+    color:rgba(255,255,255,.84);
     font-size:11px;
     font-weight:800;
     letter-spacing:.16em;
@@ -143,7 +130,7 @@
     height:8px;
     border-radius:50%;
     background:linear-gradient(135deg,var(--rj-lace-blue),var(--rj-lace-cyan));
-    box-shadow:0 0 18px rgba(49,212,255,.65);
+    box-shadow:0 0 18px rgba(67,215,255,.72);
   }
 
   .rj-lace-skip{
@@ -151,172 +138,89 @@
     top:clamp(12px,3vw,22px);
     left:clamp(12px,3vw,22px);
     z-index:5;
-    min-width:74px;
-    padding:9px 13px;
-    border:1px solid rgba(255,255,255,.28);
+    min-width:76px;
+    padding:9px 14px;
+    border:1px solid rgba(255,255,255,.3);
     border-radius:999px;
     cursor:pointer;
-    color:rgba(255,255,255,.88);
-    background:rgba(10,22,38,.38);
+    color:rgba(255,255,255,.9);
+    background:rgba(8,18,32,.45);
     backdrop-filter:blur(10px);
     -webkit-backdrop-filter:blur(10px);
     font:inherit;
     font-size:12px;
-    font-weight:700;
+    font-weight:800;
     transition:transform .22s ease,background .22s ease,border-color .22s ease;
   }
 
   .rj-lace-skip:hover,
   .rj-lace-skip:focus-visible{
     transform:translateY(-1px);
-    border-color:rgba(255,255,255,.36);
+    border-color:rgba(255,255,255,.48);
     background:rgba(255,255,255,.14);
   }
 
   .rj-lace-stage{
     position:relative;
-    width:min(880px,98vw);
-    margin-top:clamp(12px,3vh,26px);
-    aspect-ratio:900/520;
+    width:min(920px,112vw);
+    aspect-ratio:900/500;
+    margin-top:clamp(0px,2vh,22px);
   }
 
-  .rj-lace-glow{
+  .rj-lace-stage::before{
+    content:"";
     position:absolute;
-    inset:17% 8% 8%;
+    inset:18% 9% 2%;
     border-radius:50%;
-    opacity:.78;
+    opacity:.76;
     background:
-      radial-gradient(circle at 50% 48%,rgba(49,212,255,.32),transparent 38%),
-      radial-gradient(circle at 50% 56%,rgba(255,138,22,.2),transparent 52%);
-    filter:blur(18px);
-    animation:rjGlow 2.8s ease-in-out infinite;
+      radial-gradient(circle at 50% 47%,rgba(67,215,255,.33),transparent 37%),
+      radial-gradient(circle at 50% 58%,rgba(255,156,36,.2),transparent 54%);
+    filter:blur(22px);
+    animation:rjLaceGlow 2.8s ease-in-out infinite;
   }
 
-  .rj-lace-svg{
+  .rj-lace-canvas{
     position:relative;
     z-index:1;
+    display:block;
     width:100%;
     height:100%;
-    overflow:visible;
-    filter:drop-shadow(0 28px 30px rgba(0,0,0,.42));
-  }
-
-  .rj-lace-svg .lace{
-    fill:none;
-    stroke-linecap:round;
-    stroke-linejoin:round;
-    transition:transform 1.25s cubic-bezier(.18,.8,.16,1),opacity .55s ease,stroke-dashoffset 1.1s ease;
-    will-change:transform,opacity;
-  }
-
-  .rj-lace-svg .lace-shadow{
-    opacity:.34;
-    stroke:#07111e;
-    stroke-width:42;
-  }
-
-  .rj-lace-svg .lace-main{
-    stroke:url(#rjLaceGradient);
-    stroke-width:31;
-  }
-
-  .rj-lace-svg .lace-thread{
-    stroke:url(#rjThreadGradient);
-    stroke-width:5;
-    stroke-dasharray:18 16;
-    opacity:.9;
-  }
-
-  .rj-lace-svg .knot{
-    transition:transform .9s cubic-bezier(.18,.8,.16,1),opacity .55s ease;
-    transform-origin:450px 260px;
-    will-change:transform,opacity;
-  }
-
-  .rj-lace-svg .aglet{
-    fill:url(#rjAgletGradient);
-    stroke:rgba(255,255,255,.65);
-    stroke-width:2;
-    transition:transform 1.25s cubic-bezier(.18,.8,.16,1),opacity .55s ease;
-    transform-box:fill-box;
-    transform-origin:center;
-  }
-
-  .rj-lace-intro.is-untying .left-loop{
-    transform:translate(-205px,18px) rotate(-16deg) scaleX(1.14);
-  }
-
-  .rj-lace-intro.is-untying .right-loop{
-    transform:translate(205px,18px) rotate(16deg) scaleX(1.14);
-  }
-
-  .rj-lace-intro.is-untying .left-tail{
-    transform:translate(-260px,-34px) rotate(-8deg);
-  }
-
-  .rj-lace-intro.is-untying .right-tail{
-    transform:translate(260px,-34px) rotate(8deg);
-  }
-
-  .rj-lace-intro.is-untying .cross-left{
-    transform:translate(-112px,78px) rotate(-14deg);
-    opacity:.86;
-  }
-
-  .rj-lace-intro.is-untying .cross-right{
-    transform:translate(112px,78px) rotate(14deg);
-    opacity:.86;
-  }
-
-  .rj-lace-intro.is-untying .lace-thread{
-    stroke-dashoffset:-90;
-  }
-
-  .rj-lace-intro.is-untying .knot{
-    transform:scale(.5) rotate(28deg);
-    opacity:0;
-  }
-
-  .rj-lace-intro.is-untying .left-aglet{
-    transform:translate(-250px,-38px) rotate(-18deg);
-  }
-
-  .rj-lace-intro.is-untying .right-aglet{
-    transform:translate(250px,-38px) rotate(18deg);
+    filter:drop-shadow(0 30px 34px rgba(0,0,0,.48));
   }
 
   .rj-lace-copy{
     position:relative;
     z-index:2;
     width:min(560px,calc(100vw - 32px));
-    margin-top:clamp(-34px,-3vw,-12px);
+    margin-top:clamp(-42px,-3vw,-14px);
     padding:clamp(18px,3vw,25px) clamp(18px,4vw,34px) clamp(20px,3vw,28px);
-    border:1px solid rgba(255,255,255,.2);
+    border:1px solid rgba(255,255,255,.22);
     border-radius:32px;
     background:
-      linear-gradient(180deg,rgba(255,255,255,.13),rgba(255,255,255,.04)),
-      rgba(7,17,31,.55);
+      linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.04)),
+      rgba(7,17,31,.58);
     box-shadow:
-      0 22px 55px rgba(0,0,0,.32),
+      0 24px 60px rgba(0,0,0,.34),
       inset 0 1px 0 rgba(255,255,255,.22);
-    backdrop-filter:blur(14px) saturate(1.16);
-    -webkit-backdrop-filter:blur(14px) saturate(1.16);
+    backdrop-filter:blur(15px) saturate(1.16);
+    -webkit-backdrop-filter:blur(15px) saturate(1.16);
   }
 
   .rj-lace-title{
     margin:0;
     color:#fff;
-    font-size:clamp(27px,5.7vw,44px);
+    font-size:clamp(27px,5.4vw,43px);
     font-weight:900;
     line-height:1.55;
-    text-shadow:0 8px 26px rgba(0,0,0,.34);
+    text-shadow:0 8px 26px rgba(0,0,0,.36);
   }
 
   .rj-lace-subtitle{
     max-width:430px;
     margin:9px auto 0;
     color:rgba(255,255,255,.82);
-    font-size:clamp(13px,2.7vw,16px);
+    font-size:clamp(13px,2.6vw,16px);
     line-height:1.9;
   }
 
@@ -325,19 +229,19 @@
     align-items:center;
     justify-content:center;
     gap:9px;
-    min-width:208px;
+    min-width:210px;
     margin-top:22px;
     padding:15px 24px;
-    border:1px solid rgba(255,255,255,.26);
+    border:1px solid rgba(255,255,255,.28);
     border-radius:999px;
     cursor:pointer;
     color:#fff;
     background:
-      linear-gradient(135deg,var(--rj-lace-blue),#086fe8 58%,#015ed0),
+      linear-gradient(135deg,var(--rj-lace-blue),#0874ed 58%,#015ed0),
       var(--rj-lace-blue);
     box-shadow:
-      0 18px 35px rgba(16,151,255,.34),
-      inset 0 1px 0 rgba(255,255,255,.28);
+      0 18px 35px rgba(18,156,255,.36),
+      inset 0 1px 0 rgba(255,255,255,.3);
     font:inherit;
     font-size:15px;
     font-weight:900;
@@ -354,16 +258,16 @@
   .rj-lace-open:focus-visible{
     transform:translateY(-2px);
     box-shadow:
-      0 22px 44px rgba(16,151,255,.44),
-      inset 0 1px 0 rgba(255,255,255,.3);
+      0 22px 44px rgba(18,156,255,.46),
+      inset 0 1px 0 rgba(255,255,255,.34);
   }
 
   .rj-lace-intro.is-untying .rj-lace-open{
-    filter:saturate(.8);
+    filter:saturate(.82);
     pointer-events:none;
   }
 
-  @keyframes rjGlow{
+  @keyframes rjLaceGlow{
     0%,100%{transform:scale(.98);opacity:.62}
     50%{transform:scale(1.05);opacity:.86}
   }
@@ -373,16 +277,15 @@
       padding:14px;
     }
 
-    .rj-lace-card{
+    .rj-lace-shell{
       width:100%;
       min-height:calc(100svh - 28px);
       padding:58px 0 28px;
     }
 
     .rj-lace-stage{
-      width:min(114vw,520px);
-      max-width:none;
-      margin-top:1.5vh;
+      width:min(116vw,540px);
+      margin-top:2vh;
     }
 
     .rj-lace-copy{
@@ -407,7 +310,7 @@
     }
 
     .rj-lace-stage{
-      width:min(110vw,450px);
+      width:min(112vw,460px);
     }
   }
 
@@ -424,7 +327,7 @@
 </style>
 
 <div class="rj-lace-intro" id="rjLaceIntro" role="dialog" aria-modal="true" aria-label="ورود به فروشگاه رضا جردن">
-  <div class="rj-lace-card">
+  <div class="rj-lace-shell">
     <span class="rj-lace-brand">REZA JORDAAN</span>
 
     <button class="rj-lace-skip" type="button" data-rj-lace-close>
@@ -432,65 +335,7 @@
     </button>
 
     <div class="rj-lace-stage" aria-hidden="true">
-      <span class="rj-lace-glow"></span>
-
-      <svg class="rj-lace-svg" viewBox="0 0 900 520" role="img" aria-label="">
-        <defs>
-          <linearGradient id="rjLaceGradient" x1="0" y1="0" x2="900" y2="0" gradientUnits="userSpaceOnUse">
-            <stop offset="0" stop-color="#e7edf7"/>
-            <stop offset=".18" stop-color="#ffffff"/>
-            <stop offset=".34" stop-color="#cfeaff"/>
-            <stop offset=".52" stop-color="#ffffff"/>
-            <stop offset=".7" stop-color="#dff4ff"/>
-            <stop offset="1" stop-color="#f8fbff"/>
-          </linearGradient>
-
-          <linearGradient id="rjThreadGradient" x1="0" y1="0" x2="900" y2="0" gradientUnits="userSpaceOnUse">
-            <stop offset="0" stop-color="#1097ff"/>
-            <stop offset=".48" stop-color="#31d4ff"/>
-            <stop offset="1" stop-color="#ff8a16"/>
-          </linearGradient>
-
-          <linearGradient id="rjAgletGradient" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="#ffffff"/>
-            <stop offset=".48" stop-color="#97a9b9"/>
-            <stop offset="1" stop-color="#f4f7fb"/>
-          </linearGradient>
-        </defs>
-
-        <path class="lace lace-shadow left-loop" d="M455 260 C352 124 166 140 144 247 C124 343 300 361 438 268"/>
-        <path class="lace lace-shadow right-loop" d="M445 260 C548 124 734 140 756 247 C776 343 600 361 462 268"/>
-        <path class="lace lace-shadow cross-left" d="M116 276 C266 252 340 239 455 260"/>
-        <path class="lace lace-shadow cross-right" d="M784 276 C634 252 560 239 445 260"/>
-        <path class="lace lace-shadow left-tail" d="M430 275 C330 314 215 383 76 433"/>
-        <path class="lace lace-shadow right-tail" d="M470 275 C570 314 685 383 824 433"/>
-
-        <path class="lace lace-main left-loop" d="M455 260 C352 124 166 140 144 247 C124 343 300 361 438 268"/>
-        <path class="lace lace-main right-loop" d="M445 260 C548 124 734 140 756 247 C776 343 600 361 462 268"/>
-        <path class="lace lace-main cross-left" d="M116 276 C266 252 340 239 455 260"/>
-        <path class="lace lace-main cross-right" d="M784 276 C634 252 560 239 445 260"/>
-        <path class="lace lace-main left-tail" d="M430 275 C330 314 215 383 76 433"/>
-        <path class="lace lace-main right-tail" d="M470 275 C570 314 685 383 824 433"/>
-
-        <path class="lace lace-thread left-loop" d="M455 260 C352 124 166 140 144 247 C124 343 300 361 438 268"/>
-        <path class="lace lace-thread right-loop" d="M445 260 C548 124 734 140 756 247 C776 343 600 361 462 268"/>
-        <path class="lace lace-thread cross-left" d="M116 276 C266 252 340 239 455 260"/>
-        <path class="lace lace-thread cross-right" d="M784 276 C634 252 560 239 445 260"/>
-        <path class="lace lace-thread left-tail" d="M430 275 C330 314 215 383 76 433"/>
-        <path class="lace lace-thread right-tail" d="M470 275 C570 314 685 383 824 433"/>
-
-        <g class="knot">
-          <ellipse cx="450" cy="260" rx="58" ry="42" fill="rgba(6,13,23,.35)"/>
-          <path d="M402 246 C421 205 483 204 504 246 C485 270 425 271 402 246Z" fill="url(#rjLaceGradient)"/>
-          <path d="M396 274 C424 241 480 241 506 274 C480 304 423 304 396 274Z" fill="url(#rjLaceGradient)"/>
-          <path d="M410 248 C430 267 469 268 491 248" fill="none" stroke="rgba(5,14,24,.24)" stroke-width="5" stroke-linecap="round"/>
-          <path d="M410 273 C431 257 469 257 491 273" fill="none" stroke="rgba(5,14,24,.18)" stroke-width="5" stroke-linecap="round"/>
-          <path d="M414 244 C435 236 465 236 486 244" fill="none" stroke="rgba(49,212,255,.58)" stroke-width="4" stroke-linecap="round" stroke-dasharray="12 10"/>
-        </g>
-
-        <rect class="aglet left-aglet" x="44" y="418" width="68" height="24" rx="12" transform="rotate(-18 78 430)"/>
-        <rect class="aglet right-aglet" x="788" y="418" width="68" height="24" rx="12" transform="rotate(18 822 430)"/>
-      </svg>
+      <canvas class="rj-lace-canvas" id="rjLaceCanvas"></canvas>
     </div>
 
     <div class="rj-lace-copy">
@@ -506,12 +351,31 @@
 <script>
 (function () {
   var intro = document.getElementById("rjLaceIntro");
-  if (!intro) return;
+  var canvas = document.getElementById("rjLaceCanvas");
+  if (!intro || !canvas) return;
 
-  var key = "rj_shoelace_intro_seen_v1";
+  var key = "rj_shoelace_intro_seen_v2";
+  var ctx = canvas.getContext("2d");
   var openButton = intro.querySelector("[data-rj-lace-open]");
   var closeButtons = intro.querySelectorAll("[data-rj-lace-close]");
+  var reducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var done = false;
+  var progress = 0;
+  var dpr = 1;
+  var sceneWidth = 900;
+  var sceneHeight = 500;
+
+  function easeOutCubic(t) {
+    return 1 - Math.pow(1 - t, 3);
+  }
+
+  function easeInOut(t) {
+    return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  }
+
+  function lerp(a, b, t) {
+    return a + (b - a) * t;
+  }
 
   function remember() {
     try {
@@ -519,6 +383,298 @@
         localStorage.setItem(key, "1");
       }
     } catch (error) {}
+  }
+
+  function resizeCanvas() {
+    var rect = canvas.getBoundingClientRect();
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.max(1, Math.round(rect.width * dpr));
+    canvas.height = Math.max(1, Math.round(rect.height * dpr));
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    draw(progress, performance.now());
+  }
+
+  function sceneTransform() {
+    var rect = canvas.getBoundingClientRect();
+    var scale = Math.min(rect.width / sceneWidth, rect.height / sceneHeight);
+    var offsetX = (rect.width - sceneWidth * scale) / 2;
+    var offsetY = (rect.height - sceneHeight * scale) / 2;
+    return { scale:scale, offsetX:offsetX, offsetY:offsetY };
+  }
+
+  function applyPoint(x, y, transform) {
+    var ox = transform.ox || 450;
+    var oy = transform.oy || 250;
+    var sx = transform.sx == null ? 1 : transform.sx;
+    var sy = transform.sy == null ? 1 : transform.sy;
+    var rot = transform.rot || 0;
+    var tx = transform.tx || 0;
+    var ty = transform.ty || 0;
+    var dx = (x - ox) * sx;
+    var dy = (y - oy) * sy;
+    var cos = Math.cos(rot);
+    var sin = Math.sin(rot);
+
+    return {
+      x:ox + dx * cos - dy * sin + tx,
+      y:oy + dx * sin + dy * cos + ty
+    };
+  }
+
+  function makePath(commands, transform) {
+    var path = new Path2D();
+    commands.forEach(function (command) {
+      var p;
+      if (command[0] === "M") {
+        p = applyPoint(command[1], command[2], transform);
+        path.moveTo(p.x, p.y);
+      }
+
+      if (command[0] === "C") {
+        var p1 = applyPoint(command[1], command[2], transform);
+        var p2 = applyPoint(command[3], command[4], transform);
+        var p3 = applyPoint(command[5], command[6], transform);
+        path.bezierCurveTo(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y);
+      }
+    });
+
+    return path;
+  }
+
+  function strokePath(path, width, alpha, dashOffset) {
+    var gradient = ctx.createLinearGradient(90, 0, 810, 0);
+    gradient.addColorStop(0, "#e6edf7");
+    gradient.addColorStop(.2, "#ffffff");
+    gradient.addColorStop(.42, "#dff6ff");
+    gradient.addColorStop(.62, "#ffffff");
+    gradient.addColorStop(.82, "#e9f8ff");
+    gradient.addColorStop(1, "#f8fbff");
+
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+
+    ctx.shadowColor = "rgba(0,0,0,.42)";
+    ctx.shadowBlur = 18;
+    ctx.shadowOffsetY = 14;
+    ctx.strokeStyle = "rgba(5,10,18,.36)";
+    ctx.lineWidth = width + 20;
+    ctx.stroke(path);
+
+    ctx.shadowBlur = 0;
+    ctx.shadowOffsetY = 0;
+    ctx.strokeStyle = gradient;
+    ctx.lineWidth = width;
+    ctx.stroke(path);
+
+    ctx.strokeStyle = "rgba(255,255,255,.72)";
+    ctx.lineWidth = Math.max(2, width * .18);
+    ctx.stroke(path);
+
+    ctx.setLineDash([18, 17]);
+    ctx.lineDashOffset = dashOffset;
+    var thread = ctx.createLinearGradient(90, 0, 810, 0);
+    thread.addColorStop(0, "#129cff");
+    thread.addColorStop(.52, "#43d7ff");
+    thread.addColorStop(1, "#ff9c24");
+    ctx.strokeStyle = thread;
+    ctx.lineWidth = Math.max(3, width * .15);
+    ctx.stroke(path);
+
+    ctx.restore();
+  }
+
+  function drawKnot(p, pulse) {
+    var alpha = Math.max(0, 1 - p * 1.45);
+    var scale = lerp(1, .58, easeOutCubic(p));
+    var rotation = lerp(0, .45, easeInOut(p));
+
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.translate(450, 250);
+    ctx.rotate(rotation);
+    ctx.scale(scale + pulse * .01, scale + pulse * .01);
+
+    ctx.shadowColor = "rgba(0,0,0,.36)";
+    ctx.shadowBlur = 22;
+    ctx.shadowOffsetY = 14;
+    ctx.fillStyle = "rgba(4,9,16,.3)";
+    ctx.beginPath();
+    ctx.ellipse(0, 10, 76, 45, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.shadowBlur = 0;
+    var knotGradient = ctx.createLinearGradient(-74, -46, 74, 46);
+    knotGradient.addColorStop(0, "#f9fcff");
+    knotGradient.addColorStop(.36, "#dce9f4");
+    knotGradient.addColorStop(.66, "#ffffff");
+    knotGradient.addColorStop(1, "#cbd8e4");
+
+    ctx.fillStyle = knotGradient;
+    ctx.beginPath();
+    ctx.ellipse(-20, -5, 56, 28, -.16, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.ellipse(22, 10, 58, 29, .18, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.strokeStyle = "rgba(5,12,20,.18)";
+    ctx.lineWidth = 5;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(-58, -2);
+    ctx.bezierCurveTo(-24, 13, 24, 14, 58, -2);
+    ctx.stroke();
+
+    ctx.strokeStyle = "rgba(67,215,255,.58)";
+    ctx.lineWidth = 4;
+    ctx.setLineDash([12, 10]);
+    ctx.beginPath();
+    ctx.moveTo(-48, -13);
+    ctx.bezierCurveTo(-18, -23, 24, -21, 50, -9);
+    ctx.stroke();
+
+    ctx.restore();
+  }
+
+  function drawAglet(x, y, rot, alpha) {
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.translate(x, y);
+    ctx.rotate(rot);
+    ctx.shadowColor = "rgba(0,0,0,.3)";
+    ctx.shadowBlur = 10;
+    ctx.shadowOffsetY = 7;
+
+    var grad = ctx.createLinearGradient(-38, -12, 38, 12);
+    grad.addColorStop(0, "#ffffff");
+    grad.addColorStop(.52, "#9aacbd");
+    grad.addColorStop(1, "#f7fbff");
+    ctx.fillStyle = grad;
+
+    ctx.beginPath();
+    ctx.roundRect(-38, -12, 76, 24, 12);
+    ctx.fill();
+
+    ctx.restore();
+  }
+
+  function draw(p, time) {
+    var rect = canvas.getBoundingClientRect();
+    var t = sceneTransform();
+    var pulse = Math.sin(time / 620) * (1 - p);
+    var dash = -time / 32;
+    var open = easeInOut(p);
+
+    ctx.clearRect(0, 0, rect.width, rect.height);
+    ctx.save();
+    ctx.translate(t.offsetX, t.offsetY);
+    ctx.scale(t.scale, t.scale);
+
+    var leftLoop = [
+      ["M", 450, 250],
+      ["C", 348, 98, 150, 132, 140, 242],
+      ["C", 128, 363, 318, 366, 438, 264]
+    ];
+
+    var rightLoop = [
+      ["M", 450, 250],
+      ["C", 552, 98, 750, 132, 760, 242],
+      ["C", 772, 363, 582, 366, 462, 264]
+    ];
+
+    var leftTail = [
+      ["M", 426, 270],
+      ["C", 320, 308, 208, 376, 78, 430]
+    ];
+
+    var rightTail = [
+      ["M", 474, 270],
+      ["C", 580, 308, 692, 376, 822, 430]
+    ];
+
+    var crossLeft = [
+      ["M", 108, 272],
+      ["C", 252, 245, 338, 235, 452, 253]
+    ];
+
+    var crossRight = [
+      ["M", 792, 272],
+      ["C", 648, 245, 562, 235, 448, 253]
+    ];
+
+    var transforms = {
+      leftLoop:{
+        ox:450,
+        oy:250,
+        tx:lerp(0, -260, open),
+        ty:lerp(pulse * 4, 28, open),
+        rot:lerp(0, -.24, open),
+        sx:lerp(1, 1.16, open),
+        sy:lerp(1, .88, open)
+      },
+      rightLoop:{
+        ox:450,
+        oy:250,
+        tx:lerp(0, 260, open),
+        ty:lerp(-pulse * 3, 28, open),
+        rot:lerp(0, .24, open),
+        sx:lerp(1, 1.16, open),
+        sy:lerp(1, .88, open)
+      },
+      leftTail:{
+        ox:426,
+        oy:270,
+        tx:lerp(0, -320, open),
+        ty:lerp(0, -42, open),
+        rot:lerp(0, -.12, open)
+      },
+      rightTail:{
+        ox:474,
+        oy:270,
+        tx:lerp(0, 320, open),
+        ty:lerp(0, -42, open),
+        rot:lerp(0, .12, open)
+      },
+      crossLeft:{
+        ox:452,
+        oy:253,
+        tx:lerp(0, -150, open),
+        ty:lerp(0, 88, open),
+        rot:lerp(0, -.22, open)
+      },
+      crossRight:{
+        ox:448,
+        oy:253,
+        tx:lerp(0, 150, open),
+        ty:lerp(0, 88, open),
+        rot:lerp(0, .22, open)
+      }
+    };
+
+    var width = lerp(32, 29, open);
+    strokePath(makePath(leftLoop, transforms.leftLoop), width, 1, dash);
+    strokePath(makePath(rightLoop, transforms.rightLoop), width, 1, dash - 12);
+    strokePath(makePath(crossLeft, transforms.crossLeft), width, lerp(1, .78, open), dash - 24);
+    strokePath(makePath(crossRight, transforms.crossRight), width, lerp(1, .78, open), dash - 30);
+    strokePath(makePath(leftTail, transforms.leftTail), width, 1, dash - 8);
+    strokePath(makePath(rightTail, transforms.rightTail), width, 1, dash - 18);
+
+    drawKnot(open, pulse);
+
+    drawAglet(lerp(78, -245, open), lerp(430, 388, open), lerp(-.32, -.5, open), 1);
+    drawAglet(lerp(822, 1145, open), lerp(430, 388, open), lerp(.32, .5, open), 1);
+
+    ctx.restore();
+  }
+
+  function renderIdle(time) {
+    if (!done && progress === 0) {
+      draw(0, time);
+      requestAnimationFrame(renderIdle);
+    }
   }
 
   function unlockPage() {
@@ -538,13 +694,32 @@
 
     remember();
 
-    if (withAnimation) {
-      intro.classList.add("is-untying");
-      window.setTimeout(unlockPage, 1450);
+    if (!withAnimation || reducedMotion) {
+      progress = 1;
+      draw(1, performance.now());
+      unlockPage();
       return;
     }
 
-    unlockPage();
+    intro.classList.add("is-untying");
+
+    var start = performance.now();
+    var duration = 1550;
+
+    function frame(now) {
+      var raw = Math.min(1, (now - start) / duration);
+      progress = easeOutCubic(raw);
+      draw(progress, now);
+
+      if (raw < 1) {
+        requestAnimationFrame(frame);
+        return;
+      }
+
+      window.setTimeout(unlockPage, 260);
+    }
+
+    requestAnimationFrame(frame);
   }
 
   if (document.documentElement.getAttribute("data-rj-lace-intro") === "seen") {
@@ -569,6 +744,10 @@
       finish(false);
     }
   });
+
+  window.addEventListener("resize", resizeCanvas);
+  resizeCanvas();
+  requestAnimationFrame(renderIdle);
 
   window.setTimeout(function () {
     if (!done && openButton) {
