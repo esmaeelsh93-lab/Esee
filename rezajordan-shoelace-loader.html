@@ -1,0 +1,565 @@
+<!--
+  REZA JORDAAN | Shoelace Intro Loader
+  قابل استفاده در وردپرس / المنتور / WPCode
+
+  پیشنهاد نصب:
+  این کد را در Header سایت قرار بدهید تا قبل از کامل دیده شدن صفحه فعال شود.
+-->
+
+<script>
+(function () {
+  var key = "rj_shoelace_intro_seen_v1";
+
+  try {
+    if (window.localStorage && localStorage.getItem(key) === "1") {
+      document.documentElement.setAttribute("data-rj-lace-intro", "seen");
+      return;
+    }
+  } catch (error) {
+    /* اگر مرورگر localStorage را محدود کرده باشد، فقط همین بازدید نمایش داده می‌شود. */
+  }
+
+  document.documentElement.setAttribute("data-rj-lace-intro", "new");
+})();
+</script>
+
+<style>
+  :root{
+    --rj-lace-bg:#07111e;
+    --rj-lace-card:rgba(8,18,32,.76);
+    --rj-lace-text:#ffffff;
+    --rj-lace-muted:rgba(255,255,255,.76);
+    --rj-lace-blue:#1097ff;
+    --rj-lace-cyan:#31d4ff;
+    --rj-lace-orange:#ff8a16;
+    --rj-lace-white:#f8fbff;
+  }
+
+  html[data-rj-lace-intro="new"],
+  html[data-rj-lace-intro="new"] body{
+    overflow:hidden!important;
+    width:100%!important;
+  }
+
+  html[data-rj-lace-intro="seen"] .rj-lace-intro{
+    display:none!important;
+  }
+
+  .rj-lace-intro,
+  .rj-lace-intro *{
+    box-sizing:border-box;
+  }
+
+  .rj-lace-intro{
+    position:fixed;
+    inset:0;
+    z-index:2147483000;
+    display:grid;
+    place-items:center;
+    direction:rtl;
+    padding:clamp(18px,4vw,44px);
+    overflow:hidden;
+    color:var(--rj-lace-text);
+    background:
+      radial-gradient(circle at 50% 28%,rgba(16,151,255,.26),transparent 34%),
+      radial-gradient(circle at 18% 80%,rgba(255,138,22,.18),transparent 32%),
+      linear-gradient(145deg,rgba(4,10,18,.9),rgba(8,18,32,.82));
+    font-family:inherit;
+    opacity:1;
+    visibility:visible;
+    transition:opacity .55s ease,visibility .55s ease;
+    isolation:isolate;
+  }
+
+  .rj-lace-intro::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:-2;
+    backdrop-filter:blur(9px) saturate(1.08);
+    -webkit-backdrop-filter:blur(9px) saturate(1.08);
+    background:rgba(3,8,14,.44);
+  }
+
+  .rj-lace-intro::after{
+    content:"";
+    position:absolute;
+    inset:auto -18% -34% -18%;
+    z-index:-1;
+    height:52%;
+    opacity:.4;
+    background:
+      linear-gradient(90deg,transparent 0 10%,rgba(255,255,255,.08) 10% 10.7%,transparent 10.7% 18%),
+      repeating-linear-gradient(135deg,rgba(255,255,255,.07) 0 2px,transparent 2px 16px);
+    transform:rotate(-4deg);
+  }
+
+  .rj-lace-intro.is-done{
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+  }
+
+  .rj-lace-card{
+    position:relative;
+    width:min(760px,100%);
+    max-width:100%;
+    min-height:min(690px,calc(100vh - 36px));
+    display:grid;
+    grid-template-rows:1fr auto;
+    align-items:center;
+    justify-items:center;
+    gap:clamp(18px,3vw,28px);
+    padding:clamp(22px,4vw,42px);
+    border:1px solid rgba(255,255,255,.16);
+    border-radius:clamp(28px,5vw,46px);
+    background:
+      linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.03)),
+      var(--rj-lace-card);
+    box-shadow:
+      0 32px 90px rgba(0,0,0,.45),
+      inset 0 1px 0 rgba(255,255,255,.18);
+    text-align:center;
+    overflow:hidden;
+  }
+
+  .rj-lace-brand{
+    position:absolute;
+    top:clamp(15px,3vw,24px);
+    right:clamp(18px,4vw,34px);
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    color:rgba(255,255,255,.78);
+    direction:ltr;
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+  }
+
+  .rj-lace-brand::before{
+    content:"";
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:linear-gradient(135deg,var(--rj-lace-blue),var(--rj-lace-cyan));
+    box-shadow:0 0 18px rgba(49,212,255,.65);
+  }
+
+  .rj-lace-skip{
+    position:absolute;
+    top:clamp(12px,3vw,22px);
+    left:clamp(12px,3vw,22px);
+    min-width:74px;
+    padding:9px 13px;
+    border:1px solid rgba(255,255,255,.22);
+    border-radius:999px;
+    cursor:pointer;
+    color:rgba(255,255,255,.88);
+    background:rgba(255,255,255,.08);
+    font:inherit;
+    font-size:12px;
+    font-weight:700;
+    transition:transform .22s ease,background .22s ease,border-color .22s ease;
+  }
+
+  .rj-lace-skip:hover,
+  .rj-lace-skip:focus-visible{
+    transform:translateY(-1px);
+    border-color:rgba(255,255,255,.36);
+    background:rgba(255,255,255,.14);
+  }
+
+  .rj-lace-stage{
+    position:relative;
+    width:min(720px,112vw);
+    margin-top:clamp(34px,5vh,58px);
+    aspect-ratio:900/520;
+  }
+
+  .rj-lace-glow{
+    position:absolute;
+    inset:17% 8% 8%;
+    border-radius:50%;
+    opacity:.78;
+    background:
+      radial-gradient(circle at 50% 48%,rgba(49,212,255,.32),transparent 38%),
+      radial-gradient(circle at 50% 56%,rgba(255,138,22,.2),transparent 52%);
+    filter:blur(18px);
+    animation:rjGlow 2.8s ease-in-out infinite;
+  }
+
+  .rj-lace-svg{
+    position:relative;
+    z-index:1;
+    width:100%;
+    height:100%;
+    overflow:visible;
+    filter:drop-shadow(0 24px 24px rgba(0,0,0,.32));
+  }
+
+  .rj-lace-svg .lace{
+    fill:none;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    transition:transform 1.25s cubic-bezier(.18,.8,.16,1),opacity .55s ease,stroke-dashoffset 1.1s ease;
+    will-change:transform,opacity;
+  }
+
+  .rj-lace-svg .lace-shadow{
+    opacity:.28;
+    stroke:#07111e;
+    stroke-width:34;
+  }
+
+  .rj-lace-svg .lace-main{
+    stroke:url(#rjLaceGradient);
+    stroke-width:26;
+  }
+
+  .rj-lace-svg .lace-thread{
+    stroke:url(#rjThreadGradient);
+    stroke-width:4;
+    stroke-dasharray:18 16;
+    opacity:.9;
+  }
+
+  .rj-lace-svg .knot{
+    transition:transform .9s cubic-bezier(.18,.8,.16,1),opacity .55s ease;
+    transform-origin:450px 260px;
+    will-change:transform,opacity;
+  }
+
+  .rj-lace-svg .aglet{
+    fill:url(#rjAgletGradient);
+    stroke:rgba(255,255,255,.65);
+    stroke-width:2;
+    transition:transform 1.25s cubic-bezier(.18,.8,.16,1),opacity .55s ease;
+    transform-box:fill-box;
+    transform-origin:center;
+  }
+
+  .rj-lace-intro.is-untying .left-loop{
+    transform:translate(-205px,18px) rotate(-16deg) scaleX(1.14);
+  }
+
+  .rj-lace-intro.is-untying .right-loop{
+    transform:translate(205px,18px) rotate(16deg) scaleX(1.14);
+  }
+
+  .rj-lace-intro.is-untying .left-tail{
+    transform:translate(-260px,-34px) rotate(-8deg);
+  }
+
+  .rj-lace-intro.is-untying .right-tail{
+    transform:translate(260px,-34px) rotate(8deg);
+  }
+
+  .rj-lace-intro.is-untying .cross-left{
+    transform:translate(-112px,78px) rotate(-14deg);
+    opacity:.86;
+  }
+
+  .rj-lace-intro.is-untying .cross-right{
+    transform:translate(112px,78px) rotate(14deg);
+    opacity:.86;
+  }
+
+  .rj-lace-intro.is-untying .lace-thread{
+    stroke-dashoffset:-90;
+  }
+
+  .rj-lace-intro.is-untying .knot{
+    transform:scale(.5) rotate(28deg);
+    opacity:0;
+  }
+
+  .rj-lace-intro.is-untying .left-aglet{
+    transform:translate(-250px,-38px) rotate(-18deg);
+  }
+
+  .rj-lace-intro.is-untying .right-aglet{
+    transform:translate(250px,-38px) rotate(18deg);
+  }
+
+  .rj-lace-copy{
+    position:relative;
+    z-index:2;
+    width:min(560px,100%);
+    margin-top:-24px;
+  }
+
+  .rj-lace-title{
+    margin:0;
+    color:#fff;
+    font-size:clamp(27px,5.7vw,44px);
+    font-weight:900;
+    line-height:1.55;
+    text-shadow:0 8px 26px rgba(0,0,0,.34);
+  }
+
+  .rj-lace-subtitle{
+    max-width:430px;
+    margin:9px auto 0;
+    color:var(--rj-lace-muted);
+    font-size:clamp(13px,2.7vw,16px);
+    line-height:1.9;
+  }
+
+  .rj-lace-open{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:9px;
+    min-width:190px;
+    margin-top:22px;
+    padding:15px 24px;
+    border:0;
+    border-radius:999px;
+    cursor:pointer;
+    color:#fff;
+    background:
+      linear-gradient(135deg,var(--rj-lace-blue),#086fe8 58%,#015ed0),
+      var(--rj-lace-blue);
+    box-shadow:
+      0 18px 35px rgba(16,151,255,.34),
+      inset 0 1px 0 rgba(255,255,255,.28);
+    font:inherit;
+    font-size:15px;
+    font-weight:900;
+    transition:transform .22s ease,box-shadow .22s ease,filter .22s ease;
+  }
+
+  .rj-lace-open::after{
+    content:"←";
+    font-size:17px;
+    line-height:1;
+  }
+
+  .rj-lace-open:hover,
+  .rj-lace-open:focus-visible{
+    transform:translateY(-2px);
+    box-shadow:
+      0 22px 44px rgba(16,151,255,.44),
+      inset 0 1px 0 rgba(255,255,255,.3);
+  }
+
+  .rj-lace-intro.is-untying .rj-lace-open{
+    filter:saturate(.8);
+    pointer-events:none;
+  }
+
+  @keyframes rjGlow{
+    0%,100%{transform:scale(.98);opacity:.62}
+    50%{transform:scale(1.05);opacity:.86}
+  }
+
+  @media(max-width:680px){
+    .rj-lace-intro{
+      padding:12px;
+    }
+
+    .rj-lace-card{
+      width:100%;
+      min-height:calc(100svh - 24px);
+      padding:64px 18px 28px;
+      border-radius:30px;
+    }
+
+    .rj-lace-stage{
+      width:min(100%,500px);
+      max-width:none;
+      margin-top:2vh;
+    }
+
+    .rj-lace-copy{
+      width:min(330px,100%);
+      margin-top:-4px;
+    }
+
+    .rj-lace-subtitle{
+      display:none;
+    }
+
+    .rj-lace-open{
+      width:min(245px,86vw);
+    }
+  }
+
+  @media(max-width:390px){
+    .rj-lace-title{
+      font-size:24px;
+    }
+
+    .rj-lace-stage{
+      width:100%;
+    }
+  }
+
+  @media(prefers-reduced-motion:reduce){
+    .rj-lace-intro,
+    .rj-lace-intro *,
+    .rj-lace-intro::before,
+    .rj-lace-intro::after{
+      animation:none!important;
+      transition-duration:.01ms!important;
+      scroll-behavior:auto!important;
+    }
+  }
+</style>
+
+<div class="rj-lace-intro" id="rjLaceIntro" role="dialog" aria-modal="true" aria-label="ورود به فروشگاه رضا جردن">
+  <div class="rj-lace-card">
+    <span class="rj-lace-brand">REZA JORDAAN</span>
+
+    <button class="rj-lace-skip" type="button" data-rj-lace-close>
+      رد کردن
+    </button>
+
+    <div class="rj-lace-stage" aria-hidden="true">
+      <span class="rj-lace-glow"></span>
+
+      <svg class="rj-lace-svg" viewBox="0 0 900 520" role="img" aria-label="">
+        <defs>
+          <linearGradient id="rjLaceGradient" x1="0" y1="0" x2="900" y2="0" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#e7edf7"/>
+            <stop offset=".18" stop-color="#ffffff"/>
+            <stop offset=".34" stop-color="#cfeaff"/>
+            <stop offset=".52" stop-color="#ffffff"/>
+            <stop offset=".7" stop-color="#dff4ff"/>
+            <stop offset="1" stop-color="#f8fbff"/>
+          </linearGradient>
+
+          <linearGradient id="rjThreadGradient" x1="0" y1="0" x2="900" y2="0" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#1097ff"/>
+            <stop offset=".48" stop-color="#31d4ff"/>
+            <stop offset="1" stop-color="#ff8a16"/>
+          </linearGradient>
+
+          <linearGradient id="rjAgletGradient" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#ffffff"/>
+            <stop offset=".48" stop-color="#97a9b9"/>
+            <stop offset="1" stop-color="#f4f7fb"/>
+          </linearGradient>
+        </defs>
+
+        <path class="lace lace-shadow left-loop" d="M455 260 C352 124 166 140 144 247 C124 343 300 361 438 268"/>
+        <path class="lace lace-shadow right-loop" d="M445 260 C548 124 734 140 756 247 C776 343 600 361 462 268"/>
+        <path class="lace lace-shadow cross-left" d="M116 276 C266 252 340 239 455 260"/>
+        <path class="lace lace-shadow cross-right" d="M784 276 C634 252 560 239 445 260"/>
+        <path class="lace lace-shadow left-tail" d="M430 275 C330 314 215 383 76 433"/>
+        <path class="lace lace-shadow right-tail" d="M470 275 C570 314 685 383 824 433"/>
+
+        <path class="lace lace-main left-loop" d="M455 260 C352 124 166 140 144 247 C124 343 300 361 438 268"/>
+        <path class="lace lace-main right-loop" d="M445 260 C548 124 734 140 756 247 C776 343 600 361 462 268"/>
+        <path class="lace lace-main cross-left" d="M116 276 C266 252 340 239 455 260"/>
+        <path class="lace lace-main cross-right" d="M784 276 C634 252 560 239 445 260"/>
+        <path class="lace lace-main left-tail" d="M430 275 C330 314 215 383 76 433"/>
+        <path class="lace lace-main right-tail" d="M470 275 C570 314 685 383 824 433"/>
+
+        <path class="lace lace-thread left-loop" d="M455 260 C352 124 166 140 144 247 C124 343 300 361 438 268"/>
+        <path class="lace lace-thread right-loop" d="M445 260 C548 124 734 140 756 247 C776 343 600 361 462 268"/>
+        <path class="lace lace-thread cross-left" d="M116 276 C266 252 340 239 455 260"/>
+        <path class="lace lace-thread cross-right" d="M784 276 C634 252 560 239 445 260"/>
+        <path class="lace lace-thread left-tail" d="M430 275 C330 314 215 383 76 433"/>
+        <path class="lace lace-thread right-tail" d="M470 275 C570 314 685 383 824 433"/>
+
+        <g class="knot">
+          <ellipse cx="450" cy="260" rx="58" ry="42" fill="rgba(6,13,23,.35)"/>
+          <path d="M402 246 C421 205 483 204 504 246 C485 270 425 271 402 246Z" fill="url(#rjLaceGradient)"/>
+          <path d="M396 274 C424 241 480 241 506 274 C480 304 423 304 396 274Z" fill="url(#rjLaceGradient)"/>
+          <path d="M410 248 C430 267 469 268 491 248" fill="none" stroke="rgba(5,14,24,.24)" stroke-width="5" stroke-linecap="round"/>
+          <path d="M410 273 C431 257 469 257 491 273" fill="none" stroke="rgba(5,14,24,.18)" stroke-width="5" stroke-linecap="round"/>
+          <path d="M414 244 C435 236 465 236 486 244" fill="none" stroke="rgba(49,212,255,.58)" stroke-width="4" stroke-linecap="round" stroke-dasharray="12 10"/>
+        </g>
+
+        <rect class="aglet left-aglet" x="44" y="418" width="68" height="24" rx="12" transform="rotate(-18 78 430)"/>
+        <rect class="aglet right-aglet" x="788" y="418" width="68" height="24" rx="12" transform="rotate(18 822 430)"/>
+      </svg>
+    </div>
+
+    <div class="rj-lace-copy">
+      <h2 class="rj-lace-title">گره رو باز کن<br>تا وارد فروشگاه بشی</h2>
+      <p class="rj-lace-subtitle">مدل‌های جدید کتونی، جردن و استایل خیابونی همین پشت منتظرته.</p>
+      <button class="rj-lace-open" type="button" data-rj-lace-open>
+        باز کردن گره
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var intro = document.getElementById("rjLaceIntro");
+  if (!intro) return;
+
+  var key = "rj_shoelace_intro_seen_v1";
+  var openButton = intro.querySelector("[data-rj-lace-open]");
+  var closeButtons = intro.querySelectorAll("[data-rj-lace-close]");
+  var done = false;
+
+  function remember() {
+    try {
+      if (window.localStorage) {
+        localStorage.setItem(key, "1");
+      }
+    } catch (error) {}
+  }
+
+  function unlockPage() {
+    document.documentElement.removeAttribute("data-rj-lace-intro");
+    intro.classList.add("is-done");
+
+    window.setTimeout(function () {
+      if (intro && intro.parentNode) {
+        intro.parentNode.removeChild(intro);
+      }
+    }, 620);
+  }
+
+  function finish(withAnimation) {
+    if (done) return;
+    done = true;
+
+    remember();
+
+    if (withAnimation) {
+      intro.classList.add("is-untying");
+      window.setTimeout(unlockPage, 1450);
+      return;
+    }
+
+    unlockPage();
+  }
+
+  if (document.documentElement.getAttribute("data-rj-lace-intro") === "seen") {
+    unlockPage();
+    return;
+  }
+
+  if (openButton) {
+    openButton.addEventListener("click", function () {
+      finish(true);
+    });
+  }
+
+  closeButtons.forEach(function (button) {
+    button.addEventListener("click", function () {
+      finish(false);
+    });
+  });
+
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") {
+      finish(false);
+    }
+  });
+
+  window.setTimeout(function () {
+    if (!done && openButton) {
+      openButton.focus({ preventScroll:true });
+    }
+  }, 450);
+})();
+</script>
