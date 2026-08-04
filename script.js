@@ -75,6 +75,9 @@
     const status = card.querySelector(".warehouse-status");
     const label = button.querySelector(".organize-label");
     const hint = card.querySelector(".interaction-hint");
+    const scene = card.querySelector(".warehouse-scene");
+
+    status?.setAttribute("aria-live", "polite");
 
     const render = (organized) => {
       card.classList.toggle("organized", organized);
@@ -94,6 +97,12 @@
         hint.textContent = organized
           ? "همه کالاها در جای درست قرار گرفتند"
           : "برای دیدن قدرت سبلان کلیک کنید";
+      }
+      if (scene) {
+        scene.setAttribute(
+          "aria-label",
+          organized ? "نمای انبار مرتب‌شده" : "نمای تعاملی انبار نامرتب",
+        );
       }
     };
 
@@ -186,6 +195,13 @@
 
     let opener = null;
 
+    const cleanup = () => {
+      image.removeAttribute("src");
+      image.alt = "";
+      opener?.focus();
+      opener = null;
+    };
+
     const safeImageUrl = (source) => {
       if (!source) return null;
 
@@ -202,7 +218,14 @@
     };
 
     const close = () => {
-      if (dialog.open) dialog.close();
+      if (!dialog.open) return;
+
+      if (typeof dialog.close === "function") {
+        dialog.close();
+      } else {
+        dialog.removeAttribute("open");
+        cleanup();
+      }
     };
 
     document.querySelectorAll(".image-zoom[data-image]").forEach((button) => {
@@ -231,12 +254,7 @@
       event.preventDefault();
       close();
     });
-    dialog.addEventListener("close", () => {
-      image.removeAttribute("src");
-      image.alt = "";
-      opener?.focus();
-      opener = null;
-    });
+    dialog.addEventListener("close", cleanup);
   }
 
   function initializeAccordion() {
@@ -342,7 +360,11 @@
     const requestUpdate = () => {
       if (updatePending) return;
       updatePending = true;
-      window.requestAnimationFrame(update);
+      if (typeof window.requestAnimationFrame === "function") {
+        window.requestAnimationFrame(update);
+      } else {
+        window.setTimeout(update, 16);
+      }
     };
 
     window.addEventListener("scroll", requestUpdate, { passive: true });
