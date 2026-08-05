@@ -88,6 +88,65 @@ $export_url = wp_nonce_url(
 			</div>
 		</div>
 
+		<div class="cvs-funnel-panel">
+			<div class="cvs-panel-header">
+				<h2>قیف تبدیل کوچک فروشگاه</h2>
+				<span class="cvs-panel-sub">کاربران ← مشاهده محصول ← افزودن به سبد ← تسویه‌حساب ← خرید</span>
+			</div>
+
+			<?php if ( ! CVS_Funnel::is_woocommerce_active() ) : ?>
+				<div class="cvs-funnel-note">
+					برای نمایش اعداد <strong>واقعی</strong> این قیف، افزونه‌ی ووکامرس را نصب و فعال کنید. تا آن زمان، مراحل بعد از «کاربران» بر اساس نرخ‌های فرضی قابل‌تنظیم (از صفحه‌ی
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=' . CVS_Admin::PAGE_SETTINGS ) ); ?>">تنظیمات</a>) تخمین زده می‌شوند.
+				</div>
+			<?php elseif ( ! $funnel_has_real_data ) : ?>
+				<div class="cvs-funnel-note">
+					هنوز رویداد واقعی کافی از ووکامرس برای این بازه‌ی زمانی ثبت نشده؛ اعداد زیر بر اساس نرخ‌های فرضی تخمین زده شده‌اند. با ادامه‌ی فروش، این اعداد به‌طور خودکار واقعی می‌شوند.
+				</div>
+			<?php endif; ?>
+
+			<div class="cvs-funnel-toolbar">
+				<span class="cvs-funnel-conversion">نرخ تبدیل کل (کاربر تا خرید): <strong><?php echo esc_html( CVS_Jalali::to_persian_digits( $funnel_conversion ) ); ?>٪</strong></span>
+				<button type="button" class="cvs-btn cvs-funnel-copy-all" data-cvs-copy-all>⧉ کپی کل قیف</button>
+			</div>
+
+			<div class="cvs-funnel-flow">
+				<?php foreach ( $funnel_stages as $i => $stage ) : ?>
+					<?php if ( $i > 0 ) : ?>
+						<div class="cvs-funnel-arrow" aria-hidden="true">↓</div>
+					<?php endif; ?>
+					<?php
+					$row_text = $stage['label'] . ': ' . CVS_Jalali::format_number( $stage['count'] );
+					if ( 'users' !== $stage['key'] ) {
+						$row_text .= ' (' . CVS_Jalali::to_persian_digits( $stage['rate'] ) . '٪ نسبت به مرحله قبل)';
+					}
+					?>
+					<div class="cvs-funnel-stage">
+						<div class="cvs-funnel-stage-icon" aria-hidden="true"><?php echo esc_html( $stage['icon'] ); ?></div>
+						<div class="cvs-funnel-stage-info">
+							<div class="cvs-funnel-stage-label">
+								<?php echo esc_html( $stage['label'] ); ?>
+								<?php if ( 'users' !== $stage['key'] ) : ?>
+									<?php if ( $stage['is_estimated'] ) : ?>
+										<span class="cvs-funnel-badge cvs-funnel-badge-estimated">تخمینی</span>
+									<?php else : ?>
+										<span class="cvs-funnel-badge cvs-funnel-badge-real">واقعی</span>
+									<?php endif; ?>
+								<?php endif; ?>
+							</div>
+							<div class="cvs-funnel-stage-meta">
+								<span class="cvs-funnel-stage-count"><?php echo esc_html( CVS_Jalali::format_number( $stage['count'] ) ); ?></span>
+								<?php if ( 'users' !== $stage['key'] ) : ?>
+									<span class="cvs-funnel-stage-rate"><?php echo esc_html( CVS_Jalali::to_persian_digits( $stage['rate'] ) ); ?>٪ نسبت به مرحله قبل</span>
+								<?php endif; ?>
+							</div>
+						</div>
+						<button type="button" class="cvs-funnel-copy-btn" data-cvs-copy-row="<?php echo esc_attr( $row_text ); ?>" title="کپی این ردیف" aria-label="کپی این ردیف">⧉</button>
+					</div>
+				<?php endforeach; ?>
+			</div>
+		</div>
+
 		<div class="cvs-row cvs-row-2">
 			<div class="cvs-panel">
 				<div class="cvs-panel-header">

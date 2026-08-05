@@ -18,6 +18,14 @@ class CVS_DB {
 	}
 
 	/**
+	 * نام کامل جدول رویدادهای قیف تبدیل (با پیشوند وردپرس) را برمی‌گرداند.
+	 */
+	public static function funnel_table() {
+		global $wpdb;
+		return $wpdb->prefix . CVS_FUNNEL_TABLE_NAME;
+	}
+
+	/**
 	 * ساخت یا به‌روزرسانی جدول دیتابیس با استفاده از dbDelta.
 	 */
 	public static function create_table() {
@@ -41,6 +49,34 @@ class CVS_DB {
 			PRIMARY KEY  (id),
 			KEY visit_date (visit_date),
 			KEY source_key (source_key)
+		) {$charset_collate};";
+
+		dbDelta( $sql );
+
+		self::create_funnel_table();
+	}
+
+	/**
+	 * ساخت یا به‌روزرسانی جدول رویدادهای قیف تبدیل کوچک فروشگاه (Mini Funnel).
+	 * هر ردیف یک رویداد (مشاهده محصول/افزودن به سبد/شروع تسویه‌حساب/خرید) را ثبت می‌کند.
+	 */
+	public static function create_funnel_table() {
+		global $wpdb;
+
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+
+		$table_name      = self::funnel_table();
+		$charset_collate = $wpdb->get_charset_collate();
+
+		$sql = "CREATE TABLE {$table_name} (
+			id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+			event_date DATE NOT NULL,
+			event_time DATETIME NOT NULL,
+			stage_key VARCHAR(30) NOT NULL,
+			object_id BIGINT UNSIGNED DEFAULT NULL,
+			PRIMARY KEY  (id),
+			KEY event_date (event_date),
+			KEY stage_key (stage_key)
 		) {$charset_collate};";
 
 		dbDelta( $sql );
@@ -224,12 +260,64 @@ class CVS_DB {
 	}
 
 	/**
-	 * حذف کامل تمام رکوردهای آماری (بازنشانی آمار).
+	 * حذف کامل تمام رکوردهای آماری (بازنشانی آمار)، شامل رویدادهای قیف تبدیل.
 	 */
 	public static function truncate_all() {
 		global $wpdb;
 		$table = self::table();
 		$wpdb->query( "TRUNCATE TABLE {$table}" );
+
+		$funnel_table = self::funnel_table();
+		$wpdb->query( "TRUNCATE TABLE {$funnel_table}" );
+	}
+
+	/**
+	 * ثبت یک رویداد جدید برای قیف تبدیل کوچک فروشگاه.
+	 *
+	 * @param string   $stage_key کلید مرحله (product_view, add_to_cart, begin_checkout, purchase).
+	 * @param int|null $object_id شناسه‌ی مرتبط (مثلاً شناسه سفارش)، اختیاری.
+	 */
+	public static function insert_funnel_event( $stage_key, $object_id = null ) {
+		global $wpdb;
+
+		$wpdb->insert(
+			self::funnel_table(),
+			array(
+				'event_date' => current_time( 'Y-m-d' ),
+				'event_time' => current_time( 'mysql' ),
+				'stage_key'  => sanitize_key( $stage_key ),
+				'object_id'  => $object_id ? (int) $object_id : null,
+			),
+			array( '%s', '%s', '%s', '%d' )
+		);
+	}
+
+	/**
+	 * تعداد رویدادهای هر مرحله از قیف تبدیل در یک بازه‌ی زمانی.
+	 *
+	 * @return array نگاشت stage_key => تعداد.
+	 */
+	public static function get_funnel_counts( $from, $to ) {
+		global $wpdb;
+		$table = self::funnel_table();
+
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT stage_key, COUNT(*) AS total
+				FROM {$table}
+				WHERE event_date BETWEEN %s AND %s
+				GROUP BY stage_key",
+				$from,
+				$to
+			)
+		);
+
+		$counts = array();
+		foreach ( (array) $rows as $row ) {
+			$counts[ $row->stage_key ] = (int) $row->total;
+		}
+
+		return $counts;
 	}
 
 	/**

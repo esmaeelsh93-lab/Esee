@@ -76,6 +76,41 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</tr>
 				</table>
 
+				<h2 class="cvs-settings-subheading">نرخ‌های فرضی قیف تبدیل کوچک فروشگاه</h2>
+				<p class="description">
+					این نرخ‌ها فقط زمانی استفاده می‌شوند که ووکامرس فعال نباشد، یا هنوز داده‌ی واقعی کافی برای یک مرحله ثبت نشده باشد. هر عدد، درصدی از مرحله‌ی قبل است.
+				</p>
+				<table class="form-table" role="presentation">
+					<tr>
+						<th scope="row">نرخ فرضی مشاهده محصول</th>
+						<td>
+							<input type="number" min="0" max="100" name="funnel_rate_view" value="<?php echo esc_attr( $settings['funnel_rate_view'] ); ?>" class="small-text" />٪
+							<p class="description">چند درصد از کاربران، حداقل یک صفحه‌ی محصول را مشاهده می‌کنند.</p>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row">نرخ فرضی افزودن به سبد خرید</th>
+						<td>
+							<input type="number" min="0" max="100" name="funnel_rate_cart" value="<?php echo esc_attr( $settings['funnel_rate_cart'] ); ?>" class="small-text" />٪
+							<p class="description">چند درصد از بازدیدکنندگان محصول، آن را به سبد خرید اضافه می‌کنند.</p>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row">نرخ فرضی شروع تسویه‌حساب</th>
+						<td>
+							<input type="number" min="0" max="100" name="funnel_rate_checkout" value="<?php echo esc_attr( $settings['funnel_rate_checkout'] ); ?>" class="small-text" />٪
+							<p class="description">چند درصد از کسانی که سبد خرید دارند، وارد صفحه‌ی تسویه‌حساب می‌شوند.</p>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row">نرخ فرضی خرید نهایی</th>
+						<td>
+							<input type="number" min="0" max="100" name="funnel_rate_purchase" value="<?php echo esc_attr( $settings['funnel_rate_purchase'] ); ?>" class="small-text" />٪
+							<p class="description">چند درصد از کسانی که تسویه‌حساب را شروع کرده‌اند، خرید را نهایی می‌کنند.</p>
+						</td>
+					</tr>
+				</table>
+
 				<?php submit_button( 'ذخیره تنظیمات', 'cvs-btn cvs-btn-primary', 'submit', false ); ?>
 			</form>
 

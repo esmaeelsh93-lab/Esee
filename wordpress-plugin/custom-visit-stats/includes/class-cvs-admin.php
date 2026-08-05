@@ -91,6 +91,10 @@ class CVS_Admin {
 			'excluded_ips'        => '',
 			'retention_days'      => 0,
 			'delete_on_uninstall' => 0,
+			'funnel_rate_view'     => 55,
+			'funnel_rate_cart'     => 28,
+			'funnel_rate_checkout' => 55,
+			'funnel_rate_purchase' => 45,
 		);
 
 		$saved = get_option( 'cvs_settings', array() );
@@ -200,6 +204,10 @@ class CVS_Admin {
 		$prev_average  = round( $prev_total / $days_count, 1 );
 
 		$active_sources = count( $breakdown );
+
+		$funnel_stages       = CVS_Funnel::build_report( $from, $to, $total );
+		$funnel_has_real_data = CVS_Funnel::has_any_real_data( $funnel_stages );
+		$funnel_conversion    = CVS_Funnel::get_overall_conversion( $funnel_stages );
 
 		$top_source      = ! empty( $breakdown ) ? $breakdown[0] : null;
 		$top_source_prev = $top_source ? CVS_DB::get_source_total( $prev_from, $prev_to, $top_source->source_key ) : 0;
@@ -344,11 +352,15 @@ class CVS_Admin {
 		check_admin_referer( 'cvs_save_settings' );
 
 		$settings = array(
-			'exclude_staff'       => ! empty( $_POST['exclude_staff'] ) ? 1 : 0,
-			'session_timeout'     => isset( $_POST['session_timeout'] ) ? max( 1, (int) $_POST['session_timeout'] ) : 30,
-			'excluded_ips'        => isset( $_POST['excluded_ips'] ) ? sanitize_textarea_field( wp_unslash( $_POST['excluded_ips'] ) ) : '',
-			'retention_days'      => isset( $_POST['retention_days'] ) ? max( 0, (int) $_POST['retention_days'] ) : 0,
-			'delete_on_uninstall' => ! empty( $_POST['delete_on_uninstall'] ) ? 1 : 0,
+			'exclude_staff'        => ! empty( $_POST['exclude_staff'] ) ? 1 : 0,
+			'session_timeout'      => isset( $_POST['session_timeout'] ) ? max( 1, (int) $_POST['session_timeout'] ) : 30,
+			'excluded_ips'         => isset( $_POST['excluded_ips'] ) ? sanitize_textarea_field( wp_unslash( $_POST['excluded_ips'] ) ) : '',
+			'retention_days'       => isset( $_POST['retention_days'] ) ? max( 0, (int) $_POST['retention_days'] ) : 0,
+			'delete_on_uninstall'  => ! empty( $_POST['delete_on_uninstall'] ) ? 1 : 0,
+			'funnel_rate_view'     => isset( $_POST['funnel_rate_view'] ) ? max( 0, min( 100, (int) $_POST['funnel_rate_view'] ) ) : 55,
+			'funnel_rate_cart'     => isset( $_POST['funnel_rate_cart'] ) ? max( 0, min( 100, (int) $_POST['funnel_rate_cart'] ) ) : 28,
+			'funnel_rate_checkout' => isset( $_POST['funnel_rate_checkout'] ) ? max( 0, min( 100, (int) $_POST['funnel_rate_checkout'] ) ) : 55,
+			'funnel_rate_purchase' => isset( $_POST['funnel_rate_purchase'] ) ? max( 0, min( 100, (int) $_POST['funnel_rate_purchase'] ) ) : 45,
 		);
 
 		update_option( 'cvs_settings', $settings );
