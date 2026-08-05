@@ -17,6 +17,9 @@ global $wpdb;
 $table = $wpdb->prefix . 'cvs_visits';
 $wpdb->query( "DROP TABLE IF EXISTS {$table}" );
 
+$funnel_table = $wpdb->prefix . 'cvs_funnel_events';
+$wpdb->query( "DROP TABLE IF EXISTS {$funnel_table}" );
+
 delete_option( 'cvs_settings' );
 delete_option( 'cvs_salt' );
 delete_option( 'cvs_db_version' );

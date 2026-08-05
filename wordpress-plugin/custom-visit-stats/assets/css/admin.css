@@ -22,7 +22,7 @@
 	--cvs-panel-alt: #1f2a44;
 	--cvs-border: #2a3552;
 	--cvs-text: #e7ebf5;
-	--cvs-muted: #8b95b3;
+	--cvs-muted: #aab3cf;
 	--cvs-up: #22c55e;
 	--cvs-down: #f43f5e;
 	--cvs-radius: 16px;
@@ -35,6 +35,8 @@
 	padding: 24px;
 	border-radius: var(--cvs-radius);
 	font-family: "Vazirmatn", -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, sans-serif;
+	font-size: 14px;
+	line-height: 1.6;
 	direction: rtl;
 }
 
@@ -228,6 +230,174 @@
 
 .cvs-kpi-change.is-up::before { content: "▲ "; color: #d9f99d; }
 .cvs-kpi-change.is-down::before { content: "▼ "; color: #fecaca; }
+
+/* قیف تبدیل کوچک فروشگاه (Mini Funnel) */
+
+.cvs-funnel-panel {
+	background: var(--cvs-panel);
+	border: 1px solid var(--cvs-border);
+	border-radius: var(--cvs-radius);
+	padding: 22px;
+	margin-bottom: 20px;
+}
+
+.cvs-funnel-note {
+	background: rgba(234, 179, 8, 0.12);
+	border: 1px solid rgba(234, 179, 8, 0.35);
+	color: #fde68a;
+	border-radius: 10px;
+	padding: 10px 16px;
+	font-size: 13px;
+	line-height: 1.8;
+	margin-bottom: 16px;
+}
+
+.cvs-funnel-note a {
+	color: #fff;
+	text-decoration: underline;
+}
+
+.cvs-funnel-toolbar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-bottom: 18px;
+}
+
+.cvs-funnel-conversion {
+	font-size: 13px;
+	color: var(--cvs-muted);
+}
+
+.cvs-funnel-conversion strong {
+	color: #fff;
+	font-size: 16px;
+	font-weight: 800;
+}
+
+.cvs-funnel-copy-all {
+	font-size: 12px;
+	padding: 7px 14px;
+}
+
+.cvs-funnel-copy-all.is-copied {
+	color: #4ade80;
+	border-color: #4ade80;
+}
+
+.cvs-funnel-flow {
+	display: flex;
+	flex-direction: column;
+	max-width: 640px;
+	margin: 0 auto;
+}
+
+.cvs-funnel-arrow {
+	text-align: center;
+	color: var(--cvs-muted);
+	font-size: 18px;
+	line-height: 1;
+	padding: 6px 0;
+}
+
+.cvs-funnel-stage {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	background: var(--cvs-panel-alt);
+	border: 1px solid var(--cvs-border);
+	border-radius: 14px;
+	padding: 14px 16px;
+}
+
+.cvs-funnel-stage-icon {
+	width: 42px;
+	height: 42px;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.06);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 19px;
+	flex-shrink: 0;
+}
+
+.cvs-funnel-stage-info {
+	flex: 1;
+	min-width: 0;
+}
+
+.cvs-funnel-stage-label {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex-wrap: wrap;
+	color: #fff;
+	font-size: 14px;
+	font-weight: 700;
+	margin-bottom: 6px;
+}
+
+.cvs-funnel-badge {
+	font-size: 10px;
+	font-weight: 700;
+	padding: 2px 9px;
+	border-radius: 999px;
+	white-space: nowrap;
+}
+
+.cvs-funnel-badge-real {
+	background: rgba(34, 197, 94, 0.18);
+	color: #4ade80;
+}
+
+.cvs-funnel-badge-estimated {
+	background: rgba(234, 179, 8, 0.18);
+	color: #facc15;
+}
+
+.cvs-funnel-stage-meta {
+	display: flex;
+	align-items: baseline;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+
+.cvs-funnel-stage-count {
+	font-size: 22px;
+	font-weight: 800;
+	color: #fff;
+}
+
+.cvs-funnel-stage-rate {
+	font-size: 12px;
+	color: var(--cvs-muted);
+}
+
+.cvs-funnel-copy-btn {
+	flex-shrink: 0;
+	width: 36px;
+	height: 36px;
+	border-radius: 10px;
+	border: 1px solid var(--cvs-border);
+	background: transparent;
+	color: var(--cvs-muted);
+	font-size: 16px;
+	cursor: pointer;
+	transition: all 0.15s ease;
+}
+
+.cvs-funnel-copy-btn:hover {
+	background: var(--cvs-border);
+	color: #fff;
+}
+
+.cvs-funnel-copy-btn.is-copied {
+	color: #4ade80;
+	border-color: #4ade80;
+}
 
 /* پنل‌های نمودار */
 
@@ -450,7 +620,7 @@
 	padding: 40px 20px;
 }
 
-/* واکنش‌گرا */
+/* واکنش‌گرا (دسکتاپ کوچک/تبلت) */
 
 @media (max-width: 1200px) {
 	.cvs-row.cvs-row-2,
@@ -458,10 +628,170 @@
 		grid-template-columns: 1fr;
 	}
 	.cvs-kpi-grid {
-		grid-template-columns: 1fr;
+		grid-template-columns: repeat(2, 1fr);
 	}
 	.cvs-mini-metrics {
 		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+/* واکنش‌گرا (تبلت عمودی / موبایل بزرگ) */
+
+@media (max-width: 780px) {
+	.cvs-dashboard {
+		margin: 12px 12px 12px 0;
+		padding: 16px;
+	}
+
+	.cvs-header {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.cvs-header h1 {
+		font-size: 19px;
+	}
+
+	.cvs-actions {
+		width: 100%;
+	}
+
+	.cvs-actions .cvs-btn {
+		flex: 1;
+		justify-content: center;
+	}
+
+	.cvs-kpi-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.cvs-kpi-card {
+		padding: 18px;
+		min-height: auto;
+	}
+
+	.cvs-kpi-value {
+		font-size: 28px;
+	}
+
+	.cvs-panel,
+	.cvs-table-panel,
+	.cvs-funnel-panel {
+		padding: 16px;
+	}
+
+	.cvs-chart-wrap {
+		height: 240px;
+	}
+
+	.cvs-chart-wrap.cvs-chart-tall {
+		height: 260px;
+	}
+
+	.cvs-donut-wrap {
+		height: 200px;
+	}
+
+	.cvs-funnel-stage-count {
+		font-size: 19px;
+	}
+
+	.cvs-funnel-toolbar {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.cvs-funnel-copy-all {
+		width: 100%;
+	}
+}
+
+/* واکنش‌گرا (موبایل) */
+
+@media (max-width: 480px) {
+	.cvs-dashboard {
+		font-size: 13px;
+	}
+
+	.cvs-filterbar {
+		border-radius: 14px;
+		justify-content: flex-start;
+	}
+
+	.cvs-pill {
+		padding: 7px 12px;
+		font-size: 12px;
+	}
+
+	.cvs-mini-metrics {
+		grid-template-columns: 1fr 1fr;
+		gap: 10px;
+	}
+
+	.cvs-mini-metric .cvs-mini-value {
+		font-size: 16px;
+	}
+
+	.cvs-row.cvs-row-3 {
+		gap: 14px;
+	}
+
+	.cvs-chart-wrap {
+		height: 210px;
+	}
+
+	.cvs-chart-wrap.cvs-chart-tall {
+		height: 230px;
+	}
+
+	.cvs-donut-wrap {
+		height: 180px;
+	}
+
+	.cvs-rank-card {
+		padding: 12px;
+		gap: 10px;
+	}
+
+	.cvs-rank-icon {
+		width: 32px;
+		height: 32px;
+		font-size: 13px;
+	}
+
+	.cvs-rank-value {
+		font-size: 17px;
+	}
+
+	.cvs-table th,
+	.cvs-table td {
+		padding: 8px 10px;
+		font-size: 12px;
+	}
+
+	.cvs-funnel-stage {
+		padding: 12px;
+		gap: 10px;
+	}
+
+	.cvs-funnel-stage-icon {
+		width: 34px;
+		height: 34px;
+		font-size: 15px;
+	}
+
+	.cvs-funnel-stage-label {
+		font-size: 13px;
+	}
+
+	.cvs-funnel-stage-count {
+		font-size: 17px;
+	}
+
+	.cvs-funnel-copy-btn {
+		width: 32px;
+		height: 32px;
+		font-size: 14px;
 	}
 }
 
@@ -494,6 +824,15 @@
 
 .cvs-settings-panel .description {
 	color: var(--cvs-muted);
+}
+
+.cvs-settings-subheading {
+	color: #fff;
+	font-size: 15px;
+	font-weight: 700;
+	margin: 26px 0 6px;
+	padding-top: 18px;
+	border-top: 1px dashed var(--cvs-border);
 }
 
 .cvs-notice {

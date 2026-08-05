@@ -17,12 +17,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // دسترسی مستقیم مجاز نیست.
 }
 
-define( 'CVS_VERSION', '1.0.0' );
-define( 'CVS_DB_VERSION', '1.0' );
+define( 'CVS_VERSION', '1.1.0' );
+define( 'CVS_DB_VERSION', '1.1' );
 define( 'CVS_PLUGIN_FILE', __FILE__ );
 define( 'CVS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CVS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'CVS_TABLE_NAME', 'cvs_visits' );
+define( 'CVS_FUNNEL_TABLE_NAME', 'cvs_funnel_events' );
 
 require_once CVS_PLUGIN_DIR . 'includes/class-cvs-jalali.php';
 require_once CVS_PLUGIN_DIR . 'includes/class-cvs-db.php';
@@ -30,6 +31,7 @@ require_once CVS_PLUGIN_DIR . 'includes/class-cvs-source-detector.php';
 require_once CVS_PLUGIN_DIR . 'includes/class-cvs-tracker.php';
 require_once CVS_PLUGIN_DIR . 'includes/class-cvs-admin.php';
 require_once CVS_PLUGIN_DIR . 'includes/class-cvs-dashboard-widget.php';
+require_once CVS_PLUGIN_DIR . 'includes/class-cvs-funnel.php';
 
 /**
  * راه‌اندازی فعال‌سازی افزونه: ساخت جدول دیتابیس و مقادیر پیش‌فرض تنظیمات.
@@ -38,11 +40,15 @@ function cvs_activate_plugin() {
 	CVS_DB::create_table();
 
 	$defaults = array(
-		'exclude_staff'      => 1,
-		'session_timeout'    => 30,
-		'excluded_ips'       => '',
-		'retention_days'     => 0,
-		'delete_on_uninstall'=> 0,
+		'exclude_staff'       => 1,
+		'session_timeout'     => 30,
+		'excluded_ips'        => '',
+		'retention_days'      => 0,
+		'delete_on_uninstall' => 0,
+		'funnel_rate_view'     => 55,
+		'funnel_rate_cart'     => 28,
+		'funnel_rate_checkout' => 55,
+		'funnel_rate_purchase' => 45,
 	);
 	if ( false === get_option( 'cvs_settings' ) ) {
 		add_option( 'cvs_settings', $defaults );
@@ -91,5 +97,6 @@ function cvs_init_plugin() {
 	CVS_Tracker::init();
 	CVS_Admin::init();
 	CVS_Dashboard_Widget::init();
+	CVS_Funnel::init();
 }
 add_action( 'plugins_loaded', 'cvs_init_plugin' );

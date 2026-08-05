@@ -1,17 +1,93 @@
 ( function () {
 	'use strict';
 
+	/* دکمه‌های کپی قیف تبدیل کوچک فروشگاه (کپی هر ردیف یا کل قیف در کلیپ‌بورد). */
+	function initFunnelCopyButtons() {
+		var copyButtons = document.querySelectorAll( '[data-cvs-copy-row]' );
+		var copyAllButton = document.querySelector( '[data-cvs-copy-all]' );
+
+		function copyText( text, triggerEl ) {
+			var done = function () {
+				if ( ! triggerEl ) {
+					return;
+				}
+				var original = triggerEl.textContent;
+				triggerEl.classList.add( 'is-copied' );
+				triggerEl.textContent = '✓';
+				setTimeout( function () {
+					triggerEl.classList.remove( 'is-copied' );
+					triggerEl.textContent = original;
+				}, 1200 );
+			};
+
+			if ( navigator.clipboard && navigator.clipboard.writeText ) {
+				navigator.clipboard.writeText( text ).then( done ).catch( function () {
+					fallbackCopy( text );
+					done();
+				} );
+				return;
+			}
+
+			fallbackCopy( text );
+			done();
+		}
+
+		function fallbackCopy( text ) {
+			var textarea = document.createElement( 'textarea' );
+			textarea.value = text;
+			textarea.setAttribute( 'readonly', '' );
+			textarea.style.position = 'absolute';
+			textarea.style.left = '-9999px';
+			document.body.appendChild( textarea );
+			textarea.select();
+			try {
+				document.execCommand( 'copy' );
+			} catch ( e ) {
+				/* بی‌اهمیت: در صورت خطا فقط کپی انجام نمی‌شود. */
+			}
+			document.body.removeChild( textarea );
+		}
+
+		copyButtons.forEach( function ( btn ) {
+			btn.addEventListener( 'click', function () {
+				copyText( btn.getAttribute( 'data-cvs-copy-row' ) || '', btn );
+			} );
+		} );
+
+		if ( copyAllButton ) {
+			copyAllButton.addEventListener( 'click', function () {
+				var lines = [];
+				copyButtons.forEach( function ( btn ) {
+					lines.push( btn.getAttribute( 'data-cvs-copy-row' ) || '' );
+				} );
+				copyText( lines.join( '\n' ), copyAllButton );
+			} );
+		}
+	}
+
+	document.addEventListener( 'DOMContentLoaded', initFunnelCopyButtons );
+
 	if ( typeof Chart === 'undefined' || typeof cvsChartData === 'undefined' ) {
 		return;
 	}
 
-	var GRID_COLOR  = 'rgba(255, 255, 255, 0.06)';
-	var TEXT_COLOR  = '#8b95b3';
+	var GRID_COLOR  = 'rgba(255, 255, 255, 0.08)';
+	var TEXT_COLOR  = '#aab3cf';
 	var FALLBACK    = '#64748b';
+	var isSmallScreen = window.innerWidth <= 600;
 
 	Chart.defaults.color = TEXT_COLOR;
 	Chart.defaults.font.family = "'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Tahoma, sans-serif";
+	Chart.defaults.font.size = isSmallScreen ? 11 : 13;
 	Chart.defaults.plugins.legend.labels.usePointStyle = true;
+	Chart.defaults.plugins.legend.labels.font = { size: isSmallScreen ? 11 : 12 };
+	Chart.defaults.plugins.tooltip.titleFont = { size: isSmallScreen ? 12 : 13, weight: '700' };
+	Chart.defaults.plugins.tooltip.bodyFont = { size: isSmallScreen ? 12 : 13 };
+	Chart.defaults.plugins.tooltip.padding = 10;
+	Chart.defaults.plugins.tooltip.backgroundColor = '#0f1626';
+	Chart.defaults.plugins.tooltip.borderColor = '#2a3552';
+	Chart.defaults.plugins.tooltip.borderWidth = 1;
+	Chart.defaults.plugins.tooltip.rtl = true;
 
 	function hexToRgba( hex, alpha ) {
 		var parsed = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec( hex );
@@ -59,7 +135,11 @@
 				responsive: true,
 				maintainAspectRatio: false,
 				scales: {
-					x: { stacked: true, grid: { color: GRID_COLOR }, ticks: { color: TEXT_COLOR } },
+					x: {
+						stacked: true,
+						grid: { color: GRID_COLOR },
+						ticks: { color: TEXT_COLOR, maxRotation: 0, autoSkip: true, maxTicksLimit: isSmallScreen ? 5 : 12 },
+					},
 					y: { stacked: true, beginAtZero: true, grid: { color: GRID_COLOR }, ticks: { color: TEXT_COLOR, precision: 0 } },
 				},
 				plugins: {
@@ -96,7 +176,7 @@
 				responsive: true,
 				maintainAspectRatio: false,
 				scales: {
-					x: { grid: { display: false }, ticks: { color: TEXT_COLOR, maxTicksLimit: 8 } },
+					x: { grid: { display: false }, ticks: { color: TEXT_COLOR, maxRotation: 0, maxTicksLimit: isSmallScreen ? 4 : 8 } },
 					y: { beginAtZero: true, grid: { color: GRID_COLOR }, ticks: { color: TEXT_COLOR, precision: 0 } },
 				},
 				plugins: { legend: { display: false } },
@@ -156,7 +236,7 @@
 				responsive: true,
 				maintainAspectRatio: false,
 				scales: {
-					x: { grid: { color: GRID_COLOR }, ticks: { color: TEXT_COLOR, maxTicksLimit: 10 } },
+					x: { grid: { color: GRID_COLOR }, ticks: { color: TEXT_COLOR, maxRotation: 0, maxTicksLimit: isSmallScreen ? 5 : 10 } },
 					y: { beginAtZero: true, grid: { color: GRID_COLOR }, ticks: { color: TEXT_COLOR, precision: 0 } },
 				},
 				plugins: { legend: { display: false } },
