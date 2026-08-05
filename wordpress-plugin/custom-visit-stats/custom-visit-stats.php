@@ -3,7 +3,7 @@
  * Plugin Name:       آمار بازدید سایت (Custom Visit Stats)
  * Plugin URI:        https://github.com/esmaeelsh93-lab/Esee
  * Description:       افزونه اختصاصی آمار بازدید که تعداد ورودی‌های سایت را بر اساس تاریخ و منبع ارجاع (گوگل، اینستاگرام، ایکس، تلگرام، مستقیم و ...) در پیشخوان وردپرس نمایش می‌دهد.
- * Version:           1.0.0
+ * Version:           1.1.0
  * Requires at least: 5.8
  * Requires PHP:      7.4
  * Author:            Esee
