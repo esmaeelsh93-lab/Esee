@@ -89,12 +89,47 @@ class CVS_Admin {
 			'exclude_staff'       => 1,
 			'session_timeout'     => 30,
 			'excluded_ips'        => '',
-			'retention_days'      => 0,
+			'retention_days'      => 365,
 			'delete_on_uninstall' => 0,
+			'cookie_less'         => 0,
+			'dashboard_theme'     => 'light',
+			'persian_digits'      => 1,
 		);
 
 		$saved = get_option( 'cvs_settings', array() );
 		return wp_parse_args( $saved, $defaults );
+	}
+
+	/**
+	 * معماری اطلاعاتی اصلی افزونه.
+	 */
+	public static function get_navigation_items() {
+		return array(
+			'dashboard' => array( 'label' => 'داشبورد', 'icon' => 'dashicons-chart-area' ),
+			'visitors'  => array( 'label' => 'بازدیدکنندگان', 'icon' => 'dashicons-groups' ),
+			'sources'   => array( 'label' => 'منابع ترافیک', 'icon' => 'dashicons-share' ),
+			'funnel'    => array( 'label' => 'قیف فروش', 'icon' => 'dashicons-filter' ),
+			'heatmap'   => array( 'label' => 'نقشه حرارتی', 'icon' => 'dashicons-location-alt' ),
+			'geography' => array( 'label' => 'جغرافیا و شهرها', 'icon' => 'dashicons-admin-site-alt3' ),
+			'sales'     => array( 'label' => 'گزارش فروش', 'icon' => 'dashicons-cart' ),
+			'events'    => array( 'label' => 'رویدادها', 'icon' => 'dashicons-flag' ),
+			'settings'  => array( 'label' => 'تنظیمات', 'icon' => 'dashicons-admin-generic' ),
+			'guide'     => array( 'label' => 'آموزش و راهنما', 'icon' => 'dashicons-welcome-learn-more' ),
+		);
+	}
+
+	public static function get_tab_url( $tab ) {
+		if ( 'settings' === $tab ) {
+			return admin_url( 'admin.php?page=' . self::PAGE_SETTINGS );
+		}
+
+		return add_query_arg(
+			array(
+				'page' => self::PAGE_STATS,
+				'tab'  => sanitize_key( $tab ),
+			),
+			admin_url( 'admin.php' )
+		);
 	}
 
 	/**
@@ -185,47 +220,42 @@ class CVS_Admin {
 			wp_die( 'شما دسترسی لازم برای مشاهده‌ی این صفحه را ندارید.' );
 		}
 
+		$navigation = self::get_navigation_items();
+		$display_settings = self::get_settings();
+		$active_tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : 'dashboard';
+		if ( ! isset( $navigation[ $active_tab ] ) || 'settings' === $active_tab ) {
+			$active_tab = 'dashboard';
+		}
+
 		list( $from, $to, $range ) = self::resolve_date_range();
 		list( $prev_from, $prev_to ) = CVS_DB::get_previous_range( $from, $to );
 
 		$total           = CVS_DB::get_total( $from, $to );
 		$prev_total      = CVS_DB::get_total( $prev_from, $prev_to );
-		$breakdown       = CVS_DB::get_breakdown_by_source( $from, $to );
-		$daily_series    = CVS_DB::get_daily_series( $from, $to );
-		$daily_table     = CVS_DB::get_daily_breakdown_table( $from, $to );
-		$other_referrers = CVS_DB::get_other_referrers( $from, $to );
+		$unique_visitors = CVS_DB::get_unique_visitors( $from, $to );
+		$prev_unique     = CVS_DB::get_unique_visitors( $prev_from, $prev_to );
+		$sessions_count  = CVS_DB::get_sessions_count( $from, $to );
+		$prev_sessions   = CVS_DB::get_sessions_count( $prev_from, $prev_to );
+		$bounce_rate     = CVS_DB::get_bounce_rate( $from, $to );
+		$avg_duration    = CVS_DB::get_average_duration( $from, $to );
+		$online_count    = CVS_DB::get_online_count();
+		$needs_charts    = in_array( $active_tab, array( 'dashboard', 'sources' ), true );
+		$breakdown       = $needs_charts ? CVS_DB::get_breakdown_by_source( $from, $to ) : array();
+		$daily_series    = $needs_charts
+			? CVS_DB::get_daily_series( $from, $to )
+			: array( 'dates' => CVS_DB::get_date_range_list( $from, $to ), 'sources' => array() );
+		$top_pages       = 'dashboard' === $active_tab ? CVS_DB::get_top_pages( $from, $to ) : array();
+		$recent_sessions = 'visitors' === $active_tab ? CVS_DB::get_recent_sessions( $from, $to ) : array();
+		$city_breakdown  = 'geography' === $active_tab ? CVS_DB::get_city_breakdown( $from, $to ) : array();
+		$needs_sales     = in_array( $active_tab, array( 'dashboard', 'sales', 'funnel' ), true );
+		$sales           = $needs_sales ? CVS_DB::get_sales_totals( $from, $to ) : array( 'total_sales' => 0, 'orders_count' => 0 );
+		$previous_sales  = $needs_sales ? CVS_DB::get_sales_totals( $prev_from, $prev_to ) : array( 'total_sales' => 0, 'orders_count' => 0 );
 
-		$days_count    = max( 1, count( $daily_series['dates'] ) );
-		$daily_average = round( $total / $days_count, 1 );
-		$prev_average  = round( $prev_total / $days_count, 1 );
-
-		$active_sources = count( $breakdown );
-
-		$top_source      = ! empty( $breakdown ) ? $breakdown[0] : null;
-		$top_source_prev = $top_source ? CVS_DB::get_source_total( $prev_from, $prev_to, $top_source->source_key ) : 0;
-
-		$best_day = null;
-		foreach ( $daily_table as $day ) {
-			if ( null === $best_day || $day['total'] > $best_day['total'] ) {
-				$best_day = $day;
-			}
-		}
-
-		$total_change   = self::calc_percent_change( $total, $prev_total );
-		$average_change = self::calc_percent_change( $daily_average, $prev_average );
-		$top_change     = $top_source ? self::calc_percent_change( (int) $top_source->total, $top_source_prev ) : array( 'percent' => 0, 'direction' => 'up' );
-
-		$top_sources_ranked = array_slice( $breakdown, 0, 4 );
-		$ranked_with_change = array();
-		foreach ( $top_sources_ranked as $row ) {
-			$prev_count           = CVS_DB::get_source_total( $prev_from, $prev_to, $row->source_key );
-			$ranked_with_change[] = array(
-				'key'    => $row->source_key,
-				'label'  => $row->source_label,
-				'total'  => (int) $row->total,
-				'change' => self::calc_percent_change( (int) $row->total, $prev_count ),
-			);
-		}
+		$days_count      = max( 1, count( $daily_series['dates'] ) );
+		$total_change    = self::calc_percent_change( $total, $prev_total );
+		$unique_change   = self::calc_percent_change( $unique_visitors, $prev_unique );
+		$sessions_change = self::calc_percent_change( $sessions_count, $prev_sessions );
+		$sales_change    = self::calc_percent_change( $sales['total_sales'], $previous_sales['total_sales'] );
 
 		$chart_colors = self::get_chart_colors();
 
@@ -263,8 +293,9 @@ class CVS_Admin {
 				),
 				'colors' => $chart_colors,
 				'i18n'   => array(
-					'totalLabel'      => 'تعداد ورودی',
-					'cumulativeLabel' => 'روند تجمعی ورودی‌ها',
+					'totalLabel'      => 'تعداد بازدید',
+					'cumulativeLabel' => 'روند تجمعی بازدیدها',
+					'numberLocale'    => ! empty( $display_settings['persian_digits'] ) ? 'fa-IR' : 'en-US',
 				),
 			)
 		);
@@ -326,9 +357,11 @@ class CVS_Admin {
 			wp_die( 'شما دسترسی لازم برای مشاهده‌ی این صفحه را ندارید.' );
 		}
 
-		$settings = self::get_settings();
-		$saved    = isset( $_GET['saved'] ) && '1' === $_GET['saved'];
-		$reset    = isset( $_GET['reset'] ) && '1' === $_GET['reset'];
+		$settings   = self::get_settings();
+		$navigation = self::get_navigation_items();
+		$active_tab = 'settings';
+		$saved      = isset( $_GET['saved'] ) && '1' === $_GET['saved'];
+		$reset      = isset( $_GET['reset'] ) && '1' === $_GET['reset'];
 
 		include CVS_PLUGIN_DIR . 'templates/settings-page.php';
 	}
@@ -343,12 +376,16 @@ class CVS_Admin {
 
 		check_admin_referer( 'cvs_save_settings' );
 
+		$dashboard_theme = isset( $_POST['dashboard_theme'] ) ? sanitize_key( wp_unslash( $_POST['dashboard_theme'] ) ) : 'light';
 		$settings = array(
 			'exclude_staff'       => ! empty( $_POST['exclude_staff'] ) ? 1 : 0,
-			'session_timeout'     => isset( $_POST['session_timeout'] ) ? max( 1, (int) $_POST['session_timeout'] ) : 30,
+			'session_timeout'     => isset( $_POST['session_timeout'] ) ? max( 1, min( 1440, (int) $_POST['session_timeout'] ) ) : 30,
 			'excluded_ips'        => isset( $_POST['excluded_ips'] ) ? sanitize_textarea_field( wp_unslash( $_POST['excluded_ips'] ) ) : '',
 			'retention_days'      => isset( $_POST['retention_days'] ) ? max( 0, (int) $_POST['retention_days'] ) : 0,
 			'delete_on_uninstall' => ! empty( $_POST['delete_on_uninstall'] ) ? 1 : 0,
+			'cookie_less'         => ! empty( $_POST['cookie_less'] ) ? 1 : 0,
+			'persian_digits'      => ! empty( $_POST['persian_digits'] ) ? 1 : 0,
+			'dashboard_theme'     => in_array( $dashboard_theme, array( 'light', 'dark', 'auto' ), true ) ? $dashboard_theme : 'light',
 		);
 
 		update_option( 'cvs_settings', $settings );
@@ -384,22 +421,55 @@ class CVS_Admin {
 		check_admin_referer( 'cvs_export_csv' );
 
 		list( $from, $to ) = self::resolve_date_range();
-
-		$daily_table = CVS_DB::get_daily_breakdown_table( $from, $to );
+		$allowed_reports = array( 'dashboard', 'visitors', 'sources', 'geography', 'sales' );
+		$report = isset( $_GET['report'] ) ? sanitize_key( wp_unslash( $_GET['report'] ) ) : 'dashboard';
+		if ( ! in_array( $report, $allowed_reports, true ) ) {
+			$report = 'dashboard';
+		}
 
 		nocache_headers();
 		header( 'Content-Type: text/csv; charset=utf-8' );
-		header( 'Content-Disposition: attachment; filename=visit-stats-' . $from . '-to-' . $to . '.csv' );
+		header( 'Content-Disposition: attachment; filename=visit-stats-' . $report . '-' . $from . '-to-' . $to . '.csv' );
 
 		$output = fopen( 'php://output', 'w' );
 		// BOM برای نمایش صحیح حروف فارسی در اکسل.
 		fwrite( $output, "\xEF\xBB\xBF" );
 
-		fputcsv( $output, array( 'تاریخ', 'منبع', 'تعداد ورودی' ) );
-
-		foreach ( $daily_table as $day ) {
-			foreach ( $day['sources'] as $source ) {
-				fputcsv( $output, array( $day['date'], $source['label'], $source['total'] ) );
+		if ( 'visitors' === $report ) {
+			fputcsv( $output, array( 'شروع نشست', 'صفحه ورود', 'صفحه خروج', 'تعداد صفحات', 'مدت (ثانیه)', 'دستگاه', 'مرورگر', 'سیستم‌عامل', 'کشور', 'شهر' ) );
+			foreach ( CVS_DB::get_recent_sessions( $from, $to, 200 ) as $session ) {
+				fputcsv(
+					$output,
+					array(
+						$session->first_seen,
+						$session->entry_page,
+						$session->exit_page,
+						$session->page_count,
+						$session->duration_seconds,
+						$session->device_type,
+						$session->browser,
+						$session->os,
+						$session->country,
+						$session->city,
+					)
+				);
+			}
+		} elseif ( 'geography' === $report ) {
+			fputcsv( $output, array( 'کشور', 'شهر', 'بازدید', 'بازدیدکننده یکتا' ) );
+			foreach ( CVS_DB::get_city_breakdown( $from, $to, 500 ) as $city ) {
+				fputcsv( $output, array( $city->country, $city->city, $city->visits, $city->unique_visitors ) );
+			}
+		} elseif ( 'sales' === $report ) {
+			fputcsv( $output, array( 'تاریخ', 'فروش', 'تعداد سفارش' ) );
+			foreach ( CVS_DB::get_daily_sales( $from, $to ) as $day ) {
+				fputcsv( $output, array( $day->summary_date, $day->total_sales, $day->orders_count ) );
+			}
+		} else {
+			fputcsv( $output, array( 'تاریخ', 'منبع', 'تعداد بازدید' ) );
+			foreach ( CVS_DB::get_daily_breakdown_table( $from, $to ) as $day ) {
+				foreach ( $day['sources'] as $source ) {
+					fputcsv( $output, array( $day['date'], $source['label'], $source['total'] ) );
+				}
 			}
 		}
 

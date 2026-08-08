@@ -100,6 +100,13 @@ class CVS_Jalali {
 	 * تبدیل ارقام لاتین یک رشته به ارقام فارسی.
 	 */
 	public static function to_persian_digits( $string ) {
+		if ( class_exists( 'CVS_Admin' ) ) {
+			$settings = CVS_Admin::get_settings();
+			if ( empty( $settings['persian_digits'] ) ) {
+				return (string) $string;
+			}
+		}
+
 		$latin   = array( '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' );
 		$persian = array( '۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹' );
 
