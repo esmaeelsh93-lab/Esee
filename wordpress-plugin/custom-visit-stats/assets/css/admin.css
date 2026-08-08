@@ -3,10 +3,23 @@
  * Namespaced entirely under `.cvs-admin-wrap` / `.cvs-app` so the rest of
  * wp-admin is left untouched. Native RTL, light/dark/auto themes, and a
  * responsive sidebar -> icon-rail -> bottom-nav layout.
- *
- * No local font files ship with this plugin, so we only declare a font
- * stack (Vazirmatn if the environment/theme provides it, else Tahoma).
  */
+
+@font-face {
+	font-family: "Vazirmatn";
+	src: url("../fonts/Vazirmatn-Regular.woff2") format("woff2");
+	font-weight: 400 600;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "Vazirmatn";
+	src: url("../fonts/Vazirmatn-Bold.woff2") format("woff2");
+	font-weight: 700 800;
+	font-style: normal;
+	font-display: swap;
+}
 
 /* ==========================================================================
    1. Design tokens (light theme defaults) + JS bridge variables
