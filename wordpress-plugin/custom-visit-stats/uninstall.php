@@ -14,8 +14,15 @@ if ( empty( $settings['delete_on_uninstall'] ) ) {
 }
 
 global $wpdb;
-$table = $wpdb->prefix . 'cvs_visits';
-$wpdb->query( "DROP TABLE IF EXISTS {$table}" );
+$tables = array(
+	$wpdb->prefix . 'cvs_visits',
+	$wpdb->prefix . 'cvs_sessions',
+	$wpdb->prefix . 'cvs_daily_summary',
+	$wpdb->prefix . 'cvs_city_daily',
+);
+foreach ( $tables as $table ) {
+	$wpdb->query( "DROP TABLE IF EXISTS {$table}" );
+}
 
 delete_option( 'cvs_settings' );
 delete_option( 'cvs_salt' );
