@@ -8,12 +8,30 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+$footer_logo_id = get_theme_mod( 'custom_logo' );
 ?>
 <footer class="site-footer">
 	<div class="site-footer__glow" aria-hidden="true"></div>
 	<div class="site-footer__inner pc-container">
 		<div class="site-footer__brand">
-			<img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/parisa-crop-mark.svg' ); ?>" alt="" width="72" height="72">
+			<?php if ( $footer_logo_id ) : ?>
+				<?php
+				echo wp_kses_post(
+					wp_get_attachment_image(
+						$footer_logo_id,
+						'full',
+						false,
+						array(
+							'class' => 'site-footer__logo',
+							'alt'   => get_bloginfo( 'name' ),
+						)
+					)
+				);
+				?>
+			<?php else : ?>
+				<img class="site-footer__logo" src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/parisa-crop-logo.svg' ); ?>" alt="<?php esc_attr_e( 'Parisa Crop', 'parisacrop' ); ?>" width="72" height="72">
+			<?php endif; ?>
 			<div>
 				<p class="site-footer__eyebrow">Parisa Crop</p>
 				<h2><?php esc_html_e( 'خاص مثل تو', 'parisacrop' ); ?></h2>

@@ -38,71 +38,88 @@ $benefits = array(
 	array(
 		'icon'        => 'rocket',
 		'title'       => __( 'ارسال سریع', 'parisacrop' ),
-		'description' => __( 'سفارشت را با دقت آماده می‌کنیم تا در کوتاه‌ترین زمان به دستت برسد.', 'parisacrop' ),
+		'description' => __( 'سفارشت سریع و با دقت به دستت می‌رسد.', 'parisacrop' ),
 	),
 	array(
 		'icon'        => 'tag',
 		'title'       => __( 'قیمت مناسب', 'parisacrop' ),
-		'description' => __( 'استایل جذاب نباید دور از دسترس باشد؛ انتخاب‌های خوش‌قیمت همیشه منتظرت هستند.', 'parisacrop' ),
+		'description' => __( 'انتخاب‌های خوش‌قیمت همیشه منتظرت هستند.', 'parisacrop' ),
 	),
 	array(
 		'icon'        => 'sparkles',
 		'title'       => __( 'تنوع کالا', 'parisacrop' ),
-		'description' => __( 'از مدل‌های روزمره تا انتخاب‌های خاص، برای هر حال‌وهوایی چیزی داریم.', 'parisacrop' ),
+		'description' => __( 'مدل‌های متنوع برای هر سلیقه و استایل.', 'parisacrop' ),
 	),
 	array(
 		'icon'        => 'heart',
 		'title'       => __( 'انتخاب باکیفیت', 'parisacrop' ),
-		'description' => __( 'هر محصول با وسواس انتخاب می‌شود تا هم زیبا باشد و هم حس خوبی به تو بدهد.', 'parisacrop' ),
+		'description' => __( 'محصولات زیبا و باکیفیت، انتخاب‌شده برای تو.', 'parisacrop' ),
 	),
 	array(
 		'icon'        => 'bag',
 		'title'       => __( 'خرید آسان و مطمئن', 'parisacrop' ),
-		'description' => __( 'از پیدا کردن مدل محبوبت تا ثبت سفارش، مسیر خرید ساده و امن طراحی شده است.', 'parisacrop' ),
+		'description' => __( 'خریدی ساده، امن و بدون دردسر.', 'parisacrop' ),
 	),
 	array(
 		'icon'        => 'chat',
 		'title'       => __( 'پشتیبانی پاسخ‌گو', 'parisacrop' ),
-		'description' => __( 'برای انتخاب بهتر یا پیگیری سفارش، با حوصله کنار تو هستیم.', 'parisacrop' ),
+		'description' => __( 'برای انتخاب و پیگیری سفارش کنارت هستیم.', 'parisacrop' ),
 	),
 );
 ?>
 
 <main id="main">
 	<section class="hero" aria-labelledby="hero-title">
-		<div class="hero__spotlight" aria-hidden="true"></div>
-		<div class="hero__orb hero__orb--one" aria-hidden="true"></div>
-		<div class="hero__orb hero__orb--two" aria-hidden="true"></div>
-		<div class="hero__sparkles" aria-hidden="true">
-			<span>✦</span><span>✧</span><span>♥</span><span>✦</span>
-		</div>
+		<picture class="hero__media" aria-hidden="true">
+			<source
+				media="(max-width: 700px)"
+				srcset="<?php echo esc_url( get_template_directory_uri() . '/assets/images/hero-mobile.webp' ); ?>"
+			>
+			<img
+				src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/hero-desktop.webp' ); ?>"
+				alt=""
+				width="1983"
+				height="793"
+				fetchpriority="high"
+				decoding="async"
+			>
+		</picture>
+		<div class="hero__veil" aria-hidden="true"></div>
 		<div class="hero__inner pc-container">
 			<div class="hero__copy">
-				<p class="hero__kicker"><?php esc_html_e( 'CROP & TOP COLLECTION', 'parisacrop' ); ?></p>
-				<h1 id="hero-title">
-					<span class="hero__title-line">Parisa Crop</span>
-					<span class="hero__title-script">Shop</span>
-				</h1>
-				<p class="hero__tagline"><?php esc_html_e( 'خاص مثل تو', 'parisacrop' ); ?><span aria-hidden="true">♥</span></p>
-				<p class="hero__description"><?php esc_html_e( 'تازه‌ترین انتخاب‌ها برای ساختن استایلی که امضای خود تو را دارد.', 'parisacrop' ); ?></p>
-				<a class="pc-button pc-button--primary" href="#new-arrivals">
-					<?php esc_html_e( 'دیدن تازه‌ها', 'parisacrop' ); ?>
+				<h1 class="hero__title" id="hero-title"><?php esc_html_e( 'پریسا کراپ شاپ', 'parisacrop' ); ?></h1>
+				<p class="hero__tagline"><?php esc_html_e( 'خاص مثل تو', 'parisacrop' ); ?></p>
+				<a class="pc-button pc-button--primary pc-button--hero" href="<?php echo esc_url( parisacrop_shop_url() ); ?>">
+					<span aria-hidden="true">♥</span>
+					<?php esc_html_e( 'بریم فروشگاه', 'parisacrop' ); ?>
 					<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
 				</a>
 			</div>
-			<div class="hero__visual" aria-hidden="true">
-				<div class="hero__halo"></div>
-				<img class="hero__hanger" src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/hanger.svg' ); ?>" alt="">
-				<div class="hero__ribbon">
-					<span><?php esc_html_e( 'برای تو', 'parisacrop' ); ?></span>
-				</div>
-				<div class="hero__heart hero__heart--one">♥</div>
-				<div class="hero__heart hero__heart--two">♥</div>
-			</div>
 		</div>
-		<a class="hero__scroll" href="#categories" aria-label="<?php esc_attr_e( 'رفتن به دسته‌بندی‌ها', 'parisacrop' ); ?>">
-			<span></span>
-		</a>
+	</section>
+
+	<section class="product-search" aria-labelledby="product-search-title">
+		<div class="pc-container">
+			<h2 class="screen-reader-text" id="product-search-title"><?php esc_html_e( 'جستجوی محصولات', 'parisacrop' ); ?></h2>
+			<form class="product-search__form" role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+				<label class="screen-reader-text" for="parisacrop-product-search"><?php esc_html_e( 'نام محصول', 'parisacrop' ); ?></label>
+				<span class="product-search__icon" aria-hidden="true">
+					<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg>
+				</span>
+				<input
+					id="parisacrop-product-search"
+					type="search"
+					name="s"
+					placeholder="<?php esc_attr_e( 'کافیه اسم محصول رو جستجو کنی...', 'parisacrop' ); ?>"
+					autocomplete="off"
+				>
+				<input type="hidden" name="post_type" value="product">
+				<button type="submit">
+					<?php esc_html_e( 'جستجو', 'parisacrop' ); ?>
+					<span aria-hidden="true">←</span>
+				</button>
+			</form>
+		</div>
 	</section>
 
 	<section class="category-section pc-section" id="categories" aria-labelledby="category-title">

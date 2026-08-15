@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'PARISACROP_VERSION', '1.0.0' );
+define( 'PARISACROP_VERSION', '1.1.0' );
 define( 'PARISACROP_CATEGORY_META_KEY', '_parisacrop_show_home' );
 define( 'PARISACROP_INSTAGRAM_URL', 'https://www.instagram.com/papillon.galley.shop/' );
 define( 'PARISACROP_WHATSAPP_URL', 'https://wa.me/989927779013' );

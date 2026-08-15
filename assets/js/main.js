@@ -70,52 +70,12 @@
 
 	const heroTimeline = gsap.timeline({ defaults: { ease: "power3.out" } });
 	heroTimeline
-		.from(".hero__kicker", { autoAlpha: 0, x: 34, duration: 0.65 })
-		.from(".hero__title-line", { autoAlpha: 0, y: 55, rotateX: -18, duration: 0.9 }, "-=0.35")
-		.from(".hero__title-script", { autoAlpha: 0, scale: 0.72, rotate: -18, duration: 0.85 }, "-=0.5")
-		.from(".hero__tagline", { autoAlpha: 0, y: 22, duration: 0.55 }, "-=0.42")
-		.from(".hero__description", { autoAlpha: 0, y: 18, duration: 0.5 }, "-=0.36")
-		.from(".hero .pc-button", { autoAlpha: 0, y: 16, duration: 0.48 }, "-=0.28")
-		.from(".hero__halo", { autoAlpha: 0, scale: 0.72, duration: 1.1 }, 0.15)
-		.from(".hero__hanger", { autoAlpha: 0, y: -90, rotate: -7, duration: 1.25, ease: "elastic.out(1, 0.6)" }, 0.25)
-		.from(".hero__ribbon", { autoAlpha: 0, y: 30, rotate: 8, duration: 0.7 }, 0.8)
-		.from(".hero__sparkles span, .hero__heart", { autoAlpha: 0, scale: 0, stagger: 0.09, duration: 0.45 }, 0.75);
-
-	gsap.to(".hero__spotlight", {
-		xPercent: 30,
-		opacity: 0.35,
-		duration: 4.5,
-		ease: "sine.inOut",
-		repeat: -1,
-		yoyo: true,
-	});
-
-	gsap.to(".hero__hanger", {
-		y: 8,
-		rotate: -0.7,
-		duration: 3.4,
-		ease: "sine.inOut",
-		repeat: -1,
-		yoyo: true,
-	});
-
-	gsap.to(".hero__heart--one", {
-		y: -13,
-		rotate: 7,
-		duration: 2.3,
-		ease: "sine.inOut",
-		repeat: -1,
-		yoyo: true,
-	});
-
-	gsap.to(".hero__heart--two", {
-		y: 10,
-		rotate: -8,
-		duration: 2.8,
-		ease: "sine.inOut",
-		repeat: -1,
-		yoyo: true,
-	});
+		.from(".hero__media img", { autoAlpha: 0, scale: 1.06, duration: 1.35 })
+		.from(".hero__copy", { autoAlpha: 0, y: 30, scale: 0.97, duration: 0.7 }, "-=0.72")
+		.from(".hero__title", { autoAlpha: 0, y: 24, duration: 0.62 }, "-=0.42")
+		.from(".hero__tagline", { autoAlpha: 0, y: 18, duration: 0.5 }, "-=0.35")
+		.from(".hero .pc-button", { autoAlpha: 0, y: 14, scale: 0.94, duration: 0.48 }, "-=0.28")
+		.from(".product-search__form", { autoAlpha: 0, y: 20, duration: 0.55 }, "-=0.2");
 
 	gsap.utils.toArray(".section-heading").forEach((heading) => {
 		gsap.from(heading.children, {

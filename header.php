@@ -9,8 +9,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$shop_url  = parisacrop_shop_url();
-$categories = taxonomy_exists( 'product_cat' )
+$home_url       = home_url( '/' );
+$shop_url       = parisacrop_shop_url();
+$custom_logo_id = get_theme_mod( 'custom_logo' );
+$categories     = taxonomy_exists( 'product_cat' )
 	? get_terms(
 		array(
 			'taxonomy'   => 'product_cat',
@@ -38,9 +40,21 @@ if ( is_wp_error( $categories ) ) {
 
 <header class="site-header" data-header>
 	<div class="site-header__inner pc-container">
-		<a class="site-brand" href="<?php echo esc_url( $shop_url ); ?>" aria-label="<?php esc_attr_e( 'فروشگاه پریسا کراپ', 'parisacrop' ); ?>">
-			<?php if ( has_custom_logo() ) : ?>
-				<?php echo wp_kses_post( get_custom_logo() ); ?>
+		<a class="site-brand" href="<?php echo esc_url( $home_url ); ?>" aria-label="<?php esc_attr_e( 'صفحه اصلی پریسا کراپ', 'parisacrop' ); ?>">
+			<?php if ( $custom_logo_id ) : ?>
+				<?php
+				echo wp_kses_post(
+					wp_get_attachment_image(
+						$custom_logo_id,
+						'full',
+						false,
+						array(
+							'class' => 'site-brand__logo custom-logo',
+							'alt'   => get_bloginfo( 'name' ),
+						)
+					)
+				);
+				?>
 			<?php else : ?>
 				<img
 					class="site-brand__logo"
@@ -53,7 +67,7 @@ if ( is_wp_error( $categories ) ) {
 		</a>
 
 		<nav class="desktop-nav" aria-label="<?php esc_attr_e( 'منوی اصلی', 'parisacrop' ); ?>">
-			<a class="desktop-nav__link" href="<?php echo esc_url( $shop_url ); ?>"><?php esc_html_e( 'خانه', 'parisacrop' ); ?></a>
+			<a class="desktop-nav__link" href="<?php echo esc_url( $home_url ); ?>"><?php esc_html_e( 'خانه', 'parisacrop' ); ?></a>
 			<div class="desktop-nav__dropdown">
 				<button class="desktop-nav__link desktop-nav__trigger" type="button" aria-expanded="false">
 					<?php esc_html_e( 'دسته‌بندی‌ها', 'parisacrop' ); ?>
@@ -96,7 +110,7 @@ if ( is_wp_error( $categories ) ) {
 
 	<div class="mobile-menu" id="mobile-menu" aria-hidden="true">
 		<nav aria-label="<?php esc_attr_e( 'منوی موبایل', 'parisacrop' ); ?>">
-			<a href="<?php echo esc_url( $shop_url ); ?>"><?php esc_html_e( 'خانه', 'parisacrop' ); ?></a>
+			<a href="<?php echo esc_url( $home_url ); ?>"><?php esc_html_e( 'خانه', 'parisacrop' ); ?></a>
 			<p><?php esc_html_e( 'دسته‌بندی‌ها', 'parisacrop' ); ?></p>
 			<?php foreach ( $categories as $category ) : ?>
 				<a class="mobile-menu__category" href="<?php echo esc_url( get_term_link( $category ) ); ?>">
