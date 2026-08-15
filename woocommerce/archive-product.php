@@ -14,11 +14,12 @@ if ( is_shop() ) {
 	get_footer( 'shop' );
 	return;
 }
+
+do_action( 'woocommerce_before_main_content' );
 ?>
-<main id="main" class="product-archive pc-section">
+<div class="product-archive pc-section">
 	<div class="pc-container">
 		<?php
-		do_action( 'woocommerce_before_main_content' );
 		do_action( 'woocommerce_shop_loop_header' );
 
 		if ( woocommerce_product_loop() ) {
@@ -39,9 +40,9 @@ if ( is_shop() ) {
 			do_action( 'woocommerce_no_products_found' );
 		}
 
-		do_action( 'woocommerce_after_main_content' );
 		?>
 	</div>
-</main>
+</div>
 <?php
+do_action( 'woocommerce_after_main_content' );
 get_footer( 'shop' );
