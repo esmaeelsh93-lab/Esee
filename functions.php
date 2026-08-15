@@ -11,6 +11,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 define( 'PARISACROP_VERSION', '1.0.0' );
 define( 'PARISACROP_CATEGORY_META_KEY', '_parisacrop_show_home' );
+define( 'PARISACROP_INSTAGRAM_URL', 'https://www.instagram.com/papillon.galley.shop/' );
+define( 'PARISACROP_WHATSAPP_URL', 'https://wa.me/989927779013' );
+define( 'PARISACROP_PHONE_URL', 'tel:+989927779013' );
+define( 'PARISACROP_PHONE_DISPLAY', '09927779013' );
 
 /**
  * Register theme features.

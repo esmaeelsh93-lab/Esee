@@ -75,14 +75,14 @@ if ( is_wp_error( $categories ) ) {
 		</nav>
 
 		<div class="header-actions">
-			<a class="social-button social-button--instagram" href="#" aria-label="<?php esc_attr_e( 'اینستاگرام پریسا کراپ؛ لینک به‌زودی اضافه می‌شود', 'parisacrop' ); ?>">
+			<a class="social-button social-button--instagram" href="<?php echo esc_url( PARISACROP_INSTAGRAM_URL ); ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php esc_attr_e( 'اینستاگرام پریسا کراپ', 'parisacrop' ); ?>">
 				<svg aria-hidden="true" viewBox="0 0 24 24">
 					<rect x="3" y="3" width="18" height="18" rx="5"/>
 					<circle cx="12" cy="12" r="4"/>
 					<circle class="fill-dot" cx="17.4" cy="6.6" r="1"/>
 				</svg>
 			</a>
-			<a class="social-button social-button--whatsapp" href="#" aria-label="<?php esc_attr_e( 'واتساپ پریسا کراپ؛ لینک به‌زودی اضافه می‌شود', 'parisacrop' ); ?>">
+			<a class="social-button social-button--whatsapp" href="<?php echo esc_url( PARISACROP_WHATSAPP_URL ); ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php esc_attr_e( 'واتساپ پریسا کراپ', 'parisacrop' ); ?>">
 				<svg aria-hidden="true" viewBox="0 0 24 24">
 					<path d="M20.5 11.7a8.5 8.5 0 0 1-12.6 7.5L3 20.5l1.3-4.7a8.5 8.5 0 1 1 16.2-4.1Z"/>
 					<path d="M9 8.2c.2-.5.4-.5.7-.5h.5c.2 0 .3.1.4.4l.7 1.7c.1.3.1.4-.1.6l-.5.6c-.2.2-.2.3 0 .6.5.9 1.2 1.7 2.1 2.2.3.2.5.2.7 0l.7-.9c.2-.2.4-.3.6-.2l1.8.8c.3.1.4.3.4.5 0 .3-.2 1.4-.9 1.9-.5.4-1.2.7-2 .5-1.1-.2-2.6-.8-4.2-2.2-1.9-1.7-3-3.7-3.1-4.8-.1-.6.1-1.2.5-1.6.5-.5 1-.6 1.2-.6Z"/>

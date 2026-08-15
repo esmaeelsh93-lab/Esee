@@ -31,10 +31,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<div class="site-footer__column site-footer__contact">
 			<h3><?php esc_html_e( 'با ما در ارتباط باش', 'parisacrop' ); ?></h3>
-			<p><?php esc_html_e( 'شماره تماس فروشگاه به‌زودی اضافه می‌شود.', 'parisacrop' ); ?></p>
+			<p>
+				<?php esc_html_e( 'شماره تماس:', 'parisacrop' ); ?>
+				<a href="<?php echo esc_url( PARISACROP_PHONE_URL ); ?>" dir="ltr"><?php echo esc_html( PARISACROP_PHONE_DISPLAY ); ?></a>
+			</p>
 			<div class="site-footer__socials">
-				<a href="#" aria-label="<?php esc_attr_e( 'اینستاگرام؛ لینک به‌زودی', 'parisacrop' ); ?>">Instagram</a>
-				<a href="#" aria-label="<?php esc_attr_e( 'واتساپ؛ لینک به‌زودی', 'parisacrop' ); ?>">WhatsApp</a>
+				<a href="<?php echo esc_url( PARISACROP_INSTAGRAM_URL ); ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php esc_attr_e( 'اینستاگرام پریسا کراپ', 'parisacrop' ); ?>">Instagram</a>
+				<a href="<?php echo esc_url( PARISACROP_WHATSAPP_URL ); ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php esc_attr_e( 'واتساپ پریسا کراپ', 'parisacrop' ); ?>">WhatsApp</a>
 			</div>
 		</div>
 	</div>
