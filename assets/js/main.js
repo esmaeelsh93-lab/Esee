@@ -169,7 +169,11 @@
 		if (!marquee || !marqueeTrack) return;
 		marqueeTween?.kill();
 		gsap.set(marqueeTrack, { x: 0 });
-		const distance = marqueeTrack.scrollWidth / 2;
+		const cards = [...marqueeTrack.children];
+		const duplicateStart = cards[cards.length / 2];
+		const distance = cards[0] && duplicateStart
+			? Math.abs(duplicateStart.offsetLeft - cards[0].offsetLeft)
+			: marqueeTrack.scrollWidth / 2;
 		if (distance <= 0) return;
 
 		marqueeTween = gsap.to(marqueeTrack, {
