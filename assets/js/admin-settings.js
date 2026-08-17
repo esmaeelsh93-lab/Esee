@@ -47,6 +47,17 @@
 			refreshButton();
 		});
 
+		editor.addEventListener("change", (event) => {
+			const pageSelect = event.target.closest("select[name$='[page_id]']");
+			if (!pageSelect || pageSelect.value === "0") return;
+			const row = pageSelect.closest(".pc-link-row");
+			const labelInput = row?.querySelector("input[name$='[label]']");
+			const urlInput = row?.querySelector("input[name$='[url]']");
+			const selectedTitle = pageSelect.selectedOptions[0]?.textContent.trim();
+			if (labelInput && selectedTitle) labelInput.value = selectedTitle;
+			if (urlInput) urlInput.value = "";
+		});
+
 		refreshButton();
 	});
 })();
