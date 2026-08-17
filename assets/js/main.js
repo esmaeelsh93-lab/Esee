@@ -7,6 +7,8 @@
 	const dropdown = document.querySelector(".desktop-nav__dropdown");
 	const dropdownTrigger = dropdown?.querySelector(".desktop-nav__trigger");
 	const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+	const configuredMarqueeSpeed = Number.parseFloat(window.parisacropConfig?.marqueeSpeed);
+	const marqueeSpeed = Number.isFinite(configuredMarqueeSpeed) ? configuredMarqueeSpeed : 42;
 
 	const setHeaderState = () => {
 		header?.classList.toggle("is-scrolled", window.scrollY > 24);
@@ -138,7 +140,7 @@
 
 		marqueeTween = gsap.to(marqueeTrack, {
 			x: -distance,
-			duration: distance / 42,
+			duration: distance / marqueeSpeed,
 			ease: "none",
 			repeat: -1,
 		});

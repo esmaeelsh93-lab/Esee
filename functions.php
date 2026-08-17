@@ -9,12 +9,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'PARISACROP_VERSION', '1.1.0' );
+define( 'PARISACROP_VERSION', '1.2.0' );
 define( 'PARISACROP_CATEGORY_META_KEY', '_parisacrop_show_home' );
-define( 'PARISACROP_INSTAGRAM_URL', 'https://www.instagram.com/papillon.galley.shop/' );
-define( 'PARISACROP_WHATSAPP_URL', 'https://wa.me/989927779013' );
-define( 'PARISACROP_PHONE_URL', 'tel:+989927779013' );
-define( 'PARISACROP_PHONE_DISPLAY', '09927779013' );
+
+require_once get_template_directory() . '/inc/theme-settings.php';
+require_once get_template_directory() . '/inc/page-content.php';
 
 /**
  * Register theme features.
@@ -89,8 +88,37 @@ function parisacrop_enqueue_assets() {
 		PARISACROP_VERSION,
 		true
 	);
+	wp_localize_script(
+		'parisacrop-main',
+		'parisacropConfig',
+		array(
+			'marqueeSpeed' => absint( parisacrop_get_setting( 'marquee_speed' ) ),
+		)
+	);
 }
 add_action( 'wp_enqueue_scripts', 'parisacrop_enqueue_assets' );
+
+/**
+ * Apply product-card controls as safe CSS custom properties.
+ */
+function parisacrop_enqueue_dynamic_styles() {
+	$settings = parisacrop_get_settings();
+	$css      = sprintf(
+		':root{--pc-shop-columns-desktop:%1$d;--pc-shop-columns-mobile:%2$d;--pc-shop-image-height-desktop:%3$dpx;--pc-shop-image-height-mobile:%4$dpx;--pc-latest-card-width-desktop:%5$dpx;--pc-latest-card-width-mobile:%6$dpx;--pc-latest-image-height-desktop:%7$dpx;--pc-latest-image-height-mobile:%8$dpx;--pc-product-card-gap:%9$dpx;}',
+		absint( $settings['shop_columns_desktop'] ),
+		absint( $settings['shop_columns_mobile'] ),
+		absint( $settings['shop_image_height_desktop'] ),
+		absint( $settings['shop_image_height_mobile'] ),
+		absint( $settings['latest_card_width_desktop'] ),
+		absint( $settings['latest_card_width_mobile'] ),
+		absint( $settings['latest_image_height_desktop'] ),
+		absint( $settings['latest_image_height_mobile'] ),
+		absint( $settings['product_card_gap'] )
+	);
+
+	wp_add_inline_style( 'parisacrop-main', $css );
+}
+add_action( 'wp_enqueue_scripts', 'parisacrop_enqueue_dynamic_styles', 15 );
 
 /**
  * Return the WooCommerce shop URL, with the requested /shop fallback.

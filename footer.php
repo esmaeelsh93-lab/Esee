@@ -10,6 +10,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $footer_logo_id = get_theme_mod( 'custom_logo' );
+$footer_links   = parisacrop_get_theme_links( 'footer_links' );
+$phone_display  = parisacrop_get_setting( 'phone_display' );
+$phone_url      = parisacrop_get_setting( 'phone_url' );
+$instagram_url  = parisacrop_get_setting( 'instagram_url' );
+$whatsapp_url   = parisacrop_get_setting( 'whatsapp_url' );
+$telegram_url   = parisacrop_get_setting( 'telegram_url' );
+$email          = parisacrop_get_setting( 'email' );
+$address        = parisacrop_get_setting( 'address' );
 ?>
 <footer class="site-footer">
 	<div class="site-footer__glow" aria-hidden="true"></div>
@@ -34,29 +42,39 @@ $footer_logo_id = get_theme_mod( 'custom_logo' );
 			<?php endif; ?>
 			<div>
 				<p class="site-footer__eyebrow">Parisa Crop</p>
-				<h2><?php esc_html_e( 'خاص مثل تو', 'parisacrop' ); ?></h2>
+				<h2><?php echo esc_html( parisacrop_get_setting( 'footer_tagline' ) ); ?></h2>
 			</div>
-			<p><?php esc_html_e( 'انتخاب‌های تازه و دوست‌داشتنی برای استایلی که فقط مال توست.', 'parisacrop' ); ?></p>
+			<p><?php echo esc_html( parisacrop_get_setting( 'footer_description' ) ); ?></p>
 		</div>
 
 		<div class="site-footer__column">
 			<h3><?php esc_html_e( 'دسترسی سریع', 'parisacrop' ); ?></h3>
-			<a href="<?php echo esc_url( parisacrop_shop_url() ); ?>"><?php esc_html_e( 'فروشگاه', 'parisacrop' ); ?></a>
-			<a href="<?php echo esc_url( parisacrop_shop_url() . '#categories' ); ?>"><?php esc_html_e( 'دسته‌بندی‌ها', 'parisacrop' ); ?></a>
-			<a href="<?php echo esc_url( parisacrop_shop_url() . '#new-arrivals' ); ?>"><?php esc_html_e( 'جدیدترین‌ها', 'parisacrop' ); ?></a>
-			<a href="<?php echo esc_url( parisacrop_shop_url() . '#why-us' ); ?>"><?php esc_html_e( 'چرا ما؟', 'parisacrop' ); ?></a>
+			<?php foreach ( $footer_links as $footer_link ) : ?>
+				<a href="<?php echo esc_url( $footer_link['url'] ); ?>"><?php echo esc_html( $footer_link['label'] ); ?></a>
+			<?php endforeach; ?>
 		</div>
 
 		<div class="site-footer__column site-footer__contact">
 			<h3><?php esc_html_e( 'با ما در ارتباط باش', 'parisacrop' ); ?></h3>
-			<p>
-				<?php esc_html_e( 'شماره تماس:', 'parisacrop' ); ?>
-				<a href="<?php echo esc_url( PARISACROP_PHONE_URL ); ?>" dir="ltr"><?php echo esc_html( PARISACROP_PHONE_DISPLAY ); ?></a>
-			</p>
-			<div class="site-footer__socials">
-				<a href="<?php echo esc_url( PARISACROP_INSTAGRAM_URL ); ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php esc_attr_e( 'اینستاگرام پریسا کراپ', 'parisacrop' ); ?>">Instagram</a>
-				<a href="<?php echo esc_url( PARISACROP_WHATSAPP_URL ); ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php esc_attr_e( 'واتساپ پریسا کراپ', 'parisacrop' ); ?>">WhatsApp</a>
-			</div>
+			<?php if ( $phone_display && parisacrop_get_setting( 'show_phone_footer' ) ) : ?>
+				<p>
+					<?php esc_html_e( 'شماره تماس:', 'parisacrop' ); ?>
+					<a href="<?php echo esc_url( $phone_url ); ?>" dir="ltr"><?php echo esc_html( $phone_display ); ?></a>
+				</p>
+			<?php endif; ?>
+			<?php if ( $email ) : ?>
+				<p><a href="mailto:<?php echo esc_attr( antispambot( $email ) ); ?>" dir="ltr"><?php echo esc_html( antispambot( $email ) ); ?></a></p>
+			<?php endif; ?>
+			<?php if ( $address ) : ?>
+				<p><?php echo wp_kses_post( nl2br( esc_html( $address ) ) ); ?></p>
+			<?php endif; ?>
+			<?php if ( parisacrop_get_setting( 'show_social_footer' ) ) : ?>
+				<div class="site-footer__socials">
+					<?php if ( $instagram_url ) : ?><a href="<?php echo esc_url( $instagram_url ); ?>" target="_blank" rel="noopener noreferrer">Instagram</a><?php endif; ?>
+					<?php if ( $whatsapp_url ) : ?><a href="<?php echo esc_url( $whatsapp_url ); ?>" target="_blank" rel="noopener noreferrer">WhatsApp</a><?php endif; ?>
+					<?php if ( $telegram_url ) : ?><a href="<?php echo esc_url( $telegram_url ); ?>" target="_blank" rel="noopener noreferrer">Telegram</a><?php endif; ?>
+				</div>
+			<?php endif; ?>
 		</div>
 	</div>
 

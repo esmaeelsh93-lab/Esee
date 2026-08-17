@@ -17,7 +17,7 @@ if ( post_type_exists( 'product' ) && function_exists( 'wc_get_product' ) ) {
 		array(
 			'post_type'           => 'product',
 			'post_status'         => 'publish',
-			'posts_per_page'      => 10,
+			'posts_per_page'      => absint( parisacrop_get_setting( 'latest_products_count' ) ),
 			'orderby'             => 'date',
 			'order'               => 'DESC',
 			'ignore_sticky_posts' => true,
@@ -98,29 +98,31 @@ $benefits = array(
 		</div>
 	</section>
 
-	<section class="product-search" aria-labelledby="product-search-title">
-		<div class="pc-container">
-			<h2 class="screen-reader-text" id="product-search-title"><?php esc_html_e( 'جستجوی محصولات', 'parisacrop' ); ?></h2>
-			<form class="product-search__form" role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>">
-				<label class="screen-reader-text" for="parisacrop-product-search"><?php esc_html_e( 'نام محصول', 'parisacrop' ); ?></label>
-				<span class="product-search__icon" aria-hidden="true">
-					<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg>
-				</span>
-				<input
-					id="parisacrop-product-search"
-					type="search"
-					name="s"
-					placeholder="<?php esc_attr_e( 'کافیه اسم محصول رو جستجو کنی...', 'parisacrop' ); ?>"
-					autocomplete="off"
-				>
-				<input type="hidden" name="post_type" value="product">
-				<button type="submit">
-					<?php esc_html_e( 'جستجو', 'parisacrop' ); ?>
-					<span aria-hidden="true">←</span>
-				</button>
-			</form>
-		</div>
-	</section>
+	<?php if ( parisacrop_get_setting( 'show_product_search' ) ) : ?>
+		<section class="product-search" aria-labelledby="product-search-title">
+			<div class="pc-container">
+				<h2 class="screen-reader-text" id="product-search-title"><?php esc_html_e( 'جستجوی محصولات', 'parisacrop' ); ?></h2>
+				<form class="product-search__form" role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+					<label class="screen-reader-text" for="parisacrop-product-search"><?php esc_html_e( 'نام محصول', 'parisacrop' ); ?></label>
+					<span class="product-search__icon" aria-hidden="true">
+						<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg>
+					</span>
+					<input
+						id="parisacrop-product-search"
+						type="search"
+						name="s"
+						placeholder="<?php esc_attr_e( 'کافیه اسم محصول رو جستجو کنی...', 'parisacrop' ); ?>"
+						autocomplete="off"
+					>
+					<input type="hidden" name="post_type" value="product">
+					<button type="submit">
+						<?php esc_html_e( 'جستجو', 'parisacrop' ); ?>
+						<span aria-hidden="true">←</span>
+					</button>
+				</form>
+			</div>
+		</section>
+	<?php endif; ?>
 
 	<section class="category-section pc-section" id="categories" aria-labelledby="category-title">
 		<div class="pc-container">
