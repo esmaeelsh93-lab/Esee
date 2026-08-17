@@ -51,6 +51,19 @@ function parisacrop_setup() {
 add_action( 'after_setup_theme', 'parisacrop_setup' );
 
 /**
+ * Provide a lightweight fallback favicon until a WordPress Site Icon is set.
+ */
+function parisacrop_fallback_site_icon() {
+	if ( has_site_icon() ) {
+		return;
+	}
+	?>
+	<link rel="icon" href="<?php echo esc_url( get_template_directory_uri() . '/assets/images/parisa-crop-mark.svg' ); ?>" type="image/svg+xml">
+	<?php
+}
+add_action( 'wp_head', 'parisacrop_fallback_site_icon', 1 );
+
+/**
  * Load the visual layer and animations.
  */
 function parisacrop_enqueue_assets() {
