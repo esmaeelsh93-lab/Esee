@@ -70,14 +70,20 @@
 	const { gsap } = window;
 	gsap.registerPlugin(window.ScrollTrigger);
 
-	const heroTimeline = gsap.timeline({ defaults: { ease: "power3.out" } });
-	heroTimeline
-		.from(".hero__media img", { autoAlpha: 0, scale: 1.06, duration: 1.35 })
-		.from(".hero__copy", { autoAlpha: 0, y: 30, scale: 0.97, duration: 0.7 }, "-=0.72")
-		.from(".hero__title", { autoAlpha: 0, y: 24, duration: 0.62 }, "-=0.42")
-		.from(".hero__tagline", { autoAlpha: 0, y: 18, duration: 0.5 }, "-=0.35")
-		.from(".hero .pc-button", { autoAlpha: 0, y: 14, scale: 0.94, duration: 0.48 }, "-=0.28")
-		.from(".product-search__form", { autoAlpha: 0, y: 20, duration: 0.55 }, "-=0.2");
+	const hero = document.querySelector(".hero");
+	if (hero) {
+		const heroTimeline = gsap.timeline({ defaults: { ease: "power3.out" } });
+		heroTimeline
+			.from(".hero__media img", { autoAlpha: 0, scale: 1.06, duration: 1.35 })
+			.from(".hero__copy", { autoAlpha: 0, y: 30, scale: 0.97, duration: 0.7 }, "-=0.72")
+			.from(".hero__title", { autoAlpha: 0, y: 24, duration: 0.62 }, "-=0.42")
+			.from(".hero__tagline", { autoAlpha: 0, y: 18, duration: 0.5 }, "-=0.35")
+			.from(".hero .pc-button", { autoAlpha: 0, y: 14, scale: 0.94, duration: 0.48 }, "-=0.28");
+
+		if (document.querySelector(".product-search__form")) {
+			heroTimeline.from(".product-search__form", { autoAlpha: 0, y: 20, duration: 0.55 }, "-=0.2");
+		}
+	}
 
 	gsap.utils.toArray(".section-heading").forEach((heading) => {
 		gsap.from(heading.children, {
@@ -94,33 +100,37 @@
 		});
 	});
 
-	gsap.from(".category-card", {
-		autoAlpha: 0,
-		y: 58,
-		rotate: 2,
-		duration: 0.78,
-		stagger: 0.1,
-		ease: "power3.out",
-		scrollTrigger: {
-			trigger: ".category-grid",
-			start: "top 82%",
-			once: true,
-		},
-	});
+	if (document.querySelector(".category-grid")) {
+		gsap.from(".category-card", {
+			autoAlpha: 0,
+			y: 58,
+			rotate: 2,
+			duration: 0.78,
+			stagger: 0.1,
+			ease: "power3.out",
+			scrollTrigger: {
+				trigger: ".category-grid",
+				start: "top 82%",
+				once: true,
+			},
+		});
+	}
 
-	gsap.from(".benefit-card", {
-		autoAlpha: 0,
-		y: 50,
-		scale: 0.96,
-		duration: 0.7,
-		stagger: 0.1,
-		ease: "back.out(1.3)",
-		scrollTrigger: {
-			trigger: ".benefit-grid",
-			start: "top 82%",
-			once: true,
-		},
-	});
+	if (document.querySelector(".benefit-grid")) {
+		gsap.from(".benefit-card", {
+			autoAlpha: 0,
+			y: 50,
+			scale: 0.96,
+			duration: 0.7,
+			stagger: 0.1,
+			ease: "back.out(1.3)",
+			scrollTrigger: {
+				trigger: ".benefit-grid",
+				start: "top 82%",
+				once: true,
+			},
+		});
+	}
 
 	const marquee = document.querySelector("[data-product-marquee]");
 	const marqueeTrack = marquee?.querySelector(".product-marquee__track");
