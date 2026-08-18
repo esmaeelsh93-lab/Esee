@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$featured_categories = parisacrop_get_featured_categories();
+$featured_categories = rezajordaan_get_featured_categories();
 $latest_products     = array();
 
 if ( post_type_exists( 'product' ) && function_exists( 'wc_get_product' ) ) {
@@ -17,7 +17,7 @@ if ( post_type_exists( 'product' ) && function_exists( 'wc_get_product' ) ) {
 		array(
 			'post_type'           => 'product',
 			'post_status'         => 'publish',
-			'posts_per_page'      => absint( parisacrop_get_setting( 'latest_products_count' ) ),
+			'posts_per_page'      => absint( rezajordaan_get_setting( 'latest_products_count' ) ),
 			'orderby'             => 'date',
 			'order'               => 'DESC',
 			'ignore_sticky_posts' => true,
@@ -37,33 +37,33 @@ if ( post_type_exists( 'product' ) && function_exists( 'wc_get_product' ) ) {
 $benefits = array(
 	array(
 		'icon'        => 'rocket',
-		'title'       => __( 'ارسال سریع', 'parisacrop' ),
-		'description' => __( 'سفارشت سریع و با دقت به دستت می‌رسد.', 'parisacrop' ),
+		'title'       => __( 'ارسال سریع', 'rezajordaan' ),
+		'description' => __( 'سفارشت سریع و با دقت به دستت می‌رسد.', 'rezajordaan' ),
 	),
 	array(
 		'icon'        => 'tag',
-		'title'       => __( 'قیمت مناسب', 'parisacrop' ),
-		'description' => __( 'انتخاب‌های خوش‌قیمت همیشه منتظرت هستند.', 'parisacrop' ),
+		'title'       => __( 'قیمت مناسب', 'rezajordaan' ),
+		'description' => __( 'انتخاب‌های خوش‌قیمت همیشه منتظرت هستند.', 'rezajordaan' ),
 	),
 	array(
 		'icon'        => 'sparkles',
-		'title'       => __( 'تنوع کالا', 'parisacrop' ),
-		'description' => __( 'مدل‌های متنوع برای هر سلیقه و استایل.', 'parisacrop' ),
+		'title'       => __( 'تنوع کالا', 'rezajordaan' ),
+		'description' => __( 'مدل‌های متنوع برای هر سلیقه و استایل.', 'rezajordaan' ),
 	),
 	array(
 		'icon'        => 'heart',
-		'title'       => __( 'انتخاب باکیفیت', 'parisacrop' ),
-		'description' => __( 'محصولات زیبا و باکیفیت، انتخاب‌شده برای تو.', 'parisacrop' ),
+		'title'       => __( 'انتخاب باکیفیت', 'rezajordaan' ),
+		'description' => __( 'محصولات زیبا و باکیفیت، انتخاب‌شده برای تو.', 'rezajordaan' ),
 	),
 	array(
 		'icon'        => 'bag',
-		'title'       => __( 'خرید آسان و مطمئن', 'parisacrop' ),
-		'description' => __( 'خریدی ساده، امن و بدون دردسر.', 'parisacrop' ),
+		'title'       => __( 'خرید آسان و مطمئن', 'rezajordaan' ),
+		'description' => __( 'خریدی ساده، امن و بدون دردسر.', 'rezajordaan' ),
 	),
 	array(
 		'icon'        => 'chat',
-		'title'       => __( 'پشتیبانی پاسخ‌گو', 'parisacrop' ),
-		'description' => __( 'برای انتخاب و پیگیری سفارش کنارت هستیم.', 'parisacrop' ),
+		'title'       => __( 'پشتیبانی پاسخ‌گو', 'rezajordaan' ),
+		'description' => __( 'برای انتخاب و پیگیری سفارش کنارت هستیم.', 'rezajordaan' ),
 	),
 );
 ?>
@@ -85,44 +85,44 @@ $benefits = array(
 			>
 		</picture>
 		<div class="hero__veil" aria-hidden="true"></div>
-		<div class="hero__inner pc-container">
+		<div class="hero__inner rj-container">
 			<div class="hero__copy">
-				<p class="hero__eyebrow"><?php esc_html_e( 'رضا جردن', 'parisacrop' ); ?></p>
-				<div class="hero__payment-logos" data-payment-logos aria-label="<?php esc_attr_e( 'خرید اقساطی با ترب‌پی، دیجی‌پی و اسنپ‌پی', 'parisacrop' ); ?>">
-					<img class="hero__payment-logo is-active" data-payment-logo src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/trb-pay.svg' ); ?>" alt="<?php esc_attr_e( 'ترب‌پی', 'parisacrop' ); ?>">
-					<img class="hero__payment-logo" data-payment-logo src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/digipay-logo.svg' ); ?>" alt="<?php esc_attr_e( 'دیجی‌پی', 'parisacrop' ); ?>">
-					<img class="hero__payment-logo" data-payment-logo src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/snapp-pay.svg' ); ?>" alt="<?php esc_attr_e( 'اسنپ‌پی', 'parisacrop' ); ?>">
+				<p class="hero__eyebrow"><?php esc_html_e( 'رضا جردن', 'rezajordaan' ); ?></p>
+				<div class="hero__payment-logos" data-payment-logos aria-label="<?php esc_attr_e( 'خرید اقساطی با ترب‌پی، دیجی‌پی و اسنپ‌پی', 'rezajordaan' ); ?>">
+					<img class="hero__payment-logo is-active" data-payment-logo src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/trb-pay.svg' ); ?>" alt="<?php esc_attr_e( 'ترب‌پی', 'rezajordaan' ); ?>">
+					<img class="hero__payment-logo" data-payment-logo src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/digipay-logo.svg' ); ?>" alt="<?php esc_attr_e( 'دیجی‌پی', 'rezajordaan' ); ?>">
+					<img class="hero__payment-logo" data-payment-logo src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/snapp-pay.svg' ); ?>" alt="<?php esc_attr_e( 'اسنپ‌پی', 'rezajordaan' ); ?>">
 				</div>
-				<h1 class="hero__title" id="hero-title"><?php esc_html_e( 'خرید اقساطی و آسان', 'parisacrop' ); ?></h1>
-				<p class="hero__tagline"><?php esc_html_e( 'کفش موردعلاقه‌ات را امروز انتخاب کن', 'parisacrop' ); ?></p>
-				<a class="pc-button pc-button--primary pc-button--hero" href="<?php echo esc_url( parisacrop_shop_url() ); ?>">
+				<h1 class="hero__title" id="hero-title"><?php esc_html_e( 'خرید اقساطی و آسان', 'rezajordaan' ); ?></h1>
+				<p class="hero__tagline"><?php esc_html_e( 'کفش موردعلاقه‌ات را امروز انتخاب کن', 'rezajordaan' ); ?></p>
+				<a class="rj-button rj-button--primary rj-button--hero" href="<?php echo esc_url( rezajordaan_shop_url() ); ?>">
 					<span aria-hidden="true">✦</span>
-					<?php esc_html_e( 'مشاهده فروشگاه', 'parisacrop' ); ?>
+					<?php esc_html_e( 'مشاهده فروشگاه', 'rezajordaan' ); ?>
 					<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
 				</a>
 			</div>
 		</div>
 	</section>
 
-	<?php if ( parisacrop_get_setting( 'show_product_search' ) ) : ?>
+	<?php if ( rezajordaan_get_setting( 'show_product_search' ) ) : ?>
 		<section class="product-search" aria-labelledby="product-search-title">
-			<div class="pc-container">
-				<h2 class="screen-reader-text" id="product-search-title"><?php esc_html_e( 'جستجوی محصولات', 'parisacrop' ); ?></h2>
+			<div class="rj-container">
+				<h2 class="screen-reader-text" id="product-search-title"><?php esc_html_e( 'جستجوی محصولات', 'rezajordaan' ); ?></h2>
 				<form class="product-search__form" role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>">
-					<label class="screen-reader-text" for="parisacrop-product-search"><?php esc_html_e( 'نام محصول', 'parisacrop' ); ?></label>
+					<label class="screen-reader-text" for="rezajordaan-product-search"><?php esc_html_e( 'نام محصول', 'rezajordaan' ); ?></label>
 					<span class="product-search__icon" aria-hidden="true">
 						<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg>
 					</span>
 					<input
-						id="parisacrop-product-search"
+						id="rezajordaan-product-search"
 						type="search"
 						name="s"
-						placeholder="<?php esc_attr_e( 'کافیه اسم محصول رو جستجو کنی...', 'parisacrop' ); ?>"
+						placeholder="<?php esc_attr_e( 'کافیه اسم محصول رو جستجو کنی...', 'rezajordaan' ); ?>"
 						autocomplete="off"
 					>
 					<input type="hidden" name="post_type" value="product">
 					<button type="submit">
-						<?php esc_html_e( 'جستجو', 'parisacrop' ); ?>
+						<?php esc_html_e( 'جستجو', 'rezajordaan' ); ?>
 						<span aria-hidden="true">←</span>
 					</button>
 				</form>
@@ -130,12 +130,12 @@ $benefits = array(
 		</section>
 	<?php endif; ?>
 
-	<?php if ( parisacrop_get_setting( 'show_categories' ) && ( $featured_categories || current_user_can( 'manage_product_terms' ) ) ) : ?>
-	<section class="category-section pc-section" id="categories" aria-labelledby="category-title">
-		<div class="pc-container">
+	<?php if ( rezajordaan_get_setting( 'show_categories' ) && ( $featured_categories || current_user_can( 'manage_product_terms' ) ) ) : ?>
+	<section class="category-section rj-section" id="categories" aria-labelledby="category-title">
+		<div class="rj-container">
 			<header class="section-heading">
-				<p><?php echo esc_html( parisacrop_get_setting( 'category_section_kicker' ) ); ?></p>
-				<h2 id="category-title"><?php echo esc_html( parisacrop_get_setting( 'category_section_title' ) ); ?></h2>
+				<p><?php echo esc_html( rezajordaan_get_setting( 'category_section_kicker' ) ); ?></p>
+				<h2 id="category-title"><?php echo esc_html( rezajordaan_get_setting( 'category_section_title' ) ); ?></h2>
 				<span aria-hidden="true"></span>
 			</header>
 
@@ -145,22 +145,22 @@ $benefits = array(
 						<?php
 						$thumbnail_id = get_term_meta( $category->term_id, 'thumbnail_id', true );
 						$image_url    = $thumbnail_id
-							? wp_get_attachment_image_url( $thumbnail_id, 'parisacrop-category' )
+							? wp_get_attachment_image_url( $thumbnail_id, 'rezajordaan-category' )
 							: get_template_directory_uri() . '/assets/images/product-placeholder.svg';
 						$term_link    = get_term_link( $category );
 						?>
-						<a class="category-card" href="<?php echo esc_url( is_wp_error( $term_link ) ? parisacrop_shop_url() : $term_link ); ?>">
+						<a class="category-card" href="<?php echo esc_url( is_wp_error( $term_link ) ? rezajordaan_shop_url() : $term_link ); ?>">
 							<img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $category->name ); ?>" loading="lazy">
 							<span class="category-card__shade"></span>
 							<span class="category-card__index"><?php echo esc_html( sprintf( '%02d', $index + 1 ) ); ?></span>
 							<span class="category-card__content">
 								<strong><?php echo esc_html( $category->name ); ?></strong>
-								<?php if ( parisacrop_get_setting( 'show_category_count' ) ) : ?>
+								<?php if ( rezajordaan_get_setting( 'show_category_count' ) ) : ?>
 									<small>
 										<?php
 										printf(
 											/* translators: %s: product count */
-											esc_html__( '%s محصول', 'parisacrop' ),
+											esc_html__( '%s محصول', 'rezajordaan' ),
 											esc_html( number_format_i18n( $category->count ) )
 										);
 										?>
@@ -172,18 +172,18 @@ $benefits = array(
 					<?php endforeach; ?>
 				</div>
 			<?php elseif ( current_user_can( 'manage_product_terms' ) ) : ?>
-				<div class="pc-admin-note">
-					<?php esc_html_e( 'از نمایش ← تنظیمات رضا جردن، دسته‌های موردنظر را برای لندینگ تیک بزنید.', 'parisacrop' ); ?>
+				<div class="rj-admin-note">
+					<?php esc_html_e( 'از نمایش ← تنظیمات رضا جردن، دسته‌های موردنظر را برای لندینگ تیک بزنید.', 'rezajordaan' ); ?>
 				</div>
 			<?php endif; ?>
 		</div>
 	</section>
 	<?php endif; ?>
 
-	<section class="new-arrivals pc-section" id="new-arrivals" aria-labelledby="new-arrivals-title">
-		<header class="section-heading section-heading--light pc-container">
-			<p><?php esc_html_e( 'همین حالا رسیده', 'parisacrop' ); ?></p>
-			<h2 id="new-arrivals-title"><?php esc_html_e( 'جدیدترین‌ها', 'parisacrop' ); ?></h2>
+	<section class="new-arrivals rj-section" id="new-arrivals" aria-labelledby="new-arrivals-title">
+		<header class="section-heading section-heading--light rj-container">
+			<p><?php esc_html_e( 'همین حالا رسیده', 'rezajordaan' ); ?></p>
+			<h2 id="new-arrivals-title"><?php esc_html_e( 'جدیدترین‌ها', 'rezajordaan' ); ?></h2>
 			<span aria-hidden="true"></span>
 		</header>
 
@@ -197,7 +197,7 @@ $benefits = array(
 									<?php
 									echo wp_kses_post(
 										$product->get_image(
-											'parisacrop-product',
+											'rezajordaan-product',
 											array(
 												'loading' => 'lazy',
 												'alt'     => $product->get_name(),
@@ -205,7 +205,7 @@ $benefits = array(
 										)
 									);
 									?>
-									<span class="product-card__badge"><?php esc_html_e( 'جدید', 'parisacrop' ); ?></span>
+									<span class="product-card__badge"><?php esc_html_e( 'جدید', 'rezajordaan' ); ?></span>
 								</a>
 								<div class="product-card__body">
 									<h3><a href="<?php echo esc_url( $product->get_permalink() ); ?>"><?php echo esc_html( $product->get_name() ); ?></a></h3>
@@ -217,41 +217,41 @@ $benefits = array(
 				</div>
 			</div>
 		<?php elseif ( current_user_can( 'edit_products' ) ) : ?>
-			<div class="pc-admin-note pc-container"><?php esc_html_e( 'محصولی برای نمایش در بخش جدیدترین‌ها منتشر نشده است.', 'parisacrop' ); ?></div>
+			<div class="rj-admin-note rj-container"><?php esc_html_e( 'محصولی برای نمایش در بخش جدیدترین‌ها منتشر نشده است.', 'rezajordaan' ); ?></div>
 		<?php endif; ?>
 	</section>
 
-	<?php if ( parisacrop_get_setting( 'show_about' ) ) : ?>
-		<section class="about-store pc-section" id="about-us" aria-labelledby="about-store-title">
-			<div class="about-store__inner pc-container">
+	<?php if ( rezajordaan_get_setting( 'show_about' ) ) : ?>
+		<section class="about-store rj-section" id="about-us" aria-labelledby="about-store-title">
+			<div class="about-store__inner rj-container">
 				<div class="about-store__copy">
-					<p class="about-store__eyebrow"><?php esc_html_e( 'درباره رضا جردن', 'parisacrop' ); ?></p>
-					<h2 id="about-store-title"><?php echo esc_html( parisacrop_get_setting( 'about_title' ) ); ?></h2>
-					<p><?php echo esc_html( parisacrop_get_setting( 'about_description' ) ); ?></p>
+					<p class="about-store__eyebrow"><?php esc_html_e( 'درباره رضا جردن', 'rezajordaan' ); ?></p>
+					<h2 id="about-store-title"><?php echo esc_html( rezajordaan_get_setting( 'about_title' ) ); ?></h2>
+					<p><?php echo esc_html( rezajordaan_get_setting( 'about_description' ) ); ?></p>
 					<div class="about-store__actions">
-						<a class="pc-button pc-button--primary" href="<?php echo esc_url( parisacrop_get_setting( 'about_url' ) ); ?>"><?php esc_html_e( 'بیشتر درباره ما', 'parisacrop' ); ?></a>
-						<a class="about-store__contact" href="<?php echo esc_url( parisacrop_get_setting( 'phone_url' ) ); ?>"><?php esc_html_e( 'تماس با فروشگاه', 'parisacrop' ); ?></a>
+						<a class="rj-button rj-button--primary" href="<?php echo esc_url( rezajordaan_get_setting( 'about_url' ) ); ?>"><?php esc_html_e( 'بیشتر درباره ما', 'rezajordaan' ); ?></a>
+						<a class="about-store__contact" href="<?php echo esc_url( rezajordaan_get_setting( 'phone_url' ) ); ?>"><?php esc_html_e( 'تماس با فروشگاه', 'rezajordaan' ); ?></a>
 					</div>
 				</div>
 				<aside class="about-store__visit">
 					<span aria-hidden="true">
 						<svg viewBox="0 0 24 24"><path d="M12 21s7-5.3 7-12A7 7 0 1 0 5 9c0 6.7 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg>
 					</span>
-					<h3><?php esc_html_e( 'خرید حضوری', 'parisacrop' ); ?></h3>
-					<p><?php echo esc_html( parisacrop_get_setting( 'store_visit_text' ) ); ?></p>
+					<h3><?php esc_html_e( 'خرید حضوری', 'rezajordaan' ); ?></h3>
+					<p><?php echo esc_html( rezajordaan_get_setting( 'store_visit_text' ) ); ?></p>
 				</aside>
 			</div>
 		</section>
 	<?php endif; ?>
 
-	<section class="why-us pc-section" id="why-us" aria-labelledby="why-us-title">
+	<section class="why-us rj-section" id="why-us" aria-labelledby="why-us-title">
 		<div class="why-us__ribbon" aria-hidden="true"></div>
-		<div class="pc-container">
+		<div class="rj-container">
 			<header class="section-heading section-heading--dramatic">
-				<p><?php esc_html_e( 'تجربه‌ای به لطافت انتخاب تو', 'parisacrop' ); ?></p>
+				<p><?php esc_html_e( 'تجربه‌ای به لطافت انتخاب تو', 'rezajordaan' ); ?></p>
 				<h2 id="why-us-title">
-					<span><?php esc_html_e( 'چرا', 'parisacrop' ); ?></span>
-					<em><?php esc_html_e( 'ما؟', 'parisacrop' ); ?></em>
+					<span><?php esc_html_e( 'چرا', 'rezajordaan' ); ?></span>
+					<em><?php esc_html_e( 'ما؟', 'rezajordaan' ); ?></em>
 				</h2>
 				<span aria-hidden="true"></span>
 			</header>

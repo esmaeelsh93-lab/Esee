@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'PARISACROP_VERSION', '1.1.0' );
+define( 'REZAJORDAAN_VERSION', '1.2.0' );
 
 require_once get_template_directory() . '/inc/theme-settings.php';
 require_once get_template_directory() . '/inc/page-content.php';
@@ -17,8 +17,8 @@ require_once get_template_directory() . '/inc/page-content.php';
 /**
  * Register theme features.
  */
-function parisacrop_setup() {
-	load_theme_textdomain( 'parisacrop', get_template_directory() . '/languages' );
+function rezajordaan_setup() {
+	load_theme_textdomain( 'rezajordaan', get_template_directory() . '/languages' );
 
 	add_theme_support( 'title-tag' );
 	add_theme_support( 'post-thumbnails' );
@@ -30,31 +30,31 @@ function parisacrop_setup() {
 
 	register_nav_menus(
 		array(
-			'primary' => __( 'منوی اصلی', 'parisacrop' ),
-			'footer'  => __( 'منوی فوتر', 'parisacrop' ),
+			'primary' => __( 'منوی اصلی', 'rezajordaan' ),
+			'footer'  => __( 'منوی فوتر', 'rezajordaan' ),
 		)
 	);
 
-	add_image_size( 'parisacrop-category', 720, 620, true );
-	add_image_size( 'parisacrop-product', 600, 760, true );
+	add_image_size( 'rezajordaan-category', 720, 620, true );
+	add_image_size( 'rezajordaan-product', 600, 760, true );
 }
-add_action( 'after_setup_theme', 'parisacrop_setup' );
+add_action( 'after_setup_theme', 'rezajordaan_setup' );
 
 /**
  * Load the visual layer and animations.
  */
-function parisacrop_enqueue_assets() {
+function rezajordaan_enqueue_assets() {
 	wp_enqueue_style(
-		'parisacrop-fonts',
+		'rezajordaan-fonts',
 		'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Vazirmatn:wght@300;400;500;600;700;800&display=swap',
 		array(),
 		null
 	);
 	wp_enqueue_style(
-		'parisacrop-main',
+		'rezajordaan-main',
 		get_template_directory_uri() . '/assets/css/main.css',
-		array( 'parisacrop-fonts' ),
-		PARISACROP_VERSION
+		array( 'rezajordaan-fonts' ),
+		REZAJORDAAN_VERSION
 	);
 
 	wp_enqueue_script(
@@ -72,29 +72,29 @@ function parisacrop_enqueue_assets() {
 		true
 	);
 	wp_enqueue_script(
-		'parisacrop-main',
+		'rezajordaan-main',
 		get_template_directory_uri() . '/assets/js/main.js',
 		array( 'gsap', 'gsap-scroll-trigger' ),
-		PARISACROP_VERSION,
+		REZAJORDAAN_VERSION,
 		true
 	);
 	wp_localize_script(
-		'parisacrop-main',
-		'parisacropConfig',
+		'rezajordaan-main',
+		'rezajordaanConfig',
 		array(
-			'marqueeSpeed' => absint( parisacrop_get_setting( 'marquee_speed' ) ),
+			'marqueeSpeed' => absint( rezajordaan_get_setting( 'marquee_speed' ) ),
 		)
 	);
 }
-add_action( 'wp_enqueue_scripts', 'parisacrop_enqueue_assets' );
+add_action( 'wp_enqueue_scripts', 'rezajordaan_enqueue_assets' );
 
 /**
  * Apply product-card controls as safe CSS custom properties.
  */
-function parisacrop_enqueue_dynamic_styles() {
-	$settings = parisacrop_get_settings();
+function rezajordaan_enqueue_dynamic_styles() {
+	$settings = rezajordaan_get_settings();
 	$css      = sprintf(
-		':root{--pc-shop-columns-desktop:%1$d;--pc-shop-columns-mobile:%2$d;--pc-shop-image-height-desktop:%3$dpx;--pc-shop-image-height-mobile:%4$dpx;--pc-latest-card-width-desktop:%5$dpx;--pc-latest-card-width-mobile:%6$dpx;--pc-latest-image-height-desktop:%7$dpx;--pc-latest-image-height-mobile:%8$dpx;--pc-product-card-gap:%9$dpx;--pc-category-columns-desktop:%10$d;--pc-category-columns-mobile:%11$d;--pc-category-border-width:%12$dpx;--pc-category-border-color:%13$s;--pc-product-border-width:%14$dpx;--pc-product-border-color:%15$s;--pc-sale-bg:%16$s;--pc-sale-color:%17$s;--pc-category-name-color:%18$s;--pc-category-name-size-desktop:%19$dpx;--pc-category-name-size-mobile:%20$dpx;}',
+		':root{--rj-shop-columns-desktop:%1$d;--rj-shop-columns-mobile:%2$d;--rj-shop-image-height-desktop:%3$dpx;--rj-shop-image-height-mobile:%4$dpx;--rj-latest-card-width-desktop:%5$dpx;--rj-latest-card-width-mobile:%6$dpx;--rj-latest-image-height-desktop:%7$dpx;--rj-latest-image-height-mobile:%8$dpx;--rj-product-card-gap:%9$dpx;--rj-category-columns-desktop:%10$d;--rj-category-columns-mobile:%11$d;--rj-category-border-width:%12$dpx;--rj-category-border-color:%13$s;--rj-product-border-width:%14$dpx;--rj-product-border-color:%15$s;--rj-sale-bg:%16$s;--rj-sale-color:%17$s;--rj-category-name-color:%18$s;--rj-category-name-size-desktop:%19$dpx;--rj-category-name-size-mobile:%20$dpx;}',
 		absint( $settings['shop_columns_desktop'] ),
 		absint( $settings['shop_columns_mobile'] ),
 		absint( $settings['shop_image_height_desktop'] ),
@@ -117,16 +117,16 @@ function parisacrop_enqueue_dynamic_styles() {
 		absint( $settings['category_name_size_mobile'] )
 	);
 
-	wp_add_inline_style( 'parisacrop-main', $css );
+	wp_add_inline_style( 'rezajordaan-main', $css );
 }
-add_action( 'wp_enqueue_scripts', 'parisacrop_enqueue_dynamic_styles', 15 );
+add_action( 'wp_enqueue_scripts', 'rezajordaan_enqueue_dynamic_styles', 15 );
 
 /**
  * Return the WooCommerce shop URL, with the requested /shop fallback.
  *
  * @return string
  */
-function parisacrop_shop_url() {
+function rezajordaan_shop_url() {
 	if ( function_exists( 'wc_get_page_permalink' ) ) {
 		$shop_url = wc_get_page_permalink( 'shop' );
 		if ( $shop_url ) {
@@ -143,13 +143,13 @@ function parisacrop_shop_url() {
  * @param int $limit Maximum category count.
  * @return WP_Term[]
  */
-function parisacrop_get_featured_categories( $limit = 12 ) {
+function rezajordaan_get_featured_categories( $limit = 12 ) {
 	if ( ! taxonomy_exists( 'product_cat' ) ) {
 		return array();
 	}
 
 	$category_ids = array_slice(
-		array_values( array_filter( array_map( 'absint', (array) parisacrop_get_setting( 'featured_category_ids' ) ) ) ),
+		array_values( array_filter( array_map( 'absint', (array) rezajordaan_get_setting( 'featured_category_ids' ) ) ) ),
 		0,
 		absint( $limit )
 	);
@@ -175,7 +175,7 @@ function parisacrop_get_featured_categories( $limit = 12 ) {
  *
  * @return int[]
  */
-function parisacrop_get_archive_product_ids() {
+function rezajordaan_get_archive_product_ids() {
 	$args = array(
 		'post_type'              => 'product',
 		'post_status'            => 'publish',
@@ -208,8 +208,8 @@ function parisacrop_get_archive_product_ids() {
  *
  * @return array{sizes:array<int,array{taxonomy:string,terms:WP_Term[]}>,min_price:float,max_price:float,step:int}
  */
-function parisacrop_get_archive_filter_data() {
-	$product_ids = parisacrop_get_archive_product_ids();
+function rezajordaan_get_archive_filter_data() {
+	$product_ids = rezajordaan_get_archive_product_ids();
 	$data        = array(
 		'sizes'     => array(),
 		'min_price' => 0.0,
@@ -277,7 +277,7 @@ function parisacrop_get_archive_filter_data() {
  *
  * @param WP_Query $query Current query.
  */
-function parisacrop_apply_archive_size_filters( $query ) {
+function rezajordaan_apply_archive_size_filters( $query ) {
 	if ( is_admin() || ! $query->is_main_query() || ! ( is_product_category() || is_product_tag() ) ) {
 		return;
 	}
@@ -312,7 +312,7 @@ function parisacrop_apply_archive_size_filters( $query ) {
 
 	$query->set( 'tax_query', $tax_query );
 }
-add_action( 'pre_get_posts', 'parisacrop_apply_archive_size_filters', 20 );
+add_action( 'pre_get_posts', 'rezajordaan_apply_archive_size_filters', 20 );
 
 /**
  * Customize or hide WooCommerce sale badges from theme settings.
@@ -322,12 +322,12 @@ add_action( 'pre_get_posts', 'parisacrop_apply_archive_size_filters', 20 );
  * @param WC_Product $product Product object.
  * @return string
  */
-function parisacrop_sale_badge( $html, $post, $product ) {
-	if ( ! parisacrop_get_setting( 'show_sale_badge' ) ) {
+function rezajordaan_sale_badge( $html, $post, $product ) {
+	if ( ! rezajordaan_get_setting( 'show_sale_badge' ) ) {
 		return '';
 	}
 
-	$label   = (string) parisacrop_get_setting( 'sale_badge_text' );
+	$label   = (string) rezajordaan_get_setting( 'sale_badge_text' );
 	$percent = '';
 	$regular = (float) $product->get_regular_price();
 	$sale    = (float) $product->get_sale_price();
@@ -337,19 +337,19 @@ function parisacrop_sale_badge( $html, $post, $product ) {
 	}
 
 	$label = '' === $percent && str_contains( $label, '{percent}' )
-		? __( 'تخفیف', 'parisacrop' )
+		? __( 'تخفیف', 'rezajordaan' )
 		: trim( str_replace( '{percent}', $percent, $label ) );
-	return '<span class="onsale">' . esc_html( $label ?: __( 'تخفیف', 'parisacrop' ) ) . '</span>';
+	return '<span class="onsale">' . esc_html( $label ?: __( 'تخفیف', 'rezajordaan' ) ) . '</span>';
 }
-add_filter( 'woocommerce_sale_flash', 'parisacrop_sale_badge', 10, 3 );
+add_filter( 'woocommerce_sale_flash', 'rezajordaan_sale_badge', 10, 3 );
 
 /**
  * Keep WooCommerce's widget sidebar out of product and archive content.
  */
-function parisacrop_remove_woocommerce_sidebar() {
+function rezajordaan_remove_woocommerce_sidebar() {
 	remove_action( 'woocommerce_sidebar', 'woocommerce_get_sidebar', 10 );
 }
-add_action( 'wp', 'parisacrop_remove_woocommerce_sidebar' );
+add_action( 'wp', 'rezajordaan_remove_woocommerce_sidebar' );
 
 /**
  * Add useful classes for styling shop views.
@@ -357,14 +357,14 @@ add_action( 'wp', 'parisacrop_remove_woocommerce_sidebar' );
  * @param string[] $classes Existing body classes.
  * @return string[]
  */
-function parisacrop_body_classes( $classes ) {
+function rezajordaan_body_classes( $classes ) {
 	if ( function_exists( 'is_shop' ) && is_shop() ) {
-		$classes[] = 'parisacrop-home-shop';
+		$classes[] = 'rezajordaan-home-shop';
 	}
-	if ( ! parisacrop_get_setting( 'show_subcategories' ) ) {
+	if ( ! rezajordaan_get_setting( 'show_subcategories' ) ) {
 		$classes[] = 'hide-product-subcategories';
 	}
-	$classes[] = 'category-mobile-columns-' . absint( parisacrop_get_setting( 'category_columns_mobile' ) );
+	$classes[] = 'category-mobile-columns-' . absint( rezajordaan_get_setting( 'category_columns_mobile' ) );
 	return $classes;
 }
-add_filter( 'body_class', 'parisacrop_body_classes' );
+add_filter( 'body_class', 'rezajordaan_body_classes' );

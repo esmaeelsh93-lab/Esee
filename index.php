@@ -2,13 +2,13 @@
 /**
  * WordPress fallback template.
  *
- * @package ParisaCrop
+ * @package RezaJordaan
  */
 
 get_header();
 ?>
-<main id="main" class="content-page pc-section">
-	<div class="pc-container content-page__inner">
+<main id="main" class="content-page rj-section">
+	<div class="rj-container content-page__inner">
 		<?php if ( have_posts() ) : ?>
 			<?php while ( have_posts() ) : ?>
 				<?php the_post(); ?>
@@ -19,7 +19,7 @@ get_header();
 			<?php endwhile; ?>
 			<?php the_posts_pagination(); ?>
 		<?php else : ?>
-			<p><?php esc_html_e( '??????? ???? ???.', 'parisacrop' ); ?></p>
+			<p><?php esc_html_e( '??????? ???? ???.', 'rezajordaan' ); ?></p>
 		<?php endif; ?>
 	</div>
 </main>

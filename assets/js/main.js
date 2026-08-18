@@ -7,7 +7,7 @@
 	const dropdown = document.querySelector(".desktop-nav__dropdown");
 	const dropdownTrigger = dropdown?.querySelector(".desktop-nav__trigger");
 	const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-	const configuredMarqueeSpeed = Number.parseFloat(window.parisacropConfig?.marqueeSpeed);
+	const configuredMarqueeSpeed = Number.parseFloat(window.rezajordaanConfig?.marqueeSpeed);
 	const marqueeSpeed = Number.isFinite(configuredMarqueeSpeed) ? configuredMarqueeSpeed : 42;
 
 	const setHeaderState = () => {
@@ -142,7 +142,7 @@
 			.from(".hero__payment-logos", { autoAlpha: 0, y: 18, duration: 0.52 }, "-=0.42")
 			.from(".hero__title", { autoAlpha: 0, y: 24, duration: 0.62 }, "-=0.36")
 			.from(".hero__tagline", { autoAlpha: 0, y: 18, duration: 0.5 }, "-=0.35")
-			.from(".hero .pc-button", { autoAlpha: 0, y: 14, scale: 0.94, duration: 0.48 }, "-=0.28");
+			.from(".hero .rj-button", { autoAlpha: 0, y: 14, scale: 0.94, duration: 0.48 }, "-=0.28");
 
 		if (document.querySelector(".product-search__form")) {
 			heroTimeline.from(".product-search__form", { autoAlpha: 0, y: 20, duration: 0.55 }, "-=0.2");

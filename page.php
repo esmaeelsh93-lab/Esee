@@ -2,18 +2,18 @@
 /**
  * Standard editable page template.
  *
- * @package ParisaCrop
+ * @package RezaJordaan
  */
 
 get_header();
 ?>
-<main id="main" class="content-page pc-section">
-	<div class="pc-container content-page__inner">
+<main id="main" class="content-page rj-section">
+	<div class="rj-container content-page__inner">
 		<?php while ( have_posts() ) : ?>
 			<?php
 			the_post();
-			$hide_title = '1' === get_post_meta( get_the_ID(), '_parisacrop_hide_title', true );
-			$full_width = '1' === get_post_meta( get_the_ID(), '_parisacrop_full_width', true );
+			$hide_title = '1' === get_post_meta( get_the_ID(), '_rezajordaan_hide_title', true );
+			$full_width = '1' === get_post_meta( get_the_ID(), '_rezajordaan_full_width', true );
 			?>
 			<article <?php post_class( $full_width ? 'content-entry content-entry--wide' : 'content-entry' ); ?>>
 				<?php if ( ! $hide_title ) : ?>

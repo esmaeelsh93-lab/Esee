@@ -2,7 +2,7 @@
 /**
  * Product archive and the custom /shop storefront.
  *
- * @package ParisaCrop
+ * @package RezaJordaan
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -17,8 +17,8 @@ if ( is_shop() ) {
 
 do_action( 'woocommerce_before_main_content' );
 ?>
-<div class="product-archive pc-section">
-	<div class="pc-container">
+<div class="product-archive rj-section">
+	<div class="rj-container">
 		<?php
 		do_action( 'woocommerce_shop_loop_header' );
 		get_template_part( 'template-parts/product-filters' );

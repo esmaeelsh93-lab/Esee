@@ -2,15 +2,15 @@
 /**
  * Date, author and category archives for articles.
  *
- * @package ParisaCrop
+ * @package RezaJordaan
  */
 
 get_header();
 ?>
-<main id="main" class="blog-page pc-section">
-	<div class="pc-container">
+<main id="main" class="blog-page rj-section">
+	<div class="rj-container">
 		<header class="content-hero">
-			<p><?php esc_html_e( 'آرشیو نوشته‌ها', 'parisacrop' ); ?></p>
+			<p><?php esc_html_e( 'آرشیو نوشته‌ها', 'rezajordaan' ); ?></p>
 			<h1><?php the_archive_title(); ?></h1>
 			<?php the_archive_description( '<div class="content-hero__description">', '</div>' ); ?>
 		</header>
@@ -26,7 +26,7 @@ get_header();
 			</div>
 			<?php the_posts_pagination( array( 'mid_size' => 1 ) ); ?>
 		<?php else : ?>
-			<div class="content-empty"><?php esc_html_e( 'مطلبی در این بخش پیدا نشد.', 'parisacrop' ); ?></div>
+			<div class="content-empty"><?php esc_html_e( 'مطلبی در این بخش پیدا نشد.', 'rezajordaan' ); ?></div>
 		<?php endif; ?>
 	</div>
 </main>

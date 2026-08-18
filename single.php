@@ -2,13 +2,13 @@
 /**
  * Single article template.
  *
- * @package ParisaCrop
+ * @package RezaJordaan
  */
 
 get_header();
 ?>
-<main id="main" class="single-post-page pc-section">
-	<div class="pc-container single-post-page__inner">
+<main id="main" class="single-post-page rj-section">
+	<div class="rj-container single-post-page__inner">
 		<?php while ( have_posts() ) : ?>
 			<?php the_post(); ?>
 			<article <?php post_class( 'single-article' ); ?>>
@@ -24,7 +24,7 @@ get_header();
 					<?php wp_link_pages(); ?>
 				</div>
 			</article>
-			<nav class="post-navigation" aria-label="<?php esc_attr_e( 'مقاله‌های قبلی و بعدی', 'parisacrop' ); ?>">
+			<nav class="post-navigation" aria-label="<?php esc_attr_e( 'مقاله‌های قبلی و بعدی', 'rezajordaan' ); ?>">
 				<div><?php previous_post_link( '%link', '→ %title' ); ?></div>
 				<div><?php next_post_link( '%link', '%title ←' ); ?></div>
 			</nav>

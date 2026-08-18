@@ -2,7 +2,7 @@
 /**
  * Front page fallback. The primary storefront also lives at /shop.
  *
- * @package ParisaCrop
+ * @package RezaJordaan
  */
 
 get_header();

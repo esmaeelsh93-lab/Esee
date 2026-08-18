@@ -2,7 +2,7 @@
 /**
  * Small inline icons used by benefit cards.
  *
- * @package ParisaCrop
+ * @package RezaJordaan
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

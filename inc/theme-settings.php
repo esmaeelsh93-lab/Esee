@@ -14,8 +14,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @return array<string, mixed>
  */
-function parisacrop_default_settings() {
-	$shop_url = function_exists( 'parisacrop_shop_url' ) ? parisacrop_shop_url() : home_url( '/shop/' );
+function rezajordaan_default_settings() {
+	$shop_url = function_exists( 'rezajordaan_shop_url' ) ? rezajordaan_shop_url() : home_url( '/shop/' );
 
 	return array(
 		'instagram_url'              => 'https://www.instagram.com/rezajordaan/',
@@ -125,9 +125,9 @@ function parisacrop_default_settings() {
  *
  * @return array<string, mixed>
  */
-function parisacrop_get_settings() {
-	$saved = get_option( 'parisacrop_settings', array() );
-	return wp_parse_args( is_array( $saved ) ? $saved : array(), parisacrop_default_settings() );
+function rezajordaan_get_settings() {
+	$saved = get_option( 'rezajordaan_settings', array() );
+	return wp_parse_args( is_array( $saved ) ? $saved : array(), rezajordaan_default_settings() );
 }
 
 /**
@@ -136,8 +136,8 @@ function parisacrop_get_settings() {
  * @param string $key Setting key.
  * @return mixed
  */
-function parisacrop_get_setting( $key ) {
-	$settings = parisacrop_get_settings();
+function rezajordaan_get_setting( $key ) {
+	$settings = rezajordaan_get_settings();
 	return array_key_exists( $key, $settings ) ? $settings[ $key ] : null;
 }
 
@@ -147,8 +147,8 @@ function parisacrop_get_setting( $key ) {
  * @param string $key Setting key containing link rows.
  * @return array<int, array{label:string,url:string}>
  */
-function parisacrop_get_theme_links( $key ) {
-	$rows  = parisacrop_get_setting( $key );
+function rezajordaan_get_theme_links( $key ) {
+	$rows  = rezajordaan_get_setting( $key );
 	$links = array();
 
 	if ( ! is_array( $rows ) ) {
@@ -182,7 +182,7 @@ function parisacrop_get_theme_links( $key ) {
  * @param int   $limit Maximum row count.
  * @return array<int, array{label:string,page_id:int,url:string}>
  */
-function parisacrop_sanitize_link_rows( $rows, $limit ) {
+function rezajordaan_sanitize_link_rows( $rows, $limit ) {
 	$clean = array();
 
 	if ( ! is_array( $rows ) ) {
@@ -214,9 +214,9 @@ function parisacrop_sanitize_link_rows( $rows, $limit ) {
  * @param mixed $input Raw settings.
  * @return array<string, mixed>
  */
-function parisacrop_sanitize_settings( $input ) {
+function rezajordaan_sanitize_settings( $input ) {
 	$input    = is_array( $input ) ? $input : array();
-	$defaults = parisacrop_default_settings();
+	$defaults = rezajordaan_default_settings();
 	$clean    = array();
 
 	foreach ( array( 'instagram_url', 'whatsapp_url', 'rubika_url', 'telegram_url', 'phone_url', 'enamad_url', 'enamad_logo_url', 'about_url' ) as $key ) {
@@ -250,8 +250,8 @@ function parisacrop_sanitize_settings( $input ) {
 		: array();
 	$clean['featured_category_ids'] = array_slice( array_values( array_unique( array_filter( $category_ids ) ) ), 0, 24 );
 
-	$clean['header_links'] = parisacrop_sanitize_link_rows( $input['header_links'] ?? array(), 4 );
-	$clean['footer_links'] = parisacrop_sanitize_link_rows( $input['footer_links'] ?? array(), 10 );
+	$clean['header_links'] = rezajordaan_sanitize_link_rows( $input['header_links'] ?? array(), 4 );
+	$clean['footer_links'] = rezajordaan_sanitize_link_rows( $input['footer_links'] ?? array(), 10 );
 
 	$ranges = array(
 		'latest_products_count'       => array( 4, 20 ),
@@ -284,18 +284,18 @@ function parisacrop_sanitize_settings( $input ) {
 /**
  * Register the option and Appearance submenu.
  */
-function parisacrop_register_settings() {
+function rezajordaan_register_settings() {
 	register_setting(
-		'parisacrop_settings_group',
-		'parisacrop_settings',
+		'rezajordaan_settings_group',
+		'rezajordaan_settings',
 		array(
 			'type'              => 'array',
-			'sanitize_callback' => 'parisacrop_sanitize_settings',
-			'default'           => parisacrop_default_settings(),
+			'sanitize_callback' => 'rezajordaan_sanitize_settings',
+			'default'           => rezajordaan_default_settings(),
 		)
 	);
 }
-add_action( 'admin_init', 'parisacrop_register_settings' );
+add_action( 'admin_init', 'rezajordaan_register_settings' );
 
 /**
  * Assign the article-list template to the selected page.
@@ -303,7 +303,7 @@ add_action( 'admin_init', 'parisacrop_register_settings' );
  * @param array $old_value Previous settings.
  * @param array $value New settings.
  */
-function parisacrop_sync_blog_page( $old_value, $value ) {
+function rezajordaan_sync_blog_page( $old_value, $value ) {
 	$old_page_id = isset( $old_value['blog_page_id'] ) ? absint( $old_value['blog_page_id'] ) : 0;
 	$page_id     = isset( $value['blog_page_id'] ) ? absint( $value['blog_page_id'] ) : 0;
 
@@ -315,7 +315,7 @@ function parisacrop_sync_blog_page( $old_value, $value ) {
 		update_post_meta( $page_id, '_wp_page_template', 'page-blog.php' );
 	}
 }
-add_action( 'update_option_parisacrop_settings', 'parisacrop_sync_blog_page', 10, 2 );
+add_action( 'update_option_rezajordaan_settings', 'rezajordaan_sync_blog_page', 10, 2 );
 
 /**
  * Assign the article template when settings are saved for the first time.
@@ -323,50 +323,50 @@ add_action( 'update_option_parisacrop_settings', 'parisacrop_sync_blog_page', 10
  * @param string $option Option name.
  * @param array  $value Saved settings.
  */
-function parisacrop_sync_blog_page_on_add( $option, $value ) {
-	parisacrop_sync_blog_page( array(), $value );
+function rezajordaan_sync_blog_page_on_add( $option, $value ) {
+	rezajordaan_sync_blog_page( array(), $value );
 }
-add_action( 'add_option_parisacrop_settings', 'parisacrop_sync_blog_page_on_add', 10, 2 );
+add_action( 'add_option_rezajordaan_settings', 'rezajordaan_sync_blog_page_on_add', 10, 2 );
 
 /**
  * Add the settings page.
  */
-function parisacrop_add_settings_page() {
+function rezajordaan_add_settings_page() {
 	add_theme_page(
-		__( 'تنظیمات رضا جردن', 'parisacrop' ),
-		__( 'تنظیمات رضا جردن', 'parisacrop' ),
+		__( 'تنظیمات رضا جردن', 'rezajordaan' ),
+		__( 'تنظیمات رضا جردن', 'rezajordaan' ),
 		'manage_options',
-		'parisacrop-settings',
-		'parisacrop_render_settings_page'
+		'rezajordaan-settings',
+		'rezajordaan_render_settings_page'
 	);
 }
-add_action( 'admin_menu', 'parisacrop_add_settings_page' );
+add_action( 'admin_menu', 'rezajordaan_add_settings_page' );
 
 /**
  * Enqueue settings-page assets.
  *
  * @param string $hook Current admin hook.
  */
-function parisacrop_settings_assets( $hook ) {
-	if ( 'appearance_page_parisacrop-settings' !== $hook ) {
+function rezajordaan_settings_assets( $hook ) {
+	if ( 'appearance_page_rezajordaan-settings' !== $hook ) {
 		return;
 	}
 
 	wp_enqueue_style(
-		'parisacrop-admin',
+		'rezajordaan-admin',
 		get_template_directory_uri() . '/assets/css/admin-settings.css',
 		array(),
-		PARISACROP_VERSION
+		REZAJORDAAN_VERSION
 	);
 	wp_enqueue_script(
-		'parisacrop-admin',
+		'rezajordaan-admin',
 		get_template_directory_uri() . '/assets/js/admin-settings.js',
 		array(),
-		PARISACROP_VERSION,
+		REZAJORDAAN_VERSION,
 		true
 	);
 }
-add_action( 'admin_enqueue_scripts', 'parisacrop_settings_assets' );
+add_action( 'admin_enqueue_scripts', 'rezajordaan_settings_assets' );
 
 /**
  * Render a switch field.
@@ -374,10 +374,10 @@ add_action( 'admin_enqueue_scripts', 'parisacrop_settings_assets' );
  * @param string $key Settings key.
  * @param string $label Label.
  */
-function parisacrop_setting_switch( $key, $label ) {
+function rezajordaan_setting_switch( $key, $label ) {
 	?>
-	<label class="pc-admin-switch">
-		<input type="checkbox" name="parisacrop_settings[<?php echo esc_attr( $key ); ?>]" value="1" <?php checked( parisacrop_get_setting( $key ) ); ?>>
+	<label class="rj-admin-switch">
+		<input type="checkbox" name="rezajordaan_settings[<?php echo esc_attr( $key ); ?>]" value="1" <?php checked( rezajordaan_get_setting( $key ) ); ?>>
 		<span aria-hidden="true"></span>
 		<strong><?php echo esc_html( $label ); ?></strong>
 	</label>
@@ -394,13 +394,13 @@ function parisacrop_setting_switch( $key, $label ) {
  * @param int    $step Step.
  * @param string $unit Unit label.
  */
-function parisacrop_setting_range( $key, $label, $min, $max, $step = 1, $unit = '' ) {
-	$value = absint( parisacrop_get_setting( $key ) );
+function rezajordaan_setting_range( $key, $label, $min, $max, $step = 1, $unit = '' ) {
+	$value = absint( rezajordaan_get_setting( $key ) );
 	?>
-	<label class="pc-admin-range">
+	<label class="rj-admin-range">
 		<span><?php echo esc_html( $label ); ?></span>
 		<div>
-			<input type="range" name="parisacrop_settings[<?php echo esc_attr( $key ); ?>]" min="<?php echo esc_attr( $min ); ?>" max="<?php echo esc_attr( $max ); ?>" step="<?php echo esc_attr( $step ); ?>" value="<?php echo esc_attr( $value ); ?>">
+			<input type="range" name="rezajordaan_settings[<?php echo esc_attr( $key ); ?>]" min="<?php echo esc_attr( $min ); ?>" max="<?php echo esc_attr( $max ); ?>" step="<?php echo esc_attr( $step ); ?>" value="<?php echo esc_attr( $value ); ?>">
 			<output><?php echo esc_html( $value . $unit ); ?></output>
 		</div>
 	</label>
@@ -414,26 +414,26 @@ function parisacrop_setting_range( $key, $label, $min, $max, $step = 1, $unit = 
  * @param string $title Section title.
  * @param int    $limit Maximum links.
  */
-function parisacrop_setting_links( $key, $title, $limit ) {
-	$rows  = parisacrop_get_setting( $key );
+function rezajordaan_setting_links( $key, $title, $limit ) {
+	$rows  = rezajordaan_get_setting( $key );
 	$rows  = is_array( $rows ) ? $rows : array();
 	$pages = get_pages( array( 'sort_column' => 'post_title' ) );
 	?>
-	<div class="pc-link-editor" data-link-editor data-key="<?php echo esc_attr( $key ); ?>" data-limit="<?php echo esc_attr( $limit ); ?>">
-		<div class="pc-link-editor__heading">
+	<div class="rj-link-editor" data-link-editor data-key="<?php echo esc_attr( $key ); ?>" data-limit="<?php echo esc_attr( $limit ); ?>">
+		<div class="rj-link-editor__heading">
 			<div>
 				<h3><?php echo esc_html( $title ); ?></h3>
-				<p><?php esc_html_e( 'یک برگه انتخاب کنید یا عنوان و نشانی دلخواه وارد کنید.', 'parisacrop' ); ?></p>
+				<p><?php esc_html_e( 'یک برگه انتخاب کنید یا عنوان و نشانی دلخواه وارد کنید.', 'rezajordaan' ); ?></p>
 			</div>
-			<button type="button" class="button button-secondary" data-add-link><?php esc_html_e( 'افزودن پیوند', 'parisacrop' ); ?></button>
+			<button type="button" class="button button-secondary" data-add-link><?php esc_html_e( 'افزودن پیوند', 'rezajordaan' ); ?></button>
 		</div>
-		<div class="pc-link-editor__rows" data-link-rows>
+		<div class="rj-link-editor__rows" data-link-rows>
 			<?php foreach ( $rows as $index => $row ) : ?>
-				<?php parisacrop_render_link_row( $key, $index, $row, $pages ); ?>
+				<?php rezajordaan_render_link_row( $key, $index, $row, $pages ); ?>
 			<?php endforeach; ?>
 		</div>
 		<template data-link-template>
-			<?php parisacrop_render_link_row( $key, '__INDEX__', array(), $pages ); ?>
+			<?php rezajordaan_render_link_row( $key, '__INDEX__', array(), $pages ); ?>
 		</template>
 	</div>
 	<?php
@@ -447,31 +447,31 @@ function parisacrop_setting_links( $key, $title, $limit ) {
  * @param array  $row Link data.
  * @param array  $pages Published pages.
  */
-function parisacrop_render_link_row( $key, $index, $row, $pages ) {
+function rezajordaan_render_link_row( $key, $index, $row, $pages ) {
 	$label   = isset( $row['label'] ) ? $row['label'] : '';
 	$page_id = isset( $row['page_id'] ) ? absint( $row['page_id'] ) : 0;
 	$url     = isset( $row['url'] ) ? $row['url'] : '';
-	$name    = 'parisacrop_settings[' . $key . '][' . $index . ']';
+	$name    = 'rezajordaan_settings[' . $key . '][' . $index . ']';
 	?>
-	<div class="pc-link-row">
+	<div class="rj-link-row">
 		<label>
-			<span><?php esc_html_e( 'عنوان', 'parisacrop' ); ?></span>
-			<input type="text" name="<?php echo esc_attr( $name . '[label]' ); ?>" value="<?php echo esc_attr( $label ); ?>" placeholder="<?php esc_attr_e( 'مثلاً درباره ما', 'parisacrop' ); ?>">
+			<span><?php esc_html_e( 'عنوان', 'rezajordaan' ); ?></span>
+			<input type="text" name="<?php echo esc_attr( $name . '[label]' ); ?>" value="<?php echo esc_attr( $label ); ?>" placeholder="<?php esc_attr_e( 'مثلاً درباره ما', 'rezajordaan' ); ?>">
 		</label>
 		<label>
-			<span><?php esc_html_e( 'انتخاب برگه', 'parisacrop' ); ?></span>
+			<span><?php esc_html_e( 'انتخاب برگه', 'rezajordaan' ); ?></span>
 			<select name="<?php echo esc_attr( $name . '[page_id]' ); ?>">
-				<option value="0"><?php esc_html_e( '— بدون برگه —', 'parisacrop' ); ?></option>
+				<option value="0"><?php esc_html_e( '— بدون برگه —', 'rezajordaan' ); ?></option>
 				<?php foreach ( $pages as $page ) : ?>
 					<option value="<?php echo esc_attr( $page->ID ); ?>" <?php selected( $page_id, $page->ID ); ?>><?php echo esc_html( $page->post_title ); ?></option>
 				<?php endforeach; ?>
 			</select>
 		</label>
 		<label>
-			<span><?php esc_html_e( 'نشانی دلخواه', 'parisacrop' ); ?></span>
+			<span><?php esc_html_e( 'نشانی دلخواه', 'rezajordaan' ); ?></span>
 			<input type="url" dir="ltr" name="<?php echo esc_attr( $name . '[url]' ); ?>" value="<?php echo esc_attr( $url ); ?>" placeholder="https://">
 		</label>
-		<button type="button" class="button-link-delete" data-remove-link><?php esc_html_e( 'حذف', 'parisacrop' ); ?></button>
+		<button type="button" class="button-link-delete" data-remove-link><?php esc_html_e( 'حذف', 'rezajordaan' ); ?></button>
 	</div>
 	<?php
 }
@@ -479,8 +479,8 @@ function parisacrop_render_link_row( $key, $index, $row, $pages ) {
 /**
  * Render WooCommerce category visibility controls.
  */
-function parisacrop_setting_categories() {
-	$selected_ids = array_map( 'absint', (array) parisacrop_get_setting( 'featured_category_ids' ) );
+function rezajordaan_setting_categories() {
+	$selected_ids = array_map( 'absint', (array) rezajordaan_get_setting( 'featured_category_ids' ) );
 	$categories   = taxonomy_exists( 'product_cat' )
 		? get_terms(
 			array(
@@ -496,15 +496,15 @@ function parisacrop_setting_categories() {
 		$categories = array();
 	}
 	?>
-	<div class="pc-category-picker">
+	<div class="rj-category-picker">
 		<?php if ( $categories ) : ?>
-			<p><?php esc_html_e( 'هر دسته‌ای که باید در لندینگ دیده شود تیک بزنید. برداشتن تیک، همان دسته را از لندینگ حذف می‌کند.', 'parisacrop' ); ?></p>
-			<div class="pc-category-picker__list">
+			<p><?php esc_html_e( 'هر دسته‌ای که باید در لندینگ دیده شود تیک بزنید. برداشتن تیک، همان دسته را از لندینگ حذف می‌کند.', 'rezajordaan' ); ?></p>
+			<div class="rj-category-picker__list">
 				<?php foreach ( $categories as $category ) : ?>
 					<label>
 						<input
 							type="checkbox"
-							name="parisacrop_settings[featured_category_ids][]"
+							name="rezajordaan_settings[featured_category_ids][]"
 							value="<?php echo esc_attr( $category->term_id ); ?>"
 							<?php checked( in_array( (int) $category->term_id, $selected_ids, true ) ); ?>
 						>
@@ -514,7 +514,7 @@ function parisacrop_setting_categories() {
 				<?php endforeach; ?>
 			</div>
 		<?php else : ?>
-			<p><?php esc_html_e( 'پس از ساخت دسته‌بندی‌های ووکامرس، انتخاب آن‌ها در همین قسمت فعال می‌شود.', 'parisacrop' ); ?></p>
+			<p><?php esc_html_e( 'پس از ساخت دسته‌بندی‌های ووکامرس، انتخاب آن‌ها در همین قسمت فعال می‌شود.', 'rezajordaan' ); ?></p>
 		<?php endif; ?>
 	</div>
 	<?php
@@ -523,170 +523,170 @@ function parisacrop_setting_categories() {
 /**
  * Render the complete settings screen.
  */
-function parisacrop_render_settings_page() {
+function rezajordaan_render_settings_page() {
 	if ( ! current_user_can( 'manage_options' ) ) {
 		return;
 	}
 	?>
-	<div class="wrap pc-settings">
-		<header class="pc-settings__hero">
+	<div class="wrap rj-settings">
+		<header class="rj-settings__hero">
 			<div>
 				<p>REZA JORDAAN</p>
-				<h1><?php esc_html_e( 'تنظیمات ساده قالب', 'parisacrop' ); ?></h1>
-				<span><?php esc_html_e( 'فقط گزینه‌های کاربردی؛ بدون صفحه‌ساز و تنظیمات پیچیده.', 'parisacrop' ); ?></span>
+				<h1><?php esc_html_e( 'تنظیمات ساده قالب', 'rezajordaan' ); ?></h1>
+				<span><?php esc_html_e( 'فقط گزینه‌های کاربردی؛ بدون صفحه‌ساز و تنظیمات پیچیده.', 'rezajordaan' ); ?></span>
 			</div>
-			<a class="button" href="<?php echo esc_url( home_url( '/' ) ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'مشاهده سایت', 'parisacrop' ); ?></a>
+			<a class="button" href="<?php echo esc_url( home_url( '/' ) ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'مشاهده سایت', 'rezajordaan' ); ?></a>
 		</header>
 
 		<?php settings_errors(); ?>
 		<form method="post" action="options.php">
-			<?php settings_fields( 'parisacrop_settings_group' ); ?>
+			<?php settings_fields( 'rezajordaan_settings_group' ); ?>
 
-			<nav class="pc-settings__tabs" aria-label="<?php esc_attr_e( 'بخش‌های تنظیمات', 'parisacrop' ); ?>">
-				<button type="button" class="is-active" data-settings-tab="contact"><?php esc_html_e( 'هدر و فوتر', 'parisacrop' ); ?></button>
-				<button type="button" data-settings-tab="links"><?php esc_html_e( 'پیوندها و برگه‌ها', 'parisacrop' ); ?></button>
-				<button type="button" data-settings-tab="landing"><?php esc_html_e( 'لندینگ و دسته‌بندی‌ها', 'parisacrop' ); ?></button>
-				<button type="button" data-settings-tab="products"><?php esc_html_e( 'کارت محصولات', 'parisacrop' ); ?></button>
+			<nav class="rj-settings__tabs" aria-label="<?php esc_attr_e( 'بخش‌های تنظیمات', 'rezajordaan' ); ?>">
+				<button type="button" class="is-active" data-settings-tab="contact"><?php esc_html_e( 'هدر و فوتر', 'rezajordaan' ); ?></button>
+				<button type="button" data-settings-tab="links"><?php esc_html_e( 'پیوندها و برگه‌ها', 'rezajordaan' ); ?></button>
+				<button type="button" data-settings-tab="landing"><?php esc_html_e( 'لندینگ و دسته‌بندی‌ها', 'rezajordaan' ); ?></button>
+				<button type="button" data-settings-tab="products"><?php esc_html_e( 'کارت محصولات', 'rezajordaan' ); ?></button>
 			</nav>
 
-			<section class="pc-settings__panel is-active" data-settings-panel="contact">
-				<div class="pc-settings__grid">
-					<div class="pc-settings__card">
-						<h2><?php esc_html_e( 'راه‌های ارتباطی', 'parisacrop' ); ?></h2>
-						<label><span><?php esc_html_e( 'اینستاگرام', 'parisacrop' ); ?></span><input type="url" dir="ltr" name="parisacrop_settings[instagram_url]" value="<?php echo esc_attr( parisacrop_get_setting( 'instagram_url' ) ); ?>"></label>
-						<label><span><?php esc_html_e( 'واتساپ', 'parisacrop' ); ?></span><input type="url" dir="ltr" name="parisacrop_settings[whatsapp_url]" value="<?php echo esc_attr( parisacrop_get_setting( 'whatsapp_url' ) ); ?>"></label>
-						<label><span><?php esc_html_e( 'روبیکا', 'parisacrop' ); ?></span><input type="url" dir="ltr" name="parisacrop_settings[rubika_url]" value="<?php echo esc_attr( parisacrop_get_setting( 'rubika_url' ) ); ?>"></label>
-						<label><span><?php esc_html_e( 'تلگرام', 'parisacrop' ); ?></span><input type="url" dir="ltr" name="parisacrop_settings[telegram_url]" value="<?php echo esc_attr( parisacrop_get_setting( 'telegram_url' ) ); ?>"></label>
-						<label><span><?php esc_html_e( 'شماره نمایشی', 'parisacrop' ); ?></span><input type="text" dir="ltr" name="parisacrop_settings[phone_display]" value="<?php echo esc_attr( parisacrop_get_setting( 'phone_display' ) ); ?>"></label>
-						<label><span><?php esc_html_e( 'لینک تماس', 'parisacrop' ); ?></span><input type="url" dir="ltr" name="parisacrop_settings[phone_url]" value="<?php echo esc_attr( parisacrop_get_setting( 'phone_url' ) ); ?>" placeholder="tel:+98..."></label>
-						<label><span><?php esc_html_e( 'ایمیل', 'parisacrop' ); ?></span><input type="email" dir="ltr" name="parisacrop_settings[email]" value="<?php echo esc_attr( parisacrop_get_setting( 'email' ) ); ?>"></label>
-						<label><span><?php esc_html_e( 'آدرس', 'parisacrop' ); ?></span><textarea name="parisacrop_settings[address]" rows="3"><?php echo esc_textarea( parisacrop_get_setting( 'address' ) ); ?></textarea></label>
+			<section class="rj-settings__panel is-active" data-settings-panel="contact">
+				<div class="rj-settings__grid">
+					<div class="rj-settings__card">
+						<h2><?php esc_html_e( 'راه‌های ارتباطی', 'rezajordaan' ); ?></h2>
+						<label><span><?php esc_html_e( 'اینستاگرام', 'rezajordaan' ); ?></span><input type="url" dir="ltr" name="rezajordaan_settings[instagram_url]" value="<?php echo esc_attr( rezajordaan_get_setting( 'instagram_url' ) ); ?>"></label>
+						<label><span><?php esc_html_e( 'واتساپ', 'rezajordaan' ); ?></span><input type="url" dir="ltr" name="rezajordaan_settings[whatsapp_url]" value="<?php echo esc_attr( rezajordaan_get_setting( 'whatsapp_url' ) ); ?>"></label>
+						<label><span><?php esc_html_e( 'روبیکا', 'rezajordaan' ); ?></span><input type="url" dir="ltr" name="rezajordaan_settings[rubika_url]" value="<?php echo esc_attr( rezajordaan_get_setting( 'rubika_url' ) ); ?>"></label>
+						<label><span><?php esc_html_e( 'تلگرام', 'rezajordaan' ); ?></span><input type="url" dir="ltr" name="rezajordaan_settings[telegram_url]" value="<?php echo esc_attr( rezajordaan_get_setting( 'telegram_url' ) ); ?>"></label>
+						<label><span><?php esc_html_e( 'شماره نمایشی', 'rezajordaan' ); ?></span><input type="text" dir="ltr" name="rezajordaan_settings[phone_display]" value="<?php echo esc_attr( rezajordaan_get_setting( 'phone_display' ) ); ?>"></label>
+						<label><span><?php esc_html_e( 'لینک تماس', 'rezajordaan' ); ?></span><input type="url" dir="ltr" name="rezajordaan_settings[phone_url]" value="<?php echo esc_attr( rezajordaan_get_setting( 'phone_url' ) ); ?>" placeholder="tel:+98..."></label>
+						<label><span><?php esc_html_e( 'ایمیل', 'rezajordaan' ); ?></span><input type="email" dir="ltr" name="rezajordaan_settings[email]" value="<?php echo esc_attr( rezajordaan_get_setting( 'email' ) ); ?>"></label>
+						<label><span><?php esc_html_e( 'آدرس', 'rezajordaan' ); ?></span><textarea name="rezajordaan_settings[address]" rows="3"><?php echo esc_textarea( rezajordaan_get_setting( 'address' ) ); ?></textarea></label>
 					</div>
-					<div class="pc-settings__card">
-						<h2><?php esc_html_e( 'نمایش بخش‌ها', 'parisacrop' ); ?></h2>
-						<?php parisacrop_setting_switch( 'show_instagram_header', __( 'آیکون اینستاگرام در هدر', 'parisacrop' ) ); ?>
-						<?php parisacrop_setting_switch( 'show_whatsapp_header', __( 'آیکون واتساپ در هدر', 'parisacrop' ) ); ?>
-						<?php parisacrop_setting_switch( 'show_telegram_header', __( 'آیکون تلگرام در هدر', 'parisacrop' ) ); ?>
-						<?php parisacrop_setting_switch( 'show_phone_footer', __( 'شماره تماس در فوتر', 'parisacrop' ) ); ?>
-						<?php parisacrop_setting_switch( 'show_social_footer', __( 'شبکه‌های اجتماعی در فوتر', 'parisacrop' ) ); ?>
-						<?php parisacrop_setting_switch( 'show_enamad_footer', __( 'نمایش اینماد در فوتر', 'parisacrop' ) ); ?>
-						<?php parisacrop_setting_switch( 'show_product_search', __( 'جستجوی محصولات زیر هیرو', 'parisacrop' ) ); ?>
+					<div class="rj-settings__card">
+						<h2><?php esc_html_e( 'نمایش بخش‌ها', 'rezajordaan' ); ?></h2>
+						<?php rezajordaan_setting_switch( 'show_instagram_header', __( 'آیکون اینستاگرام در هدر', 'rezajordaan' ) ); ?>
+						<?php rezajordaan_setting_switch( 'show_whatsapp_header', __( 'آیکون واتساپ در هدر', 'rezajordaan' ) ); ?>
+						<?php rezajordaan_setting_switch( 'show_telegram_header', __( 'آیکون تلگرام در هدر', 'rezajordaan' ) ); ?>
+						<?php rezajordaan_setting_switch( 'show_phone_footer', __( 'شماره تماس در فوتر', 'rezajordaan' ) ); ?>
+						<?php rezajordaan_setting_switch( 'show_social_footer', __( 'شبکه‌های اجتماعی در فوتر', 'rezajordaan' ) ); ?>
+						<?php rezajordaan_setting_switch( 'show_enamad_footer', __( 'نمایش اینماد در فوتر', 'rezajordaan' ) ); ?>
+						<?php rezajordaan_setting_switch( 'show_product_search', __( 'جستجوی محصولات زیر هیرو', 'rezajordaan' ) ); ?>
 						<hr>
-						<label><span><?php esc_html_e( 'شعار فوتر', 'parisacrop' ); ?></span><input type="text" name="parisacrop_settings[footer_tagline]" value="<?php echo esc_attr( parisacrop_get_setting( 'footer_tagline' ) ); ?>"></label>
-						<label><span><?php esc_html_e( 'توضیح کوتاه فوتر', 'parisacrop' ); ?></span><textarea name="parisacrop_settings[footer_description]" rows="4"><?php echo esc_textarea( parisacrop_get_setting( 'footer_description' ) ); ?></textarea></label>
-						<label><span><?php esc_html_e( 'لینک اعتبارسنجی اینماد', 'parisacrop' ); ?></span><input type="url" dir="ltr" name="parisacrop_settings[enamad_url]" value="<?php echo esc_attr( parisacrop_get_setting( 'enamad_url' ) ); ?>"></label>
-						<label><span><?php esc_html_e( 'نشانی تصویر اینماد', 'parisacrop' ); ?></span><input type="url" dir="ltr" name="parisacrop_settings[enamad_logo_url]" value="<?php echo esc_attr( parisacrop_get_setting( 'enamad_logo_url' ) ); ?>"></label>
+						<label><span><?php esc_html_e( 'شعار فوتر', 'rezajordaan' ); ?></span><input type="text" name="rezajordaan_settings[footer_tagline]" value="<?php echo esc_attr( rezajordaan_get_setting( 'footer_tagline' ) ); ?>"></label>
+						<label><span><?php esc_html_e( 'توضیح کوتاه فوتر', 'rezajordaan' ); ?></span><textarea name="rezajordaan_settings[footer_description]" rows="4"><?php echo esc_textarea( rezajordaan_get_setting( 'footer_description' ) ); ?></textarea></label>
+						<label><span><?php esc_html_e( 'لینک اعتبارسنجی اینماد', 'rezajordaan' ); ?></span><input type="url" dir="ltr" name="rezajordaan_settings[enamad_url]" value="<?php echo esc_attr( rezajordaan_get_setting( 'enamad_url' ) ); ?>"></label>
+						<label><span><?php esc_html_e( 'نشانی تصویر اینماد', 'rezajordaan' ); ?></span><input type="url" dir="ltr" name="rezajordaan_settings[enamad_logo_url]" value="<?php echo esc_attr( rezajordaan_get_setting( 'enamad_logo_url' ) ); ?>"></label>
 					</div>
 				</div>
 			</section>
 
-			<section class="pc-settings__panel" data-settings-panel="links">
-				<div class="pc-settings__card">
-					<h2><?php esc_html_e( 'صفحه مقالات', 'parisacrop' ); ?></h2>
-					<p><?php esc_html_e( 'یک برگه خالی مثل «مجله» بسازید و اینجا انتخاب کنید تا همه نوشته‌ها در آن نمایش داده شوند.', 'parisacrop' ); ?></p>
+			<section class="rj-settings__panel" data-settings-panel="links">
+				<div class="rj-settings__card">
+					<h2><?php esc_html_e( 'صفحه مقالات', 'rezajordaan' ); ?></h2>
+					<p><?php esc_html_e( 'یک برگه خالی مثل «مجله» بسازید و اینجا انتخاب کنید تا همه نوشته‌ها در آن نمایش داده شوند.', 'rezajordaan' ); ?></p>
 					<label>
-						<span><?php esc_html_e( 'برگه نمایش مقالات', 'parisacrop' ); ?></span>
+						<span><?php esc_html_e( 'برگه نمایش مقالات', 'rezajordaan' ); ?></span>
 						<?php
 						wp_dropdown_pages(
 							array(
-								'name'              => 'parisacrop_settings[blog_page_id]',
-								'selected'          => absint( parisacrop_get_setting( 'blog_page_id' ) ),
-								'show_option_none'  => __( '— انتخاب نشده —', 'parisacrop' ),
+								'name'              => 'rezajordaan_settings[blog_page_id]',
+								'selected'          => absint( rezajordaan_get_setting( 'blog_page_id' ) ),
+								'show_option_none'  => __( '— انتخاب نشده —', 'rezajordaan' ),
 								'option_none_value' => 0,
 							)
 						);
 						?>
 					</label>
 				</div>
-				<div class="pc-settings__card">
-					<?php parisacrop_setting_links( 'header_links', __( 'پیوندهای اضافه هدر', 'parisacrop' ), 4 ); ?>
+				<div class="rj-settings__card">
+					<?php rezajordaan_setting_links( 'header_links', __( 'پیوندهای اضافه هدر', 'rezajordaan' ), 4 ); ?>
 				</div>
-				<div class="pc-settings__card">
-					<?php parisacrop_setting_links( 'footer_links', __( 'پیوندهای فوتر', 'parisacrop' ), 10 ); ?>
+				<div class="rj-settings__card">
+					<?php rezajordaan_setting_links( 'footer_links', __( 'پیوندهای فوتر', 'rezajordaan' ), 10 ); ?>
 				</div>
-				<div class="pc-settings__notice">
-					<strong><?php esc_html_e( 'برگه‌ها و مقاله‌ها اکنون قالب اختصاصی دارند.', 'parisacrop' ); ?></strong>
-					<p><?php esc_html_e( 'پس از انتشار برگه، همین‌جا آن را انتخاب کنید تا در هدر یا فوتر دیده شود. برای CSS اختصاصی، قالب «HTML اختصاصی» را برای برگه انتخاب کنید.', 'parisacrop' ); ?></p>
+				<div class="rj-settings__notice">
+					<strong><?php esc_html_e( 'برگه‌ها و مقاله‌ها اکنون قالب اختصاصی دارند.', 'rezajordaan' ); ?></strong>
+					<p><?php esc_html_e( 'پس از انتشار برگه، همین‌جا آن را انتخاب کنید تا در هدر یا فوتر دیده شود. برای CSS اختصاصی، قالب «HTML اختصاصی» را برای برگه انتخاب کنید.', 'rezajordaan' ); ?></p>
 				</div>
 			</section>
 
-			<section class="pc-settings__panel" data-settings-panel="landing">
-				<div class="pc-settings__grid">
-					<div class="pc-settings__card">
-						<h2><?php esc_html_e( 'نمایش بخش‌های لندینگ', 'parisacrop' ); ?></h2>
-						<?php parisacrop_setting_switch( 'show_categories', __( 'نمایش بخش دسته‌بندی‌ها', 'parisacrop' ) ); ?>
-						<?php parisacrop_setting_switch( 'show_category_count', __( 'نمایش تعداد محصول زیر نام دسته', 'parisacrop' ) ); ?>
-						<?php parisacrop_setting_switch( 'show_subcategories', __( 'نمایش زیردسته‌ها در آرشیو فروشگاه', 'parisacrop' ) ); ?>
-						<?php parisacrop_setting_switch( 'show_about', __( 'نمایش بخش درباره ما و خرید حضوری', 'parisacrop' ) ); ?>
+			<section class="rj-settings__panel" data-settings-panel="landing">
+				<div class="rj-settings__grid">
+					<div class="rj-settings__card">
+						<h2><?php esc_html_e( 'نمایش بخش‌های لندینگ', 'rezajordaan' ); ?></h2>
+						<?php rezajordaan_setting_switch( 'show_categories', __( 'نمایش بخش دسته‌بندی‌ها', 'rezajordaan' ) ); ?>
+						<?php rezajordaan_setting_switch( 'show_category_count', __( 'نمایش تعداد محصول زیر نام دسته', 'rezajordaan' ) ); ?>
+						<?php rezajordaan_setting_switch( 'show_subcategories', __( 'نمایش زیردسته‌ها در آرشیو فروشگاه', 'rezajordaan' ) ); ?>
+						<?php rezajordaan_setting_switch( 'show_about', __( 'نمایش بخش درباره ما و خرید حضوری', 'rezajordaan' ) ); ?>
 					</div>
-					<div class="pc-settings__card">
-						<h2><?php esc_html_e( 'متن درباره ما', 'parisacrop' ); ?></h2>
-						<label><span><?php esc_html_e( 'عنوان', 'parisacrop' ); ?></span><input type="text" name="parisacrop_settings[about_title]" value="<?php echo esc_attr( parisacrop_get_setting( 'about_title' ) ); ?>"></label>
-						<label><span><?php esc_html_e( 'توضیح', 'parisacrop' ); ?></span><textarea name="parisacrop_settings[about_description]" rows="4"><?php echo esc_textarea( parisacrop_get_setting( 'about_description' ) ); ?></textarea></label>
-						<label><span><?php esc_html_e( 'لینک درباره ما', 'parisacrop' ); ?></span><input type="url" dir="ltr" name="parisacrop_settings[about_url]" value="<?php echo esc_attr( parisacrop_get_setting( 'about_url' ) ); ?>"></label>
-						<label><span><?php esc_html_e( 'متن خرید حضوری و آدرس', 'parisacrop' ); ?></span><textarea name="parisacrop_settings[store_visit_text]" rows="5"><?php echo esc_textarea( parisacrop_get_setting( 'store_visit_text' ) ); ?></textarea></label>
+					<div class="rj-settings__card">
+						<h2><?php esc_html_e( 'متن درباره ما', 'rezajordaan' ); ?></h2>
+						<label><span><?php esc_html_e( 'عنوان', 'rezajordaan' ); ?></span><input type="text" name="rezajordaan_settings[about_title]" value="<?php echo esc_attr( rezajordaan_get_setting( 'about_title' ) ); ?>"></label>
+						<label><span><?php esc_html_e( 'توضیح', 'rezajordaan' ); ?></span><textarea name="rezajordaan_settings[about_description]" rows="4"><?php echo esc_textarea( rezajordaan_get_setting( 'about_description' ) ); ?></textarea></label>
+						<label><span><?php esc_html_e( 'لینک درباره ما', 'rezajordaan' ); ?></span><input type="url" dir="ltr" name="rezajordaan_settings[about_url]" value="<?php echo esc_attr( rezajordaan_get_setting( 'about_url' ) ); ?>"></label>
+						<label><span><?php esc_html_e( 'متن خرید حضوری و آدرس', 'rezajordaan' ); ?></span><textarea name="rezajordaan_settings[store_visit_text]" rows="5"><?php echo esc_textarea( rezajordaan_get_setting( 'store_visit_text' ) ); ?></textarea></label>
 					</div>
 				</div>
-				<div class="pc-settings__card">
-					<h2><?php esc_html_e( 'دسته‌بندی‌های قابل نمایش در لندینگ', 'parisacrop' ); ?></h2>
-					<?php parisacrop_setting_categories(); ?>
+				<div class="rj-settings__card">
+					<h2><?php esc_html_e( 'دسته‌بندی‌های قابل نمایش در لندینگ', 'rezajordaan' ); ?></h2>
+					<?php rezajordaan_setting_categories(); ?>
 				</div>
-				<div class="pc-settings__card">
-					<h2><?php esc_html_e( 'چیدمان و ظاهر دسته‌بندی‌ها', 'parisacrop' ); ?></h2>
-					<div class="pc-settings__grid">
+				<div class="rj-settings__card">
+					<h2><?php esc_html_e( 'چیدمان و ظاهر دسته‌بندی‌ها', 'rezajordaan' ); ?></h2>
+					<div class="rj-settings__grid">
 						<div>
-							<label><span><?php esc_html_e( 'نوشته بالای عنوان', 'parisacrop' ); ?></span><input type="text" name="parisacrop_settings[category_section_kicker]" value="<?php echo esc_attr( parisacrop_get_setting( 'category_section_kicker' ) ); ?>"></label>
-							<label><span><?php esc_html_e( 'عنوان بخش دسته‌بندی‌ها', 'parisacrop' ); ?></span><input type="text" name="parisacrop_settings[category_section_title]" value="<?php echo esc_attr( parisacrop_get_setting( 'category_section_title' ) ); ?>"></label>
-							<label class="pc-color-field"><span><?php esc_html_e( 'رنگ قاب دسته‌ها', 'parisacrop' ); ?></span><input type="color" name="parisacrop_settings[category_border_color]" value="<?php echo esc_attr( parisacrop_get_setting( 'category_border_color' ) ); ?>"></label>
-							<label class="pc-color-field"><span><?php esc_html_e( 'رنگ نام دسته‌ها', 'parisacrop' ); ?></span><input type="color" name="parisacrop_settings[category_name_color]" value="<?php echo esc_attr( parisacrop_get_setting( 'category_name_color' ) ); ?>"></label>
+							<label><span><?php esc_html_e( 'نوشته بالای عنوان', 'rezajordaan' ); ?></span><input type="text" name="rezajordaan_settings[category_section_kicker]" value="<?php echo esc_attr( rezajordaan_get_setting( 'category_section_kicker' ) ); ?>"></label>
+							<label><span><?php esc_html_e( 'عنوان بخش دسته‌بندی‌ها', 'rezajordaan' ); ?></span><input type="text" name="rezajordaan_settings[category_section_title]" value="<?php echo esc_attr( rezajordaan_get_setting( 'category_section_title' ) ); ?>"></label>
+							<label class="rj-color-field"><span><?php esc_html_e( 'رنگ قاب دسته‌ها', 'rezajordaan' ); ?></span><input type="color" name="rezajordaan_settings[category_border_color]" value="<?php echo esc_attr( rezajordaan_get_setting( 'category_border_color' ) ); ?>"></label>
+							<label class="rj-color-field"><span><?php esc_html_e( 'رنگ نام دسته‌ها', 'rezajordaan' ); ?></span><input type="color" name="rezajordaan_settings[category_name_color]" value="<?php echo esc_attr( rezajordaan_get_setting( 'category_name_color' ) ); ?>"></label>
 						</div>
 						<div>
-							<?php parisacrop_setting_range( 'category_columns_desktop', __( 'تعداد ستون دسکتاپ', 'parisacrop' ), 1, 4 ); ?>
-							<?php parisacrop_setting_range( 'category_columns_mobile', __( 'تعداد ستون موبایل', 'parisacrop' ), 1, 2 ); ?>
-							<?php parisacrop_setting_range( 'category_border_width', __( 'ضخامت قاب دسته‌ها', 'parisacrop' ), 0, 6, 1, 'px' ); ?>
-							<?php parisacrop_setting_range( 'category_name_size_desktop', __( 'اندازه نام دسته در دسکتاپ', 'parisacrop' ), 14, 40, 1, 'px' ); ?>
-							<?php parisacrop_setting_range( 'category_name_size_mobile', __( 'اندازه نام دسته در موبایل', 'parisacrop' ), 12, 30, 1, 'px' ); ?>
+							<?php rezajordaan_setting_range( 'category_columns_desktop', __( 'تعداد ستون دسکتاپ', 'rezajordaan' ), 1, 4 ); ?>
+							<?php rezajordaan_setting_range( 'category_columns_mobile', __( 'تعداد ستون موبایل', 'rezajordaan' ), 1, 2 ); ?>
+							<?php rezajordaan_setting_range( 'category_border_width', __( 'ضخامت قاب دسته‌ها', 'rezajordaan' ), 0, 6, 1, 'px' ); ?>
+							<?php rezajordaan_setting_range( 'category_name_size_desktop', __( 'اندازه نام دسته در دسکتاپ', 'rezajordaan' ), 14, 40, 1, 'px' ); ?>
+							<?php rezajordaan_setting_range( 'category_name_size_mobile', __( 'اندازه نام دسته در موبایل', 'rezajordaan' ), 12, 30, 1, 'px' ); ?>
 						</div>
 					</div>
 				</div>
 			</section>
 
-			<section class="pc-settings__panel" data-settings-panel="products">
-				<div class="pc-settings__grid">
-					<div class="pc-settings__card">
-						<h2><?php esc_html_e( 'فروشگاه و آرشیو محصولات', 'parisacrop' ); ?></h2>
-						<?php parisacrop_setting_range( 'shop_columns_desktop', __( 'تعداد ستون دسکتاپ', 'parisacrop' ), 2, 5 ); ?>
-						<?php parisacrop_setting_range( 'shop_columns_mobile', __( 'تعداد ستون موبایل', 'parisacrop' ), 1, 2 ); ?>
-						<?php parisacrop_setting_range( 'shop_image_height_desktop', __( 'ارتفاع تصویر دسکتاپ', 'parisacrop' ), 180, 720, 10, 'px' ); ?>
-						<?php parisacrop_setting_range( 'shop_image_height_mobile', __( 'ارتفاع تصویر موبایل', 'parisacrop' ), 140, 480, 10, 'px' ); ?>
-						<?php parisacrop_setting_range( 'product_border_width', __( 'ضخامت قاب محصول', 'parisacrop' ), 0, 6, 1, 'px' ); ?>
-						<label class="pc-color-field"><span><?php esc_html_e( 'رنگ قاب محصول', 'parisacrop' ); ?></span><input type="color" name="parisacrop_settings[product_border_color]" value="<?php echo esc_attr( parisacrop_get_setting( 'product_border_color' ) ); ?>"></label>
+			<section class="rj-settings__panel" data-settings-panel="products">
+				<div class="rj-settings__grid">
+					<div class="rj-settings__card">
+						<h2><?php esc_html_e( 'فروشگاه و آرشیو محصولات', 'rezajordaan' ); ?></h2>
+						<?php rezajordaan_setting_range( 'shop_columns_desktop', __( 'تعداد ستون دسکتاپ', 'rezajordaan' ), 2, 5 ); ?>
+						<?php rezajordaan_setting_range( 'shop_columns_mobile', __( 'تعداد ستون موبایل', 'rezajordaan' ), 1, 2 ); ?>
+						<?php rezajordaan_setting_range( 'shop_image_height_desktop', __( 'ارتفاع تصویر دسکتاپ', 'rezajordaan' ), 180, 720, 10, 'px' ); ?>
+						<?php rezajordaan_setting_range( 'shop_image_height_mobile', __( 'ارتفاع تصویر موبایل', 'rezajordaan' ), 140, 480, 10, 'px' ); ?>
+						<?php rezajordaan_setting_range( 'product_border_width', __( 'ضخامت قاب محصول', 'rezajordaan' ), 0, 6, 1, 'px' ); ?>
+						<label class="rj-color-field"><span><?php esc_html_e( 'رنگ قاب محصول', 'rezajordaan' ); ?></span><input type="color" name="rezajordaan_settings[product_border_color]" value="<?php echo esc_attr( rezajordaan_get_setting( 'product_border_color' ) ); ?>"></label>
 					</div>
-					<div class="pc-settings__card">
-						<h2><?php esc_html_e( 'اسلایدر جدیدترین‌ها', 'parisacrop' ); ?></h2>
-						<?php parisacrop_setting_range( 'latest_products_count', __( 'تعداد محصولات', 'parisacrop' ), 4, 20 ); ?>
-						<?php parisacrop_setting_range( 'marquee_speed', __( 'سرعت حرکت', 'parisacrop' ), 15, 100, 1, 'px/s' ); ?>
-						<?php parisacrop_setting_range( 'latest_card_width_desktop', __( 'عرض کارت دسکتاپ', 'parisacrop' ), 200, 420, 10, 'px' ); ?>
-						<?php parisacrop_setting_range( 'latest_card_width_mobile', __( 'عرض کارت موبایل', 'parisacrop' ), 150, 300, 10, 'px' ); ?>
-						<?php parisacrop_setting_range( 'latest_image_height_desktop', __( 'ارتفاع تصویر دسکتاپ', 'parisacrop' ), 220, 560, 10, 'px' ); ?>
-						<?php parisacrop_setting_range( 'latest_image_height_mobile', __( 'ارتفاع تصویر موبایل', 'parisacrop' ), 180, 420, 10, 'px' ); ?>
-						<?php parisacrop_setting_range( 'product_card_gap', __( 'فاصله کارت‌ها', 'parisacrop' ), 6, 48, 2, 'px' ); ?>
+					<div class="rj-settings__card">
+						<h2><?php esc_html_e( 'اسلایدر جدیدترین‌ها', 'rezajordaan' ); ?></h2>
+						<?php rezajordaan_setting_range( 'latest_products_count', __( 'تعداد محصولات', 'rezajordaan' ), 4, 20 ); ?>
+						<?php rezajordaan_setting_range( 'marquee_speed', __( 'سرعت حرکت', 'rezajordaan' ), 15, 100, 1, 'px/s' ); ?>
+						<?php rezajordaan_setting_range( 'latest_card_width_desktop', __( 'عرض کارت دسکتاپ', 'rezajordaan' ), 200, 420, 10, 'px' ); ?>
+						<?php rezajordaan_setting_range( 'latest_card_width_mobile', __( 'عرض کارت موبایل', 'rezajordaan' ), 150, 300, 10, 'px' ); ?>
+						<?php rezajordaan_setting_range( 'latest_image_height_desktop', __( 'ارتفاع تصویر دسکتاپ', 'rezajordaan' ), 220, 560, 10, 'px' ); ?>
+						<?php rezajordaan_setting_range( 'latest_image_height_mobile', __( 'ارتفاع تصویر موبایل', 'rezajordaan' ), 180, 420, 10, 'px' ); ?>
+						<?php rezajordaan_setting_range( 'product_card_gap', __( 'فاصله کارت‌ها', 'rezajordaan' ), 6, 48, 2, 'px' ); ?>
 					</div>
-					<div class="pc-settings__card">
-						<h2><?php esc_html_e( 'برچسب تخفیف', 'parisacrop' ); ?></h2>
-						<?php parisacrop_setting_switch( 'show_sale_badge', __( 'نمایش برچسب تخفیف روی محصول', 'parisacrop' ) ); ?>
-						<label><span><?php esc_html_e( 'متن برچسب', 'parisacrop' ); ?></span><input type="text" name="parisacrop_settings[sale_badge_text]" value="<?php echo esc_attr( parisacrop_get_setting( 'sale_badge_text' ) ); ?>" placeholder="٪{percent} تخفیف"></label>
-						<p class="description"><?php esc_html_e( 'برای نمایش درصد واقعی از {percent} داخل متن استفاده کنید.', 'parisacrop' ); ?></p>
-						<div class="pc-color-row">
-							<label class="pc-color-field"><span><?php esc_html_e( 'رنگ زمینه', 'parisacrop' ); ?></span><input type="color" name="parisacrop_settings[sale_badge_background]" value="<?php echo esc_attr( parisacrop_get_setting( 'sale_badge_background' ) ); ?>"></label>
-							<label class="pc-color-field"><span><?php esc_html_e( 'رنگ نوشته', 'parisacrop' ); ?></span><input type="color" name="parisacrop_settings[sale_badge_color]" value="<?php echo esc_attr( parisacrop_get_setting( 'sale_badge_color' ) ); ?>"></label>
+					<div class="rj-settings__card">
+						<h2><?php esc_html_e( 'برچسب تخفیف', 'rezajordaan' ); ?></h2>
+						<?php rezajordaan_setting_switch( 'show_sale_badge', __( 'نمایش برچسب تخفیف روی محصول', 'rezajordaan' ) ); ?>
+						<label><span><?php esc_html_e( 'متن برچسب', 'rezajordaan' ); ?></span><input type="text" name="rezajordaan_settings[sale_badge_text]" value="<?php echo esc_attr( rezajordaan_get_setting( 'sale_badge_text' ) ); ?>" placeholder="٪{percent} تخفیف"></label>
+						<p class="description"><?php esc_html_e( 'برای نمایش درصد واقعی از {percent} داخل متن استفاده کنید.', 'rezajordaan' ); ?></p>
+						<div class="rj-color-row">
+							<label class="rj-color-field"><span><?php esc_html_e( 'رنگ زمینه', 'rezajordaan' ); ?></span><input type="color" name="rezajordaan_settings[sale_badge_background]" value="<?php echo esc_attr( rezajordaan_get_setting( 'sale_badge_background' ) ); ?>"></label>
+							<label class="rj-color-field"><span><?php esc_html_e( 'رنگ نوشته', 'rezajordaan' ); ?></span><input type="color" name="rezajordaan_settings[sale_badge_color]" value="<?php echo esc_attr( rezajordaan_get_setting( 'sale_badge_color' ) ); ?>"></label>
 						</div>
 					</div>
 				</div>
 			</section>
 
-			<div class="pc-settings__save">
-				<?php submit_button( __( 'ذخیره تنظیمات', 'parisacrop' ), 'primary', 'submit', false ); ?>
+			<div class="rj-settings__save">
+				<?php submit_button( __( 'ذخیره تنظیمات', 'rezajordaan' ), 'primary', 'submit', false ); ?>
 			</div>
 		</form>
 	</div>

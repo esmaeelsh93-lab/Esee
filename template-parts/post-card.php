@@ -2,7 +2,7 @@
 /**
  * Article card used by blog and archive views.
  *
- * @package ParisaCrop
+ * @package RezaJordaan
  */
 ?>
 <article <?php post_class( 'post-card' ); ?>>
@@ -17,6 +17,6 @@
 		<p class="post-card__meta"><?php echo esc_html( get_the_date() ); ?></p>
 		<h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
 		<div class="post-card__excerpt"><?php the_excerpt(); ?></div>
-		<a class="post-card__more" href="<?php the_permalink(); ?>"><?php esc_html_e( 'ادامه مطلب', 'parisacrop' ); ?> <span aria-hidden="true">←</span></a>
+		<a class="post-card__more" href="<?php the_permalink(); ?>"><?php esc_html_e( 'ادامه مطلب', 'rezajordaan' ); ?> <span aria-hidden="true">←</span></a>
 	</div>
 </article>
