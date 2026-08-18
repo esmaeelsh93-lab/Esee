@@ -3693,6 +3693,403 @@ body.rezajordaan-archive-cards .rj-archive-card__media [class*="cash"],
 	}
 }
 
+/* Cart, checkout, and account */
+.rezajordaan-cart .content-page__inner,
+.rezajordaan-checkout .content-page__inner,
+.rezajordaan-account .content-page__inner {
+	max-width: 1180px;
+}
+
+.rezajordaan-cart .woocommerce,
+.rezajordaan-checkout .woocommerce,
+.rezajordaan-account .woocommerce {
+	color: var(--rj-espresso);
+}
+
+.rezajordaan-cart .woocommerce-notices-wrapper,
+.rezajordaan-checkout .woocommerce-notices-wrapper {
+	margin-bottom: 18px;
+}
+
+.rezajordaan-cart .woocommerce-message,
+.rezajordaan-cart .woocommerce-info,
+.rezajordaan-cart .woocommerce-error,
+.rezajordaan-checkout .woocommerce-message,
+.rezajordaan-checkout .woocommerce-info,
+.rezajordaan-checkout .woocommerce-error {
+	background: var(--rj-white);
+	border: 1px solid var(--rj-border);
+	border-radius: 16px;
+	box-shadow: var(--rj-shadow);
+	list-style: none;
+	margin: 0 0 16px;
+	padding: 14px 16px;
+}
+
+.rezajordaan-cart .woocommerce-error,
+.rezajordaan-checkout .woocommerce-error {
+	border-color: rgba(176, 64, 64, 0.35);
+}
+
+.rezajordaan-cart .woocommerce-cart-form,
+.rezajordaan-cart .cart-collaterals .cart_totals,
+.rezajordaan-checkout .woocommerce-checkout,
+.rezajordaan-checkout #order_review,
+.rezajordaan-account .woocommerce-MyAccount-navigation,
+.rezajordaan-account .woocommerce-MyAccount-content {
+	background: var(--rj-white);
+	border: 1px solid var(--rj-border);
+	border-radius: 24px;
+	box-shadow: var(--rj-shadow);
+}
+
+.rezajordaan-cart .woocommerce-cart-form,
+.rezajordaan-checkout .woocommerce-checkout,
+.rezajordaan-account .woocommerce-MyAccount-content {
+	padding: clamp(18px, 3vw, 28px);
+}
+
+.rezajordaan-cart .shop_table,
+.rezajordaan-checkout .shop_table,
+.rezajordaan-checkout table.woocommerce-checkout-review-order-table {
+	border: 0;
+	border-collapse: separate;
+	border-spacing: 0;
+	margin: 0;
+	width: 100%;
+}
+
+.rezajordaan-cart .shop_table thead th,
+.rezajordaan-checkout .shop_table thead th,
+.rezajordaan-checkout table.woocommerce-checkout-review-order-table thead th {
+	background: rgba(176, 228, 204, 0.18);
+	border-bottom: 1px solid var(--rj-border);
+	color: var(--rj-burgundy);
+	font-size: 13px;
+	font-weight: 800;
+	padding: 14px 12px;
+	text-align: right;
+}
+
+.rezajordaan-cart .shop_table td,
+.rezajordaan-cart .shop_table th,
+.rezajordaan-checkout .shop_table td,
+.rezajordaan-checkout .shop_table th,
+.rezajordaan-checkout table.woocommerce-checkout-review-order-table td,
+.rezajordaan-checkout table.woocommerce-checkout-review-order-table th {
+	border-bottom: 1px solid rgba(40, 90, 72, 0.1);
+	padding: 14px 12px;
+	vertical-align: middle;
+}
+
+.rezajordaan-cart .shop_table .product-thumbnail img,
+.rezajordaan-checkout .shop_table .product-thumbnail img {
+	border-radius: 14px;
+	height: auto;
+	max-width: 84px;
+	object-fit: cover;
+	width: 84px;
+}
+
+.rezajordaan-cart .shop_table .product-name a,
+.rezajordaan-checkout .shop_table .product-name a {
+	color: var(--rj-burgundy);
+	font-weight: 700;
+}
+
+.rezajordaan-cart .shop_table .product-remove a {
+	align-items: center;
+	background: rgba(176, 64, 64, 0.08);
+	border-radius: 999px;
+	color: #a33;
+	display: inline-flex;
+	font-size: 18px;
+	height: 34px;
+	justify-content: center;
+	width: 34px;
+}
+
+.rezajordaan-cart .shop_table .quantity .qty {
+	border: 1px solid var(--rj-border);
+	border-radius: 12px;
+	max-width: 84px;
+	min-height: 42px;
+	padding: 8px 10px;
+	text-align: center;
+}
+
+.rezajordaan-cart .actions .coupon {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+
+.rezajordaan-cart .actions .coupon .input-text {
+	border: 1px solid var(--rj-border);
+	border-radius: 12px;
+	min-height: 44px;
+	min-width: min(100%, 220px);
+	padding: 10px 14px;
+}
+
+.rezajordaan-cart .cart-collaterals {
+	display: grid;
+	gap: 18px;
+	margin-top: 22px;
+}
+
+.rezajordaan-cart .cart_totals,
+.rezajordaan-checkout #order_review {
+	padding: clamp(18px, 3vw, 28px);
+}
+
+.rezajordaan-cart .cart_totals > h2,
+.rezajordaan-checkout #order_review_heading,
+.rezajordaan-checkout .woocommerce-billing-fields > h3,
+.rezajordaan-checkout .woocommerce-shipping-fields > h3,
+.rezajordaan-checkout .woocommerce-additional-fields > h3 {
+	color: var(--rj-burgundy);
+	font-size: clamp(20px, 3vw, 26px);
+	margin: 0 0 16px;
+}
+
+.rezajordaan-cart .cart_totals .shop_table tr th,
+.rezajordaan-cart .cart_totals .shop_table tr td,
+.rezajordaan-checkout table.woocommerce-checkout-review-order-table tr th,
+.rezajordaan-checkout table.woocommerce-checkout-review-order-table tr td {
+	font-size: 14px;
+}
+
+.rezajordaan-cart .cart_totals .order-total th,
+.rezajordaan-cart .cart_totals .order-total td,
+.rezajordaan-checkout table.woocommerce-checkout-review-order-table .order-total th,
+.rezajordaan-checkout table.woocommerce-checkout-review-order-table .order-total td {
+	color: var(--rj-burgundy);
+	font-size: 18px;
+	font-weight: 800;
+}
+
+.rezajordaan-checkout form.checkout {
+	display: grid;
+	gap: 22px;
+	grid-template-columns: minmax(0, 1fr);
+}
+
+.rezajordaan-checkout .col2-set {
+	display: grid;
+	gap: 18px;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.rezajordaan-checkout .form-row label {
+	color: var(--rj-brown);
+	display: block;
+	font-size: 13px;
+	font-weight: 700;
+	margin-bottom: 6px;
+}
+
+.rezajordaan-checkout .form-row input.input-text,
+.rezajordaan-checkout .form-row textarea,
+.rezajordaan-checkout .form-row select,
+.rezajordaan-checkout .select2-container .select2-selection--single {
+	background: var(--rj-white);
+	border: 1px solid var(--rj-border);
+	border-radius: 12px;
+	min-height: 46px;
+	padding: 10px 14px;
+	width: 100%;
+}
+
+.rezajordaan-checkout .woocommerce-shipping-fields,
+.rezajordaan-checkout .woocommerce-additional-fields,
+.rezajordaan-checkout #order_review {
+	margin-top: 0;
+}
+
+.rezajordaan-checkout #shipping_method,
+.rezajordaan-cart .shipping-calculator-form,
+.rezajordaan-checkout .woocommerce-shipping-methods {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.rezajordaan-checkout #shipping_method li,
+.rezajordaan-cart .woocommerce-shipping-methods li,
+.rezajordaan-checkout .woocommerce-shipping-methods li {
+	background: rgba(176, 228, 204, 0.1);
+	border: 1px solid var(--rj-border);
+	border-radius: 14px;
+	margin: 0 0 10px;
+	padding: 12px 14px;
+}
+
+.rezajordaan-checkout #shipping_method li label,
+.rezajordaan-cart .woocommerce-shipping-methods li label,
+.rezajordaan-checkout .woocommerce-shipping-methods li label {
+	align-items: center;
+	cursor: pointer;
+	display: flex;
+	font-weight: 700;
+	gap: 10px;
+	justify-content: space-between;
+	margin: 0;
+	width: 100%;
+}
+
+.rezajordaan-checkout #shipping_method li input,
+.rezajordaan-cart .woocommerce-shipping-methods li input,
+.rezajordaan-checkout .woocommerce-shipping-methods li input {
+	accent-color: var(--rj-rose);
+	flex: 0 0 auto;
+}
+
+.rezajordaan-checkout #payment {
+	background: rgba(176, 228, 204, 0.08);
+	border: 1px solid var(--rj-border);
+	border-radius: 18px;
+	margin-top: 18px;
+	overflow: hidden;
+}
+
+.rezajordaan-checkout #payment ul.payment_methods {
+	border-bottom: 1px solid var(--rj-border);
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.rezajordaan-checkout #payment ul.payment_methods li {
+	border-bottom: 1px solid rgba(40, 90, 72, 0.08);
+	margin: 0;
+	padding: 14px 16px;
+}
+
+.rezajordaan-checkout #payment ul.payment_methods li label {
+	cursor: pointer;
+	font-weight: 700;
+}
+
+.rezajordaan-checkout #payment .payment_box {
+	background: var(--rj-white);
+	border-top: 1px solid rgba(40, 90, 72, 0.08);
+	color: var(--rj-brown);
+	font-size: 13px;
+	margin: 0;
+	padding: 12px 16px;
+}
+
+.rezajordaan-checkout #payment .place-order {
+	margin: 0;
+	padding: 16px;
+}
+
+.rezajordaan-checkout #place_order,
+.rezajordaan-cart .actions .button,
+.rezajordaan-cart .wc-proceed-to-checkout .checkout-button {
+	background: linear-gradient(135deg, var(--rj-burgundy), var(--rj-rose));
+	border: 0;
+	border-radius: 999px;
+	box-shadow: 0 12px 28px rgba(9, 20, 19, 0.14);
+	color: #fff;
+	display: inline-flex;
+	font-size: 15px;
+	font-weight: 800;
+	justify-content: center;
+	min-height: 48px;
+	padding: 12px 22px;
+	width: auto;
+}
+
+.rezajordaan-cart .wc-proceed-to-checkout {
+	margin-top: 16px;
+}
+
+.rezajordaan-cart .wc-proceed-to-checkout .checkout-button {
+	display: block;
+	text-align: center;
+	width: 100%;
+}
+
+.rezajordaan-account .woocommerce-MyAccount-navigation {
+	padding: 12px;
+}
+
+.rezajordaan-account .woocommerce-MyAccount-navigation ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.rezajordaan-account .woocommerce-MyAccount-navigation li {
+	margin: 0 0 8px;
+}
+
+.rezajordaan-account .woocommerce-MyAccount-navigation a {
+	border-radius: 12px;
+	display: block;
+	font-weight: 700;
+	padding: 10px 14px;
+}
+
+.rezajordaan-account .woocommerce-MyAccount-navigation li.is-active a,
+.rezajordaan-account .woocommerce-MyAccount-navigation a:hover {
+	background: rgba(176, 228, 204, 0.18);
+	color: var(--rj-burgundy);
+}
+
+@media (max-width: 900px) {
+	.rezajordaan-cart .shop_table thead {
+		display: none;
+	}
+
+	.rezajordaan-cart .shop_table,
+	.rezajordaan-cart .shop_table tbody,
+	.rezajordaan-cart .shop_table tr,
+	.rezajordaan-cart .shop_table td {
+		display: block;
+		width: 100%;
+	}
+
+	.rezajordaan-cart .shop_table tr {
+		border: 1px solid var(--rj-border);
+		border-radius: 18px;
+		margin-bottom: 14px;
+		overflow: hidden;
+		padding: 8px 0;
+	}
+
+	.rezajordaan-cart .shop_table td {
+		border: 0;
+		display: flex;
+		gap: 10px;
+		justify-content: space-between;
+		padding: 10px 14px;
+		text-align: left;
+	}
+
+	.rezajordaan-cart .shop_table td::before {
+		color: var(--rj-brown);
+		content: attr(data-title);
+		flex: 0 0 auto;
+		font-size: 12px;
+		font-weight: 800;
+	}
+
+	.rezajordaan-cart .shop_table .product-thumbnail {
+		justify-content: center;
+	}
+
+	.rezajordaan-cart .shop_table .product-thumbnail::before {
+		display: none;
+	}
+
+	.rezajordaan-checkout .col2-set {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}
+
 @media (prefers-reduced-motion: reduce) {
 	html {
 		scroll-behavior: auto;

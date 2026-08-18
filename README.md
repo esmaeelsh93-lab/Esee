@@ -23,7 +23,11 @@
 
 ### دانلود
 
-**نسخه 1.5.0 (آخرین):**
+**نسخه 1.5.1 (آخرین):**
+
+https://github.com/esmaeelsh93-lab/Esee/releases/download/rezajordaan-1.5.1/rezajordaan-installable.zip
+
+**نسخه 1.5.0:**
 
 https://github.com/esmaeelsh93-lab/Esee/releases/download/rezajordaan-1.5.0/rezajordaan-installable.zip
 
