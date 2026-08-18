@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'REZAJORDAAN_VERSION', '1.4.0' );
+define( 'REZAJORDAAN_VERSION', '1.4.1' );
 
 require_once get_template_directory() . '/inc/theme-settings.php';
 require_once get_template_directory() . '/inc/page-content.php';

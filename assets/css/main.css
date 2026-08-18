@@ -2871,10 +2871,10 @@ button {
 	gap: 12px;
 	grid-template-rows: auto auto auto;
 	margin: 0;
-	max-width: none;
+	max-width: 100%;
 	min-width: 0;
 	padding: 12px;
-	width: 100% !important;
+	width: auto;
 }
 
 .rezajordaan-archive-cards .woocommerce ul.products li.product.rj-archive-card::before,
@@ -2893,6 +2893,7 @@ button {
 	border-radius: 16px;
 	display: block;
 	height: var(--rj-shop-image-height-desktop);
+	max-width: 100%;
 	object-fit: cover;
 	width: 100%;
 }
@@ -2956,6 +2957,84 @@ button {
 .rezajordaan-archive-cards .woocommerce ul.products li.product .star-rating,
 .rezajordaan-archive-cards .woocommerce ul.products li.product span.onsale {
 	display: none !important;
+}
+
+@media (max-width: 768px) {
+	.rezajordaan-archive-cards .product-archive > .rj-container {
+		max-width: 100%;
+	}
+
+	.rezajordaan-archive-cards .woocommerce ul.products,
+	.rezajordaan-archive-cards .woocommerce ul.products[class*="columns-"] {
+		box-sizing: border-box;
+		display: grid;
+		gap: 10px;
+		grid-template-columns: repeat(var(--rj-shop-columns-mobile), minmax(0, 1fr));
+		margin: 0;
+		max-width: 100%;
+		padding: 0;
+		width: 100%;
+	}
+
+	.rezajordaan-archive-cards .woocommerce ul.products::before,
+	.rezajordaan-archive-cards .woocommerce ul.products::after {
+		content: none;
+		display: none;
+	}
+
+	.rezajordaan-archive-cards .woocommerce ul.products li.product,
+	.rezajordaan-archive-cards .woocommerce ul.products[class*="columns-"] li.product,
+	.rezajordaan-archive-cards .woocommerce ul.products li.product.rj-archive-card,
+	.rezajordaan-archive-cards .woocommerce ul.products[class*="columns-"] li.product:nth-child(2n) {
+		box-sizing: border-box;
+		clear: none;
+		float: none;
+		margin: 0;
+		max-width: 100%;
+		min-width: 0;
+		padding: 10px;
+		width: auto;
+	}
+
+	.rezajordaan-archive-cards .woocommerce ul.products li.product.rj-archive-card {
+		display: grid;
+		gap: 10px;
+		grid-template-rows: auto auto auto;
+	}
+
+	.rj-archive-card__media,
+	.rj-archive-price-box,
+	.rezajordaan-archive-cards .woocommerce ul.products li.product .rj-view-product-button {
+		max-width: 100%;
+		min-width: 0;
+	}
+
+	.rj-archive-card__media img {
+		height: auto;
+		max-height: var(--rj-shop-image-height-mobile);
+		max-width: 100%;
+	}
+
+	.rj-archive-price-box {
+		overflow-wrap: anywhere;
+		padding: 10px 8px;
+	}
+
+	.rj-archive-price-box__current,
+	.rj-archive-price-box__regular {
+		overflow-wrap: anywhere;
+		word-break: break-word;
+	}
+
+	.rj-archive-price-box__current {
+		font-size: clamp(12px, 3.4vw, 15px);
+	}
+
+	.rezajordaan-archive-cards .woocommerce ul.products li.product .rj-view-product-button {
+		font-size: 12px;
+		padding: 11px 10px;
+		white-space: normal;
+	}
 }
 
 /* Responsive */
@@ -3263,22 +3342,6 @@ button {
 		height: 32px;
 		left: 14px;
 		width: 32px;
-	}
-
-	.rj-archive-card__media img {
-		height: var(--rj-shop-image-height-mobile);
-	}
-
-	.rezajordaan-archive-cards .woocommerce ul.products li.product.rj-archive-card {
-		padding: 10px;
-	}
-
-	.rj-archive-price-box {
-		padding: 10px 12px;
-	}
-
-	.rj-archive-price-box__current {
-		font-size: 15px;
 	}
 
 	.product-marquee.is-animated .product-marquee__track {
