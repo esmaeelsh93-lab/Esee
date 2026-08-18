@@ -9,13 +9,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'REZAJORDAAN_VERSION', '1.5.4' );
+define( 'REZAJORDAAN_VERSION', '1.5.5' );
 
 require_once get_template_directory() . '/inc/theme-settings.php';
 require_once get_template_directory() . '/inc/page-content.php';
 require_once get_template_directory() . '/inc/plugin-compat.php';
 require_once get_template_directory() . '/inc/woocommerce-pages.php';
 require_once get_template_directory() . '/inc/woocommerce-cart-session.php';
+require_once get_template_directory() . '/inc/litespeed-compat.php';
 
 /**
  * Register theme features.
