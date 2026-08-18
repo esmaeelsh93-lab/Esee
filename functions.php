@@ -9,10 +9,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'REZAJORDAAN_VERSION', '1.4.3' );
+define( 'REZAJORDAAN_VERSION', '1.5.0' );
 
 require_once get_template_directory() . '/inc/theme-settings.php';
 require_once get_template_directory() . '/inc/page-content.php';
+require_once get_template_directory() . '/inc/plugin-compat.php';
 
 /**
  * Register theme features.
@@ -39,6 +40,15 @@ function rezajordaan_setup() {
 	add_image_size( 'rezajordaan-product', 600, 760, true );
 }
 add_action( 'after_setup_theme', 'rezajordaan_setup' );
+
+/**
+ * WooCommerce opens its own #primary wrapper; the theme already provides layout.
+ */
+function rezajordaan_woocommerce_wrapper_setup() {
+	remove_action( 'woocommerce_before_main_content', 'woocommerce_output_content_wrapper', 10 );
+	remove_action( 'woocommerce_after_main_content', 'woocommerce_output_content_wrapper_end', 10 );
+}
+add_action( 'after_setup_theme', 'rezajordaan_woocommerce_wrapper_setup' );
 
 /**
  * Pages that use GSAP-powered motion.

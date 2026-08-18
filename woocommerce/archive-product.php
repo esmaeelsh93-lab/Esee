@@ -1,17 +1,14 @@
 <?php
 /**
- * Product archive and the custom /shop storefront.
+ * Product archive partial (loaded only as a WooCommerce fallback).
  *
  * @package RezaJordaan
  */
 
 defined( 'ABSPATH' ) || exit;
 
-get_header( 'shop' );
-
-if ( is_shop() ) {
+if ( function_exists( 'is_shop' ) && is_shop() ) {
 	get_template_part( 'template-parts/home-shop' );
-	get_footer( 'shop' );
 	return;
 }
 
@@ -49,4 +46,3 @@ do_action( 'woocommerce_before_main_content' );
 </div>
 <?php
 do_action( 'woocommerce_after_main_content' );
-get_footer( 'shop' );

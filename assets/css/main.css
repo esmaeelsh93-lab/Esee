@@ -2002,12 +2002,14 @@ button {
 }
 
 .archive-full-width .product-archive > .rj-container,
-.archive-full-width.woocommerce-page > .rj-container.content-page__inner {
+.archive-full-width.woocommerce-page > .rj-container.content-page__inner,
+.archive-full-width.woocommerce-page .product-archive > .rj-container {
 	max-width: none;
 	padding-inline: clamp(18px, 3vw, 56px);
 }
 
-.archive-full-width .rezajordaan-archive-cards ul.products {
+.archive-full-width .rezajordaan-archive-cards ul.products,
+.archive-full-width.rezajordaan-archive-cards.woocommerce-page ul.products {
 	gap: clamp(14px, 2vw, 28px);
 }
 
@@ -2863,6 +2865,8 @@ button {
 }
 
 /* Archive cards */
+body.rezajordaan-archive-cards.woocommerce-page ul.products,
+body.rezajordaan-archive-cards.woocommerce-page ul.products[class*="columns-"],
 .rezajordaan-archive-cards ul.products,
 .rezajordaan-archive-cards ul.products[class*="columns-"] {
 	display: grid;
@@ -2875,12 +2879,15 @@ button {
 	width: 100%;
 }
 
+body.rezajordaan-archive-cards.woocommerce-page ul.products::before,
+body.rezajordaan-archive-cards.woocommerce-page ul.products::after,
 .rezajordaan-archive-cards ul.products::before,
 .rezajordaan-archive-cards ul.products::after {
 	content: none;
 	display: none;
 }
 
+body.rezajordaan-archive-cards.woocommerce-page ul.products li.product.rj-archive-card,
 .rezajordaan-archive-cards ul.products li.product.rj-archive-card {
 	box-sizing: border-box;
 	clear: none;
@@ -2895,11 +2902,15 @@ button {
 	width: auto;
 }
 
+body.rezajordaan-archive-cards.woocommerce-page ul.products li.product.rj-archive-card::before,
+body.rezajordaan-archive-cards.woocommerce-page ul.products li.product.rj-archive-card::after,
 .rezajordaan-archive-cards ul.products li.product.rj-archive-card::before,
 .rezajordaan-archive-cards ul.products li.product.rj-archive-card::after {
 	display: none;
 }
 
+body.rezajordaan-archive-cards.woocommerce-page ul.products[class*="columns-"] li.product.rj-archive-card,
+body.rezajordaan-archive-cards.woocommerce-page ul.products[class*="columns-"] li.product.rj-archive-card:nth-child(2n),
 .rezajordaan-archive-cards ul.products[class*="columns-"] li.product.rj-archive-card,
 .rezajordaan-archive-cards ul.products[class*="columns-"] li.product.rj-archive-card:nth-child(2n) {
 	clear: none;
@@ -2987,8 +2998,8 @@ button {
 	font-size: clamp(14px, 2vw, 18px);
 	font-weight: 800;
 	line-height: 1.4;
-	overflow-wrap: anywhere;
-	word-break: break-word;
+	overflow-wrap: break-word;
+	word-break: normal;
 }
 
 .rj-archive-price-box__current .woocommerce-Price-amount {
@@ -3026,6 +3037,14 @@ button {
 	color: white;
 }
 
+body.rezajordaan-archive-cards .rj-archive-card > .price,
+body.rezajordaan-archive-cards .rj-archive-card > p.price,
+body.rezajordaan-archive-cards .rj-archive-card [class*="to3e"],
+body.rezajordaan-archive-cards .rj-archive-card [class*="digipay"],
+body.rezajordaan-archive-cards .rj-archive-card [class*="snapppay"],
+body.rezajordaan-archive-cards .rj-archive-card [class*="torobpay"],
+body.rezajordaan-archive-cards .rj-archive-card__media [class*="badge"],
+body.rezajordaan-archive-cards .rj-archive-card__media [class*="cash"],
 .rezajordaan-archive-cards ul.products li.product .price,
 .rezajordaan-archive-cards ul.products li.product .star-rating {
 	display: none !important;
@@ -3614,6 +3633,8 @@ button {
 }
 
 @media (max-width: 900px) {
+	body.rezajordaan-archive-cards.woocommerce-page ul.products,
+	body.rezajordaan-archive-cards.woocommerce-page ul.products[class*="columns-"],
 	.rezajordaan-archive-cards ul.products,
 	.rezajordaan-archive-cards ul.products[class*="columns-"] {
 		gap: 10px;
@@ -3622,10 +3643,14 @@ button {
 }
 
 @media (max-width: 768px) {
-	body.rezajordaan-archive-cards .product-archive > .rj-container {
+	body.rezajordaan-archive-cards .product-archive > .rj-container,
+	body.rezajordaan-archive-cards.woocommerce-page .product-archive > .rj-container {
 		max-width: 100%;
 	}
 
+	body.rezajordaan-archive-cards.woocommerce-page ul.products[class*="columns-"] li.product,
+	body.rezajordaan-archive-cards.woocommerce-page ul.products li.product.rj-archive-card,
+	body.rezajordaan-archive-cards.woocommerce-page ul.products[class*="columns-"] li.product:nth-child(2n),
 	.rezajordaan-archive-cards ul.products[class*="columns-"] li.product,
 	.rezajordaan-archive-cards ul.products li.product.rj-archive-card,
 	.rezajordaan-archive-cards ul.products[class*="columns-"] li.product:nth-child(2n) {
@@ -3637,6 +3662,7 @@ button {
 		width: auto;
 	}
 
+	body.rezajordaan-archive-cards.woocommerce-page ul.products li.product.rj-archive-card,
 	.rezajordaan-archive-cards ul.products li.product.rj-archive-card {
 		padding: 10px;
 	}
