@@ -65,6 +65,26 @@
 		link.addEventListener("click", (event) => event.preventDefault());
 	});
 
+	const paymentLogos = [...document.querySelectorAll("[data-payment-logo]")];
+	if (paymentLogos.length) {
+		let activePaymentLogo = 0;
+		const showPaymentLogo = (index) => {
+			paymentLogos.forEach((logo, logoIndex) => {
+				const isActive = logoIndex === index;
+				logo.classList.toggle("is-active", isActive);
+				logo.setAttribute("aria-hidden", String(!isActive));
+			});
+		};
+
+		showPaymentLogo(activePaymentLogo);
+		if (!prefersReducedMotion) {
+			window.setInterval(() => {
+				activePaymentLogo = (activePaymentLogo + 1) % paymentLogos.length;
+				showPaymentLogo(activePaymentLogo);
+			}, 2600);
+		}
+	}
+
 	if (prefersReducedMotion || typeof window.gsap === "undefined") return;
 
 	const { gsap } = window;
@@ -76,7 +96,8 @@
 		heroTimeline
 			.from(".hero__media img", { autoAlpha: 0, scale: 1.06, duration: 1.35 })
 			.from(".hero__copy", { autoAlpha: 0, y: 30, scale: 0.97, duration: 0.7 }, "-=0.72")
-			.from(".hero__title", { autoAlpha: 0, y: 24, duration: 0.62 }, "-=0.42")
+			.from(".hero__payment-logos", { autoAlpha: 0, y: 18, duration: 0.52 }, "-=0.42")
+			.from(".hero__title", { autoAlpha: 0, y: 24, duration: 0.62 }, "-=0.36")
 			.from(".hero__tagline", { autoAlpha: 0, y: 18, duration: 0.5 }, "-=0.35")
 			.from(".hero .pc-button", { autoAlpha: 0, y: 14, scale: 0.94, duration: 0.48 }, "-=0.28");
 

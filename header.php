@@ -2,7 +2,7 @@
 /**
  * Site header.
  *
- * @package ParisaCrop
+ * @package RezaJordaan
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -44,7 +44,7 @@ if ( is_wp_error( $categories ) ) {
 
 <header class="site-header" data-header>
 	<div class="site-header__inner pc-container">
-		<a class="site-brand" href="<?php echo esc_url( $home_url ); ?>" aria-label="<?php esc_attr_e( 'صفحه اصلی پریسا کراپ', 'parisacrop' ); ?>">
+		<a class="site-brand" href="<?php echo esc_url( $home_url ); ?>" aria-label="<?php esc_attr_e( 'صفحه اصلی رضا جردن', 'parisacrop' ); ?>">
 			<?php if ( $custom_logo_id ) : ?>
 				<?php
 				echo wp_kses_post(
@@ -60,13 +60,10 @@ if ( is_wp_error( $categories ) ) {
 				);
 				?>
 			<?php else : ?>
-				<img
-					class="site-brand__logo"
-					src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/parisa-crop-logo.svg' ); ?>"
-					alt="<?php esc_attr_e( 'Parisa Crop', 'parisacrop' ); ?>"
-					width="108"
-					height="108"
-				>
+				<span class="site-brand__wordmark">
+					<strong><?php esc_html_e( 'رضا جردن', 'parisacrop' ); ?></strong>
+					<small>REZA JORDAAN</small>
+				</span>
 			<?php endif; ?>
 		</a>
 
@@ -97,7 +94,7 @@ if ( is_wp_error( $categories ) ) {
 
 		<div class="header-actions">
 			<?php if ( $instagram_url && parisacrop_get_setting( 'show_instagram_header' ) ) : ?>
-				<a class="social-button social-button--instagram" href="<?php echo esc_url( $instagram_url ); ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php esc_attr_e( 'اینستاگرام پریسا کراپ', 'parisacrop' ); ?>">
+				<a class="social-button social-button--instagram" href="<?php echo esc_url( $instagram_url ); ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php esc_attr_e( 'اینستاگرام رضا جردن', 'parisacrop' ); ?>">
 					<svg aria-hidden="true" viewBox="0 0 24 24">
 						<rect x="3" y="3" width="18" height="18" rx="5"/>
 						<circle cx="12" cy="12" r="4"/>
@@ -106,7 +103,7 @@ if ( is_wp_error( $categories ) ) {
 				</a>
 			<?php endif; ?>
 			<?php if ( $whatsapp_url && parisacrop_get_setting( 'show_whatsapp_header' ) ) : ?>
-				<a class="social-button social-button--whatsapp" href="<?php echo esc_url( $whatsapp_url ); ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php esc_attr_e( 'واتساپ پریسا کراپ', 'parisacrop' ); ?>">
+				<a class="social-button social-button--whatsapp" href="<?php echo esc_url( $whatsapp_url ); ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php esc_attr_e( 'واتساپ رضا جردن', 'parisacrop' ); ?>">
 					<svg aria-hidden="true" viewBox="0 0 24 24">
 						<path d="M20.5 11.7a8.5 8.5 0 0 1-12.6 7.5L3 20.5l1.3-4.7a8.5 8.5 0 1 1 16.2-4.1Z"/>
 						<path d="M9 8.2c.2-.5.4-.5.7-.5h.5c.2 0 .3.1.4.4l.7 1.7c.1.3.1.4-.1.6l-.5.6c-.2.2-.2.3 0 .6.5.9 1.2 1.7 2.1 2.2.3.2.5.2.7 0l.7-.9c.2-.2.4-.3.6-.2l1.8.8c.3.1.4.3.4.5 0 .3-.2 1.4-.9 1.9-.5.4-1.2.7-2 .5-1.1-.2-2.6-.8-4.2-2.2-1.9-1.7-3-3.7-3.1-4.8-.1-.6.1-1.2.5-1.6.5-.5 1-.6 1.2-.6Z"/>
@@ -114,7 +111,7 @@ if ( is_wp_error( $categories ) ) {
 				</a>
 			<?php endif; ?>
 			<?php if ( $telegram_url && parisacrop_get_setting( 'show_telegram_header' ) ) : ?>
-				<a class="social-button social-button--telegram" href="<?php echo esc_url( $telegram_url ); ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php esc_attr_e( 'تلگرام پریسا کراپ', 'parisacrop' ); ?>">
+				<a class="social-button social-button--telegram" href="<?php echo esc_url( $telegram_url ); ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php esc_attr_e( 'تلگرام رضا جردن', 'parisacrop' ); ?>">
 					<svg aria-hidden="true" viewBox="0 0 24 24"><path d="m3 11 18-7-4 17-6-5-4 3 1-5 9-7-11 6Z"/></svg>
 				</a>
 			<?php endif; ?>

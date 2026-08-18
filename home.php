@@ -8,12 +8,12 @@
 get_header();
 
 $posts_page_id = get_option( 'page_for_posts' );
-$page_title    = $posts_page_id ? get_the_title( $posts_page_id ) : __( 'مجله پریسا', 'parisacrop' );
+$page_title    = $posts_page_id ? get_the_title( $posts_page_id ) : __( 'مجله رضا جردن', 'parisacrop' );
 ?>
 <main id="main" class="blog-page pc-section">
 	<div class="pc-container">
 		<header class="content-hero">
-			<p>PARISA CROP MAGAZINE</p>
+			<p>REZA JORDAAN MAGAZINE</p>
 			<h1><?php echo esc_html( $page_title ); ?></h1>
 			<span><?php esc_html_e( 'تازه‌ترین نوشته‌ها، راهنمای انتخاب و ایده‌های استایل', 'parisacrop' ); ?></span>
 		</header>

@@ -2,7 +2,7 @@
 /**
  * Site footer.
  *
- * @package ParisaCrop
+ * @package RezaJordaan
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -15,9 +15,12 @@ $phone_display  = parisacrop_get_setting( 'phone_display' );
 $phone_url      = parisacrop_get_setting( 'phone_url' );
 $instagram_url  = parisacrop_get_setting( 'instagram_url' );
 $whatsapp_url   = parisacrop_get_setting( 'whatsapp_url' );
+$rubika_url     = parisacrop_get_setting( 'rubika_url' );
 $telegram_url   = parisacrop_get_setting( 'telegram_url' );
 $email          = parisacrop_get_setting( 'email' );
 $address        = parisacrop_get_setting( 'address' );
+$enamad_url     = parisacrop_get_setting( 'enamad_url' );
+$enamad_logo    = parisacrop_get_setting( 'enamad_logo_url' );
 ?>
 <footer class="site-footer">
 	<div class="site-footer__glow" aria-hidden="true"></div>
@@ -38,29 +41,44 @@ $address        = parisacrop_get_setting( 'address' );
 				);
 				?>
 			<?php else : ?>
-				<img class="site-footer__logo" src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/parisa-crop-logo.svg' ); ?>" alt="<?php esc_attr_e( 'Parisa Crop', 'parisacrop' ); ?>" width="72" height="72">
+				<span class="site-footer__wordmark" aria-hidden="true">RJ</span>
 			<?php endif; ?>
 			<div>
-				<p class="site-footer__eyebrow">Parisa Crop</p>
+				<p class="site-footer__eyebrow">Reza Jordaan</p>
 				<h2><?php echo esc_html( parisacrop_get_setting( 'footer_tagline' ) ); ?></h2>
 			</div>
 			<p><?php echo esc_html( parisacrop_get_setting( 'footer_description' ) ); ?></p>
 		</div>
 
 		<div class="site-footer__column">
-			<h3><?php esc_html_e( 'دسترسی سریع', 'parisacrop' ); ?></h3>
+			<h3><?php esc_html_e( 'لینک‌های مفید', 'parisacrop' ); ?></h3>
 			<?php foreach ( $footer_links as $footer_link ) : ?>
 				<a href="<?php echo esc_url( $footer_link['url'] ); ?>"><?php echo esc_html( $footer_link['label'] ); ?></a>
 			<?php endforeach; ?>
 		</div>
 
 		<div class="site-footer__column site-footer__contact">
-			<h3><?php esc_html_e( 'با ما در ارتباط باش', 'parisacrop' ); ?></h3>
+			<h3><?php esc_html_e( 'راه‌های ارتباطی', 'parisacrop' ); ?></h3>
+			<?php if ( $instagram_url ) : ?>
+				<p>
+					<?php esc_html_e( 'اینستاگرام:', 'parisacrop' ); ?>
+					<a href="<?php echo esc_url( $instagram_url ); ?>" target="_blank" rel="noopener noreferrer" dir="ltr">@rezajordaan</a>
+				</p>
+			<?php endif; ?>
 			<?php if ( $phone_display && parisacrop_get_setting( 'show_phone_footer' ) ) : ?>
 				<p>
-					<?php esc_html_e( 'شماره تماس:', 'parisacrop' ); ?>
+					<?php esc_html_e( 'تماس:', 'parisacrop' ); ?>
 					<a href="<?php echo esc_url( $phone_url ); ?>" dir="ltr"><?php echo esc_html( $phone_display ); ?></a>
 				</p>
+			<?php endif; ?>
+			<?php if ( $whatsapp_url ) : ?>
+				<p>
+					<?php esc_html_e( 'واتساپ:', 'parisacrop' ); ?>
+					<a href="<?php echo esc_url( $whatsapp_url ); ?>" target="_blank" rel="noopener noreferrer" dir="ltr"><?php echo esc_html( $phone_display ); ?></a>
+				</p>
+			<?php endif; ?>
+			<?php if ( $rubika_url ) : ?>
+				<p><a href="<?php echo esc_url( $rubika_url ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'روبیکا رضا جردن', 'parisacrop' ); ?></a></p>
 			<?php endif; ?>
 			<?php if ( $email ) : ?>
 				<p><a href="mailto:<?php echo esc_attr( antispambot( $email ) ); ?>" dir="ltr"><?php echo esc_html( antispambot( $email ) ); ?></a></p>
@@ -72,10 +90,20 @@ $address        = parisacrop_get_setting( 'address' );
 				<div class="site-footer__socials">
 					<?php if ( $instagram_url ) : ?><a href="<?php echo esc_url( $instagram_url ); ?>" target="_blank" rel="noopener noreferrer">Instagram</a><?php endif; ?>
 					<?php if ( $whatsapp_url ) : ?><a href="<?php echo esc_url( $whatsapp_url ); ?>" target="_blank" rel="noopener noreferrer">WhatsApp</a><?php endif; ?>
+					<?php if ( $rubika_url ) : ?><a href="<?php echo esc_url( $rubika_url ); ?>" target="_blank" rel="noopener noreferrer">Rubika</a><?php endif; ?>
 					<?php if ( $telegram_url ) : ?><a href="<?php echo esc_url( $telegram_url ); ?>" target="_blank" rel="noopener noreferrer">Telegram</a><?php endif; ?>
 				</div>
 			<?php endif; ?>
 		</div>
+
+		<?php if ( $enamad_url && $enamad_logo && parisacrop_get_setting( 'show_enamad_footer' ) ) : ?>
+			<div class="site-footer__trust">
+				<h3><?php esc_html_e( 'خرید مطمئن', 'parisacrop' ); ?></h3>
+				<a href="<?php echo esc_url( $enamad_url ); ?>" target="_blank" rel="noopener noreferrer" referrerpolicy="origin">
+					<img src="<?php echo esc_url( $enamad_logo ); ?>" alt="<?php esc_attr_e( 'نماد اعتماد الکترونیکی رضا جردن', 'parisacrop' ); ?>" loading="lazy" referrerpolicy="origin" width="125" height="136">
+				</a>
+			</div>
+		<?php endif; ?>
 	</div>
 
 	<div class="site-footer__credit">

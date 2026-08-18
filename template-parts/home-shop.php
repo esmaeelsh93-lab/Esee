@@ -1,8 +1,8 @@
 <?php
 /**
- * Animated Parisa Crop storefront.
+ * Animated Reza Jordaan storefront.
  *
- * @package ParisaCrop
+ * @package RezaJordaan
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -78,8 +78,8 @@ $benefits = array(
 			<img
 				src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/hero-desktop.webp' ); ?>"
 				alt=""
-				width="1983"
-				height="793"
+				width="1672"
+				height="941"
 				fetchpriority="high"
 				decoding="async"
 			>
@@ -87,11 +87,17 @@ $benefits = array(
 		<div class="hero__veil" aria-hidden="true"></div>
 		<div class="hero__inner pc-container">
 			<div class="hero__copy">
-				<h1 class="hero__title" id="hero-title"><?php esc_html_e( 'پریسا کراپ شاپ', 'parisacrop' ); ?></h1>
-				<p class="hero__tagline"><?php esc_html_e( 'خاص مثل تو', 'parisacrop' ); ?></p>
+				<p class="hero__eyebrow"><?php esc_html_e( 'رضا جردن', 'parisacrop' ); ?></p>
+				<div class="hero__payment-logos" data-payment-logos aria-label="<?php esc_attr_e( 'خرید اقساطی با ترب‌پی، دیجی‌پی و اسنپ‌پی', 'parisacrop' ); ?>">
+					<img class="hero__payment-logo is-active" data-payment-logo src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/trb-pay.svg' ); ?>" alt="<?php esc_attr_e( 'ترب‌پی', 'parisacrop' ); ?>">
+					<img class="hero__payment-logo" data-payment-logo src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/digipay-logo.svg' ); ?>" alt="<?php esc_attr_e( 'دیجی‌پی', 'parisacrop' ); ?>">
+					<img class="hero__payment-logo" data-payment-logo src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/snapp-pay.svg' ); ?>" alt="<?php esc_attr_e( 'اسنپ‌پی', 'parisacrop' ); ?>">
+				</div>
+				<h1 class="hero__title" id="hero-title"><?php esc_html_e( 'خرید اقساطی و آسان', 'parisacrop' ); ?></h1>
+				<p class="hero__tagline"><?php esc_html_e( 'کفش موردعلاقه‌ات را امروز انتخاب کن', 'parisacrop' ); ?></p>
 				<a class="pc-button pc-button--primary pc-button--hero" href="<?php echo esc_url( parisacrop_shop_url() ); ?>">
-					<span aria-hidden="true">♥</span>
-					<?php esc_html_e( 'بریم فروشگاه', 'parisacrop' ); ?>
+					<span aria-hidden="true">✦</span>
+					<?php esc_html_e( 'مشاهده فروشگاه', 'parisacrop' ); ?>
 					<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
 				</a>
 			</div>
@@ -124,6 +130,7 @@ $benefits = array(
 		</section>
 	<?php endif; ?>
 
+	<?php if ( parisacrop_get_setting( 'show_categories' ) && ( $featured_categories || current_user_can( 'manage_product_terms' ) ) ) : ?>
 	<section class="category-section pc-section" id="categories" aria-labelledby="category-title">
 		<div class="pc-container">
 			<header class="section-heading">
@@ -164,11 +171,12 @@ $benefits = array(
 				</div>
 			<?php elseif ( current_user_can( 'manage_product_terms' ) ) : ?>
 				<div class="pc-admin-note">
-					<?php esc_html_e( 'از بخش محصولات ← دسته‌بندی‌ها، گزینه «نمایش در صفحه اصلی» را برای دسته‌های موردنظر فعال کنید.', 'parisacrop' ); ?>
+					<?php esc_html_e( 'از نمایش ← تنظیمات رضا جردن، دسته‌های موردنظر را برای لندینگ تیک بزنید.', 'parisacrop' ); ?>
 				</div>
 			<?php endif; ?>
 		</div>
 	</section>
+	<?php endif; ?>
 
 	<section class="new-arrivals pc-section" id="new-arrivals" aria-labelledby="new-arrivals-title">
 		<header class="section-heading section-heading--light pc-container">
@@ -210,6 +218,29 @@ $benefits = array(
 			<div class="pc-admin-note pc-container"><?php esc_html_e( 'محصولی برای نمایش در بخش جدیدترین‌ها منتشر نشده است.', 'parisacrop' ); ?></div>
 		<?php endif; ?>
 	</section>
+
+	<?php if ( parisacrop_get_setting( 'show_about' ) ) : ?>
+		<section class="about-store pc-section" id="about-us" aria-labelledby="about-store-title">
+			<div class="about-store__inner pc-container">
+				<div class="about-store__copy">
+					<p class="about-store__eyebrow"><?php esc_html_e( 'درباره رضا جردن', 'parisacrop' ); ?></p>
+					<h2 id="about-store-title"><?php echo esc_html( parisacrop_get_setting( 'about_title' ) ); ?></h2>
+					<p><?php echo esc_html( parisacrop_get_setting( 'about_description' ) ); ?></p>
+					<div class="about-store__actions">
+						<a class="pc-button pc-button--primary" href="<?php echo esc_url( parisacrop_get_setting( 'about_url' ) ); ?>"><?php esc_html_e( 'بیشتر درباره ما', 'parisacrop' ); ?></a>
+						<a class="about-store__contact" href="<?php echo esc_url( parisacrop_get_setting( 'phone_url' ) ); ?>"><?php esc_html_e( 'تماس با فروشگاه', 'parisacrop' ); ?></a>
+					</div>
+				</div>
+				<aside class="about-store__visit">
+					<span aria-hidden="true">
+						<svg viewBox="0 0 24 24"><path d="M12 21s7-5.3 7-12A7 7 0 1 0 5 9c0 6.7 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg>
+					</span>
+					<h3><?php esc_html_e( 'خرید حضوری', 'parisacrop' ); ?></h3>
+					<p><?php echo esc_html( parisacrop_get_setting( 'store_visit_text' ) ); ?></p>
+				</aside>
+			</div>
+		</section>
+	<?php endif; ?>
 
 	<section class="why-us pc-section" id="why-us" aria-labelledby="why-us-title">
 		<div class="why-us__ribbon" aria-hidden="true"></div>

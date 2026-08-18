@@ -1,10 +1,10 @@
 .pc-settings {
-	--pc-admin-cream: #fbf1e4;
-	--pc-admin-powder: #f4c6cb;
-	--pc-admin-rose: #e85d75;
-	--pc-admin-burgundy: #b3364a;
-	--pc-admin-espresso: #3a2318;
-	--pc-admin-brown: #7a5240;
+	--pc-admin-cream: #f3faf7;
+	--pc-admin-powder: #b0e4cc;
+	--pc-admin-rose: #408a71;
+	--pc-admin-burgundy: #285a48;
+	--pc-admin-espresso: #091413;
+	--pc-admin-brown: #285a48;
 	color: var(--pc-admin-espresso);
 	direction: rtl;
 	margin: 22px 0 40px 20px;
@@ -20,10 +20,10 @@
 .pc-settings__hero {
 	align-items: center;
 	background:
-		radial-gradient(circle at 10% 20%, rgba(232, 93, 117, 0.2), transparent 26%),
-		linear-gradient(120deg, #3a2318, #5d3327);
+		radial-gradient(circle at 10% 20%, rgba(176, 228, 204, 0.2), transparent 26%),
+		linear-gradient(120deg, #091413, #285a48);
 	border-radius: 24px;
-	box-shadow: 0 18px 45px rgba(58, 35, 24, 0.16);
+	box-shadow: 0 18px 45px rgba(9, 20, 19, 0.16);
 	color: white;
 	display: flex;
 	justify-content: space-between;
@@ -307,6 +307,44 @@
 	margin: 4px 0 0;
 }
 
+.pc-category-picker > p {
+	color: var(--pc-admin-brown);
+	margin: 0 0 16px;
+}
+
+.pc-category-picker__list {
+	display: grid;
+	gap: 9px;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.pc-category-picker__list label {
+	align-items: center;
+	background: var(--pc-admin-cream);
+	border: 1px solid rgba(40, 90, 72, 0.16);
+	border-radius: 12px;
+	cursor: pointer;
+	display: grid;
+	gap: 8px;
+	grid-template-columns: auto 1fr auto;
+	padding: 11px 12px;
+}
+
+.pc-category-picker__list input {
+	accent-color: var(--pc-admin-rose);
+}
+
+.pc-category-picker__list span {
+	font-weight: 700;
+}
+
+.pc-category-picker__list small {
+	background: white;
+	border-radius: 999px;
+	color: var(--pc-admin-brown);
+	padding: 1px 7px;
+}
+
 .pc-settings__save {
 	background: rgba(240, 240, 241, 0.93);
 	border-top: 1px solid #dcdcde;
@@ -335,6 +373,10 @@
 	.pc-link-row {
 		grid-template-columns: 1fr 1fr;
 	}
+
+	.pc-category-picker__list {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
 }
 
 @media (max-width: 600px) {
@@ -358,6 +400,10 @@
 	}
 
 	.pc-link-row {
+		grid-template-columns: 1fr;
+	}
+
+	.pc-category-picker__list {
 		grid-template-columns: 1fr;
 	}
 }

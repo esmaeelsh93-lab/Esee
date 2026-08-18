@@ -1,8 +1,8 @@
 <?php
 /**
- * Small, focused settings panel for the Parisa Crop theme.
+ * Small, focused settings panel for the Reza Jordaan theme.
  *
- * @package ParisaCrop
+ * @package RezaJordaan
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -18,43 +18,75 @@ function parisacrop_default_settings() {
 	$shop_url = function_exists( 'parisacrop_shop_url' ) ? parisacrop_shop_url() : home_url( '/shop/' );
 
 	return array(
-		'instagram_url'              => 'https://www.instagram.com/papillon.galley.shop/',
-		'whatsapp_url'               => 'https://wa.me/989927779013',
+		'instagram_url'              => 'https://www.instagram.com/rezajordaan/',
+		'whatsapp_url'               => 'https://wa.me/989035263346',
+		'rubika_url'                 => 'https://rubika.ir/rezajordaan',
 		'telegram_url'               => '',
-		'phone_display'              => '09927779013',
-		'phone_url'                  => 'tel:+989927779013',
+		'phone_display'              => '09035263346',
+		'phone_url'                  => 'tel:+989035263346',
 		'email'                      => '',
-		'address'                    => '',
+		'address'                    => 'کرج، گلشهر، خیابان پونه شرقی، جنب اسباب‌بازی البرز',
+		'enamad_url'                 => 'https://trustseal.enamad.ir/?id=541613&Code=ZHfcBR7k0vVn3dPW7YgfoAkkTmF6j0Uc',
+		'enamad_logo_url'            => 'https://trustseal.enamad.ir/logo.aspx?id=541613&Code=ZHfcBR7k0vVn3dPW7YgfoAkkTmF6j0Uc',
 		'show_instagram_header'      => 1,
 		'show_whatsapp_header'       => 1,
 		'show_telegram_header'       => 0,
 		'show_phone_footer'          => 1,
 		'show_social_footer'         => 1,
+		'show_enamad_footer'         => 1,
 		'show_product_search'        => 1,
-		'footer_tagline'             => 'خاص مثل تو',
-		'footer_description'         => 'انتخاب‌های تازه و دوست‌داشتنی برای استایلی که فقط مال توست.',
+		'show_categories'            => 1,
+		'show_about'                 => 1,
+		'featured_category_ids'      => array(),
+		'footer_tagline'             => 'انتخاب خاص برای استایل تو',
+		'footer_description'         => 'فروشگاه کفش رضا جردن؛ خرید آنلاین و اقساطی آسان با امکان بررسی و خرید حضوری.',
+		'about_title'                => 'کیفیت را از نزدیک انتخاب کن',
+		'about_description'          => 'در رضا جردن تلاش می‌کنیم انتخاب کفش باکیفیت، خوش‌استایل و مناسب را برایت ساده‌تر کنیم؛ چه آنلاین خرید کنی و چه حضوری به فروشگاه بیایی.',
+		'about_url'                  => 'https://rezajordaan.ir/about-us-3/',
+		'store_visit_text'           => 'برای بررسی کیفیت از نزدیک و تست سایز، خرید حضوری در فروشگاه فیزیکی فراهم است: کرج، گلشهر، خیابان پونه شرقی، جنب اسباب‌بازی البرز',
 		'blog_page_id'               => 0,
-		'header_links'               => array(),
-		'footer_links'               => array(
+		'header_links'               => array(
 			array(
 				'label'   => 'فروشگاه',
 				'page_id' => 0,
 				'url'     => $shop_url,
 			),
 			array(
-				'label'   => 'دسته‌بندی‌ها',
+				'label'   => 'درباره ما',
 				'page_id' => 0,
-				'url'     => $shop_url . '#categories',
+				'url'     => 'https://rezajordaan.ir/about-us-3/',
 			),
 			array(
-				'label'   => 'جدیدترین‌ها',
+				'label'   => 'تماس با ما',
 				'page_id' => 0,
-				'url'     => $shop_url . '#new-arrivals',
+				'url'     => 'https://rezajordaan.ir/contact-us/',
+			),
+		),
+		'footer_links'               => array(
+			array(
+				'label'   => 'صفحه اصلی',
+				'page_id' => 0,
+				'url'     => home_url( '/' ),
 			),
 			array(
-				'label'   => 'چرا ما؟',
+				'label'   => 'فروشگاه ما',
 				'page_id' => 0,
-				'url'     => $shop_url . '#why-us',
+				'url'     => $shop_url,
+			),
+			array(
+				'label'   => 'درباره ما',
+				'page_id' => 0,
+				'url'     => 'https://rezajordaan.ir/about-us-3/',
+			),
+			array(
+				'label'   => 'تماس با ما',
+				'page_id' => 0,
+				'url'     => 'https://rezajordaan.ir/contact-us/',
+			),
+			array(
+				'label'   => 'سیاست تعویض و مرجوعی',
+				'page_id' => 0,
+				'url'     => 'https://rezajordaan.ir/%D8%B3%DB%8C%D8%A7%D8%B3%D8%AA-%D8%AA%D8%B9%D9%88%DB%8C%D8%B6-%D9%88-%D9%85%D8%B1%D8%AC%D9%88%D8%B9%DB%8C/',
 			),
 		),
 		'latest_products_count'      => 10,
@@ -170,7 +202,7 @@ function parisacrop_sanitize_settings( $input ) {
 	$defaults = parisacrop_default_settings();
 	$clean    = array();
 
-	foreach ( array( 'instagram_url', 'whatsapp_url', 'telegram_url', 'phone_url' ) as $key ) {
+	foreach ( array( 'instagram_url', 'whatsapp_url', 'rubika_url', 'telegram_url', 'phone_url', 'enamad_url', 'enamad_logo_url', 'about_url' ) as $key ) {
 		$clean[ $key ] = isset( $input[ $key ] ) ? esc_url_raw( $input[ $key ] ) : '';
 	}
 
@@ -179,11 +211,19 @@ function parisacrop_sanitize_settings( $input ) {
 	$clean['address']            = isset( $input['address'] ) ? sanitize_textarea_field( $input['address'] ) : '';
 	$clean['footer_tagline']     = isset( $input['footer_tagline'] ) ? sanitize_text_field( $input['footer_tagline'] ) : '';
 	$clean['footer_description'] = isset( $input['footer_description'] ) ? sanitize_textarea_field( $input['footer_description'] ) : '';
+	$clean['about_title']        = isset( $input['about_title'] ) ? sanitize_text_field( $input['about_title'] ) : '';
+	$clean['about_description']  = isset( $input['about_description'] ) ? sanitize_textarea_field( $input['about_description'] ) : '';
+	$clean['store_visit_text']   = isset( $input['store_visit_text'] ) ? sanitize_textarea_field( $input['store_visit_text'] ) : '';
 	$clean['blog_page_id']       = isset( $input['blog_page_id'] ) ? absint( $input['blog_page_id'] ) : 0;
 
-	foreach ( array( 'show_instagram_header', 'show_whatsapp_header', 'show_telegram_header', 'show_phone_footer', 'show_social_footer', 'show_product_search' ) as $key ) {
+	foreach ( array( 'show_instagram_header', 'show_whatsapp_header', 'show_telegram_header', 'show_phone_footer', 'show_social_footer', 'show_enamad_footer', 'show_product_search', 'show_categories', 'show_about' ) as $key ) {
 		$clean[ $key ] = empty( $input[ $key ] ) ? 0 : 1;
 	}
+
+	$category_ids = isset( $input['featured_category_ids'] ) && is_array( $input['featured_category_ids'] )
+		? array_map( 'absint', $input['featured_category_ids'] )
+		: array();
+	$clean['featured_category_ids'] = array_slice( array_values( array_unique( array_filter( $category_ids ) ) ), 0, 24 );
 
 	$clean['header_links'] = parisacrop_sanitize_link_rows( $input['header_links'] ?? array(), 4 );
 	$clean['footer_links'] = parisacrop_sanitize_link_rows( $input['footer_links'] ?? array(), 10 );
@@ -262,8 +302,8 @@ add_action( 'add_option_parisacrop_settings', 'parisacrop_sync_blog_page_on_add'
  */
 function parisacrop_add_settings_page() {
 	add_theme_page(
-		__( 'تنظیمات پریسا کراپ', 'parisacrop' ),
-		__( 'تنظیمات پریسا کراپ', 'parisacrop' ),
+		__( 'تنظیمات رضا جردن', 'parisacrop' ),
+		__( 'تنظیمات رضا جردن', 'parisacrop' ),
 		'manage_options',
 		'parisacrop-settings',
 		'parisacrop_render_settings_page'
@@ -406,6 +446,50 @@ function parisacrop_render_link_row( $key, $index, $row, $pages ) {
 }
 
 /**
+ * Render WooCommerce category visibility controls.
+ */
+function parisacrop_setting_categories() {
+	$selected_ids = array_map( 'absint', (array) parisacrop_get_setting( 'featured_category_ids' ) );
+	$categories   = taxonomy_exists( 'product_cat' )
+		? get_terms(
+			array(
+				'taxonomy'   => 'product_cat',
+				'hide_empty' => false,
+				'orderby'    => 'name',
+				'order'      => 'ASC',
+			)
+		)
+		: array();
+
+	if ( is_wp_error( $categories ) ) {
+		$categories = array();
+	}
+	?>
+	<div class="pc-category-picker">
+		<?php if ( $categories ) : ?>
+			<p><?php esc_html_e( 'هر دسته‌ای که باید در لندینگ دیده شود تیک بزنید. برداشتن تیک، همان دسته را از لندینگ حذف می‌کند.', 'parisacrop' ); ?></p>
+			<div class="pc-category-picker__list">
+				<?php foreach ( $categories as $category ) : ?>
+					<label>
+						<input
+							type="checkbox"
+							name="parisacrop_settings[featured_category_ids][]"
+							value="<?php echo esc_attr( $category->term_id ); ?>"
+							<?php checked( in_array( (int) $category->term_id, $selected_ids, true ) ); ?>
+						>
+						<span><?php echo esc_html( $category->name ); ?></span>
+						<small><?php echo esc_html( number_format_i18n( $category->count ) ); ?></small>
+					</label>
+				<?php endforeach; ?>
+			</div>
+		<?php else : ?>
+			<p><?php esc_html_e( 'پس از ساخت دسته‌بندی‌های ووکامرس، انتخاب آن‌ها در همین قسمت فعال می‌شود.', 'parisacrop' ); ?></p>
+		<?php endif; ?>
+	</div>
+	<?php
+}
+
+/**
  * Render the complete settings screen.
  */
 function parisacrop_render_settings_page() {
@@ -416,7 +500,7 @@ function parisacrop_render_settings_page() {
 	<div class="wrap pc-settings">
 		<header class="pc-settings__hero">
 			<div>
-				<p>PARISA CROP</p>
+				<p>REZA JORDAAN</p>
 				<h1><?php esc_html_e( 'تنظیمات ساده قالب', 'parisacrop' ); ?></h1>
 				<span><?php esc_html_e( 'فقط گزینه‌های کاربردی؛ بدون صفحه‌ساز و تنظیمات پیچیده.', 'parisacrop' ); ?></span>
 			</div>
@@ -430,6 +514,7 @@ function parisacrop_render_settings_page() {
 			<nav class="pc-settings__tabs" aria-label="<?php esc_attr_e( 'بخش‌های تنظیمات', 'parisacrop' ); ?>">
 				<button type="button" class="is-active" data-settings-tab="contact"><?php esc_html_e( 'هدر و فوتر', 'parisacrop' ); ?></button>
 				<button type="button" data-settings-tab="links"><?php esc_html_e( 'پیوندها و برگه‌ها', 'parisacrop' ); ?></button>
+				<button type="button" data-settings-tab="landing"><?php esc_html_e( 'لندینگ و دسته‌بندی‌ها', 'parisacrop' ); ?></button>
 				<button type="button" data-settings-tab="products"><?php esc_html_e( 'کارت محصولات', 'parisacrop' ); ?></button>
 			</nav>
 
@@ -439,6 +524,7 @@ function parisacrop_render_settings_page() {
 						<h2><?php esc_html_e( 'راه‌های ارتباطی', 'parisacrop' ); ?></h2>
 						<label><span><?php esc_html_e( 'اینستاگرام', 'parisacrop' ); ?></span><input type="url" dir="ltr" name="parisacrop_settings[instagram_url]" value="<?php echo esc_attr( parisacrop_get_setting( 'instagram_url' ) ); ?>"></label>
 						<label><span><?php esc_html_e( 'واتساپ', 'parisacrop' ); ?></span><input type="url" dir="ltr" name="parisacrop_settings[whatsapp_url]" value="<?php echo esc_attr( parisacrop_get_setting( 'whatsapp_url' ) ); ?>"></label>
+						<label><span><?php esc_html_e( 'روبیکا', 'parisacrop' ); ?></span><input type="url" dir="ltr" name="parisacrop_settings[rubika_url]" value="<?php echo esc_attr( parisacrop_get_setting( 'rubika_url' ) ); ?>"></label>
 						<label><span><?php esc_html_e( 'تلگرام', 'parisacrop' ); ?></span><input type="url" dir="ltr" name="parisacrop_settings[telegram_url]" value="<?php echo esc_attr( parisacrop_get_setting( 'telegram_url' ) ); ?>"></label>
 						<label><span><?php esc_html_e( 'شماره نمایشی', 'parisacrop' ); ?></span><input type="text" dir="ltr" name="parisacrop_settings[phone_display]" value="<?php echo esc_attr( parisacrop_get_setting( 'phone_display' ) ); ?>"></label>
 						<label><span><?php esc_html_e( 'لینک تماس', 'parisacrop' ); ?></span><input type="url" dir="ltr" name="parisacrop_settings[phone_url]" value="<?php echo esc_attr( parisacrop_get_setting( 'phone_url' ) ); ?>" placeholder="tel:+98..."></label>
@@ -452,10 +538,13 @@ function parisacrop_render_settings_page() {
 						<?php parisacrop_setting_switch( 'show_telegram_header', __( 'آیکون تلگرام در هدر', 'parisacrop' ) ); ?>
 						<?php parisacrop_setting_switch( 'show_phone_footer', __( 'شماره تماس در فوتر', 'parisacrop' ) ); ?>
 						<?php parisacrop_setting_switch( 'show_social_footer', __( 'شبکه‌های اجتماعی در فوتر', 'parisacrop' ) ); ?>
+						<?php parisacrop_setting_switch( 'show_enamad_footer', __( 'نمایش اینماد در فوتر', 'parisacrop' ) ); ?>
 						<?php parisacrop_setting_switch( 'show_product_search', __( 'جستجوی محصولات زیر هیرو', 'parisacrop' ) ); ?>
 						<hr>
 						<label><span><?php esc_html_e( 'شعار فوتر', 'parisacrop' ); ?></span><input type="text" name="parisacrop_settings[footer_tagline]" value="<?php echo esc_attr( parisacrop_get_setting( 'footer_tagline' ) ); ?>"></label>
 						<label><span><?php esc_html_e( 'توضیح کوتاه فوتر', 'parisacrop' ); ?></span><textarea name="parisacrop_settings[footer_description]" rows="4"><?php echo esc_textarea( parisacrop_get_setting( 'footer_description' ) ); ?></textarea></label>
+						<label><span><?php esc_html_e( 'لینک اعتبارسنجی اینماد', 'parisacrop' ); ?></span><input type="url" dir="ltr" name="parisacrop_settings[enamad_url]" value="<?php echo esc_attr( parisacrop_get_setting( 'enamad_url' ) ); ?>"></label>
+						<label><span><?php esc_html_e( 'نشانی تصویر اینماد', 'parisacrop' ); ?></span><input type="url" dir="ltr" name="parisacrop_settings[enamad_logo_url]" value="<?php echo esc_attr( parisacrop_get_setting( 'enamad_logo_url' ) ); ?>"></label>
 					</div>
 				</div>
 			</section>
@@ -487,6 +576,27 @@ function parisacrop_render_settings_page() {
 				<div class="pc-settings__notice">
 					<strong><?php esc_html_e( 'برگه‌ها و مقاله‌ها اکنون قالب اختصاصی دارند.', 'parisacrop' ); ?></strong>
 					<p><?php esc_html_e( 'پس از انتشار برگه، همین‌جا آن را انتخاب کنید تا در هدر یا فوتر دیده شود. برای CSS اختصاصی، قالب «HTML اختصاصی» را برای برگه انتخاب کنید.', 'parisacrop' ); ?></p>
+				</div>
+			</section>
+
+			<section class="pc-settings__panel" data-settings-panel="landing">
+				<div class="pc-settings__grid">
+					<div class="pc-settings__card">
+						<h2><?php esc_html_e( 'نمایش بخش‌های لندینگ', 'parisacrop' ); ?></h2>
+						<?php parisacrop_setting_switch( 'show_categories', __( 'نمایش بخش دسته‌بندی‌ها', 'parisacrop' ) ); ?>
+						<?php parisacrop_setting_switch( 'show_about', __( 'نمایش بخش درباره ما و خرید حضوری', 'parisacrop' ) ); ?>
+					</div>
+					<div class="pc-settings__card">
+						<h2><?php esc_html_e( 'متن درباره ما', 'parisacrop' ); ?></h2>
+						<label><span><?php esc_html_e( 'عنوان', 'parisacrop' ); ?></span><input type="text" name="parisacrop_settings[about_title]" value="<?php echo esc_attr( parisacrop_get_setting( 'about_title' ) ); ?>"></label>
+						<label><span><?php esc_html_e( 'توضیح', 'parisacrop' ); ?></span><textarea name="parisacrop_settings[about_description]" rows="4"><?php echo esc_textarea( parisacrop_get_setting( 'about_description' ) ); ?></textarea></label>
+						<label><span><?php esc_html_e( 'لینک درباره ما', 'parisacrop' ); ?></span><input type="url" dir="ltr" name="parisacrop_settings[about_url]" value="<?php echo esc_attr( parisacrop_get_setting( 'about_url' ) ); ?>"></label>
+						<label><span><?php esc_html_e( 'متن خرید حضوری و آدرس', 'parisacrop' ); ?></span><textarea name="parisacrop_settings[store_visit_text]" rows="5"><?php echo esc_textarea( parisacrop_get_setting( 'store_visit_text' ) ); ?></textarea></label>
+					</div>
+				</div>
+				<div class="pc-settings__card">
+					<h2><?php esc_html_e( 'دسته‌بندی‌های قابل نمایش در لندینگ', 'parisacrop' ); ?></h2>
+					<?php parisacrop_setting_categories(); ?>
 				</div>
 			</section>
 

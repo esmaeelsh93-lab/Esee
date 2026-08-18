@@ -2,7 +2,7 @@
 /**
  * Editable page content and safe per-page presentation controls.
  *
- * @package ParisaCrop
+ * @package RezaJordaan
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function parisacrop_add_page_options_box() {
 	add_meta_box(
 		'parisacrop-page-options',
-		__( 'تنظیمات نمایش پریسا کراپ', 'parisacrop' ),
+		__( 'تنظیمات نمایش رضا جردن', 'parisacrop' ),
 		'parisacrop_render_page_options_box',
 		'page',
 		'normal',

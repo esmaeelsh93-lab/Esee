@@ -21,7 +21,7 @@ $posts_query = new WP_Query(
 <main id="main" class="blog-page pc-section">
 	<div class="pc-container">
 		<header class="content-hero">
-			<p>PARISA CROP MAGAZINE</p>
+			<p>REZA JORDAAN MAGAZINE</p>
 			<h1><?php the_title(); ?></h1>
 			<?php if ( get_the_content() ) : ?>
 				<div class="content-hero__description"><?php the_content(); ?></div>

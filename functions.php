@@ -1,16 +1,15 @@
 <?php
 /**
- * Core theme setup for Parisa Crop.
+ * Core theme setup for Reza Jordaan.
  *
- * @package ParisaCrop
+ * @package RezaJordaan
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'PARISACROP_VERSION', '1.2.0' );
-define( 'PARISACROP_CATEGORY_META_KEY', '_parisacrop_show_home' );
+define( 'PARISACROP_VERSION', '1.0.0' );
 
 require_once get_template_directory() . '/inc/theme-settings.php';
 require_once get_template_directory() . '/inc/page-content.php';
@@ -49,19 +48,6 @@ function parisacrop_setup() {
 	add_image_size( 'parisacrop-product', 600, 760, true );
 }
 add_action( 'after_setup_theme', 'parisacrop_setup' );
-
-/**
- * Provide a lightweight fallback favicon until a WordPress Site Icon is set.
- */
-function parisacrop_fallback_site_icon() {
-	if ( has_site_icon() ) {
-		return;
-	}
-	?>
-	<link rel="icon" href="<?php echo esc_url( get_template_directory_uri() . '/assets/images/parisa-crop-mark.svg' ); ?>" type="image/svg+xml">
-	<?php
-}
-add_action( 'wp_head', 'parisacrop_fallback_site_icon', 1 );
 
 /**
  * Load the visual layer and animations.
@@ -160,94 +146,27 @@ function parisacrop_get_featured_categories( $limit = 12 ) {
 		return array();
 	}
 
+	$category_ids = array_slice(
+		array_values( array_filter( array_map( 'absint', (array) parisacrop_get_setting( 'featured_category_ids' ) ) ) ),
+		0,
+		absint( $limit )
+	);
+
+	if ( ! $category_ids ) {
+		return array();
+	}
+
 	$terms = get_terms(
 		array(
 			'taxonomy'   => 'product_cat',
 			'hide_empty' => true,
-			'number'     => absint( $limit ),
-			'meta_query' => array(
-				array(
-					'key'     => PARISACROP_CATEGORY_META_KEY,
-					'value'   => 'yes',
-					'compare' => '=',
-				),
-			),
-			'orderby'    => 'menu_order',
-			'order'      => 'ASC',
+			'include'    => $category_ids,
+			'orderby'    => 'include',
 		)
 	);
 
 	return is_wp_error( $terms ) ? array() : $terms;
 }
-
-/**
- * Add the homepage visibility control when a product category is created.
- */
-function parisacrop_add_category_field() {
-	wp_nonce_field( 'parisacrop_save_category_meta', 'parisacrop_category_nonce' );
-	?>
-	<div class="form-field">
-		<label for="parisacrop-show-home">
-			<input type="checkbox" name="parisacrop_show_home" id="parisacrop-show-home" value="yes">
-			<?php esc_html_e( 'نمایش در صفحه اصلی', 'parisacrop' ); ?>
-		</label>
-		<p><?php esc_html_e( 'این دسته را در بخش دسته‌بندی‌های صفحه فروشگاه نمایش بده.', 'parisacrop' ); ?></p>
-	</div>
-	<?php
-}
-add_action( 'product_cat_add_form_fields', 'parisacrop_add_category_field' );
-
-/**
- * Add the homepage visibility control when a product category is edited.
- *
- * @param WP_Term $term Current product category.
- */
-function parisacrop_edit_category_field( $term ) {
-	$is_visible = 'yes' === get_term_meta( $term->term_id, PARISACROP_CATEGORY_META_KEY, true );
-	wp_nonce_field( 'parisacrop_save_category_meta', 'parisacrop_category_nonce' );
-	?>
-	<tr class="form-field">
-		<th scope="row"><?php esc_html_e( 'نمایش در صفحه اصلی', 'parisacrop' ); ?></th>
-		<td>
-			<label for="parisacrop-show-home">
-				<input
-					type="checkbox"
-					name="parisacrop_show_home"
-					id="parisacrop-show-home"
-					value="yes"
-					<?php checked( $is_visible ); ?>
-				>
-				<?php esc_html_e( 'نمایش این دسته در صفحه فروشگاه', 'parisacrop' ); ?>
-			</label>
-			<p class="description"><?php esc_html_e( 'دسته‌های انتخاب‌شده به‌صورت خودکار در ویترین نمایش داده می‌شوند.', 'parisacrop' ); ?></p>
-		</td>
-	</tr>
-	<?php
-}
-add_action( 'product_cat_edit_form_fields', 'parisacrop_edit_category_field' );
-
-/**
- * Save homepage visibility for product categories.
- *
- * @param int $term_id Product category ID.
- */
-function parisacrop_save_category_field( $term_id ) {
-	if (
-		! isset( $_POST['parisacrop_category_nonce'] )
-		|| ! wp_verify_nonce(
-			sanitize_text_field( wp_unslash( $_POST['parisacrop_category_nonce'] ) ),
-			'parisacrop_save_category_meta'
-		)
-		|| ! current_user_can( 'manage_product_terms' )
-	) {
-		return;
-	}
-
-	$value = isset( $_POST['parisacrop_show_home'] ) ? 'yes' : 'no';
-	update_term_meta( $term_id, PARISACROP_CATEGORY_META_KEY, $value );
-}
-add_action( 'created_product_cat', 'parisacrop_save_category_field' );
-add_action( 'edited_product_cat', 'parisacrop_save_category_field' );
 
 /**
  * Add useful classes for styling shop views.

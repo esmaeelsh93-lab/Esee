@@ -10,7 +10,7 @@
 		<?php if ( has_post_thumbnail() ) : ?>
 			<?php the_post_thumbnail( 'large', array( 'loading' => 'lazy' ) ); ?>
 		<?php else : ?>
-			<span>Parisa Crop</span>
+			<span>Reza Jordaan</span>
 		<?php endif; ?>
 	</a>
 	<div class="post-card__body">
