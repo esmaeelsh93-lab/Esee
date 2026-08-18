@@ -2007,7 +2007,7 @@ button {
 	padding-inline: clamp(18px, 3vw, 56px);
 }
 
-.archive-full-width .woocommerce ul.products {
+.archive-full-width .rezajordaan-archive-cards ul.products {
 	gap: clamp(14px, 2vw, 28px);
 }
 
@@ -2863,8 +2863,8 @@ button {
 }
 
 /* Archive cards */
-.rezajordaan-archive-cards .woocommerce ul.products,
-.rezajordaan-archive-cards .woocommerce ul.products[class*="columns-"] {
+.rezajordaan-archive-cards ul.products,
+.rezajordaan-archive-cards ul.products[class*="columns-"] {
 	display: grid;
 	gap: clamp(14px, 2vw, 24px);
 	grid-template-columns: repeat(var(--rj-shop-columns-desktop), minmax(0, 1fr));
@@ -2875,13 +2875,13 @@ button {
 	width: 100%;
 }
 
-.rezajordaan-archive-cards .woocommerce ul.products::before,
-.rezajordaan-archive-cards .woocommerce ul.products::after {
+.rezajordaan-archive-cards ul.products::before,
+.rezajordaan-archive-cards ul.products::after {
 	content: none;
 	display: none;
 }
 
-.rezajordaan-archive-cards .woocommerce ul.products li.product.rj-archive-card {
+.rezajordaan-archive-cards ul.products li.product.rj-archive-card {
 	box-sizing: border-box;
 	clear: none;
 	display: grid;
@@ -2895,9 +2895,17 @@ button {
 	width: auto;
 }
 
-.rezajordaan-archive-cards .woocommerce ul.products li.product.rj-archive-card::before,
-.rezajordaan-archive-cards .woocommerce ul.products li.product.rj-archive-card::after {
+.rezajordaan-archive-cards ul.products li.product.rj-archive-card::before,
+.rezajordaan-archive-cards ul.products li.product.rj-archive-card::after {
 	display: none;
+}
+
+.rezajordaan-archive-cards ul.products[class*="columns-"] li.product.rj-archive-card,
+.rezajordaan-archive-cards ul.products[class*="columns-"] li.product.rj-archive-card:nth-child(2n) {
+	clear: none;
+	float: none;
+	margin: 0;
+	width: auto;
 }
 
 .rj-archive-card__media {
@@ -2998,7 +3006,7 @@ button {
 	text-align: center;
 }
 
-.rezajordaan-archive-cards .woocommerce ul.products li.product .rj-view-product-button {
+.rezajordaan-archive-cards ul.products li.product .rj-view-product-button {
 	background: var(--rj-burgundy);
 	border: 0;
 	border-radius: 14px;
@@ -3013,13 +3021,13 @@ button {
 	width: 100%;
 }
 
-.rezajordaan-archive-cards .woocommerce ul.products li.product .rj-view-product-button:hover {
+.rezajordaan-archive-cards ul.products li.product .rj-view-product-button:hover {
 	background: var(--rj-rose);
 	color: white;
 }
 
-.rezajordaan-archive-cards .woocommerce ul.products li.product .price,
-.rezajordaan-archive-cards .woocommerce ul.products li.product .star-rating {
+.rezajordaan-archive-cards ul.products li.product .price,
+.rezajordaan-archive-cards ul.products li.product .star-rating {
 	display: none !important;
 }
 
@@ -3606,21 +3614,21 @@ button {
 }
 
 @media (max-width: 900px) {
-	.rezajordaan-archive-cards .woocommerce ul.products,
-	.rezajordaan-archive-cards .woocommerce ul.products[class*="columns-"] {
+	.rezajordaan-archive-cards ul.products,
+	.rezajordaan-archive-cards ul.products[class*="columns-"] {
 		gap: 10px;
 		grid-template-columns: repeat(var(--rj-shop-columns-mobile), minmax(0, 1fr));
 	}
 }
 
 @media (max-width: 768px) {
-	.rezajordaan-archive-cards .product-archive > .rj-container {
+	body.rezajordaan-archive-cards .product-archive > .rj-container {
 		max-width: 100%;
 	}
 
-	.rezajordaan-archive-cards .woocommerce ul.products[class*="columns-"] li.product,
-	.rezajordaan-archive-cards .woocommerce ul.products li.product.rj-archive-card,
-	.rezajordaan-archive-cards .woocommerce ul.products[class*="columns-"] li.product:nth-child(2n) {
+	.rezajordaan-archive-cards ul.products[class*="columns-"] li.product,
+	.rezajordaan-archive-cards ul.products li.product.rj-archive-card,
+	.rezajordaan-archive-cards ul.products[class*="columns-"] li.product:nth-child(2n) {
 		clear: none;
 		float: none;
 		margin: 0;
@@ -3629,7 +3637,7 @@ button {
 		width: auto;
 	}
 
-	.rezajordaan-archive-cards .woocommerce ul.products li.product.rj-archive-card {
+	.rezajordaan-archive-cards ul.products li.product.rj-archive-card {
 		padding: 10px;
 	}
 
@@ -3653,7 +3661,7 @@ button {
 		font-size: clamp(12px, 3.4vw, 15px);
 	}
 
-	.rezajordaan-archive-cards .woocommerce ul.products li.product .rj-view-product-button {
+	.rezajordaan-archive-cards ul.products li.product .rj-view-product-button {
 		font-size: 12px;
 		padding: 11px 10px;
 	}
