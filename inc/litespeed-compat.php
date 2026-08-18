@@ -80,6 +80,7 @@ function rezajordaan_litespeed_js_excludes( $excludes ) {
 		'persian',
 		'pws',
 		'rezajordaan-checkout',
+		'rezajordaan-product-variations',
 	);
 
 	return array_values( array_unique( array_merge( (array) $excludes, $patterns ) ) );

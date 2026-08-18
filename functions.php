@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'REZAJORDAAN_VERSION', '1.6.0' );
+define( 'REZAJORDAAN_VERSION', '1.6.1' );
 
 require_once get_template_directory() . '/inc/theme-settings.php';
 require_once get_template_directory() . '/inc/page-content.php';
@@ -113,6 +113,31 @@ function rezajordaan_enqueue_assets() {
 	);
 }
 add_action( 'wp_enqueue_scripts', 'rezajordaan_enqueue_assets' );
+
+/**
+ * Enhance variable product selectors with branded swatches and stock cues.
+ */
+function rezajordaan_enqueue_product_variation_script() {
+	if ( ! function_exists( 'is_product' ) || ! is_product() ) {
+		return;
+	}
+
+	global $product;
+
+	if ( ! $product instanceof WC_Product || ! $product->is_type( 'variable' ) ) {
+		return;
+	}
+
+	wp_enqueue_script( 'wc-add-to-cart-variation' );
+	wp_enqueue_script(
+		'rezajordaan-product-variations',
+		get_template_directory_uri() . '/assets/js/product-variations.js',
+		array( 'jquery', 'wc-add-to-cart-variation' ),
+		REZAJORDAAN_VERSION,
+		true
+	);
+}
+add_action( 'wp_enqueue_scripts', 'rezajordaan_enqueue_product_variation_script', 25 );
 
 /**
  * Apply product-card controls as safe CSS custom properties.
