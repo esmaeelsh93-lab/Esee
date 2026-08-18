@@ -4168,9 +4168,12 @@ body.rezajordaan-archive-cards .rj-archive-card__media [class*="cash"],
 
 	.rezajordaan-checkout #shipping_method li,
 	.rezajordaan-checkout .woocommerce-shipping-methods li {
-		display: block;
-		opacity: 1;
-		visibility: visible;
+		display: block !important;
+		height: auto !important;
+		max-height: none !important;
+		opacity: 1 !important;
+		overflow: visible !important;
+		visibility: visible !important;
 	}
 }
 

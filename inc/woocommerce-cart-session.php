@@ -47,6 +47,22 @@ function rezajordaan_enqueue_cart_fragments() {
 add_action( 'wp_enqueue_scripts', 'rezajordaan_enqueue_cart_fragments', 20 );
 
 /**
+ * Remember recent add-to-cart so mobile can recover from stale cache once.
+ */
+function rezajordaan_cart_pending_flag_script() {
+	if ( ! function_exists( 'WC' ) || is_admin() ) {
+		return;
+	}
+
+	wp_add_inline_script(
+		'wc-cart-fragments',
+		'(function($){$(document.body).on("added_to_cart",function(){try{sessionStorage.setItem("rj_pending_cart",String(Date.now()));}catch(e){}});})(jQuery);',
+		'after'
+	);
+}
+add_action( 'wp_enqueue_scripts', 'rezajordaan_cart_pending_flag_script', 25 );
+
+/**
  * Update header mini-cart markup after AJAX add-to-cart.
  *
  * @param array $fragments Cart fragments.
@@ -87,11 +103,38 @@ function rezajordaan_render_header_cart_link() {
 function rezajordaan_cache_dynamic_cookies( $cookies ) {
 	$cookies[] = 'woocommerce_items_in_cart';
 	$cookies[] = 'woocommerce_cart_hash';
+	$cookies[] = 'wp_woocommerce_session_';
 
 	return $cookies;
 }
 add_filter( 'rocket_cache_dynamic_cookies', 'rezajordaan_cache_dynamic_cookies' );
 add_filter( 'litespeed_cache_vary_cookies', 'rezajordaan_cache_dynamic_cookies' );
+
+/**
+ * When cart/session cookies exist, never serve a cached page (critical on mobile).
+ *
+ * @param string[] $cookies Cookie name patterns.
+ * @return string[]
+ */
+function rezajordaan_cache_reject_cookies( $cookies ) {
+	$cookies[] = 'woocommerce_items_in_cart';
+	$cookies[] = 'woocommerce_cart_hash';
+	$cookies[] = 'wp_woocommerce_session_';
+	$cookies[] = 'woocommerce_recently_viewed';
+
+	return $cookies;
+}
+add_filter( 'rocket_cache_reject_cookies', 'rezajordaan_cache_reject_cookies' );
+
+/**
+ * Do not cache pages while the cart has items (desktop + mobile file variants).
+ */
+add_filter( 'rocket_cache_wc_empty_cart', '__return_false' );
+
+/**
+ * Disable WP Rocket fragment caching that can desync mini-cart vs cart page.
+ */
+add_filter( 'rocket_override_wc_refresh_cart_fragments_cache', '__return_true' );
 
 /**
  * WP Rocket: never delay/defer WooCommerce cart scripts.
@@ -125,9 +168,30 @@ function rezajordaan_nocache_wc_pages() {
 
 	if ( ! headers_sent() ) {
 		nocache_headers();
+		header( 'Cache-Control: no-store, no-cache, must-revalidate, max-age=0', true );
+		header( 'Pragma: no-cache', true );
+		header( 'Vary: Cookie', false );
 	}
 }
 add_action( 'template_redirect', 'rezajordaan_nocache_wc_pages', 20 );
+
+/**
+ * Enqueue cart recovery script (mobile cache/session desync).
+ */
+function rezajordaan_enqueue_cart_script() {
+	if ( ! function_exists( 'is_cart' ) || ! is_cart() ) {
+		return;
+	}
+
+	wp_enqueue_script(
+		'rezajordaan-cart',
+		get_template_directory_uri() . '/assets/js/cart.js',
+		array( 'jquery', 'wc-cart-fragments' ),
+		REZAJORDAAN_VERSION,
+		true
+	);
+}
+add_action( 'wp_enqueue_scripts', 'rezajordaan_enqueue_cart_script', 30 );
 
 /**
  * Ensure cart session cookie works on HTTPS stores.
