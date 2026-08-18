@@ -21,7 +21,18 @@
 
 ## نصب
 
-1. فایل `dist/rezajordaan-installable.zip` را از بخش `نمایش ← پوسته‌ها ← افزودن پوسته` نصب کنید.
+### دانلود
+
+**نسخه 1.5.0 (آخرین):**
+
+https://github.com/esmaeelsh93-lab/Esee/releases/download/rezajordaan-1.5.0/rezajordaan-installable.zip
+
+اگر لینک Release کار نکرد، از این آدرس مستقیم branch استفاده کنید:
+
+https://raw.githubusercontent.com/esmaeelsh93-lab/Esee/cursor/rezajordaan-theme-8310/dist/rezajordaan-installable.zip
+
+1. فایل zip را دانلود کنید.
+2. در پیشخوان وردپرس بروید به `نمایش ← پوسته‌ها ← افزودن ← بارگذاری پوسته` و فایل را آپلود کنید.
 2. ووکامرس را فعال و برگه فروشگاه را با نشانی `/shop` تنظیم کنید.
 3. در `نمایش ← تنظیمات رضا جردن ← لندینگ و دسته‌بندی‌ها`، دسته‌های قابل نمایش را تیک بزنید.
 4. اطلاعات تماس، پیوندهای هدر و فوتر و تنظیمات کارت‌ها را در همان پنل بررسی کنید.
