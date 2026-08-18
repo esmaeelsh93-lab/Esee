@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Keep archive cards clean when third-party plugins inject loop markup.
  */
 function rezajordaan_setup_plugin_compat() {
-	if ( ! function_exists( 'rezajordaan_is_archive_product_card' ) || ! rezajordaan_is_archive_product_card() ) {
+	if ( ! function_exists( 'rezajordaan_is_loop_product_card' ) || ! rezajordaan_is_loop_product_card() ) {
 		return;
 	}
 
@@ -61,6 +61,8 @@ function rezajordaan_setup_plugin_compat() {
 	}
 }
 add_action( 'wp', 'rezajordaan_setup_plugin_compat', 20 );
+add_action( 'woocommerce_before_shop_loop', 'rezajordaan_setup_plugin_compat', 1 );
+add_action( 'woocommerce_before_shop_loop_item', 'rezajordaan_setup_plugin_compat', 0 );
 
 /**
  * Strip plugin overlays from archive card thumbnails.
@@ -73,7 +75,7 @@ add_action( 'wp', 'rezajordaan_setup_plugin_compat', 20 );
  * @return string
  */
 function rezajordaan_archive_product_image( $image, $product, $size, $attr, $placeholder ) {
-	if ( ! rezajordaan_is_archive_product_card() ) {
+	if ( ! rezajordaan_is_loop_product_card() ) {
 		return $image;
 	}
 
@@ -93,7 +95,7 @@ add_filter( 'woocommerce_product_get_image', 'rezajordaan_archive_product_image'
  * @return string
  */
 function rezajordaan_suppress_archive_loop_price_html( $price, $product ) {
-	if ( ! rezajordaan_is_archive_product_card() || doing_action( 'woocommerce_single_product_summary' ) ) {
+	if ( ! rezajordaan_is_loop_product_card() || doing_action( 'woocommerce_single_product_summary' ) ) {
 		return $price;
 	}
 

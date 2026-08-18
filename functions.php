@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'REZAJORDAAN_VERSION', '1.5.5' );
+define( 'REZAJORDAAN_VERSION', '1.5.6' );
 
 require_once get_template_directory() . '/inc/theme-settings.php';
 require_once get_template_directory() . '/inc/page-content.php';
@@ -469,6 +469,36 @@ function rezajordaan_is_archive_product_card() {
 
 	return false;
 }
+
+/**
+ * Compact cards for archives plus related / upsell / cross-sell loops.
+ */
+function rezajordaan_is_loop_product_card() {
+	if ( rezajordaan_is_archive_product_card() ) {
+		return true;
+	}
+
+	if ( ! function_exists( 'wc_get_loop_prop' ) ) {
+		return false;
+	}
+
+	$name = (string) wc_get_loop_prop( 'name' );
+
+	return in_array( $name, array( 'related', 'up-sells', 'cross-sells' ), true );
+}
+
+/**
+ * Keep related products as a compact two-column grid.
+ *
+ * @param array $args Related products query args.
+ * @return array
+ */
+function rezajordaan_related_products_args( $args ) {
+	$args['posts_per_page'] = 4;
+	$args['columns']        = 2;
+	return $args;
+}
+add_filter( 'woocommerce_output_related_products_args', 'rezajordaan_related_products_args' );
 
 /**
  * Match WooCommerce loop columns with theme settings.

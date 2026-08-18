@@ -13,7 +13,7 @@ if ( ! is_a( $product, WC_Product::class ) ) {
 	return;
 }
 
-if ( function_exists( 'rezajordaan_is_archive_product_card' ) && rezajordaan_is_archive_product_card() ) {
+if ( function_exists( 'rezajordaan_is_loop_product_card' ) && rezajordaan_is_loop_product_card() ) {
 	load_template( get_template_directory() . '/woocommerce/content-product-archive-card.php', false );
 	return;
 }
