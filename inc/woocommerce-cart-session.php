@@ -56,7 +56,7 @@ function rezajordaan_cart_pending_flag_script() {
 
 	wp_add_inline_script(
 		'wc-cart-fragments',
-		'(function($){$(document.body).on("added_to_cart",function(){try{sessionStorage.setItem("rj_pending_cart",String(Date.now()));}catch(e){}});})(jQuery);',
+		'(function($){function markPendingCart(){try{sessionStorage.setItem("rj_pending_cart",String(Date.now()));}catch(e){}}$(document.body).on("added_to_cart",markPendingCart).on("submit","form.cart",markPendingCart);})(jQuery);',
 		'after'
 	);
 }
@@ -105,10 +105,10 @@ function rezajordaan_cache_dynamic_cookies( $cookies ) {
 	$cookies[] = 'woocommerce_cart_hash';
 	$cookies[] = 'wp_woocommerce_session_';
 
-	return $cookies;
+	return array_values( array_unique( $cookies ) );
 }
 add_filter( 'rocket_cache_dynamic_cookies', 'rezajordaan_cache_dynamic_cookies' );
-add_filter( 'litespeed_cache_vary_cookies', 'rezajordaan_cache_dynamic_cookies' );
+add_filter( 'litespeed_vary_cookies', 'rezajordaan_cache_dynamic_cookies' );
 
 /**
  * When cart/session cookies exist, never serve a cached page (critical on mobile).
