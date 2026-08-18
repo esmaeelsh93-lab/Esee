@@ -110,3 +110,61 @@ function rezajordaan_cart_checkout_body_classes( $classes ) {
 	return $classes;
 }
 add_filter( 'body_class', 'rezajordaan_cart_checkout_body_classes' );
+
+/**
+ * Checkout pages must stay dynamic (shipping depends on city/state).
+ */
+function rezajordaan_prevent_checkout_page_cache() {
+	if ( ! function_exists( 'is_cart' ) || ! function_exists( 'is_checkout' ) ) {
+		return;
+	}
+
+	if ( ! is_cart() && ! is_checkout() ) {
+		return;
+	}
+
+	if ( ! defined( 'DONOTCACHEPAGE' ) ) {
+		define( 'DONOTCACHEPAGE', true );
+	}
+
+	if ( ! defined( 'DONOTCACHEOBJECT' ) ) {
+		define( 'DONOTCACHEOBJECT', true );
+	}
+}
+add_action( 'template_redirect', 'rezajordaan_prevent_checkout_page_cache', 0 );
+
+/**
+ * Ask common cache plugins (WP Rocket, etc.) not to cache cart/checkout.
+ *
+ * @param string[] $uris Rejected URI patterns.
+ * @return string[]
+ */
+function rezajordaan_cache_reject_cart_checkout( $uris ) {
+	$uris[] = '/cart(.*)';
+	$uris[] = '/checkout(.*)';
+	$uris[] = '/سبد-خرید(.*)';
+	$uris[] = '/تسویه-حساب(.*)';
+
+	return $uris;
+}
+add_filter( 'rocket_cache_reject_uri', 'rezajordaan_cache_reject_cart_checkout' );
+add_filter( 'litespeed_cache_exclude_uri', 'rezajordaan_cache_reject_cart_checkout' );
+
+/**
+ * Refresh shipping methods when Iranian address fields change (mobile-friendly).
+ */
+function rezajordaan_enqueue_checkout_script() {
+	if ( ! function_exists( 'is_checkout' ) || ! is_checkout() || is_wc_endpoint_url( 'order-received' ) ) {
+		return;
+	}
+
+	wp_enqueue_script( 'wc-checkout' );
+	wp_enqueue_script(
+		'rezajordaan-checkout',
+		get_template_directory_uri() . '/assets/js/checkout.js',
+		array( 'jquery', 'wc-checkout' ),
+		REZAJORDAAN_VERSION,
+		true
+	);
+}
+add_action( 'wp_enqueue_scripts', 'rezajordaan_enqueue_checkout_script', 30 );
