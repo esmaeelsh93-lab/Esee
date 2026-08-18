@@ -47,16 +47,26 @@ function rezajordaan_enqueue_cart_fragments() {
 add_action( 'wp_enqueue_scripts', 'rezajordaan_enqueue_cart_fragments', 20 );
 
 /**
- * Remember recent add-to-cart so mobile can recover from stale cache once.
+ * Remember only server-confirmed add-to-cart operations.
+ *
+ * Native single-product forms reload the document. Marking their submit event
+ * before WooCommerce validates the request creates false recovery attempts when
+ * the add is rejected or the request is interrupted.
  */
 function rezajordaan_cart_pending_flag_script() {
 	if ( ! function_exists( 'WC' ) || is_admin() ) {
 		return;
 	}
 
+	$is_confirmed_native_add = isset( $_SERVER['REQUEST_METHOD'] )
+		&& 'POST' === strtoupper( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ) ) )
+		&& isset( $_POST['add-to-cart'] )
+		&& WC()->cart
+		&& WC()->cart->get_cart_contents_count() > 0;
+
 	wp_add_inline_script(
 		'wc-cart-fragments',
-		'(function($){function markPendingCart(){try{sessionStorage.setItem("rj_pending_cart",String(Date.now()));}catch(e){}}$(document.body).on("added_to_cart",markPendingCart).on("submit","form.cart",markPendingCart);})(jQuery);',
+		'(function($){function markPendingCart(){try{sessionStorage.setItem("rj_pending_cart",String(Date.now()));}catch(e){}}$(document.body).on("added_to_cart",markPendingCart);' . ( $is_confirmed_native_add ? 'markPendingCart();' : '' ) . '})(jQuery);',
 		'after'
 	);
 }

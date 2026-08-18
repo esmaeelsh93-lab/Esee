@@ -44,26 +44,20 @@ function rezajordaan_litespeed_nocache_wc_pages() {
 add_action( 'litespeed_control_finalize', 'rezajordaan_litespeed_nocache_wc_pages' );
 
 /**
- * Disable LiteSpeed page cache for WooCommerce AJAX (update_order_review / shipping).
+ * Disable LiteSpeed page cache for WooCommerce AJAX and native cart mutations.
  */
 function rezajordaan_litespeed_nocache_wc_ajax() {
-	if ( ! wp_doing_ajax() ) {
-		return;
-	}
-
 	$wc_ajax = isset( $_REQUEST['wc-ajax'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['wc-ajax'] ) ) : '';
-
-	if ( '' === $wc_ajax && empty( $_REQUEST['action'] ) ) {
-		return;
-	}
-
 	$action = isset( $_REQUEST['action'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['action'] ) ) : '';
+	$method = isset( $_SERVER['REQUEST_METHOD'] ) ? strtoupper( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ) ) ) : '';
+	$is_native_add_to_cart = 'POST' === $method && isset( $_POST['add-to-cart'] );
+	$is_wc_admin_ajax      = wp_doing_ajax() && 0 === strpos( $action, 'woocommerce_' );
 
-	if ( '' !== $wc_ajax || 0 === strpos( $action, 'woocommerce_' ) ) {
+	if ( '' !== $wc_ajax || $is_wc_admin_ajax || $is_native_add_to_cart ) {
 		if ( ! defined( 'DONOTCACHEPAGE' ) ) {
 			define( 'DONOTCACHEPAGE', true );
 		}
-		do_action( 'litespeed_control_set_nocache', 'rezajordaan wc ajax' );
+		do_action( 'litespeed_control_set_nocache', 'rezajordaan wc cart mutation' );
 	}
 }
 add_action( 'init', 'rezajordaan_litespeed_nocache_wc_ajax', 0 );

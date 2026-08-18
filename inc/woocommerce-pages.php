@@ -144,21 +144,3 @@ function rezajordaan_enqueue_checkout_script() {
 	);
 }
 add_action( 'wp_enqueue_scripts', 'rezajordaan_enqueue_checkout_script', 30 );
-
-/**
- * Also load checkout refresh helpers on the cart page shipping calculator (mobile).
- */
-function rezajordaan_enqueue_cart_shipping_script() {
-	if ( ! function_exists( 'is_cart' ) || ! is_cart() ) {
-		return;
-	}
-
-	wp_enqueue_script(
-		'rezajordaan-checkout',
-		get_template_directory_uri() . '/assets/js/checkout.js',
-		array( 'jquery' ),
-		REZAJORDAAN_VERSION,
-		true
-	);
-}
-add_action( 'wp_enqueue_scripts', 'rezajordaan_enqueue_cart_shipping_script', 35 );
