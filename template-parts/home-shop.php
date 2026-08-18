@@ -134,8 +134,8 @@ $benefits = array(
 	<section class="category-section pc-section" id="categories" aria-labelledby="category-title">
 		<div class="pc-container">
 			<header class="section-heading">
-				<p><?php esc_html_e( 'برای هر سلیقه', 'parisacrop' ); ?></p>
-				<h2 id="category-title"><?php esc_html_e( 'دسته‌بندی‌ها', 'parisacrop' ); ?></h2>
+				<p><?php echo esc_html( parisacrop_get_setting( 'category_section_kicker' ) ); ?></p>
+				<h2 id="category-title"><?php echo esc_html( parisacrop_get_setting( 'category_section_title' ) ); ?></h2>
 				<span aria-hidden="true"></span>
 			</header>
 
@@ -155,15 +155,17 @@ $benefits = array(
 							<span class="category-card__index"><?php echo esc_html( sprintf( '%02d', $index + 1 ) ); ?></span>
 							<span class="category-card__content">
 								<strong><?php echo esc_html( $category->name ); ?></strong>
-								<small>
-									<?php
-									printf(
-										/* translators: %s: product count */
-										esc_html__( '%s محصول', 'parisacrop' ),
-										esc_html( number_format_i18n( $category->count ) )
-									);
-									?>
-								</small>
+								<?php if ( parisacrop_get_setting( 'show_category_count' ) ) : ?>
+									<small>
+										<?php
+										printf(
+											/* translators: %s: product count */
+											esc_html__( '%s محصول', 'parisacrop' ),
+											esc_html( number_format_i18n( $category->count ) )
+										);
+										?>
+									</small>
+								<?php endif; ?>
 							</span>
 							<span class="category-card__arrow" aria-hidden="true">←</span>
 						</a>

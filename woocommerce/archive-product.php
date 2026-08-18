@@ -21,6 +21,7 @@ do_action( 'woocommerce_before_main_content' );
 	<div class="pc-container">
 		<?php
 		do_action( 'woocommerce_shop_loop_header' );
+		get_template_part( 'template-parts/product-filters' );
 
 		if ( woocommerce_product_loop() ) {
 			do_action( 'woocommerce_before_shop_loop' );

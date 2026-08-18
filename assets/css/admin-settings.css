@@ -137,6 +137,11 @@
 	margin-bottom: 16px;
 }
 
+.pc-settings__card .pc-settings__grid > div > label {
+	display: block;
+	margin-bottom: 16px;
+}
+
 .pc-settings__card label > span:first-child,
 .pc-link-row label span {
 	color: var(--pc-admin-brown);
@@ -161,6 +166,23 @@
 
 .pc-settings textarea {
 	resize: vertical;
+}
+
+.pc-color-row {
+	display: grid;
+	gap: 14px;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	margin-top: 16px;
+}
+
+.pc-color-field input[type="color"] {
+	background: white;
+	border: 1px solid rgba(40, 90, 72, 0.22);
+	border-radius: 10px;
+	cursor: pointer;
+	height: 46px;
+	padding: 5px;
+	width: 100%;
 }
 
 .pc-settings input:focus,

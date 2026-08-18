@@ -11,11 +11,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $home_url       = home_url( '/' );
 $shop_url       = parisacrop_shop_url();
-$custom_logo_id = get_theme_mod( 'custom_logo' );
 $header_links   = parisacrop_get_theme_links( 'header_links' );
 $instagram_url  = parisacrop_get_setting( 'instagram_url' );
 $whatsapp_url   = parisacrop_get_setting( 'whatsapp_url' );
 $telegram_url   = parisacrop_get_setting( 'telegram_url' );
+$show_inner_search = ! is_front_page() && ! ( function_exists( 'is_shop' ) && is_shop() );
 $categories     = taxonomy_exists( 'product_cat' )
 	? get_terms(
 		array(
@@ -43,28 +43,12 @@ if ( is_wp_error( $categories ) ) {
 <a class="skip-link screen-reader-text" href="#main"><?php esc_html_e( 'رفتن به محتوای اصلی', 'parisacrop' ); ?></a>
 
 <header class="site-header" data-header>
-	<div class="site-header__inner pc-container">
+	<div class="site-header__inner pc-container<?php echo $show_inner_search ? ' has-inner-search' : ''; ?>">
 		<a class="site-brand" href="<?php echo esc_url( $home_url ); ?>" aria-label="<?php esc_attr_e( 'صفحه اصلی رضا جردن', 'parisacrop' ); ?>">
-			<?php if ( $custom_logo_id ) : ?>
-				<?php
-				echo wp_kses_post(
-					wp_get_attachment_image(
-						$custom_logo_id,
-						'full',
-						false,
-						array(
-							'class' => 'site-brand__logo custom-logo',
-							'alt'   => get_bloginfo( 'name' ),
-						)
-					)
-				);
-				?>
-			<?php else : ?>
-				<span class="site-brand__wordmark">
-					<strong><?php esc_html_e( 'رضا جردن', 'parisacrop' ); ?></strong>
-					<small>REZA JORDAAN</small>
-				</span>
-			<?php endif; ?>
+			<span class="site-brand__wordmark">
+				<strong><?php esc_html_e( 'رضا جردن', 'parisacrop' ); ?></strong>
+				<small>REZA JORDAAN</small>
+			</span>
 		</a>
 
 		<nav class="desktop-nav" aria-label="<?php esc_attr_e( 'منوی اصلی', 'parisacrop' ); ?>">
@@ -91,6 +75,15 @@ if ( is_wp_error( $categories ) ) {
 				</div>
 			</div>
 		</nav>
+
+		<?php if ( $show_inner_search ) : ?>
+			<form class="header-search" role="search" method="get" action="<?php echo esc_url( $home_url ); ?>">
+				<label class="screen-reader-text" for="header-product-search"><?php esc_html_e( 'جستجوی محصول', 'parisacrop' ); ?></label>
+				<svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg>
+				<input id="header-product-search" type="search" name="s" value="<?php echo esc_attr( get_search_query() ); ?>" placeholder="<?php esc_attr_e( 'جستجوی محصول...', 'parisacrop' ); ?>" autocomplete="off">
+				<input type="hidden" name="post_type" value="product">
+			</form>
+		<?php endif; ?>
 
 		<div class="header-actions">
 			<?php if ( $instagram_url && parisacrop_get_setting( 'show_instagram_header' ) ) : ?>

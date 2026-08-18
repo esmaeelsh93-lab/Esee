@@ -85,6 +85,49 @@
 		}
 	}
 
+	document.querySelectorAll("[data-price-range]").forEach((priceFilter) => {
+		const minRange = priceFilter.querySelector("[data-price-min-range]");
+		const maxRange = priceFilter.querySelector("[data-price-max-range]");
+		const minInput = priceFilter.querySelector("[data-price-min-input]");
+		const maxInput = priceFilter.querySelector("[data-price-max-input]");
+		const slider = priceFilter.querySelector(".archive-filters__slider");
+
+		if (!minRange || !maxRange || !minInput || !maxInput || !slider) return;
+
+		const floor = Number(minRange.min);
+		const ceiling = Number(maxRange.max);
+		const span = Math.max(1, ceiling - floor);
+		const clamp = (value) => Math.min(ceiling, Math.max(floor, Number(value)));
+
+		const render = () => {
+			let minValue = clamp(minRange.value);
+			let maxValue = clamp(maxRange.value);
+
+			if (minValue > maxValue) {
+				[minValue, maxValue] = [maxValue, minValue];
+			}
+
+			minRange.value = String(minValue);
+			maxRange.value = String(maxValue);
+			minInput.value = String(minValue);
+			maxInput.value = String(maxValue);
+			slider.style.setProperty("--price-start", `${((minValue - floor) / span) * 100}%`);
+			slider.style.setProperty("--price-end", `${((maxValue - floor) / span) * 100}%`);
+		};
+
+		minRange.addEventListener("input", render);
+		maxRange.addEventListener("input", render);
+		minInput.addEventListener("change", () => {
+			minRange.value = minInput.value;
+			render();
+		});
+		maxInput.addEventListener("change", () => {
+			maxRange.value = maxInput.value;
+			render();
+		});
+		render();
+	});
+
 	if (prefersReducedMotion || typeof window.gsap === "undefined") return;
 
 	const { gsap } = window;

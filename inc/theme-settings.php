@@ -37,7 +37,24 @@ function parisacrop_default_settings() {
 		'show_product_search'        => 1,
 		'show_categories'            => 1,
 		'show_about'                 => 1,
+		'show_category_count'        => 1,
+		'show_subcategories'         => 0,
+		'show_sale_badge'            => 1,
 		'featured_category_ids'      => array(),
+		'category_section_kicker'    => 'برای هر سلیقه',
+		'category_section_title'     => 'دسته‌بندی‌ها',
+		'category_columns_desktop'   => 3,
+		'category_columns_mobile'    => 2,
+		'category_border_width'      => 1,
+		'category_border_color'      => '#408a71',
+		'category_name_color'        => '#ffffff',
+		'category_name_size_desktop' => 26,
+		'category_name_size_mobile'  => 18,
+		'product_border_width'       => 1,
+		'product_border_color'       => '#b0e4cc',
+		'sale_badge_text'            => '٪{percent} تخفیف',
+		'sale_badge_background'      => '#285a48',
+		'sale_badge_color'           => '#ffffff',
 		'footer_tagline'             => 'انتخاب خاص برای استایل تو',
 		'footer_description'         => 'فروشگاه کفش رضا جردن؛ خرید آنلاین و اقساطی آسان با امکان بررسی و خرید حضوری.',
 		'about_title'                => 'کیفیت را از نزدیک انتخاب کن',
@@ -211,13 +228,21 @@ function parisacrop_sanitize_settings( $input ) {
 	$clean['address']            = isset( $input['address'] ) ? sanitize_textarea_field( $input['address'] ) : '';
 	$clean['footer_tagline']     = isset( $input['footer_tagline'] ) ? sanitize_text_field( $input['footer_tagline'] ) : '';
 	$clean['footer_description'] = isset( $input['footer_description'] ) ? sanitize_textarea_field( $input['footer_description'] ) : '';
+	$clean['category_section_kicker'] = isset( $input['category_section_kicker'] ) ? sanitize_text_field( $input['category_section_kicker'] ) : '';
+	$clean['category_section_title']  = isset( $input['category_section_title'] ) ? sanitize_text_field( $input['category_section_title'] ) : '';
+	$clean['sale_badge_text']         = isset( $input['sale_badge_text'] ) ? sanitize_text_field( $input['sale_badge_text'] ) : '';
 	$clean['about_title']        = isset( $input['about_title'] ) ? sanitize_text_field( $input['about_title'] ) : '';
 	$clean['about_description']  = isset( $input['about_description'] ) ? sanitize_textarea_field( $input['about_description'] ) : '';
 	$clean['store_visit_text']   = isset( $input['store_visit_text'] ) ? sanitize_textarea_field( $input['store_visit_text'] ) : '';
 	$clean['blog_page_id']       = isset( $input['blog_page_id'] ) ? absint( $input['blog_page_id'] ) : 0;
 
-	foreach ( array( 'show_instagram_header', 'show_whatsapp_header', 'show_telegram_header', 'show_phone_footer', 'show_social_footer', 'show_enamad_footer', 'show_product_search', 'show_categories', 'show_about' ) as $key ) {
+	foreach ( array( 'show_instagram_header', 'show_whatsapp_header', 'show_telegram_header', 'show_phone_footer', 'show_social_footer', 'show_enamad_footer', 'show_product_search', 'show_categories', 'show_about', 'show_category_count', 'show_subcategories', 'show_sale_badge' ) as $key ) {
 		$clean[ $key ] = empty( $input[ $key ] ) ? 0 : 1;
+	}
+
+	foreach ( array( 'category_border_color', 'category_name_color', 'product_border_color', 'sale_badge_background', 'sale_badge_color' ) as $key ) {
+		$clean[ $key ] = isset( $input[ $key ] ) ? sanitize_hex_color( $input[ $key ] ) : $defaults[ $key ];
+		$clean[ $key ] = $clean[ $key ] ?: $defaults[ $key ];
 	}
 
 	$category_ids = isset( $input['featured_category_ids'] ) && is_array( $input['featured_category_ids'] )
@@ -240,6 +265,12 @@ function parisacrop_sanitize_settings( $input ) {
 		'latest_image_height_desktop' => array( 220, 560 ),
 		'latest_image_height_mobile'  => array( 180, 420 ),
 		'product_card_gap'            => array( 6, 48 ),
+		'category_columns_desktop'    => array( 1, 4 ),
+		'category_columns_mobile'     => array( 1, 2 ),
+		'category_border_width'       => array( 0, 6 ),
+		'category_name_size_desktop'  => array( 14, 40 ),
+		'category_name_size_mobile'   => array( 12, 30 ),
+		'product_border_width'        => array( 0, 6 ),
 	);
 
 	foreach ( $ranges as $key => $limits ) {
@@ -584,6 +615,8 @@ function parisacrop_render_settings_page() {
 					<div class="pc-settings__card">
 						<h2><?php esc_html_e( 'نمایش بخش‌های لندینگ', 'parisacrop' ); ?></h2>
 						<?php parisacrop_setting_switch( 'show_categories', __( 'نمایش بخش دسته‌بندی‌ها', 'parisacrop' ) ); ?>
+						<?php parisacrop_setting_switch( 'show_category_count', __( 'نمایش تعداد محصول زیر نام دسته', 'parisacrop' ) ); ?>
+						<?php parisacrop_setting_switch( 'show_subcategories', __( 'نمایش زیردسته‌ها در آرشیو فروشگاه', 'parisacrop' ) ); ?>
 						<?php parisacrop_setting_switch( 'show_about', __( 'نمایش بخش درباره ما و خرید حضوری', 'parisacrop' ) ); ?>
 					</div>
 					<div class="pc-settings__card">
@@ -598,6 +631,24 @@ function parisacrop_render_settings_page() {
 					<h2><?php esc_html_e( 'دسته‌بندی‌های قابل نمایش در لندینگ', 'parisacrop' ); ?></h2>
 					<?php parisacrop_setting_categories(); ?>
 				</div>
+				<div class="pc-settings__card">
+					<h2><?php esc_html_e( 'چیدمان و ظاهر دسته‌بندی‌ها', 'parisacrop' ); ?></h2>
+					<div class="pc-settings__grid">
+						<div>
+							<label><span><?php esc_html_e( 'نوشته بالای عنوان', 'parisacrop' ); ?></span><input type="text" name="parisacrop_settings[category_section_kicker]" value="<?php echo esc_attr( parisacrop_get_setting( 'category_section_kicker' ) ); ?>"></label>
+							<label><span><?php esc_html_e( 'عنوان بخش دسته‌بندی‌ها', 'parisacrop' ); ?></span><input type="text" name="parisacrop_settings[category_section_title]" value="<?php echo esc_attr( parisacrop_get_setting( 'category_section_title' ) ); ?>"></label>
+							<label class="pc-color-field"><span><?php esc_html_e( 'رنگ قاب دسته‌ها', 'parisacrop' ); ?></span><input type="color" name="parisacrop_settings[category_border_color]" value="<?php echo esc_attr( parisacrop_get_setting( 'category_border_color' ) ); ?>"></label>
+							<label class="pc-color-field"><span><?php esc_html_e( 'رنگ نام دسته‌ها', 'parisacrop' ); ?></span><input type="color" name="parisacrop_settings[category_name_color]" value="<?php echo esc_attr( parisacrop_get_setting( 'category_name_color' ) ); ?>"></label>
+						</div>
+						<div>
+							<?php parisacrop_setting_range( 'category_columns_desktop', __( 'تعداد ستون دسکتاپ', 'parisacrop' ), 1, 4 ); ?>
+							<?php parisacrop_setting_range( 'category_columns_mobile', __( 'تعداد ستون موبایل', 'parisacrop' ), 1, 2 ); ?>
+							<?php parisacrop_setting_range( 'category_border_width', __( 'ضخامت قاب دسته‌ها', 'parisacrop' ), 0, 6, 1, 'px' ); ?>
+							<?php parisacrop_setting_range( 'category_name_size_desktop', __( 'اندازه نام دسته در دسکتاپ', 'parisacrop' ), 14, 40, 1, 'px' ); ?>
+							<?php parisacrop_setting_range( 'category_name_size_mobile', __( 'اندازه نام دسته در موبایل', 'parisacrop' ), 12, 30, 1, 'px' ); ?>
+						</div>
+					</div>
+				</div>
 			</section>
 
 			<section class="pc-settings__panel" data-settings-panel="products">
@@ -608,6 +659,8 @@ function parisacrop_render_settings_page() {
 						<?php parisacrop_setting_range( 'shop_columns_mobile', __( 'تعداد ستون موبایل', 'parisacrop' ), 1, 2 ); ?>
 						<?php parisacrop_setting_range( 'shop_image_height_desktop', __( 'ارتفاع تصویر دسکتاپ', 'parisacrop' ), 180, 720, 10, 'px' ); ?>
 						<?php parisacrop_setting_range( 'shop_image_height_mobile', __( 'ارتفاع تصویر موبایل', 'parisacrop' ), 140, 480, 10, 'px' ); ?>
+						<?php parisacrop_setting_range( 'product_border_width', __( 'ضخامت قاب محصول', 'parisacrop' ), 0, 6, 1, 'px' ); ?>
+						<label class="pc-color-field"><span><?php esc_html_e( 'رنگ قاب محصول', 'parisacrop' ); ?></span><input type="color" name="parisacrop_settings[product_border_color]" value="<?php echo esc_attr( parisacrop_get_setting( 'product_border_color' ) ); ?>"></label>
 					</div>
 					<div class="pc-settings__card">
 						<h2><?php esc_html_e( 'اسلایدر جدیدترین‌ها', 'parisacrop' ); ?></h2>
@@ -618,6 +671,16 @@ function parisacrop_render_settings_page() {
 						<?php parisacrop_setting_range( 'latest_image_height_desktop', __( 'ارتفاع تصویر دسکتاپ', 'parisacrop' ), 220, 560, 10, 'px' ); ?>
 						<?php parisacrop_setting_range( 'latest_image_height_mobile', __( 'ارتفاع تصویر موبایل', 'parisacrop' ), 180, 420, 10, 'px' ); ?>
 						<?php parisacrop_setting_range( 'product_card_gap', __( 'فاصله کارت‌ها', 'parisacrop' ), 6, 48, 2, 'px' ); ?>
+					</div>
+					<div class="pc-settings__card">
+						<h2><?php esc_html_e( 'برچسب تخفیف', 'parisacrop' ); ?></h2>
+						<?php parisacrop_setting_switch( 'show_sale_badge', __( 'نمایش برچسب تخفیف روی محصول', 'parisacrop' ) ); ?>
+						<label><span><?php esc_html_e( 'متن برچسب', 'parisacrop' ); ?></span><input type="text" name="parisacrop_settings[sale_badge_text]" value="<?php echo esc_attr( parisacrop_get_setting( 'sale_badge_text' ) ); ?>" placeholder="٪{percent} تخفیف"></label>
+						<p class="description"><?php esc_html_e( 'برای نمایش درصد واقعی از {percent} داخل متن استفاده کنید.', 'parisacrop' ); ?></p>
+						<div class="pc-color-row">
+							<label class="pc-color-field"><span><?php esc_html_e( 'رنگ زمینه', 'parisacrop' ); ?></span><input type="color" name="parisacrop_settings[sale_badge_background]" value="<?php echo esc_attr( parisacrop_get_setting( 'sale_badge_background' ) ); ?>"></label>
+							<label class="pc-color-field"><span><?php esc_html_e( 'رنگ نوشته', 'parisacrop' ); ?></span><input type="color" name="parisacrop_settings[sale_badge_color]" value="<?php echo esc_attr( parisacrop_get_setting( 'sale_badge_color' ) ); ?>"></label>
+						</div>
 					</div>
 				</div>
 			</section>

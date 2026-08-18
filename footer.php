@@ -9,7 +9,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$footer_logo_id = get_theme_mod( 'custom_logo' );
 $footer_links   = parisacrop_get_theme_links( 'footer_links' );
 $phone_display  = parisacrop_get_setting( 'phone_display' );
 $phone_url      = parisacrop_get_setting( 'phone_url' );
@@ -26,23 +25,6 @@ $enamad_logo    = parisacrop_get_setting( 'enamad_logo_url' );
 	<div class="site-footer__glow" aria-hidden="true"></div>
 	<div class="site-footer__inner pc-container">
 		<div class="site-footer__brand">
-			<?php if ( $footer_logo_id ) : ?>
-				<?php
-				echo wp_kses_post(
-					wp_get_attachment_image(
-						$footer_logo_id,
-						'full',
-						false,
-						array(
-							'class' => 'site-footer__logo',
-							'alt'   => get_bloginfo( 'name' ),
-						)
-					)
-				);
-				?>
-			<?php else : ?>
-				<span class="site-footer__wordmark" aria-hidden="true">RJ</span>
-			<?php endif; ?>
 			<div>
 				<p class="site-footer__eyebrow">Reza Jordaan</p>
 				<h2><?php echo esc_html( parisacrop_get_setting( 'footer_tagline' ) ); ?></h2>
