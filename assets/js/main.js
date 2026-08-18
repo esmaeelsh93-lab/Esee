@@ -128,6 +128,50 @@
 		render();
 	});
 
+	const initProductMarquee = () => {
+		const marquee = document.querySelector("[data-product-marquee]");
+		const track = marquee?.querySelector(".product-marquee__track");
+		if (!marquee || !track || prefersReducedMotion) {
+			return;
+		}
+
+		let resizeTimer;
+		const applyDuration = () => {
+			const distance = track.scrollWidth / 2;
+			if (distance <= 0) {
+				return;
+			}
+
+			const duration = Math.max(8, distance / marqueeSpeed);
+			track.style.setProperty("--rj-marquee-duration", `${duration}s`);
+			marquee.classList.add("is-animated");
+		};
+
+		applyDuration();
+		marquee.addEventListener("mouseenter", () => {
+			track.style.animationPlayState = "paused";
+		});
+		marquee.addEventListener("mouseleave", () => {
+			track.style.animationPlayState = "running";
+		});
+		marquee.addEventListener("focusin", () => {
+			track.style.animationPlayState = "paused";
+		});
+		marquee.addEventListener("focusout", () => {
+			track.style.animationPlayState = "running";
+		});
+		window.addEventListener(
+			"resize",
+			() => {
+				window.clearTimeout(resizeTimer);
+				resizeTimer = window.setTimeout(applyDuration, 180);
+			},
+			{ passive: true }
+		);
+	};
+
+	initProductMarquee();
+
 	document.querySelectorAll(".woocommerce-product-gallery").forEach((gallery) => {
 		const track = gallery.querySelector(".woocommerce-product-gallery__wrapper, .flex-viewport .slides");
 		const thumbs = gallery.querySelector(".flex-control-thumbs");
@@ -218,46 +262,5 @@
 				once: true,
 			},
 		});
-	}
-
-	const marquee = document.querySelector("[data-product-marquee]");
-	const marqueeTrack = marquee?.querySelector(".product-marquee__track");
-	let marqueeTween;
-	let resizeTimer;
-
-	const createMarquee = () => {
-		if (!marquee || !marqueeTrack) return;
-		marqueeTween?.kill();
-		gsap.set(marqueeTrack, { x: 0 });
-		const cards = [...marqueeTrack.children];
-		const duplicateStart = cards[cards.length / 2];
-		const distance = cards[0] && duplicateStart
-			? Math.abs(duplicateStart.offsetLeft - cards[0].offsetLeft)
-			: marqueeTrack.scrollWidth / 2;
-		if (distance <= 0) return;
-
-		marqueeTween = gsap.to(marqueeTrack, {
-			x: -distance,
-			duration: distance / marqueeSpeed,
-			ease: "none",
-			repeat: -1,
-		});
-	};
-
-	if (marquee) {
-		createMarquee();
-		marquee.addEventListener("mouseenter", () => marqueeTween?.pause());
-		marquee.addEventListener("mouseleave", () => marqueeTween?.resume());
-		marquee.addEventListener("focusin", () => marqueeTween?.pause());
-		marquee.addEventListener("focusout", () => marqueeTween?.resume());
-
-		window.addEventListener(
-			"resize",
-			() => {
-				window.clearTimeout(resizeTimer);
-				resizeTimer = window.setTimeout(createMarquee, 180);
-			},
-			{ passive: true }
-		);
 	}
 })();

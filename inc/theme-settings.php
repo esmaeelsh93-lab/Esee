@@ -108,8 +108,9 @@ function rezajordaan_default_settings() {
 		),
 		'latest_products_count'      => 10,
 		'marquee_speed'              => 42,
-		'shop_columns_desktop'       => 3,
-		'shop_columns_mobile'        => 2,
+		'shop_columns_desktop'       => 4,
+		'shop_columns_mobile'        => 1,
+		'archive_full_width'         => 1,
 		'shop_image_height_desktop'  => 360,
 		'shop_image_height_mobile'   => 220,
 		'latest_card_width_desktop'  => 300,
@@ -236,7 +237,7 @@ function rezajordaan_sanitize_settings( $input ) {
 	$clean['store_visit_text']   = isset( $input['store_visit_text'] ) ? sanitize_textarea_field( $input['store_visit_text'] ) : '';
 	$clean['blog_page_id']       = isset( $input['blog_page_id'] ) ? absint( $input['blog_page_id'] ) : 0;
 
-	foreach ( array( 'show_instagram_header', 'show_whatsapp_header', 'show_telegram_header', 'show_phone_footer', 'show_social_footer', 'show_enamad_footer', 'show_product_search', 'show_categories', 'show_about', 'show_category_count', 'show_subcategories', 'show_sale_badge' ) as $key ) {
+	foreach ( array( 'show_instagram_header', 'show_whatsapp_header', 'show_telegram_header', 'show_phone_footer', 'show_social_footer', 'show_enamad_footer', 'show_product_search', 'show_categories', 'show_about', 'show_category_count', 'show_subcategories', 'show_sale_badge', 'archive_full_width' ) as $key ) {
 		$clean[ $key ] = empty( $input[ $key ] ) ? 0 : 1;
 	}
 
@@ -256,7 +257,7 @@ function rezajordaan_sanitize_settings( $input ) {
 	$ranges = array(
 		'latest_products_count'       => array( 4, 20 ),
 		'marquee_speed'               => array( 15, 100 ),
-		'shop_columns_desktop'        => array( 2, 5 ),
+		'shop_columns_desktop'        => array( 2, 6 ),
 		'shop_columns_mobile'         => array( 1, 2 ),
 		'shop_image_height_desktop'   => array( 180, 720 ),
 		'shop_image_height_mobile'    => array( 140, 480 ),
@@ -655,7 +656,8 @@ function rezajordaan_render_settings_page() {
 				<div class="rj-settings__grid">
 					<div class="rj-settings__card">
 						<h2><?php esc_html_e( 'فروشگاه و آرشیو محصولات', 'rezajordaan' ); ?></h2>
-						<?php rezajordaan_setting_range( 'shop_columns_desktop', __( 'تعداد ستون دسکتاپ', 'rezajordaan' ), 2, 5 ); ?>
+						<?php rezajordaan_setting_switch( 'archive_full_width', __( 'نمایش فول‌عرض محصولات در دسته‌بندی (دسکتاپ)', 'rezajordaan' ) ); ?>
+						<?php rezajordaan_setting_range( 'shop_columns_desktop', __( 'تعداد ستون دسکتاپ', 'rezajordaan' ), 2, 6 ); ?>
 						<?php rezajordaan_setting_range( 'shop_columns_mobile', __( 'تعداد ستون موبایل', 'rezajordaan' ), 1, 2 ); ?>
 						<?php rezajordaan_setting_range( 'shop_image_height_desktop', __( 'ارتفاع تصویر دسکتاپ', 'rezajordaan' ), 180, 720, 10, 'px' ); ?>
 						<?php rezajordaan_setting_range( 'shop_image_height_mobile', __( 'ارتفاع تصویر موبایل', 'rezajordaan' ), 140, 480, 10, 'px' ); ?>

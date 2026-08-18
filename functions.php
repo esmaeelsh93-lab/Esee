@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'REZAJORDAAN_VERSION', '1.3.0' );
+define( 'REZAJORDAAN_VERSION', '1.4.0' );
 
 require_once get_template_directory() . '/inc/theme-settings.php';
 require_once get_template_directory() . '/inc/page-content.php';
@@ -413,40 +413,50 @@ function rezajordaan_single_purchase_box_close() {
 }
 
 /**
- * Simplify category archive cards to price and a view button.
+ * Determine whether the current loop should use the compact archive card.
  */
-function rezajordaan_setup_archive_product_cards() {
+function rezajordaan_is_archive_product_card() {
 	if ( is_admin() || ! function_exists( 'is_product_taxonomy' ) ) {
-		return;
+		return false;
 	}
 
-	if ( ! is_product_taxonomy() ) {
-		return;
-	}
-
-	remove_action( 'woocommerce_shop_loop_item_title', 'woocommerce_template_loop_product_title', 10 );
-	remove_action( 'woocommerce_after_shop_loop_item_title', 'woocommerce_template_loop_rating', 5 );
-	remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart', 10 );
-	add_action( 'woocommerce_after_shop_loop_item', 'rezajordaan_loop_view_product_button', 20 );
+	return is_product_taxonomy() || ( is_search() && 'product' === get_post_type() );
 }
-add_action( 'wp', 'rezajordaan_setup_archive_product_cards' );
 
 /**
- * Render the archive card CTA.
+ * Render a readable price box for archive cards.
  */
-function rezajordaan_loop_view_product_button() {
+function rezajordaan_archive_price_box() {
 	global $product;
 
 	if ( ! $product instanceof WC_Product ) {
 		return;
 	}
 
-	printf(
-		'<a href="%1$s" class="button rj-view-product-button">%2$s</a>',
-		esc_url( $product->get_permalink() ),
-		esc_html__( 'دیدن محصول', 'rezajordaan' )
-	);
+	$regular = (float) $product->get_regular_price();
+	$current = (float) $product->get_price();
+	$on_sale = $product->is_on_sale() && $regular > $current;
+	?>
+	<div class="rj-archive-price-box">
+		<?php if ( $on_sale ) : ?>
+			<span class="rj-archive-price-box__regular"><?php echo wp_kses_post( wc_price( $regular ) ); ?></span>
+		<?php endif; ?>
+		<span class="rj-archive-price-box__current"><?php echo wp_kses_post( wc_price( $current ) ); ?></span>
+	</div>
+	<?php
 }
+
+/**
+ * Simplify category archive cards to price and a view button.
+ */
+function rezajordaan_setup_archive_product_cards() {
+	if ( ! rezajordaan_is_archive_product_card() ) {
+		return;
+	}
+
+	remove_action( 'woocommerce_before_shop_loop_item_title', 'woocommerce_show_product_loop_sale_flash', 10 );
+}
+add_action( 'wp', 'rezajordaan_setup_archive_product_cards' );
 
 /**
  * Render a clean full-width heading before the product gallery.
@@ -486,6 +496,9 @@ function rezajordaan_body_classes( $classes ) {
 	}
 	if ( function_exists( 'is_product_taxonomy' ) && is_product_taxonomy() ) {
 		$classes[] = 'rezajordaan-archive-cards';
+	}
+	if ( rezajordaan_get_setting( 'archive_full_width' ) && ( is_product_taxonomy() || ( function_exists( 'is_shop' ) && is_shop() ) ) ) {
+		$classes[] = 'archive-full-width';
 	}
 	$classes[] = 'category-mobile-columns-' . absint( rezajordaan_get_setting( 'category_columns_mobile' ) );
 	return $classes;
