@@ -4,32 +4,23 @@
 	var colorMap = {
 		صورتی: "#f4a6c8",
 		قرمز: "#d64545",
-		"آبی": "#5b8def",
+		آبی: "#5b8def",
 		"آبی روشن": "#8ec5ff",
-		"آبی کمرنگ": "#b8d9ff",
-		"سبز": "#4caf7d",
-		"زرد": "#f2c94c",
-		"مشکی": "#1f1f1f",
-		"سفید": "#f7f7f7",
-		"خاکستری": "#9aa0a6",
-		"بنفش": "#8b6fd6",
-		"نارنجی": "#f2994a",
-		"قهوه‌ای": "#8d6e63",
-		"کرم": "#f5e6c8",
-		"بژ": "#e8d8b8",
+		سبز: "#4caf7d",
+		زرد: "#f2c94c",
+		مشکی: "#1f1f1f",
+		سفید: "#f7f7f7",
+		خاکستری: "#9aa0a6",
+		بنفش: "#8b6fd6",
+		نارنجی: "#f2994a",
 		pink: "#f4a6c8",
-		red: "#d64545",
 		blue: "#5b8def",
 		green: "#4caf7d",
-		yellow: "#f2c94c",
 		black: "#1f1f1f",
 		white: "#f7f7f7",
 		grey: "#9aa0a6",
 		gray: "#9aa0a6",
 		purple: "#8b6fd6",
-		orange: "#f2994a",
-		brown: "#8d6e63",
-		beige: "#e8d8b8",
 	};
 
 	function parseVariations($form) {
@@ -102,6 +93,10 @@
 	}
 
 	function isOptionInStock(variations, attributeKey, optionValue, selections) {
+		if (!variations.length) {
+			return true;
+		}
+
 		for (var index = 0; index < variations.length; index += 1) {
 			var variation = variations[index];
 
@@ -127,18 +122,9 @@
 	function resolveColorSwatch(label) {
 		var normalized = String(label || "")
 			.trim()
-			.toLowerCase()
-			.replace(/\s+/g, " ");
+			.toLowerCase();
 
-		if (colorMap[label]) {
-			return colorMap[label];
-		}
-
-		if (colorMap[normalized]) {
-			return colorMap[normalized];
-		}
-
-		return "";
+		return colorMap[label] || colorMap[normalized] || "";
 	}
 
 	function syncSelectedStates($form) {
@@ -172,21 +158,26 @@
 		});
 	}
 
+	function clearSwatches($form) {
+		$form.find(".rj-variation-swatches").remove();
+		$form.find(".variations select").removeClass("rj-variation-select-hidden");
+	}
+
 	function buildSwatches($form, variations) {
+		clearSwatches($form);
 		$form.addClass("rj-variations-enhanced");
 
 		$form.find(".variations select").each(function () {
 			var $select = $(this);
 			var $cell = $select.closest("td.value");
-
-			if ($cell.find(".rj-variation-swatches").length) {
-				return;
-			}
-
 			var attributeKey = getAttributeKey($select);
 			var label = $select.closest("tr").find("label").text().trim();
 			var isColor = /color|رنگ|pa_color/i.test(attributeKey + " " + label);
 			var $group = $('<div class="rj-variation-swatches" role="radiogroup"></div>');
+
+			if (!$cell.length || !attributeKey) {
+				return;
+			}
 
 			$group.attr("aria-label", label);
 			$group.data("attribute", attributeKey);
@@ -222,47 +213,70 @@
 				}
 
 				$button.on("click", function () {
-					if ($select.val() === value) {
-						return;
-					}
-
 					$select.val(value).trigger("change");
 				});
 
 				$group.append($button);
 			});
 
+			if (!$group.children().length) {
+				return;
+			}
+
 			$select.addClass("rj-variation-select-hidden");
 			$cell.append($group);
-		});
-
-		$form.on(
-			"woocommerce_update_variation_values found_variation reset_data hide_variation show_variation",
-			function () {
-				syncSelectedStates($form);
-				updateSwatchStates($form, variations);
-			}
-		);
-
-		$form.find(".variations select").on("change", function () {
-			syncSelectedStates($form);
-			updateSwatchStates($form, variations);
 		});
 
 		syncSelectedStates($form);
 		updateSwatchStates($form, variations);
 	}
 
-	$(function () {
+	function enhanceForm($form) {
+		var variations = parseVariations($form);
+		buildSwatches($form, variations);
+	}
+
+	function bindFormEvents($form) {
+		if ($form.data("rjVariationBound")) {
+			return;
+		}
+
+		$form.data("rjVariationBound", true);
+
+		$form.on(
+			"woocommerce_update_variation_values found_variation reset_data hide_variation show_variation check_variations",
+			function () {
+				enhanceForm($form);
+			}
+		);
+
+		$form.find(".variations select").on("change", function () {
+			syncSelectedStates($form);
+			updateSwatchStates($form, parseVariations($form));
+		});
+	}
+
+	function initAllForms() {
 		$("form.variations_form").each(function () {
 			var $form = $(this);
-			var variations = parseVariations($form);
-
-			if (!variations.length) {
-				return;
-			}
-
-			buildSwatches($form, variations);
+			bindFormEvents($form);
+			enhanceForm($form);
 		});
+	}
+
+	$(function () {
+		initAllForms();
 	});
+
+	$(document.body).on("wc_variation_form", function (_event, $form) {
+		if ($form && $form.length) {
+			bindFormEvents($form);
+			enhanceForm($form);
+			return;
+		}
+
+		initAllForms();
+	});
+
+	$(document.body).on("updated_wc_div", initAllForms);
 })(window.jQuery);

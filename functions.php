@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'REZAJORDAAN_VERSION', '1.6.1' );
+define( 'REZAJORDAAN_VERSION', '1.6.2' );
 
 require_once get_template_directory() . '/inc/theme-settings.php';
 require_once get_template_directory() . '/inc/page-content.php';
@@ -138,6 +138,16 @@ function rezajordaan_enqueue_product_variation_script() {
 	);
 }
 add_action( 'wp_enqueue_scripts', 'rezajordaan_enqueue_product_variation_script', 25 );
+
+/**
+ * Load variation JSON inline so stock states are available for swatch buttons.
+ *
+ * @return int
+ */
+function rezajordaan_variation_ajax_threshold() {
+	return 300;
+}
+add_filter( 'woocommerce_ajax_variation_threshold', 'rezajordaan_variation_ajax_threshold' );
 
 /**
  * Apply product-card controls as safe CSS custom properties.
