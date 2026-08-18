@@ -15,7 +15,6 @@ $phone_url      = rezajordaan_get_setting( 'phone_url' );
 $instagram_url  = rezajordaan_get_setting( 'instagram_url' );
 $whatsapp_url   = rezajordaan_get_setting( 'whatsapp_url' );
 $rubika_url     = rezajordaan_get_setting( 'rubika_url' );
-$telegram_url   = rezajordaan_get_setting( 'telegram_url' );
 $email          = rezajordaan_get_setting( 'email' );
 $address        = rezajordaan_get_setting( 'address' );
 $enamad_url     = rezajordaan_get_setting( 'enamad_url' );
@@ -41,40 +40,45 @@ $enamad_logo    = rezajordaan_get_setting( 'enamad_logo_url' );
 
 		<div class="site-footer__column site-footer__contact">
 			<h3><?php esc_html_e( 'راه‌های ارتباطی', 'rezajordaan' ); ?></h3>
-			<?php if ( $instagram_url ) : ?>
-				<p>
-					<?php esc_html_e( 'اینستاگرام:', 'rezajordaan' ); ?>
-					<a href="<?php echo esc_url( $instagram_url ); ?>" target="_blank" rel="noopener noreferrer" dir="ltr">@rezajordaan</a>
-				</p>
-			<?php endif; ?>
-			<?php if ( $phone_display && rezajordaan_get_setting( 'show_phone_footer' ) ) : ?>
-				<p>
-					<?php esc_html_e( 'تماس:', 'rezajordaan' ); ?>
-					<a href="<?php echo esc_url( $phone_url ); ?>" dir="ltr"><?php echo esc_html( $phone_display ); ?></a>
-				</p>
-			<?php endif; ?>
-			<?php if ( $whatsapp_url ) : ?>
-				<p>
-					<?php esc_html_e( 'واتساپ:', 'rezajordaan' ); ?>
-					<a href="<?php echo esc_url( $whatsapp_url ); ?>" target="_blank" rel="noopener noreferrer" dir="ltr"><?php echo esc_html( $phone_display ); ?></a>
-				</p>
-			<?php endif; ?>
-			<?php if ( $rubika_url ) : ?>
-				<p><a href="<?php echo esc_url( $rubika_url ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'روبیکا رضا جردن', 'rezajordaan' ); ?></a></p>
-			<?php endif; ?>
+			<div class="site-footer__contact-grid">
+				<?php if ( $instagram_url && rezajordaan_get_setting( 'show_social_footer' ) ) : ?>
+					<a class="footer-contact-card footer-contact-card--instagram" href="<?php echo esc_url( $instagram_url ); ?>" target="_blank" rel="noopener noreferrer">
+						<span class="footer-contact-card__icon" aria-hidden="true">
+							<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle class="fill-dot" cx="17.3" cy="6.7" r="1"/></svg>
+						</span>
+						<span><strong><?php esc_html_e( 'اینستاگرام', 'rezajordaan' ); ?></strong><small dir="ltr">@rezajordaan</small></span>
+					</a>
+				<?php endif; ?>
+				<?php if ( $whatsapp_url && rezajordaan_get_setting( 'show_social_footer' ) ) : ?>
+					<a class="footer-contact-card footer-contact-card--whatsapp" href="<?php echo esc_url( $whatsapp_url ); ?>" target="_blank" rel="noopener noreferrer">
+						<span class="footer-contact-card__icon" aria-hidden="true">
+							<svg viewBox="0 0 24 24"><path d="M20.5 11.7a8.5 8.5 0 0 1-12.6 7.5L3 20.5l1.3-4.7a8.5 8.5 0 1 1 16.2-4.1Z"/><path d="M9 8.2c.2-.5.4-.5.7-.5h.5c.2 0 .3.1.4.4l.7 1.7c.1.3.1.4-.1.6l-.5.6c-.2.2-.2.3 0 .6.5.9 1.2 1.7 2.1 2.2.3.2.5.2.7 0l.7-.9c.2-.2.4-.3.6-.2l1.8.8"/></svg>
+						</span>
+						<span><strong><?php esc_html_e( 'واتساپ', 'rezajordaan' ); ?></strong><small dir="ltr"><?php echo esc_html( $phone_display ); ?></small></span>
+					</a>
+				<?php endif; ?>
+				<?php if ( $phone_display && rezajordaan_get_setting( 'show_phone_footer' ) ) : ?>
+					<a class="footer-contact-card footer-contact-card--phone" href="<?php echo esc_url( $phone_url ); ?>">
+						<span class="footer-contact-card__icon" aria-hidden="true">
+							<svg viewBox="0 0 24 24"><path d="M7.2 3.7 10 7.2 8.3 9.4c1.2 2.6 3.2 4.6 5.8 5.8l2.2-1.7 3.5 2.8-.7 3.3c-.2.8-.9 1.3-1.7 1.3C9.5 20.3 3.7 14.5 3.1 6.6c-.1-.8.5-1.5 1.3-1.7l2.8-.7Z"/></svg>
+						</span>
+						<span><strong><?php esc_html_e( 'تماس مستقیم', 'rezajordaan' ); ?></strong><small dir="ltr"><?php echo esc_html( $phone_display ); ?></small></span>
+					</a>
+				<?php endif; ?>
+				<?php if ( $rubika_url && rezajordaan_get_setting( 'show_social_footer' ) ) : ?>
+					<a class="footer-contact-card footer-contact-card--rubika" href="<?php echo esc_url( $rubika_url ); ?>" target="_blank" rel="noopener noreferrer">
+						<span class="footer-contact-card__icon" aria-hidden="true">
+							<svg viewBox="0 0 24 24"><path d="M7.3 4.3h9.4a3 3 0 0 1 3 3v6.1a3 3 0 0 1-3 3h-4.1L8.3 20v-3.6h-1a3 3 0 0 1-3-3V7.3a3 3 0 0 1 3-3Z"/><path d="M8.5 9.2h7m-7 3.1h4.5"/></svg>
+						</span>
+						<span><strong><?php esc_html_e( 'روبیکا', 'rezajordaan' ); ?></strong><small>rezajordaan</small></span>
+					</a>
+				<?php endif; ?>
+			</div>
 			<?php if ( $email ) : ?>
-				<p><a href="mailto:<?php echo esc_attr( antispambot( $email ) ); ?>" dir="ltr"><?php echo esc_html( antispambot( $email ) ); ?></a></p>
+				<p class="site-footer__email"><a href="mailto:<?php echo esc_attr( antispambot( $email ) ); ?>" dir="ltr"><?php echo esc_html( antispambot( $email ) ); ?></a></p>
 			<?php endif; ?>
 			<?php if ( $address ) : ?>
-				<p><?php echo wp_kses_post( nl2br( esc_html( $address ) ) ); ?></p>
-			<?php endif; ?>
-			<?php if ( rezajordaan_get_setting( 'show_social_footer' ) ) : ?>
-				<div class="site-footer__socials">
-					<?php if ( $instagram_url ) : ?><a href="<?php echo esc_url( $instagram_url ); ?>" target="_blank" rel="noopener noreferrer">Instagram</a><?php endif; ?>
-					<?php if ( $whatsapp_url ) : ?><a href="<?php echo esc_url( $whatsapp_url ); ?>" target="_blank" rel="noopener noreferrer">WhatsApp</a><?php endif; ?>
-					<?php if ( $rubika_url ) : ?><a href="<?php echo esc_url( $rubika_url ); ?>" target="_blank" rel="noopener noreferrer">Rubika</a><?php endif; ?>
-					<?php if ( $telegram_url ) : ?><a href="<?php echo esc_url( $telegram_url ); ?>" target="_blank" rel="noopener noreferrer">Telegram</a><?php endif; ?>
-				</div>
+				<p class="site-footer__address"><?php echo wp_kses_post( nl2br( esc_html( $address ) ) ); ?></p>
 			<?php endif; ?>
 		</div>
 

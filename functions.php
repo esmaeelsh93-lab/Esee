@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'REZAJORDAAN_VERSION', '1.2.0' );
+define( 'REZAJORDAAN_VERSION', '1.3.0' );
 
 require_once get_template_directory() . '/inc/theme-settings.php';
 require_once get_template_directory() . '/inc/page-content.php';
@@ -344,6 +344,123 @@ function rezajordaan_sale_badge( $html, $post, $product ) {
 add_filter( 'woocommerce_sale_flash', 'rezajordaan_sale_badge', 10, 3 );
 
 /**
+ * Replace long taxonomy SEO copy with a compact disclosure.
+ */
+function rezajordaan_setup_collapsible_archive_description() {
+	if ( ! is_product_category() && ! is_product_tag() ) {
+		return;
+	}
+
+	remove_action( 'woocommerce_archive_description', 'woocommerce_taxonomy_archive_description', 10 );
+	add_action( 'woocommerce_archive_description', 'rezajordaan_collapsible_archive_description', 10 );
+}
+add_action( 'wp', 'rezajordaan_setup_collapsible_archive_description' );
+
+/**
+ * Render the current product taxonomy description as expandable content.
+ */
+function rezajordaan_collapsible_archive_description() {
+	$description = get_the_archive_description();
+	if ( ! $description ) {
+		return;
+	}
+	?>
+	<details class="archive-seo-copy">
+		<summary>
+			<span><?php esc_html_e( 'راهنمای خرید و توضیحات بیشتر', 'rezajordaan' ); ?></span>
+			<i aria-hidden="true"></i>
+		</summary>
+		<div class="archive-seo-copy__content"><?php echo wp_kses_post( $description ); ?></div>
+	</details>
+	<?php
+}
+
+/**
+ * Reorder single-product content so purchasing controls follow the gallery.
+ */
+function rezajordaan_reorder_single_product() {
+	if ( ! is_product() ) {
+		return;
+	}
+
+	remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_title', 5 );
+	remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_rating', 10 );
+	remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_price', 10 );
+	remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_excerpt', 20 );
+	remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30 );
+
+	add_action( 'woocommerce_before_single_product_summary', 'rezajordaan_single_product_heading', 1 );
+	add_action( 'woocommerce_single_product_summary', 'rezajordaan_single_purchase_box_open', 4 );
+	add_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_price', 5 );
+	add_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 10 );
+	add_action( 'woocommerce_single_product_summary', 'rezajordaan_single_purchase_box_close', 11 );
+	add_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_excerpt', 20 );
+}
+add_action( 'wp', 'rezajordaan_reorder_single_product' );
+
+/**
+ * Open the boxed purchase panel on single-product pages.
+ */
+function rezajordaan_single_purchase_box_open() {
+	echo '<div class="single-product-purchase">';
+}
+
+/**
+ * Close the boxed purchase panel on single-product pages.
+ */
+function rezajordaan_single_purchase_box_close() {
+	echo '</div>';
+}
+
+/**
+ * Simplify category archive cards to price and a view button.
+ */
+function rezajordaan_setup_archive_product_cards() {
+	if ( is_admin() || ! function_exists( 'is_product_taxonomy' ) ) {
+		return;
+	}
+
+	if ( ! is_product_taxonomy() ) {
+		return;
+	}
+
+	remove_action( 'woocommerce_shop_loop_item_title', 'woocommerce_template_loop_product_title', 10 );
+	remove_action( 'woocommerce_after_shop_loop_item_title', 'woocommerce_template_loop_rating', 5 );
+	remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart', 10 );
+	add_action( 'woocommerce_after_shop_loop_item', 'rezajordaan_loop_view_product_button', 20 );
+}
+add_action( 'wp', 'rezajordaan_setup_archive_product_cards' );
+
+/**
+ * Render the archive card CTA.
+ */
+function rezajordaan_loop_view_product_button() {
+	global $product;
+
+	if ( ! $product instanceof WC_Product ) {
+		return;
+	}
+
+	printf(
+		'<a href="%1$s" class="button rj-view-product-button">%2$s</a>',
+		esc_url( $product->get_permalink() ),
+		esc_html__( 'دیدن محصول', 'rezajordaan' )
+	);
+}
+
+/**
+ * Render a clean full-width heading before the product gallery.
+ */
+function rezajordaan_single_product_heading() {
+	?>
+	<header class="single-product-heading">
+		<p><?php esc_html_e( 'انتخاب و خرید محصول', 'rezajordaan' ); ?></p>
+		<h1 class="product_title entry-title"><?php the_title(); ?></h1>
+	</header>
+	<?php
+}
+
+/**
  * Keep WooCommerce's widget sidebar out of product and archive content.
  */
 function rezajordaan_remove_woocommerce_sidebar() {
@@ -363,6 +480,12 @@ function rezajordaan_body_classes( $classes ) {
 	}
 	if ( ! rezajordaan_get_setting( 'show_subcategories' ) ) {
 		$classes[] = 'hide-product-subcategories';
+	}
+	if ( function_exists( 'is_product' ) && is_product() ) {
+		$classes[] = 'rezajordaan-single-product';
+	}
+	if ( function_exists( 'is_product_taxonomy' ) && is_product_taxonomy() ) {
+		$classes[] = 'rezajordaan-archive-cards';
 	}
 	$classes[] = 'category-mobile-columns-' . absint( rezajordaan_get_setting( 'category_columns_mobile' ) );
 	return $classes;

@@ -128,6 +128,30 @@
 		render();
 	});
 
+	document.querySelectorAll(".woocommerce-product-gallery").forEach((gallery) => {
+		const track = gallery.querySelector(".woocommerce-product-gallery__wrapper, .flex-viewport .slides");
+		const thumbs = gallery.querySelector(".flex-control-thumbs");
+
+		if (track) {
+			track.setAttribute("tabindex", "0");
+			track.addEventListener(
+				"wheel",
+				(event) => {
+					if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+					event.preventDefault();
+					track.scrollLeft += event.deltaY;
+				},
+				{ passive: false }
+			);
+		}
+
+		thumbs?.querySelectorAll("li").forEach((thumb) => {
+			thumb.addEventListener("click", () => {
+				thumb.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+			});
+		});
+	});
+
 	if (prefersReducedMotion || typeof window.gsap === "undefined") return;
 
 	const { gsap } = window;
