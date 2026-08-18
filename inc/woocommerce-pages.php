@@ -10,30 +10,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WooCommerce Blocks break many Iranian shipping plugins (MahdiY PWS, etc.).
- * Render the classic shortcodes instead of block templates.
- *
- * @param string $content Page content.
- * @return string
- */
-function rezajordaan_classic_cart_checkout_content( $content ) {
-	if ( ! is_main_query() || ! in_the_loop() ) {
-		return $content;
-	}
-
-	if ( function_exists( 'is_cart' ) && is_cart() ) {
-		return do_shortcode( '[woocommerce_cart]' );
-	}
-
-	if ( function_exists( 'is_checkout' ) && is_checkout() && ! is_wc_endpoint_url( 'order-received' ) ) {
-		return do_shortcode( '[woocommerce_checkout]' );
-	}
-
-	return $content;
-}
-add_filter( 'the_content', 'rezajordaan_classic_cart_checkout_content', 5 );
-
-/**
  * One-time migration: replace block markup on cart/checkout pages in the database.
  */
 function rezajordaan_maybe_migrate_wc_pages_to_classic() {

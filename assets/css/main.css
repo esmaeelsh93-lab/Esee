@@ -415,6 +415,60 @@ button {
 	stroke: none;
 }
 
+.rj-header-cart {
+	align-items: center;
+	background: rgba(255, 250, 245, 0.72);
+	border: 1px solid var(--rj-border);
+	border-radius: 999px;
+	color: inherit;
+	display: inline-flex;
+	gap: 6px;
+	height: 42px;
+	justify-content: center;
+	min-width: 42px;
+	padding: 0 12px;
+	position: relative;
+	transition: background 200ms ease, border-color 200ms ease, color 200ms ease, transform 200ms ease;
+}
+
+.rj-header-cart:hover,
+.rj-header-cart:focus-visible,
+.rj-header-cart.is-active {
+	background: var(--rj-rose);
+	border-color: var(--rj-rose);
+	color: #fff;
+	outline: 0;
+	transform: translateY(-2px);
+}
+
+.rj-header-cart svg {
+	fill: none;
+	height: 20px;
+	stroke: currentColor;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-width: 1.8;
+	width: 20px;
+}
+
+.rj-header-cart__count {
+	background: var(--rj-burgundy);
+	border-radius: 999px;
+	color: #fff;
+	font-size: 11px;
+	font-weight: 800;
+	line-height: 1;
+	min-width: 18px;
+	padding: 4px 6px;
+	text-align: center;
+}
+
+.rj-header-cart.is-active .rj-header-cart__count,
+.rj-header-cart:hover .rj-header-cart__count {
+	background: #fff;
+	color: var(--rj-burgundy);
+}
+
 .menu-toggle {
 	align-items: center;
 	background: var(--rj-espresso);

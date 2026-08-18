@@ -108,6 +108,9 @@ if ( is_wp_error( $categories ) ) {
 					<svg aria-hidden="true" viewBox="0 0 24 24"><path d="m3 11 18-7-4 17-6-5-4 3 1-5 9-7-11 6Z"/></svg>
 				</a>
 			<?php endif; ?>
+			<?php if ( function_exists( 'wc_get_cart_url' ) ) : ?>
+				<?php rezajordaan_render_header_cart_link(); ?>
+			<?php endif; ?>
 			<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="<?php esc_attr_e( 'باز کردن منو', 'rezajordaan' ); ?>">
 				<span></span><span></span><span></span>
 			</button>
