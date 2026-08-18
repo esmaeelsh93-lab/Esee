@@ -2,18 +2,36 @@
 /**
  * Plugin Name: Reza Jordaan Commerce
  * Description: Custom shipping methods and checkout fields for the Reza Jordaan store.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Requires at least: 6.4
  * Requires PHP: 8.0
  * Requires Plugins: woocommerce
+ * WC requires at least: 8.0
+ * WC tested up to: 11.0
  * Author: Esmaeil Shojaei
  * Text Domain: rezajordaan-commerce
  */
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'REZAJORDAAN_COMMERCE_VERSION', '1.0.0' );
+define( 'REZAJORDAAN_COMMERCE_VERSION', '1.0.1' );
 define( 'REZAJORDAAN_COMMERCE_OPTION', 'rezajordaan_commerce_shipping_methods' );
+
+/**
+ * Declare compatibility with WooCommerce HPOS and feature flags.
+ */
+function rezajordaan_commerce_declare_compatibility() {
+	if ( ! class_exists( '\Automattic\WooCommerce\Utilities\FeaturesUtil' ) ) {
+		return;
+	}
+
+	\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility(
+		'custom_order_tables',
+		__FILE__,
+		true
+	);
+}
+add_action( 'before_woocommerce_init', 'rezajordaan_commerce_declare_compatibility' );
 
 /**
  * Return the store's default delivery methods.
@@ -367,6 +385,10 @@ add_filter( 'woocommerce_package_rates', 'rezajordaan_commerce_package_shipping_
  * @return bool
  */
 function rezajordaan_commerce_ready_to_calc_shipping( $ready ) {
+	if ( function_exists( 'is_cart' ) && is_cart() && ! is_checkout() ) {
+		return false;
+	}
+
 	if ( function_exists( 'is_checkout' ) && is_checkout() && ! is_wc_endpoint_url( 'order-received' ) ) {
 		return true;
 	}
@@ -374,6 +396,44 @@ function rezajordaan_commerce_ready_to_calc_shipping( $ready ) {
 	return $ready;
 }
 add_filter( 'woocommerce_cart_ready_to_calc_shipping', 'rezajordaan_commerce_ready_to_calc_shipping', 999 );
+
+/**
+ * Keep shipping rates stable when address fields trigger update_checkout.
+ *
+ * @param string[]           $fields  Ignored hash fields.
+ * @param array<string,mixed> $package Shipping package.
+ * @return string[]
+ */
+function rezajordaan_commerce_ignore_destination_in_package_hash( $fields, $package ) {
+	unset( $package );
+	$fields[] = 'destination';
+	return array_values( array_unique( $fields ) );
+}
+add_filter( 'woocommerce_shipping_package_hash_ignored_fields', 'rezajordaan_commerce_ignore_destination_in_package_hash', 10, 2 );
+
+/**
+ * Default to the first enabled delivery method when nothing is selected.
+ *
+ * @param string              $default Default method ID.
+ * @param array<string,mixed> $package Shipping package.
+ * @param string              $chosen  Currently chosen method ID.
+ * @return string
+ */
+function rezajordaan_commerce_default_chosen_shipping_method( $default, $package, $chosen ) {
+	unset( $package );
+
+	if ( '' !== $chosen ) {
+		return $chosen;
+	}
+
+	foreach ( rezajordaan_commerce_get_shipping_methods( true ) as $key => $method ) {
+		unset( $method );
+		return 'rezajordaan_commerce_' . sanitize_key( $key );
+	}
+
+	return $default;
+}
+add_filter( 'woocommerce_shipping_chosen_method', 'rezajordaan_commerce_default_chosen_shipping_method', 10, 3 );
 
 /**
  * Show each delivery method's explanation below its title.
@@ -568,4 +628,23 @@ function rezajordaan_commerce_disable_pws_checkout_fields() {
 	}
 }
 add_action( 'wp', 'rezajordaan_commerce_disable_pws_checkout_fields', 5 );
+
+/**
+ * Validate Iranian mobile numbers and optional email at checkout.
+ */
+function rezajordaan_commerce_validate_checkout_fields() {
+	$phone = isset( $_POST['billing_phone'] ) ? sanitize_text_field( wp_unslash( $_POST['billing_phone'] ) ) : '';
+	$phone = preg_replace( '/\D+/', '', $phone );
+
+	if ( '' === $phone || ! preg_match( '/^09[0-9]{9}$/', $phone ) ) {
+		wc_add_notice( 'لطفاً شماره موبایل معتبر ایرانی وارد کنید (مثلاً ۰۹۱۲۱۲۳۴۵۶۷).', 'error' );
+	}
+
+	$email = isset( $_POST['billing_email'] ) ? sanitize_email( wp_unslash( $_POST['billing_email'] ) ) : '';
+
+	if ( '' !== $email && ! is_email( $email ) ) {
+		wc_add_notice( 'ایمیل وارد شده معتبر نیست.', 'error' );
+	}
+}
+add_action( 'woocommerce_checkout_process', 'rezajordaan_commerce_validate_checkout_fields' );
 
