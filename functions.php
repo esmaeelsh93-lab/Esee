@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'REZAJORDAAN_VERSION', '1.4.1' );
+define( 'REZAJORDAAN_VERSION', '1.4.2' );
 
 require_once get_template_directory() . '/inc/theme-settings.php';
 require_once get_template_directory() . '/inc/page-content.php';
@@ -41,6 +41,13 @@ function rezajordaan_setup() {
 add_action( 'after_setup_theme', 'rezajordaan_setup' );
 
 /**
+ * Pages that use GSAP-powered motion.
+ */
+function rezajordaan_should_enqueue_motion() {
+	return is_front_page() || ( function_exists( 'is_shop' ) && is_shop() );
+}
+
+/**
  * Load the visual layer and animations.
  */
 function rezajordaan_enqueue_assets() {
@@ -57,24 +64,30 @@ function rezajordaan_enqueue_assets() {
 		REZAJORDAAN_VERSION
 	);
 
-	wp_enqueue_script(
-		'gsap',
-		'https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js',
-		array(),
-		'3.13.0',
-		true
-	);
-	wp_enqueue_script(
-		'gsap-scroll-trigger',
-		'https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js',
-		array( 'gsap' ),
-		'3.13.0',
-		true
-	);
+	$script_deps = array();
+
+	if ( rezajordaan_should_enqueue_motion() ) {
+		wp_enqueue_script(
+			'gsap',
+			'https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js',
+			array(),
+			'3.13.0',
+			true
+		);
+		wp_enqueue_script(
+			'gsap-scroll-trigger',
+			'https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js',
+			array( 'gsap' ),
+			'3.13.0',
+			true
+		);
+		$script_deps = array( 'gsap', 'gsap-scroll-trigger' );
+	}
+
 	wp_enqueue_script(
 		'rezajordaan-main',
 		get_template_directory_uri() . '/assets/js/main.js',
-		array( 'gsap', 'gsap-scroll-trigger' ),
+		$script_deps,
 		REZAJORDAAN_VERSION,
 		true
 	);
@@ -416,12 +429,52 @@ function rezajordaan_single_purchase_box_close() {
  * Determine whether the current loop should use the compact archive card.
  */
 function rezajordaan_is_archive_product_card() {
-	if ( is_admin() || ! function_exists( 'is_product_taxonomy' ) ) {
+	if ( is_admin() || ! function_exists( 'is_woocommerce' ) ) {
 		return false;
 	}
 
-	return is_product_taxonomy() || ( is_search() && 'product' === get_post_type() );
+	// The /shop page renders template-parts/home-shop.php instead of this loop.
+	if ( is_shop() ) {
+		return false;
+	}
+
+	if ( is_product_taxonomy() || is_post_type_archive( 'product' ) ) {
+		return true;
+	}
+
+	if ( is_search() ) {
+		$post_type = get_query_var( 'post_type' );
+
+		if ( 'product' === $post_type ) {
+			return true;
+		}
+
+		if ( is_array( $post_type ) && in_array( 'product', $post_type, true ) ) {
+			return true;
+		}
+	}
+
+	return false;
 }
+
+/**
+ * Match WooCommerce loop columns with theme settings.
+ *
+ * @param int $columns Default loop columns.
+ * @return int
+ */
+function rezajordaan_loop_shop_columns( $columns ) {
+	if ( ! rezajordaan_is_archive_product_card() ) {
+		return $columns;
+	}
+
+	if ( wp_is_mobile() ) {
+		return max( 1, absint( rezajordaan_get_setting( 'shop_columns_mobile' ) ) );
+	}
+
+	return max( 2, absint( rezajordaan_get_setting( 'shop_columns_desktop' ) ) );
+}
+add_filter( 'loop_shop_columns', 'rezajordaan_loop_shop_columns' );
 
 /**
  * Render a readable price box for archive cards.
@@ -441,7 +494,15 @@ function rezajordaan_archive_price_box() {
 		<?php if ( $on_sale ) : ?>
 			<span class="rj-archive-price-box__regular"><?php echo wp_kses_post( wc_price( $regular ) ); ?></span>
 		<?php endif; ?>
-		<span class="rj-archive-price-box__current"><?php echo wp_kses_post( wc_price( $current ) ); ?></span>
+		<span class="rj-archive-price-box__current">
+			<?php
+			if ( '' !== $product->get_price() ) {
+				echo wp_kses_post( wc_price( $current ) );
+			} else {
+				esc_html_e( 'تماس بگیرید', 'rezajordaan' );
+			}
+			?>
+		</span>
 	</div>
 	<?php
 }
@@ -494,7 +555,7 @@ function rezajordaan_body_classes( $classes ) {
 	if ( function_exists( 'is_product' ) && is_product() ) {
 		$classes[] = 'rezajordaan-single-product';
 	}
-	if ( function_exists( 'is_product_taxonomy' ) && is_product_taxonomy() ) {
+	if ( rezajordaan_is_archive_product_card() ) {
 		$classes[] = 'rezajordaan-archive-cards';
 	}
 	if ( rezajordaan_get_setting( 'archive_full_width' ) && ( is_product_taxonomy() || ( function_exists( 'is_shop' ) && is_shop() ) ) ) {

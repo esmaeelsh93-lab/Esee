@@ -196,10 +196,14 @@
 		});
 	});
 
-	if (prefersReducedMotion || typeof window.gsap === "undefined") return;
+	if (prefersReducedMotion || typeof window.gsap === "undefined" || typeof window.ScrollTrigger === "undefined") {
+		return;
+	}
 
 	const { gsap } = window;
-	gsap.registerPlugin(window.ScrollTrigger);
+	if (typeof gsap.registerPlugin === "function") {
+		gsap.registerPlugin(window.ScrollTrigger);
+	}
 
 	const hero = document.querySelector(".hero");
 	if (hero) {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Product loop card.
+ * Product loop card router.
  *
  * @package RezaJordaan
  */
@@ -14,7 +14,7 @@ if ( ! is_a( $product, WC_Product::class ) ) {
 }
 
 if ( function_exists( 'rezajordaan_is_archive_product_card' ) && rezajordaan_is_archive_product_card() ) {
-	wc_get_template( 'content-product-archive-card.php' );
+	load_template( get_template_directory() . '/woocommerce/content-product-archive-card.php', false );
 	return;
 }
 
