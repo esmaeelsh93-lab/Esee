@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name: Reza Jordaan Commerce
- * Description: Custom shipping methods and checkout fields for the Reza Jordaan store.
- * Version: 1.0.1
+ * Description: Custom shipping methods and Iranian province/city checkout dropdowns for the Reza Jordaan store.
+ * Version: 1.1.0
  * Requires at least: 6.4
  * Requires PHP: 8.0
  * Requires Plugins: woocommerce
@@ -14,8 +14,12 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'REZAJORDAAN_COMMERCE_VERSION', '1.0.1' );
+define( 'REZAJORDAAN_COMMERCE_VERSION', '1.1.0' );
 define( 'REZAJORDAAN_COMMERCE_OPTION', 'rezajordaan_commerce_shipping_methods' );
+define( 'REZAJORDAAN_COMMERCE_PATH', plugin_dir_path( __FILE__ ) );
+define( 'REZAJORDAAN_COMMERCE_URL', plugin_dir_url( __FILE__ ) );
+
+require_once REZAJORDAAN_COMMERCE_PATH . 'includes/iran-address.php';
 
 /**
  * Declare compatibility with WooCommerce HPOS and feature flags.
@@ -509,24 +513,10 @@ function rezajordaan_commerce_checkout_fields( $fields ) {
 		'autocomplete' => 'tel',
 		'priority'     => 30,
 	);
-	$billing['billing_state']      = array(
-		'type'         => 'text',
-		'label'        => 'استان',
-		'placeholder'  => 'نام استان را بنویسید',
-		'required'     => true,
-		'class'        => array( 'form-row-first' ),
-		'autocomplete' => 'address-level1',
-		'priority'     => 40,
-	);
-	$billing['billing_city']       = array(
-		'type'         => 'text',
-		'label'        => 'شهر',
-		'placeholder'  => 'نام شهر را بنویسید',
-		'required'     => true,
-		'class'        => array( 'form-row-last' ),
-		'autocomplete' => 'address-level2',
-		'priority'     => 50,
-	);
+	$current_state                 = rezajordaan_commerce_checkout_field_value( 'billing_state' );
+	$current_city                  = rezajordaan_commerce_checkout_field_value( 'billing_city' );
+	$billing['billing_state']      = rezajordaan_commerce_state_field_args( $current_state );
+	$billing['billing_city']       = rezajordaan_commerce_city_field_args( $current_state, $current_city );
 	$billing['billing_address_1']  = array(
 		'type'              => 'textarea',
 		'label'             => 'نشانی کامل',
@@ -587,6 +577,10 @@ function rezajordaan_commerce_checkout_posted_data( $data ) {
 	$data['billing_country']  = 'IR';
 	$data['shipping_country'] = 'IR';
 
+	if ( isset( $data['billing_state'] ) ) {
+		$data['billing_state'] = rezajordaan_commerce_normalize_state_code( (string) $data['billing_state'] );
+	}
+
 	foreach ( array( 'first_name', 'last_name', 'state', 'city', 'address_1', 'postcode' ) as $field ) {
 		$billing_key  = 'billing_' . $field;
 		$shipping_key = 'shipping_' . $field;
@@ -599,6 +593,117 @@ function rezajordaan_commerce_checkout_posted_data( $data ) {
 	return $data;
 }
 add_filter( 'woocommerce_checkout_posted_data', 'rezajordaan_commerce_checkout_posted_data', 999 );
+
+/**
+ * Keep Iranian provinces as a WooCommerce state select with Persian labels.
+ *
+ * @param array<string,array<string,string>> $states Country states.
+ * @return array<string,array<string,string>>
+ */
+function rezajordaan_commerce_woocommerce_states( $states ) {
+	$states['IR'] = rezajordaan_commerce_persian_states();
+	return $states;
+}
+add_filter( 'woocommerce_states', 'rezajordaan_commerce_woocommerce_states', 99999 );
+
+/**
+ * Force Iran to use required province/city fields in WooCommerce locale data.
+ *
+ * @param array<string,array<string,array<string,mixed>>> $locale Country locale fields.
+ * @return array<string,array<string,array<string,mixed>>>
+ */
+function rezajordaan_commerce_country_locale( $locale ) {
+	if ( ! isset( $locale['IR'] ) || ! is_array( $locale['IR'] ) ) {
+		$locale['IR'] = array();
+	}
+
+	$locale['IR']['state']             = isset( $locale['IR']['state'] ) && is_array( $locale['IR']['state'] ) ? $locale['IR']['state'] : array();
+	$locale['IR']['city']              = isset( $locale['IR']['city'] ) && is_array( $locale['IR']['city'] ) ? $locale['IR']['city'] : array();
+	$locale['IR']['state']['required'] = true;
+	$locale['IR']['state']['hidden']   = false;
+	$locale['IR']['city']['required']  = true;
+	$locale['IR']['city']['hidden']    = false;
+
+	return $locale;
+}
+add_filter( 'woocommerce_get_country_locale', 'rezajordaan_commerce_country_locale', 9999 );
+
+/**
+ * Apply the same select fields on My Account address forms.
+ *
+ * @param array<string,array<string,mixed>> $fields Address fields.
+ * @return array<string,array<string,mixed>>
+ */
+function rezajordaan_commerce_billing_fields( $fields ) {
+	$current_state           = rezajordaan_commerce_checkout_field_value( 'billing_state' );
+	$current_city            = rezajordaan_commerce_checkout_field_value( 'billing_city' );
+	$fields['billing_state'] = rezajordaan_commerce_state_field_args( $current_state );
+	$fields['billing_city']  = rezajordaan_commerce_city_field_args( $current_state, $current_city );
+	return $fields;
+}
+add_filter( 'woocommerce_billing_fields', 'rezajordaan_commerce_billing_fields', 9999 );
+
+/**
+ * Read a checkout/address value from the request, then WooCommerce, then the user.
+ *
+ * @param string $key Field key.
+ * @return string
+ */
+function rezajordaan_commerce_checkout_field_value( $key ) {
+	if ( isset( $_POST[ $key ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		return sanitize_text_field( wp_unslash( $_POST[ $key ] ) );
+	}
+
+	if ( function_exists( 'WC' ) && WC() && WC()->checkout() ) {
+		$value = WC()->checkout()->get_value( $key );
+		if ( null !== $value && '' !== $value ) {
+			return (string) $value;
+		}
+	}
+
+	return '';
+}
+
+/**
+ * Load province/city dropdown assets on checkout and account address pages.
+ */
+function rezajordaan_commerce_enqueue_checkout_address() {
+	$load = ( function_exists( 'is_checkout' ) && is_checkout() )
+		|| ( function_exists( 'is_account_page' ) && is_account_page() && function_exists( 'is_wc_endpoint_url' ) && is_wc_endpoint_url( 'edit-address' ) );
+
+	if ( ! $load ) {
+		return;
+	}
+
+	wp_enqueue_style(
+		'rezajordaan-commerce-checkout-address',
+		REZAJORDAAN_COMMERCE_URL . 'assets/css/checkout-address.css',
+		array(),
+		REZAJORDAAN_COMMERCE_VERSION
+	);
+
+	wp_enqueue_script(
+		'rezajordaan-commerce-checkout-address',
+		REZAJORDAAN_COMMERCE_URL . 'assets/js/checkout-address.js',
+		array( 'jquery' ),
+		REZAJORDAAN_COMMERCE_VERSION,
+		true
+	);
+
+	wp_localize_script(
+		'rezajordaan-commerce-checkout-address',
+		'rjCommerceAddress',
+		array(
+			'cities'  => rezajordaan_commerce_cities_map(),
+			'aliases' => rezajordaan_commerce_state_aliases(),
+			'i18n'    => array(
+				'chooseProvince' => 'ابتدا استان را انتخاب کنید',
+				'chooseCity'     => 'شهر را انتخاب کنید',
+			),
+		)
+	);
+}
+add_action( 'wp_enqueue_scripts', 'rezajordaan_commerce_enqueue_checkout_address', 30 );
 
 /**
  * Keep checkout guest-friendly and use one delivery address.
@@ -644,6 +749,15 @@ function rezajordaan_commerce_validate_checkout_fields() {
 
 	if ( '' !== $email && ! is_email( $email ) ) {
 		wc_add_notice( 'ایمیل وارد شده معتبر نیست.', 'error' );
+	}
+
+	$state = isset( $_POST['billing_state'] ) ? sanitize_text_field( wp_unslash( $_POST['billing_state'] ) ) : '';
+	$city  = isset( $_POST['billing_city'] ) ? sanitize_text_field( wp_unslash( $_POST['billing_city'] ) ) : '';
+
+	if ( ! rezajordaan_commerce_is_valid_state( $state ) ) {
+		wc_add_notice( 'لطفاً استان را از فهرست انتخاب کنید.', 'error' );
+	} elseif ( ! rezajordaan_commerce_is_valid_city( $state, $city ) ) {
+		wc_add_notice( 'لطفاً شهر را از فهرست استان انتخاب‌شده برگزینید.', 'error' );
 	}
 }
 add_action( 'woocommerce_checkout_process', 'rezajordaan_commerce_validate_checkout_fields' );

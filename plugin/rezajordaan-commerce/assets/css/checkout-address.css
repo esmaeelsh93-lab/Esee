@@ -1,0 +1,11 @@
+.woocommerce-checkout .rj-state-select,
+.woocommerce-checkout .rj-city-select,
+.woocommerce-address-fields .rj-state-select,
+.woocommerce-address-fields .rj-city-select {
+	width: 100%;
+}
+
+.woocommerce-checkout .select2-container,
+.woocommerce-address-fields .select2-container {
+	width: 100% !important;
+}
