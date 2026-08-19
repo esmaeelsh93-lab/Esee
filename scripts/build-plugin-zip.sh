@@ -8,6 +8,7 @@ OUT="$ROOT/dist/rezajordaan-commerce-installable.zip"
 mkdir -p "$ROOT/dist"
 rsync -a \
 	--exclude '.DS_Store' \
+	--exclude 'tests' \
 	"$ROOT/plugin/rezajordaan-commerce/" "$BUILD_DIR/rezajordaan-commerce/"
 
 rm -f "$OUT"
