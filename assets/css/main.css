@@ -3190,7 +3190,7 @@ body.rezajordaan-archive-cards.woocommerce-page ul.products li.product.rj-archiv
 	display: grid;
 	float: none;
 	gap: 10px;
-	grid-template-rows: auto auto auto auto auto;
+	grid-template-rows: auto auto auto;
 	margin: 0;
 	max-width: 100%;
 	min-width: 0;
@@ -3216,7 +3216,7 @@ body.rezajordaan-archive-cards.woocommerce-page ul.products[class*="columns-"] l
 }
 
 .rj-archive-card__media {
-	aspect-ratio: 1 / 1;
+	aspect-ratio: 4 / 5;
 	background: rgba(176, 228, 204, 0.12);
 	border-radius: 16px;
 	display: block;
@@ -3230,7 +3230,9 @@ body.rezajordaan-archive-cards.woocommerce-page ul.products[class*="columns-"] l
 	display: block;
 	height: 100%;
 	max-width: 100%;
-	object-fit: cover;
+	object-fit: contain;
+	object-position: center;
+	padding: 6px;
 	width: 100%;
 }
 
@@ -3266,13 +3268,13 @@ body.rezajordaan-archive-cards.woocommerce-page ul.products[class*="columns-"] l
 .rj-archive-price-box {
 	background: linear-gradient(145deg, #285a48, #408a71);
 	border: 1px solid rgba(176, 228, 204, 0.35);
-	border-radius: 16px;
-	box-shadow: 0 10px 24px rgba(9, 20, 19, 0.12);
+	border-radius: 14px;
+	box-shadow: 0 8px 18px rgba(9, 20, 19, 0.1);
 	display: grid;
-	gap: 4px;
-	min-height: 52px;
+	gap: 3px;
+	min-height: 46px;
 	min-width: 0;
-	padding: 12px 10px;
+	padding: 10px 8px;
 	text-align: center;
 	width: 100%;
 }
@@ -3314,26 +3316,6 @@ body.rezajordaan-archive-cards.woocommerce-page ul.products[class*="columns-"] l
 	margin: 0;
 	padding: 6px 10px;
 	text-align: center;
-}
-
-.rezajordaan-archive-cards ul.products li.product .rj-view-product-button {
-	background: var(--rj-burgundy);
-	border: 0;
-	border-radius: 14px;
-	display: block;
-	font-size: 13px;
-	font-weight: 800;
-	line-height: 1.4;
-	margin: 0;
-	min-width: 0;
-	padding: 12px 14px;
-	text-align: center;
-	width: 100%;
-}
-
-.rezajordaan-archive-cards ul.products li.product .rj-view-product-button:hover {
-	background: var(--rj-rose);
-	color: white;
 }
 
 body.rezajordaan-archive-cards .rj-archive-card > .price,
@@ -3992,16 +3974,18 @@ body.rezajordaan-archive-cards .rj-archive-card__media [class*="cash"],
 	}
 
 	.rj-archive-price-box {
-		padding: 10px 8px;
+		border-radius: 12px;
+		min-height: 38px;
+		padding: 7px 6px;
+	}
+
+	.rj-archive-price-box__regular {
+		font-size: 10px;
 	}
 
 	.rj-archive-price-box__current {
-		font-size: clamp(12px, 3.4vw, 15px);
-	}
-
-	.rezajordaan-archive-cards ul.products li.product .rj-view-product-button {
-		font-size: 12px;
-		padding: 11px 10px;
+		font-size: clamp(11px, 2.8vw, 13px);
+		line-height: 1.35;
 	}
 }
 

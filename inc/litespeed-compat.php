@@ -23,6 +23,8 @@ function rezajordaan_litespeed_exclude_uris( $uris ) {
 		'/shop',
 		'/product',
 		'/product-category',
+		'/page/',
+		'/product-tag/',
 		'/سبد-خرید',
 		'/تسویه-حساب',
 		'wc-ajax',
@@ -50,6 +52,10 @@ function rezajordaan_litespeed_nocache_dynamic_pages() {
 	}
 
 	if ( function_exists( 'is_product_taxonomy' ) && is_product_taxonomy() ) {
+		$should_bypass = true;
+	}
+
+	if ( is_paged() ) {
 		$should_bypass = true;
 	}
 

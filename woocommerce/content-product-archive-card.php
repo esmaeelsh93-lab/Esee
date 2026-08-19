@@ -56,8 +56,4 @@ if ( ! $image_html ) {
 	<?php if ( ! $product->is_in_stock() ) : ?>
 		<p class="rj-archive-card__stock"><?php esc_html_e( 'ناموجود', 'rezajordaan' ); ?></p>
 	<?php endif; ?>
-
-	<a href="<?php echo esc_url( $permalink ); ?>" class="button rj-view-product-button" aria-label="<?php echo esc_attr( $aria_label ); ?>">
-		<?php esc_html_e( 'دیدن محصول', 'rezajordaan' ); ?>
-	</a>
 </li>
