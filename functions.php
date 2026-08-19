@@ -9,12 +9,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'REZAJORDAAN_VERSION', '1.6.4' );
+define( 'REZAJORDAAN_VERSION', '1.6.5' );
 
 require_once get_template_directory() . '/inc/theme-settings.php';
 require_once get_template_directory() . '/inc/page-content.php';
 require_once get_template_directory() . '/inc/plugin-compat.php';
 require_once get_template_directory() . '/inc/woocommerce-pages.php';
+require_once get_template_directory() . '/inc/woocommerce-archive.php';
 require_once get_template_directory() . '/inc/woocommerce-cart-session.php';
 require_once get_template_directory() . '/inc/litespeed-compat.php';
 
@@ -332,99 +333,6 @@ function rezajordaan_get_archive_filter_data() {
 
 	return $data;
 }
-
-/**
- * Apply selected intelligent size filters to product archive queries.
- *
- * @param WP_Query $query Current query.
- */
-function rezajordaan_apply_archive_size_filters( $query ) {
-	if ( is_admin() || ! $query->is_main_query() || ! ( is_product_category() || is_product_tag() ) ) {
-		return;
-	}
-
-	$selected = isset( $_GET['rz_size'] ) ? (array) wp_unslash( $_GET['rz_size'] ) : array();
-	$grouped  = array();
-
-	foreach ( $selected as $value ) {
-		$term_id = is_scalar( $value ) ? absint( $value ) : 0;
-		$term    = $term_id ? get_term( $term_id ) : null;
-
-		if ( $term instanceof WP_Term && str_starts_with( $term->taxonomy, 'pa_' ) ) {
-			$grouped[ $term->taxonomy ][] = $term_id;
-		}
-	}
-
-	if ( ! $grouped ) {
-		return;
-	}
-
-	$tax_query             = (array) $query->get( 'tax_query' );
-	$tax_query['relation'] = 'AND';
-
-	foreach ( $grouped as $taxonomy => $term_ids ) {
-		$tax_query[] = array(
-			'taxonomy' => $taxonomy,
-			'field'    => 'term_id',
-			'terms'    => array_unique( array_map( 'absint', $term_ids ) ),
-			'operator' => 'IN',
-		);
-	}
-
-	$query->set( 'tax_query', $tax_query );
-}
-add_action( 'pre_get_posts', 'rezajordaan_apply_archive_size_filters', 20 );
-
-/**
- * Keep active archive filters when shoppers move between pages.
- *
- * @param array $args Pagination arguments.
- * @return array
- */
-function rezajordaan_archive_pagination_args( $args ) {
-	if ( ! ( is_product_category() || is_product_tag() || ( function_exists( 'is_shop' ) && is_shop() ) ) ) {
-		return $args;
-	}
-
-	$add_args = isset( $args['add_args'] ) && is_array( $args['add_args'] ) ? $args['add_args'] : array();
-
-	foreach ( array( 'orderby', 'min_price', 'max_price' ) as $key ) {
-		if ( isset( $_GET[ $key ] ) ) {
-			$add_args[ $key ] = wc_clean( wp_unslash( $_GET[ $key ] ) );
-		}
-	}
-
-	if ( isset( $_GET['rz_size'] ) ) {
-		$add_args['rz_size'] = array_map( 'absint', (array) wp_unslash( $_GET['rz_size'] ) );
-	}
-
-	$args['add_args'] = $add_args;
-
-	return $args;
-}
-add_filter( 'woocommerce_pagination_args', 'rezajordaan_archive_pagination_args' );
-
-/**
- * Prevent canonical redirects from collapsing paginated product archives to page 1.
- *
- * @param string $redirect_url  Redirect target.
- * @param string $requested_url Requested URL.
- * @return string|false
- */
-function rezajordaan_preserve_archive_pagination( $redirect_url, $requested_url ) {
-	unset( $requested_url );
-
-	if ( ! is_paged() ) {
-		return $redirect_url;
-	}
-
-	if ( is_product_category() || is_product_tag() || ( function_exists( 'is_shop' ) && is_shop() ) ) {
-		return false;
-	}
-
-	return $redirect_url;
-}
-add_filter( 'redirect_canonical', 'rezajordaan_preserve_archive_pagination', 10, 2 );
 
 /**
  * Customize or hide WooCommerce sale badges from theme settings.
