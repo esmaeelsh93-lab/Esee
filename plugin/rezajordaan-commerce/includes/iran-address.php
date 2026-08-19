@@ -288,7 +288,7 @@ function rezajordaan_commerce_city_field_args( $current_state = '', $current_cit
 	}
 
 	return array(
-		'type'              => 'select',
+		'type'              => 'rj_city',
 		'label'             => 'شهر',
 		'required'          => true,
 		'class'             => array( 'form-row-last', 'address-field', 'update_totals_on_change' ),
@@ -297,9 +297,64 @@ function rezajordaan_commerce_city_field_args( $current_state = '', $current_cit
 		'options'           => $options,
 		'default'           => $current_city,
 		'input_class'       => array( 'rj-city-select' ),
+		'rj_groups'         => rezajordaan_commerce_city_groups( $state ),
 		'custom_attributes' => array(
 			'data-placeholder' => 'شهر را انتخاب کنید',
 			'data-selected'    => $current_city,
+		),
+	);
+}
+
+/**
+ * City optgroups for checkout. Unknown province → all provinces, so the
+ * city list is searchable even if JavaScript does not run.
+ *
+ * @param string $state Raw state value.
+ * @return array<string,array{label:string,cities:string[]}>
+ */
+function rezajordaan_commerce_city_groups( $state = '' ) {
+	$states = rezajordaan_commerce_persian_states();
+	$map    = rezajordaan_commerce_cities_map();
+	$code   = rezajordaan_commerce_normalize_state_code( $state );
+	$groups = array();
+
+	$codes = ( $code && isset( $map[ $code ] ) ) ? array( $code ) : array_keys( $states );
+
+	foreach ( $codes as $state_code ) {
+		if ( ! isset( $states[ $state_code ] ) ) {
+			continue;
+		}
+
+		$groups[ $state_code ] = array(
+			'label'  => $states[ $state_code ],
+			'cities' => isset( $map[ $state_code ] ) && is_array( $map[ $state_code ] ) ? $map[ $state_code ] : array(),
+		);
+	}
+
+	return $groups;
+}
+
+/**
+ * Frontend payload for the city dropdown script.
+ *
+ * @return array<string,mixed>
+ */
+function rezajordaan_commerce_address_script_data() {
+	$states = rezajordaan_commerce_persian_states();
+	$labels = array();
+
+	foreach ( $states as $code => $label ) {
+		$labels[ $label ] = $code;
+		$labels[ rezajordaan_commerce_normalize_persian( $label ) ] = $code;
+	}
+
+	return array(
+		'cities'  => rezajordaan_commerce_cities_map(),
+		'aliases' => rezajordaan_commerce_state_aliases(),
+		'labels'  => $labels,
+		'states'  => $states,
+		'i18n'    => array(
+			'chooseCity' => 'شهر را انتخاب کنید',
 		),
 	);
 }

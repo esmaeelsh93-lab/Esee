@@ -10,35 +10,50 @@ const aliases = {
 	IS: "ESF",
 };
 
-function canonicalState(code, cityMap, aliasMap) {
-	if (!code) {
-		return "";
-	}
-	const upper = String(code).toUpperCase();
-	if (Object.prototype.hasOwnProperty.call(cityMap, upper)) {
+const labels = {
+	البرز: "ABZ",
+	تهران: "THR",
+	اصفهان: "ESF",
+};
+
+function canonicalState(raw, labelText, cityMap, aliasMap, labelMap) {
+	const value = String(raw || "").trim();
+	const upper = value.toUpperCase();
+	const name = String(labelText || value)
+		.replace(/ي/g, "ی")
+		.replace(/ك/g, "ک")
+		.replace(/\s+/g, " ")
+		.trim();
+
+	if (cityMap[upper]) {
 		return upper;
 	}
-	if (Object.prototype.hasOwnProperty.call(aliasMap, upper)) {
+	if (aliasMap[upper]) {
 		return aliasMap[upper];
 	}
-	return upper;
+	if (labelMap[value]) {
+		return labelMap[value];
+	}
+	if (labelMap[name]) {
+		return labelMap[name];
+	}
+	return "";
 }
 
-function cityOptions(state) {
-	return cityMapCities(canonicalState(state, cities, aliases));
-}
-
-function cityMapCities(code) {
-	return cities[code] || [];
+function cityOptions(state, labelText) {
+	const code = canonicalState(state, labelText, cities, aliases, labels);
+	return code && cities[code] ? cities[code] : null;
 }
 
 assert.strictEqual(Object.keys(cities).length, 31, "31 provinces in JSON");
 assert.ok(cities.ABZ.includes("کرج"), "Karaj is in Alborz");
 assert.ok(cities.THR.includes("تهران"), "Tehran is in Tehran province");
-assert.ok(!cities.ABZ.includes("تهران"), "Tehran city is not in Alborz");
 assert.deepStrictEqual(cityOptions("AL"), cities.ABZ, "AL alias loads Alborz cities");
 assert.deepStrictEqual(cityOptions("TE"), cities.THR, "TE alias loads Tehran cities");
-assert.strictEqual(cityOptions("").length, 0, "No province means no cities");
+assert.deepStrictEqual(cityOptions("البرز"), cities.ABZ, "Persian province name loads Alborz cities");
+assert.deepStrictEqual(cityOptions("ABZ", "البرز"), cities.ABZ, "Selected option label still finds Alborz");
+assert.strictEqual(cityOptions(""), null, "Unknown province does not wipe the city list");
+assert.strictEqual(cityOptions("not-a-province"), null, "Invalid province leaves existing cities in place");
 
 const wcKeys = Object.keys(cities);
 assert.ok(!wcKeys.includes("البرز"), "Typed province name is not a WooCommerce state key");

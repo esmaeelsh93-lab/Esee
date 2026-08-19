@@ -1,11 +1,18 @@
 .woocommerce-checkout .rj-state-select,
 .woocommerce-checkout .rj-city-select,
+.woocommerce-checkout #billing_state,
+.woocommerce-checkout #billing_city,
 .woocommerce-address-fields .rj-state-select,
-.woocommerce-address-fields .rj-city-select {
+.woocommerce-address-fields .rj-city-select,
+.woocommerce-address-fields #billing_state,
+.woocommerce-address-fields #billing_city {
 	width: 100%;
+	max-width: 100%;
+	min-height: 48px;
 }
 
-.woocommerce-checkout .select2-container,
-.woocommerce-address-fields .select2-container {
-	width: 100% !important;
+.woocommerce-checkout #billing_city_field,
+.woocommerce-address-fields #billing_city_field {
+	position: relative;
+	z-index: 2;
 }

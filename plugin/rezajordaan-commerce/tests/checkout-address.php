@@ -59,7 +59,7 @@ $state_field = rezajordaan_commerce_state_field_args( 'البرز' );
 $city_field  = rezajordaan_commerce_city_field_args( 'ABZ', 'کرج' );
 
 rj_assert( 'state' === $state_field['type'], 'Province field type is WooCommerce state select' );
-rj_assert( 'select' === $city_field['type'], 'City field type is select' );
+rj_assert( 'rj_city' === $city_field['type'], 'City field type is the custom city select' );
 rj_assert( 'ABZ' === $state_field['default'], 'Saved text province preselects ABZ' );
 rj_assert( isset( $city_field['options']['کرج'] ), 'Karaj is offered after Alborz is selected' );
 rj_assert( ! isset( $city_field['options']['تهران'] ), 'Tehran city is not offered for Alborz' );
@@ -75,7 +75,13 @@ rj_assert( wc_like_accepts_state( 'ABZ', $states ), 'WooCommerce accepts selecte
 rj_assert( wc_like_accepts_state( 'THR', $states ), 'WooCommerce accepts selected Tehran code THR' );
 
 $empty_city = rezajordaan_commerce_city_field_args( '', '' );
-rj_assert( 'ابتدا استان را انتخاب کنید' === $empty_city['options'][''], 'City placeholder asks for province first' );
+rj_assert( 31 === count( $empty_city['rj_groups'] ), 'City dropdown keeps all 31 provinces when none is selected' );
+rj_assert( in_array( 'کرج', $empty_city['rj_groups']['ABZ']['cities'], true ), 'Karaj remains findable before a province is chosen' );
+
+$payload = rezajordaan_commerce_address_script_data();
+rj_assert( 'ABZ' === $payload['labels']['البرز'], 'JS payload maps البرز to ABZ' );
+rj_assert( 'THR' === $payload['labels']['تهران'], 'JS payload maps تهران to THR' );
+rj_assert( isset( $payload['cities']['ABZ'] ), 'JS payload includes Alborz cities' );
 
 $total = 0;
 foreach ( $cities as $list ) {
