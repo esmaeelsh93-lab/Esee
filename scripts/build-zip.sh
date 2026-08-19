@@ -12,6 +12,7 @@ rsync -a \
 	--exclude '.cursor' \
 	--exclude 'node_modules' \
 	--exclude 'scripts' \
+	--exclude 'plugin' \
 	"$ROOT/" "$BUILD_DIR/rezajordaan/"
 
 rm -f "$OUT"

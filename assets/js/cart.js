@@ -18,6 +18,32 @@
 		return Boolean(document.querySelector(".cart-empty"));
 	}
 
+	function cartCookieHasItems() {
+		var cookies = "";
+
+		try {
+			cookies = document.cookie || "";
+		} catch (error) {
+			return false;
+		}
+
+		var match = cookies.match(/(?:^|;\s*)woocommerce_items_in_cart=([^;]*)/);
+
+		if (!match) {
+			return false;
+		}
+
+		var value = match[1];
+
+		try {
+			value = decodeURIComponent(value);
+		} catch (error) {
+			/* use the raw cookie value */
+		}
+
+		return (Number.parseInt(value, 10) || 0) > 0;
+	}
+
 	function clearPendingCartFlag() {
 		try {
 			sessionStorage.removeItem("rj_pending_cart");
@@ -41,8 +67,9 @@
 
 		var count = headerCartCount();
 		var looksEmpty = cartPageLooksEmpty();
+		var hasCartCookie = cartCookieHasItems();
 
-		if ((pendingCart || count > 0) && looksEmpty) {
+		if ((pendingCart || count > 0 || hasCartCookie) && looksEmpty) {
 			var url = new URL(window.location.href);
 
 			if (!url.searchParams.has("rj_cart_sync")) {
@@ -65,5 +92,11 @@
 
 	$(function () {
 		recoverStaleMobileCartCache();
+	});
+
+	window.addEventListener("pageshow", function (event) {
+		if (event.persisted) {
+			recoverStaleMobileCartCache();
+		}
 	});
 })(window.jQuery);

@@ -9,12 +9,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'REZAJORDAAN_VERSION', '1.5.6' );
+define( 'REZAJORDAAN_VERSION', '1.6.5' );
 
 require_once get_template_directory() . '/inc/theme-settings.php';
 require_once get_template_directory() . '/inc/page-content.php';
 require_once get_template_directory() . '/inc/plugin-compat.php';
 require_once get_template_directory() . '/inc/woocommerce-pages.php';
+require_once get_template_directory() . '/inc/woocommerce-archive.php';
 require_once get_template_directory() . '/inc/woocommerce-cart-session.php';
 require_once get_template_directory() . '/inc/litespeed-compat.php';
 
@@ -113,6 +114,41 @@ function rezajordaan_enqueue_assets() {
 	);
 }
 add_action( 'wp_enqueue_scripts', 'rezajordaan_enqueue_assets' );
+
+/**
+ * Enhance variable product selectors with branded swatches and stock cues.
+ */
+function rezajordaan_enqueue_product_variation_script() {
+	if ( ! function_exists( 'is_product' ) || ! is_product() ) {
+		return;
+	}
+
+	global $product;
+
+	if ( ! $product instanceof WC_Product || ! $product->is_type( 'variable' ) ) {
+		return;
+	}
+
+	wp_enqueue_script( 'wc-add-to-cart-variation' );
+	wp_enqueue_script(
+		'rezajordaan-product-variations',
+		get_template_directory_uri() . '/assets/js/product-variations.js',
+		array( 'jquery', 'wc-add-to-cart-variation' ),
+		REZAJORDAAN_VERSION,
+		true
+	);
+}
+add_action( 'wp_enqueue_scripts', 'rezajordaan_enqueue_product_variation_script', 25 );
+
+/**
+ * Load variation JSON inline so stock states are available for swatch buttons.
+ *
+ * @return int
+ */
+function rezajordaan_variation_ajax_threshold() {
+	return 300;
+}
+add_filter( 'woocommerce_ajax_variation_threshold', 'rezajordaan_variation_ajax_threshold' );
 
 /**
  * Apply product-card controls as safe CSS custom properties.
@@ -297,48 +333,6 @@ function rezajordaan_get_archive_filter_data() {
 
 	return $data;
 }
-
-/**
- * Apply selected intelligent size filters to product archive queries.
- *
- * @param WP_Query $query Current query.
- */
-function rezajordaan_apply_archive_size_filters( $query ) {
-	if ( is_admin() || ! $query->is_main_query() || ! ( is_product_category() || is_product_tag() ) ) {
-		return;
-	}
-
-	$selected = isset( $_GET['rz_size'] ) ? (array) wp_unslash( $_GET['rz_size'] ) : array();
-	$grouped  = array();
-
-	foreach ( $selected as $value ) {
-		$term_id = is_scalar( $value ) ? absint( $value ) : 0;
-		$term    = $term_id ? get_term( $term_id ) : null;
-
-		if ( $term instanceof WP_Term && str_starts_with( $term->taxonomy, 'pa_' ) ) {
-			$grouped[ $term->taxonomy ][] = $term_id;
-		}
-	}
-
-	if ( ! $grouped ) {
-		return;
-	}
-
-	$tax_query             = (array) $query->get( 'tax_query' );
-	$tax_query['relation'] = 'AND';
-
-	foreach ( $grouped as $taxonomy => $term_ids ) {
-		$tax_query[] = array(
-			'taxonomy' => $taxonomy,
-			'field'    => 'term_id',
-			'terms'    => array_unique( array_map( 'absint', $term_ids ) ),
-			'operator' => 'IN',
-		);
-	}
-
-	$query->set( 'tax_query', $tax_query );
-}
-add_action( 'pre_get_posts', 'rezajordaan_apply_archive_size_filters', 20 );
 
 /**
  * Customize or hide WooCommerce sale badges from theme settings.
