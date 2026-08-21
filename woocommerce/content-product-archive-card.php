@@ -46,6 +46,9 @@ if ( ! $image_html ) {
 			<?php echo wp_kses_post( apply_filters( 'woocommerce_sale_flash', '', get_post(), $product ) ); ?>
 		<?php endif; ?>
 	</a>
+	<?php if ( function_exists( 'rezajordaan_render_wishlist_button' ) ) : ?>
+		<?php rezajordaan_render_wishlist_button( $product, 'card' ); ?>
+	<?php endif; ?>
 
 	<h3 class="rj-archive-card__title woocommerce-loop-product__title">
 		<a href="<?php echo esc_url( $permalink ); ?>"><?php echo esc_html( $product_name ); ?></a>
@@ -56,8 +59,4 @@ if ( ! $image_html ) {
 	<?php if ( ! $product->is_in_stock() ) : ?>
 		<p class="rj-archive-card__stock"><?php esc_html_e( 'ناموجود', 'rezajordaan' ); ?></p>
 	<?php endif; ?>
-
-	<a href="<?php echo esc_url( $permalink ); ?>" class="button rj-view-product-button" aria-label="<?php echo esc_attr( $aria_label ); ?>">
-		<?php esc_html_e( 'دیدن محصول', 'rezajordaan' ); ?>
-	</a>
 </li>

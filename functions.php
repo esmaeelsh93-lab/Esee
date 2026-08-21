@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'REZAJORDAAN_VERSION', '1.5.6' );
+define( 'REZAJORDAAN_VERSION', '1.5.10' );
 
 require_once get_template_directory() . '/inc/theme-settings.php';
 require_once get_template_directory() . '/inc/page-content.php';
@@ -17,6 +17,7 @@ require_once get_template_directory() . '/inc/plugin-compat.php';
 require_once get_template_directory() . '/inc/woocommerce-pages.php';
 require_once get_template_directory() . '/inc/woocommerce-cart-session.php';
 require_once get_template_directory() . '/inc/litespeed-compat.php';
+require_once get_template_directory() . '/inc/wishlist.php';
 
 /**
  * Register theme features.
@@ -54,10 +55,10 @@ function rezajordaan_woocommerce_wrapper_setup() {
 add_action( 'after_setup_theme', 'rezajordaan_woocommerce_wrapper_setup' );
 
 /**
- * Pages that use GSAP-powered motion.
+ * Pages that use GSAP-powered motion (landing only).
  */
 function rezajordaan_should_enqueue_motion() {
-	return is_front_page() || ( function_exists( 'is_shop' ) && is_shop() );
+	return is_front_page();
 }
 
 /**
@@ -446,12 +447,15 @@ function rezajordaan_is_archive_product_card() {
 		return false;
 	}
 
-	// The /shop page renders template-parts/home-shop.php instead of this loop.
-	if ( is_shop() ) {
-		return false;
+	if ( function_exists( 'is_shop' ) && is_shop() ) {
+		return true;
 	}
 
 	if ( is_product_taxonomy() || is_post_type_archive( 'product' ) ) {
+		return true;
+	}
+
+	if ( is_page( 'wishlist' ) ) {
 		return true;
 	}
 
@@ -469,6 +473,54 @@ function rezajordaan_is_archive_product_card() {
 
 	return false;
 }
+
+/**
+ * Shop catalog: newest products first.
+ *
+ * @param string $orderby Default orderby.
+ * @return string
+ */
+function rezajordaan_default_catalog_orderby( $orderby ) {
+	return 'date';
+}
+add_filter( 'woocommerce_default_catalog_orderby', 'rezajordaan_default_catalog_orderby' );
+
+/**
+ * Force date DESC when no explicit orderby is requested on shop/archives.
+ *
+ * @param array $args Ordering args.
+ * @return array
+ */
+function rezajordaan_catalog_ordering_args( $args ) {
+	$requested = isset( $_GET['orderby'] ) ? wc_clean( wp_unslash( $_GET['orderby'] ) ) : '';
+
+	if ( '' === $requested || 'menu_order' === $requested || 'date' === $requested ) {
+		$args['orderby'] = 'date ID';
+		$args['order']   = 'DESC';
+	}
+
+	return $args;
+}
+add_filter( 'woocommerce_get_catalog_ordering_args', 'rezajordaan_catalog_ordering_args' );
+
+/**
+ * Show more products per shop page (full catalog via pagination).
+ *
+ * @param int $per_page Current per-page count.
+ * @return int
+ */
+function rezajordaan_loop_shop_per_page( $per_page ) {
+	return 48;
+}
+add_filter( 'loop_shop_per_page', 'rezajordaan_loop_shop_per_page', 20 );
+
+/**
+ * Do not render leftover shop-page editor content above the catalog.
+ */
+function rezajordaan_disable_shop_page_content_description() {
+	remove_action( 'woocommerce_archive_description', 'woocommerce_product_archive_description', 10 );
+}
+add_action( 'wp', 'rezajordaan_disable_shop_page_content_description' );
 
 /**
  * Compact cards for archives plus related / upsell / cross-sell loops.
@@ -589,7 +641,7 @@ add_action( 'wp', 'rezajordaan_remove_woocommerce_sidebar' );
  * @return string[]
  */
 function rezajordaan_body_classes( $classes ) {
-	if ( function_exists( 'is_shop' ) && is_shop() ) {
+	if ( is_front_page() ) {
 		$classes[] = 'rezajordaan-home-shop';
 	}
 	if ( ! rezajordaan_get_setting( 'show_subcategories' ) ) {

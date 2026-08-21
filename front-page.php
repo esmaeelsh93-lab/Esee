@@ -1,6 +1,6 @@
 <?php
 /**
- * Front page fallback. The primary storefront also lives at /shop.
+ * Front page / landing only.
  *
  * @package RezaJordaan
  */

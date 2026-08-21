@@ -7,11 +7,6 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( function_exists( 'is_shop' ) && is_shop() ) {
-	get_template_part( 'template-parts/home-shop' );
-	return;
-}
-
 do_action( 'woocommerce_before_main_content' );
 ?>
 <div class="product-archive rj-section">

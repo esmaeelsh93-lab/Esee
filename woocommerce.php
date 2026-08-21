@@ -9,16 +9,6 @@ defined( 'ABSPATH' ) || exit;
 
 get_header( 'shop' );
 
-if ( function_exists( 'is_shop' ) && is_shop() ) {
-	?>
-	<main id="main" class="content-page rj-section rezajordaan-home-shop">
-		<?php get_template_part( 'template-parts/home-shop' ); ?>
-	</main>
-	<?php
-	get_footer( 'shop' );
-	return;
-}
-
 $use_archive_cards = function_exists( 'rezajordaan_is_archive_product_card' ) && rezajordaan_is_archive_product_card();
 ?>
 <main id="main" class="content-page rj-section woocommerce-page<?php echo $use_archive_cards ? ' product-archive-page' : ''; ?>">

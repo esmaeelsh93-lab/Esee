@@ -11,6 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $featured_categories = rezajordaan_get_featured_categories();
 $latest_products     = array();
+$sale_products       = array();
 
 if ( post_type_exists( 'product' ) && function_exists( 'wc_get_product' ) ) {
 	$product_query = new WP_Query(
@@ -32,6 +33,33 @@ if ( post_type_exists( 'product' ) && function_exists( 'wc_get_product' ) ) {
 		}
 	}
 	wp_reset_postdata();
+
+	if ( rezajordaan_get_setting( 'show_sale_slider' ) && function_exists( 'wc_get_product_ids_on_sale' ) ) {
+		$sale_ids = array_values( array_filter( array_map( 'absint', (array) wc_get_product_ids_on_sale() ) ) );
+
+		if ( $sale_ids ) {
+			$sale_query = new WP_Query(
+				array(
+					'post_type'           => 'product',
+					'post_status'         => 'publish',
+					'posts_per_page'      => absint( rezajordaan_get_setting( 'sale_products_count' ) ),
+					'post__in'            => $sale_ids,
+					'orderby'             => 'date',
+					'order'               => 'DESC',
+					'ignore_sticky_posts' => true,
+					'no_found_rows'       => true,
+				)
+			);
+
+			foreach ( $sale_query->posts as $product_post ) {
+				$product = wc_get_product( $product_post->ID );
+				if ( $product && $product->is_visible() && $product->is_on_sale() ) {
+					$sale_products[] = $product;
+				}
+			}
+			wp_reset_postdata();
+		}
+	}
 }
 
 $benefits = array(
@@ -87,7 +115,6 @@ $benefits = array(
 		<div class="hero__veil" aria-hidden="true"></div>
 		<div class="hero__inner rj-container">
 			<div class="hero__copy">
-				<p class="hero__eyebrow"><?php esc_html_e( 'رضا جردن', 'rezajordaan' ); ?></p>
 				<div class="hero__payment-logos" data-payment-logos aria-label="<?php esc_attr_e( 'خرید اقساطی با ترب‌پی، دیجی‌پی و اسنپ‌پی', 'rezajordaan' ); ?>">
 					<img class="hero__payment-logo is-active" data-payment-logo src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/trb-pay.svg' ); ?>" alt="<?php esc_attr_e( 'ترب‌پی', 'rezajordaan' ); ?>">
 					<img class="hero__payment-logo" data-payment-logo src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/digipay-logo.svg' ); ?>" alt="<?php esc_attr_e( 'دیجی‌پی', 'rezajordaan' ); ?>">
@@ -188,7 +215,7 @@ $benefits = array(
 		</header>
 
 		<?php if ( $latest_products ) : ?>
-			<div class="product-marquee" data-product-marquee>
+			<div class="product-marquee" data-product-marquee data-speed="<?php echo esc_attr( (string) absint( rezajordaan_get_setting( 'marquee_speed' ) ) ); ?>">
 				<div class="product-marquee__track">
 					<?php for ( $copy = 0; $copy < 2; $copy++ ) : ?>
 						<?php foreach ( $latest_products as $product ) : ?>
@@ -220,6 +247,51 @@ $benefits = array(
 			<div class="rj-admin-note rj-container"><?php esc_html_e( 'محصولی برای نمایش در بخش جدیدترین‌ها منتشر نشده است.', 'rezajordaan' ); ?></div>
 		<?php endif; ?>
 	</section>
+
+	<?php if ( rezajordaan_get_setting( 'show_sale_slider' ) ) : ?>
+		<section class="sale-deals rj-section" id="sale-deals" aria-labelledby="sale-deals-title">
+			<header class="section-heading section-heading--light rj-container">
+				<?php if ( rezajordaan_get_setting( 'sale_section_kicker' ) ) : ?>
+					<p><?php echo esc_html( rezajordaan_get_setting( 'sale_section_kicker' ) ); ?></p>
+				<?php endif; ?>
+				<h2 id="sale-deals-title"><?php echo esc_html( rezajordaan_get_setting( 'sale_section_title' ) ?: __( 'با تخفیف خرید کنید', 'rezajordaan' ) ); ?></h2>
+				<span aria-hidden="true"></span>
+			</header>
+
+			<?php if ( $sale_products ) : ?>
+				<div class="product-marquee" data-product-marquee data-speed="<?php echo esc_attr( (string) absint( rezajordaan_get_setting( 'sale_marquee_speed' ) ) ); ?>">
+					<div class="product-marquee__track">
+						<?php for ( $copy = 0; $copy < 2; $copy++ ) : ?>
+							<?php foreach ( $sale_products as $product ) : ?>
+								<article class="product-card" <?php echo 1 === $copy ? 'aria-hidden="true"' : ''; ?>>
+									<a class="product-card__image" href="<?php echo esc_url( $product->get_permalink() ); ?>" tabindex="<?php echo 1 === $copy ? '-1' : '0'; ?>">
+										<?php
+										echo wp_kses_post(
+											$product->get_image(
+												'rezajordaan-product',
+												array(
+													'loading' => 'lazy',
+													'alt'     => $product->get_name(),
+												)
+											)
+										);
+										?>
+										<span class="product-card__badge product-card__badge--sale"><?php esc_html_e( 'تخفیف', 'rezajordaan' ); ?></span>
+									</a>
+									<div class="product-card__body">
+										<h3><a href="<?php echo esc_url( $product->get_permalink() ); ?>"><?php echo esc_html( $product->get_name() ); ?></a></h3>
+										<div class="product-card__price"><?php echo wp_kses_post( $product->get_price_html() ); ?></div>
+									</div>
+								</article>
+							<?php endforeach; ?>
+						<?php endfor; ?>
+					</div>
+				</div>
+			<?php elseif ( current_user_can( 'edit_products' ) ) : ?>
+				<div class="rj-admin-note rj-container"><?php esc_html_e( 'محصول تخفیف‌داری برای این اسلایدر پیدا نشد.', 'rezajordaan' ); ?></div>
+			<?php endif; ?>
+		</section>
+	<?php endif; ?>
 
 	<?php if ( rezajordaan_get_setting( 'show_about' ) ) : ?>
 		<section class="about-store rj-section" id="about-us" aria-labelledby="about-store-title">

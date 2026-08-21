@@ -108,6 +108,11 @@ function rezajordaan_default_settings() {
 		),
 		'latest_products_count'      => 10,
 		'marquee_speed'              => 42,
+		'show_sale_slider'           => 1,
+		'sale_products_count'        => 10,
+		'sale_marquee_speed'         => 38,
+		'sale_section_kicker'        => 'پیشنهاد ویژه',
+		'sale_section_title'         => 'با تخفیف خرید کنید',
 		'shop_columns_desktop'       => 4,
 		'shop_columns_mobile'        => 1,
 		'archive_full_width'         => 1,
@@ -232,12 +237,14 @@ function rezajordaan_sanitize_settings( $input ) {
 	$clean['category_section_kicker'] = isset( $input['category_section_kicker'] ) ? sanitize_text_field( $input['category_section_kicker'] ) : '';
 	$clean['category_section_title']  = isset( $input['category_section_title'] ) ? sanitize_text_field( $input['category_section_title'] ) : '';
 	$clean['sale_badge_text']         = isset( $input['sale_badge_text'] ) ? sanitize_text_field( $input['sale_badge_text'] ) : '';
+	$clean['sale_section_kicker']     = isset( $input['sale_section_kicker'] ) ? sanitize_text_field( $input['sale_section_kicker'] ) : '';
+	$clean['sale_section_title']      = isset( $input['sale_section_title'] ) ? sanitize_text_field( $input['sale_section_title'] ) : '';
 	$clean['about_title']        = isset( $input['about_title'] ) ? sanitize_text_field( $input['about_title'] ) : '';
 	$clean['about_description']  = isset( $input['about_description'] ) ? sanitize_textarea_field( $input['about_description'] ) : '';
 	$clean['store_visit_text']   = isset( $input['store_visit_text'] ) ? sanitize_textarea_field( $input['store_visit_text'] ) : '';
 	$clean['blog_page_id']       = isset( $input['blog_page_id'] ) ? absint( $input['blog_page_id'] ) : 0;
 
-	foreach ( array( 'show_instagram_header', 'show_whatsapp_header', 'show_telegram_header', 'show_phone_footer', 'show_social_footer', 'show_enamad_footer', 'show_product_search', 'show_categories', 'show_about', 'show_category_count', 'show_subcategories', 'show_sale_badge', 'archive_full_width' ) as $key ) {
+	foreach ( array( 'show_instagram_header', 'show_whatsapp_header', 'show_telegram_header', 'show_phone_footer', 'show_social_footer', 'show_enamad_footer', 'show_product_search', 'show_categories', 'show_about', 'show_category_count', 'show_subcategories', 'show_sale_badge', 'show_sale_slider', 'archive_full_width' ) as $key ) {
 		$clean[ $key ] = empty( $input[ $key ] ) ? 0 : 1;
 	}
 
@@ -257,6 +264,8 @@ function rezajordaan_sanitize_settings( $input ) {
 	$ranges = array(
 		'latest_products_count'       => array( 4, 20 ),
 		'marquee_speed'               => array( 15, 100 ),
+		'sale_products_count'         => array( 4, 20 ),
+		'sale_marquee_speed'          => array( 15, 100 ),
 		'shop_columns_desktop'        => array( 2, 6 ),
 		'shop_columns_mobile'         => array( 1, 2 ),
 		'shop_image_height_desktop'   => array( 180, 720 ),
@@ -673,6 +682,15 @@ function rezajordaan_render_settings_page() {
 						<?php rezajordaan_setting_range( 'latest_image_height_desktop', __( 'ارتفاع تصویر دسکتاپ', 'rezajordaan' ), 220, 560, 10, 'px' ); ?>
 						<?php rezajordaan_setting_range( 'latest_image_height_mobile', __( 'ارتفاع تصویر موبایل', 'rezajordaan' ), 180, 420, 10, 'px' ); ?>
 						<?php rezajordaan_setting_range( 'product_card_gap', __( 'فاصله کارت‌ها', 'rezajordaan' ), 6, 48, 2, 'px' ); ?>
+					</div>
+					<div class="rj-settings__card">
+						<h2><?php esc_html_e( 'اسلایدر محصولات تخفیف‌دار', 'rezajordaan' ); ?></h2>
+						<?php rezajordaan_setting_switch( 'show_sale_slider', __( 'نمایش اسلایدر حراج در لندینگ', 'rezajordaan' ) ); ?>
+						<label><span><?php esc_html_e( 'کیکر بخش', 'rezajordaan' ); ?></span><input type="text" name="rezajordaan_settings[sale_section_kicker]" value="<?php echo esc_attr( rezajordaan_get_setting( 'sale_section_kicker' ) ); ?>"></label>
+						<label><span><?php esc_html_e( 'عنوان بخش', 'rezajordaan' ); ?></span><input type="text" name="rezajordaan_settings[sale_section_title]" value="<?php echo esc_attr( rezajordaan_get_setting( 'sale_section_title' ) ); ?>"></label>
+						<?php rezajordaan_setting_range( 'sale_products_count', __( 'تعداد محصولات حراج', 'rezajordaan' ), 4, 20 ); ?>
+						<?php rezajordaan_setting_range( 'sale_marquee_speed', __( 'سرعت حرکت اسلایدر حراج', 'rezajordaan' ), 15, 100, 1, 'px/s' ); ?>
+						<p class="description"><?php esc_html_e( 'ابعاد کارت‌ها همان تنظیمات اسلایدر جدیدترین‌هاست. فقط محصولات دارای تخفیف نمایش داده می‌شوند.', 'rezajordaan' ); ?></p>
 					</div>
 					<div class="rj-settings__card">
 						<h2><?php esc_html_e( 'برچسب تخفیف', 'rezajordaan' ); ?></h2>
