@@ -1341,28 +1341,26 @@ img {
 }
 
 @media (max-width: 900px) {
-  .hero--photo,
-  .hero--photo.hero--photo-full {
+  .hero.hero--photo {
     width: 100vw;
     max-width: 100vw;
-    margin-inline: calc(50% - 50vw);
-    margin-top: 0;
+    margin: 0 calc(50% - 50vw);
     border-radius: 0;
-    min-height: var(--bahar-hero-mobile-min-h, 420px);
     box-shadow: none;
-  }
-
-  .hero--photo:not(.hero--photo-full) {
-    width: min(1200px, calc(100% - 1rem));
-    margin-inline: auto;
-    margin-top: 0.55rem;
-    border-radius: 18px;
-    box-shadow: 0 12px 30px rgba(162, 210, 255, 0.18);
+    min-height: max(
+      calc(var(--bahar-hero-mobile-min-vh, 50) * 1vh),
+      var(--bahar-hero-mobile-min-h, 360px)
+    );
+    height: max(
+      calc(var(--bahar-hero-mobile-min-vh, 50) * 1vh),
+      var(--bahar-hero-mobile-min-h, 360px)
+    );
   }
 
   .hero--photo .hero__media picture,
   .hero--photo .hero__media img {
     object-fit: var(--bahar-hero-mobile-fit, cover);
+    object-position: center top;
   }
 
   .hero--photo .hero__content {

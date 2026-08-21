@@ -18,7 +18,8 @@ function bahar_shop_hero_defaults() {
 	return array(
 		'mobile_full_bleed'   => 1,
 		'mobile_object_fit' => 'cover',
-		'mobile_min_height' => 420,
+		'mobile_min_height' => 360,
+		'mobile_min_vh'     => 50,
 		'desktop_object_fit' => 'contain',
 		'desktop_min_height' => 460,
 		'mobile_image_url'  => 'https://baharrshopp.ir/wp-content/uploads/2026/08/baharshopp-product-1787322561-619.webp',
@@ -37,6 +38,7 @@ function bahar_shop_hero_settings() {
 
 	$out['mobile_full_bleed']    = ! empty( $out['mobile_full_bleed'] ) ? 1 : 0;
 	$out['mobile_min_height']    = max( 280, min( 720, (int) $out['mobile_min_height'] ) );
+	$out['mobile_min_vh']        = max( 40, min( 70, (int) ( $out['mobile_min_vh'] ?? 50 ) ) );
 	$out['desktop_min_height']   = max( 280, min( 720, (int) $out['desktop_min_height'] ) );
 	$out['mobile_object_fit']    = in_array( $out['mobile_object_fit'], array( 'cover', 'contain' ), true ) ? $out['mobile_object_fit'] : 'cover';
 	$out['desktop_object_fit']   = in_array( $out['desktop_object_fit'], array( 'cover', 'contain' ), true ) ? $out['desktop_object_fit'] : 'contain';
@@ -96,6 +98,9 @@ function bahar_shop_sanitize_hero_settings( $input ) {
 	if ( isset( $input['mobile_min_height'] ) ) {
 		$out['mobile_min_height'] = max( 280, min( 720, (int) $input['mobile_min_height'] ) );
 	}
+	if ( isset( $input['mobile_min_vh'] ) ) {
+		$out['mobile_min_vh'] = max( 40, min( 70, (int) $input['mobile_min_vh'] ) );
+	}
 	if ( isset( $input['desktop_min_height'] ) ) {
 		$out['desktop_min_height'] = max( 280, min( 720, (int) $input['desktop_min_height'] ) );
 	}
@@ -119,6 +124,7 @@ function bahar_shop_hero_css_vars() {
 	$h = bahar_shop_hero_settings();
 	echo '<style id="bahar-hero-vars">:root{'
 		. '--bahar-hero-mobile-min-h:' . (int) $h['mobile_min_height'] . 'px;'
+		. '--bahar-hero-mobile-min-vh:' . (int) ( $h['mobile_min_vh'] ?? 50 ) . ';'
 		. '--bahar-hero-desktop-min-h:' . (int) $h['desktop_min_height'] . 'px;'
 		. '--bahar-hero-mobile-fit:' . esc_attr( $h['mobile_object_fit'] ) . ';'
 		. '--bahar-hero-desktop-fit:' . esc_attr( $h['desktop_object_fit'] ) . ';'
@@ -171,8 +177,16 @@ function bahar_shop_render_hero_settings_fields() {
 			</td>
 		</tr>
 		<tr>
-			<th scope="row"><label for="bahar_hero_mobile_h"><?php esc_html_e( 'حداقل ارتفاع موبایل (px)', 'bahar-shop' ); ?></label></th>
-			<td><input type="number" id="bahar_hero_mobile_h" name="bahar_shop_hero[mobile_min_height]" value="<?php echo esc_attr( (int) $h['mobile_min_height'] ); ?>" min="280" max="720" step="10" /></td>
+			<th scope="row"><label for="bahar_hero_mobile_vh"><?php esc_html_e( 'حداقل ارتفاع موبایل (٪ صفحه)', 'bahar-shop' ); ?></label></th>
+			<td>
+				<input type="number" id="bahar_hero_mobile_vh" name="bahar_shop_hero[mobile_min_vh]" value="<?php echo esc_attr( (int) ( $h['mobile_min_vh'] ?? 50 ) ); ?>" min="40" max="70" step="1" />
+				<p class="description"><?php esc_html_e( 'پیشنهاد: ۵۰ — یعنی حداقل نصف ارتفاع صفحه (مثل Nova 9).', 'bahar-shop' ); ?></p>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row"><label for="bahar_hero_mobile_h"><?php esc_html_e( 'کف ارتفاع موبایل (px)', 'bahar-shop' ); ?></label></th>
+			<td><input type="number" id="bahar_hero_mobile_h" name="bahar_shop_hero[mobile_min_height]" value="<?php echo esc_attr( (int) $h['mobile_min_height'] ); ?>" min="280" max="720" step="10" />
+			<p class="description"><?php esc_html_e( 'اگر 50vh از این عدد کمتر بود، همین px اعمال می‌شود.', 'bahar-shop' ); ?></p></td>
 		</tr>
 		<tr>
 			<th scope="row"><label for="bahar_hero_desktop_h"><?php esc_html_e( 'حداقل ارتفاع دسکتاپ (px)', 'bahar-shop' ); ?></label></th>
