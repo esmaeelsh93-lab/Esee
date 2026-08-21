@@ -317,8 +317,8 @@ function bahar_shop_cart_count_fragments( $fragments ) {
 	);
 
 	$badge_class = 'bahar-bottom-nav__badge' . ( $count > 0 ? ' is-visible' : '' );
-	$fragments['em.bahar-bottom-nav__badge'] = sprintf(
-		'<em class="%1$s" data-bahar-cart-count>%2$s</em>',
+	$fragments['span.bahar-bottom-nav__badge'] = sprintf(
+		'<span class="%1$s" data-bahar-cart-count>%2$s</span>',
 		esc_attr( $badge_class ),
 		esc_html( $label )
 	);

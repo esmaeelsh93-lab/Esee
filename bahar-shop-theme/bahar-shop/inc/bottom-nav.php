@@ -255,7 +255,7 @@ function bahar_shop_render_bottom_nav() {
 		<a href="<?php echo esc_url( $cart ); ?>" class="bahar-bottom-nav__item<?php echo $is_cart ? ' is-active' : ''; ?>">
 			<span class="bahar-bottom-nav__badge-wrap">
 				<?php bahar_shop_the_icon( 'shopping-bag' ); ?>
-				<em class="bahar-bottom-nav__badge<?php echo $count > 0 ? ' is-visible' : ''; ?>" data-bahar-cart-count><?php echo $count > 0 ? esc_html( (string) $count ) : ''; ?></em>
+				<span class="bahar-bottom-nav__badge<?php echo $count > 0 ? ' is-visible' : ''; ?>" data-bahar-cart-count><?php echo $count > 0 ? esc_html( (string) $count ) : ''; ?></span>
 			</span>
 			<span><?php esc_html_e( 'سبد', 'bahar-shop' ); ?></span>
 		</a>
