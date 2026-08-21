@@ -298,7 +298,9 @@ img {
   }
 
   .main-header__inner .nav-toggle,
-  .main-header__inner .header-insta {
+  .main-header__inner .header-insta,
+  .main-header__inner .header-wa,
+  .main-header__inner .header-mobile-tools {
     display: none;
   }
 
@@ -640,6 +642,64 @@ img {
   border: 1px solid rgba(255, 255, 255, 0.65);
   box-shadow: 0 6px 18px rgba(162, 210, 255, 0.35);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.header-wa {
+  display: none;
+  width: 46px;
+  height: 46px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7ddea8, #25d366);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  box-shadow: 0 6px 18px rgba(37, 211, 102, 0.28);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.header-wa .icon {
+  width: 24px;
+  height: 24px;
+}
+
+.header-mobile-tools {
+  display: none;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.header-social-icons {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.header-social-icons__link {
+  display: inline-flex;
+  width: 34px;
+  height: 34px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(162, 210, 255, 0.35);
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.header-social-icons__link:hover {
+  color: var(--pink-deep);
+  transform: translateY(-1px);
+}
+
+.header-social-icons__link--wa {
+  color: #1fa855;
+}
+
+.header-social-icons__link .icon {
+  width: 18px;
+  height: 18px;
 }
 
 .header-insta .icon {
@@ -1190,7 +1250,7 @@ img {
   margin-top: 0.85rem;
   overflow: hidden;
   border-radius: 24px;
-  min-height: clamp(280px, 42vw, 460px);
+  min-height: var(--bahar-hero-desktop-min-h, clamp(280px, 42vw, 460px));
   background: #e8f2fc;
   box-shadow: 0 18px 48px rgba(162, 210, 255, 0.22);
 }
@@ -1205,7 +1265,7 @@ img {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: var(--bahar-hero-desktop-fit, contain);
   object-position: center center;
   background: #e8f2fc;
 }
@@ -1228,8 +1288,15 @@ img {
   justify-content: center;
   text-align: center;
   gap: 0.45rem;
-  min-height: clamp(280px, 42vw, 460px);
+  min-height: var(--bahar-hero-desktop-min-h, clamp(280px, 42vw, 460px));
   padding: 2rem 1.25rem;
+}
+
+.hero--photo .hero__copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
 }
 
 .hero--photo .hero__brand {
@@ -1274,24 +1341,67 @@ img {
 }
 
 @media (max-width: 900px) {
-  .hero--photo {
+  .hero--photo,
+  .hero--photo.hero--photo-full {
+    width: 100vw;
+    max-width: 100vw;
+    margin-inline: calc(50% - 50vw);
+    margin-top: 0;
+    border-radius: 0;
+    min-height: var(--bahar-hero-mobile-min-h, 420px);
+    box-shadow: none;
+  }
+
+  .hero--photo:not(.hero--photo-full) {
+    width: min(1200px, calc(100% - 1rem));
+    margin-inline: auto;
     margin-top: 0.55rem;
     border-radius: 18px;
-    min-height: 320px;
+    box-shadow: 0 12px 30px rgba(162, 210, 255, 0.18);
+  }
+
+  .hero--photo .hero__media picture,
+  .hero--photo .hero__media img {
+    object-fit: var(--bahar-hero-mobile-fit, cover);
   }
 
   .hero--photo .hero__content {
-    min-height: 320px;
-    padding: 1.5rem 1rem;
+    position: absolute;
+    inset: 0;
+    min-height: 0;
+    align-items: stretch;
+    justify-content: flex-start;
+    text-align: center;
+    padding: 0.85rem 1rem 1.1rem;
+  }
+
+  .hero--photo .hero__copy {
+    align-items: center;
+    margin-top: 0.35rem;
   }
 
   .hero--photo .hero__brand {
-    font-size: clamp(2rem, 11vw, 2.6rem);
+    font-size: clamp(1.85rem, 9vw, 2.35rem);
+    margin: 0;
+  }
+
+  .hero--photo .hero__tagline {
+    font-size: clamp(0.82rem, 3.8vw, 0.98rem);
+    margin: 0.15rem 0 0;
   }
 
   .hero--photo .hero__cta {
-    font-size: 0.78rem;
-    padding: 0.4rem 1rem;
+    position: absolute;
+    bottom: 0.85rem;
+    inset-inline-start: 0.85rem;
+    margin-top: 0;
+    font-size: 0.74rem;
+    padding: 0.38rem 0.85rem;
+  }
+
+  .hero--photo .hero__shade {
+    background:
+      linear-gradient(180deg, rgba(42, 36, 56, 0.38) 0%, rgba(42, 36, 56, 0.08) 34%, rgba(42, 36, 56, 0.05) 58%, rgba(42, 36, 56, 0.42) 100%);
   }
 }
 
@@ -1899,7 +2009,9 @@ html.js-motion .hero--motion .hero__cloud {
   .bahar-product-card__actions {
     padding: 0.15rem 0.55rem 0.45rem;
     display: flex;
+    align-items: center;
     justify-content: flex-start;
+    gap: 0.45rem;
   }
 
   /* موبایل: حذف انتخاب گزینه‌ها + بازدید باریک */
@@ -2145,6 +2257,18 @@ html.js-motion .hero--motion .hero__cloud {
   font-weight: 600;
 }
 
+.footer-social--row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.footer-social__link--wa {
+  color: #1fa855;
+}
+
 .enamad-wrap img {
   max-width: 110px;
 }
@@ -2320,22 +2444,41 @@ html.js-motion .hero--motion .hero__cloud {
     height: 40px;
   }
 
-  .site-logo--mobile {
+  .site-logo--mobile,
+  .site-logo--desktop {
     display: none !important;
   }
 
-  .site-logo--desktop {
-    display: block !important;
+  .header-mobile-tools {
+    display: inline-flex;
+    order: 1;
+    margin-inline-start: auto;
+    margin-inline-end: 0.15rem;
   }
 
   .nav-toggle {
     display: flex;
-    order: 1;
+    order: 3;
   }
 
   .header-insta {
     display: inline-flex;
+    order: 1;
+    width: 42px;
+    height: 42px;
+  }
+
+  .header-wa {
+    display: inline-flex;
     order: 2;
+    width: 42px;
+    height: 42px;
+  }
+
+  .header-actions {
+    order: 2;
+    margin-inline-start: 0;
+    margin-inline-end: auto;
   }
 
   .primary-nav {
@@ -2391,11 +2534,13 @@ html.js-motion .hero--motion .hero__cloud {
     position: relative;
     flex-wrap: nowrap;
     padding: 0.55rem 0;
+    justify-content: space-between;
+    gap: 0.35rem;
   }
 
   .header-actions {
-    order: 3;
-    margin-inline-start: auto;
+    order: 2;
+    margin-inline-start: 0;
   }
 
   .primary-nav__list {
@@ -2791,6 +2936,20 @@ html.js-motion .hero--motion .hero__cloud {
   cursor: pointer;
   padding: 0;
   transition: transform 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+
+.bahar-product-card__actions .bahar-wish-btn {
+  position: static;
+  inset: auto;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(162, 210, 255, 0.22);
+}
+
+.bahar-product-card__actions .bahar-wish-btn svg {
+  width: 16px;
+  height: 16px;
 }
 
 .bahar-wish-btn svg {

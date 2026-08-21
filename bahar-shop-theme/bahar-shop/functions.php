@@ -32,4 +32,5 @@ require_once BAHAR_SHOP_DIR . '/inc/performance.php';
 require_once BAHAR_SHOP_DIR . '/inc/wishlist.php';
 require_once BAHAR_SHOP_DIR . '/inc/bottom-nav.php';
 require_once BAHAR_SHOP_DIR . '/inc/sale-slider.php';
+require_once BAHAR_SHOP_DIR . '/inc/hero-settings.php';
 require_once BAHAR_SHOP_DIR . '/inc/why-us.php';

@@ -158,6 +158,12 @@ function bahar_shop_render_settings_page() {
 				</tr>
 			</table>
 
+			<?php
+			if ( function_exists( 'bahar_shop_render_hero_settings_fields' ) ) {
+				bahar_shop_render_hero_settings_fields();
+			}
+			?>
+
 			<?php submit_button( __( 'ذخیره تنظیمات', 'bahar-shop' ) ); ?>
 		</form>
 	</div>
@@ -204,14 +210,56 @@ function bahar_shop_render_bottom_nav() {
 			<span><?php esc_html_e( 'فروشگاه', 'bahar-shop' ); ?></span>
 		</a>
 		<a href="<?php echo esc_url( $cart ); ?>" class="bahar-bottom-nav__item<?php echo $is_cart ? ' is-active' : ''; ?>">
-			<span class="bahar-bottom-nav__badge-wrap">
-				<?php bahar_shop_the_icon( 'shopping-bag' ); ?>
-				<?php if ( $count > 0 ) : ?>
-					<em class="bahar-bottom-nav__badge"><?php echo esc_html( $count ); ?></em>
-				<?php endif; ?>
-			</span>
+			<?php bahar_shop_render_bottom_nav_cart_badge( $count ); ?>
 			<span><?php esc_html_e( 'سبد', 'bahar-shop' ); ?></span>
 		</a>
 	</nav>
 	<?php
+}
+
+/**
+ * Bottom-nav cart icon + count badge (fragment-friendly).
+ *
+ * @param int $count Cart item count.
+ */
+function bahar_shop_render_bottom_nav_cart_badge( $count = null ) {
+	if ( null === $count && function_exists( 'WC' ) && WC()->cart ) {
+		$count = (int) WC()->cart->get_cart_contents_count();
+	}
+	$count = max( 0, (int) $count );
+	?>
+	<span class="bahar-bottom-nav__badge-wrap" id="bahar-nav-cart-badge">
+		<?php bahar_shop_the_icon( 'shopping-bag' ); ?>
+		<?php if ( $count > 0 ) : ?>
+			<em class="bahar-bottom-nav__badge"><?php echo esc_html( $count ); ?></em>
+		<?php endif; ?>
+	</span>
+	<?php
+}
+
+add_filter( 'woocommerce_add_to_cart_fragments', 'bahar_shop_cart_nav_fragments' );
+
+/**
+ * Refresh bottom-nav cart badge after AJAX add-to-cart.
+ *
+ * @param array<string,string> $fragments Fragments.
+ * @return array<string,string>
+ */
+function bahar_shop_cart_nav_fragments( $fragments ) {
+	if ( ! function_exists( 'WC' ) || ! WC()->cart ) {
+		return $fragments;
+	}
+
+	ob_start();
+	bahar_shop_render_bottom_nav_cart_badge( (int) WC()->cart->get_cart_contents_count() );
+	$fragments['#bahar-nav-cart-badge'] = ob_get_clean();
+
+	$count = (int) WC()->cart->get_cart_contents_count();
+	ob_start();
+	if ( $count > 0 ) {
+		echo '<span class="cart-count">' . esc_html( (string) $count ) . '</span>';
+	}
+	$fragments['#bahar-header-cart-count'] = ob_get_clean();
+
+	return $fragments;
 }

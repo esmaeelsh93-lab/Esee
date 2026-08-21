@@ -85,18 +85,20 @@
 
   .bahar-bottom-nav__badge {
     position: absolute;
-    top: -6px;
-    inset-inline-start: -8px;
-    min-width: 16px;
-    height: 16px;
-    padding: 0 4px;
+    top: -7px;
+    inset-inline-start: -10px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
     border-radius: 999px;
-    background: var(--pink-deep, #c277a7);
+    background: var(--pink-deep, #e84a9a);
     color: #fff;
-    font-size: 0.62rem;
+    font-size: 0.68rem;
     font-style: normal;
     font-weight: 800;
     display: grid;
     place-items: center;
+    box-shadow: 0 0 0 2px var(--nav-bottom-bg, #fff);
+    line-height: 1;
   }
 }

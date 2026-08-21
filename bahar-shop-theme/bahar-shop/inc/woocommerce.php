@@ -146,6 +146,10 @@ function bahar_shop_enqueue_wc_assets() {
 		wp_enqueue_script( 'wc-add-to-cart' );
 		wp_enqueue_script( 'wc-cart-fragments' );
 	}
+
+	if ( ! is_admin() && function_exists( 'WC' ) ) {
+		wp_enqueue_script( 'wc-cart-fragments' );
+	}
 }
 
 
