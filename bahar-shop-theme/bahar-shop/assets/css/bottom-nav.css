@@ -91,24 +91,26 @@
 
   .bahar-bottom-nav__badge {
     position: absolute;
-    top: -7px;
-    inset-inline-start: -9px;
-    min-width: 17px;
-    height: 17px;
-    padding: 0 4px;
+    top: -8px;
+    inset-inline-start: auto;
+    inset-inline-end: -10px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
     border-radius: 999px;
-    background: linear-gradient(135deg, #ffafcc, #c277a7);
-    color: #fff;
-    font-size: 0.62rem;
-    font-style: normal;
+    background: #c277a7;
+    color: #fff !important;
+    font-size: 0.68rem;
+    font-style: normal !important;
     font-weight: 800;
     display: none;
     place-items: center;
-    box-shadow: 0 4px 10px rgba(194, 119, 167, 0.35);
+    box-shadow: 0 4px 10px rgba(194, 119, 167, 0.4);
     line-height: 1;
+    z-index: 2;
   }
 
   .bahar-bottom-nav__badge.is-visible {
-    display: grid;
+    display: grid !important;
   }
 }
