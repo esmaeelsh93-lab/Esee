@@ -46,6 +46,9 @@ if ( ! $image_html ) {
 			<?php echo wp_kses_post( apply_filters( 'woocommerce_sale_flash', '', get_post(), $product ) ); ?>
 		<?php endif; ?>
 	</a>
+	<?php if ( function_exists( 'rezajordaan_render_wishlist_button' ) ) : ?>
+		<?php rezajordaan_render_wishlist_button( $product, 'card' ); ?>
+	<?php endif; ?>
 
 	<h3 class="rj-archive-card__title woocommerce-loop-product__title">
 		<a href="<?php echo esc_url( $permalink ); ?>"><?php echo esc_html( $product_name ); ?></a>

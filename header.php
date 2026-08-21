@@ -15,7 +15,7 @@ $header_links   = rezajordaan_get_theme_links( 'header_links' );
 $instagram_url  = rezajordaan_get_setting( 'instagram_url' );
 $whatsapp_url   = rezajordaan_get_setting( 'whatsapp_url' );
 $telegram_url   = rezajordaan_get_setting( 'telegram_url' );
-$show_inner_search = ! is_front_page() && ! ( function_exists( 'is_shop' ) && is_shop() );
+$show_inner_search = ! is_front_page();
 $categories     = taxonomy_exists( 'product_cat' )
 	? get_terms(
 		array(
@@ -108,6 +108,9 @@ if ( is_wp_error( $categories ) ) {
 					<svg aria-hidden="true" viewBox="0 0 24 24"><path d="m3 11 18-7-4 17-6-5-4 3 1-5 9-7-11 6Z"/></svg>
 				</a>
 			<?php endif; ?>
+			<?php if ( function_exists( 'rezajordaan_render_header_wishlist_link' ) ) : ?>
+				<?php rezajordaan_render_header_wishlist_link(); ?>
+			<?php endif; ?>
 			<?php if ( function_exists( 'wc_get_cart_url' ) ) : ?>
 				<?php rezajordaan_render_header_cart_link(); ?>
 			<?php endif; ?>
@@ -120,6 +123,9 @@ if ( is_wp_error( $categories ) ) {
 	<div class="mobile-menu" id="mobile-menu" aria-hidden="true">
 		<nav aria-label="<?php esc_attr_e( 'منوی موبایل', 'rezajordaan' ); ?>">
 			<a href="<?php echo esc_url( $home_url ); ?>"><?php esc_html_e( 'خانه', 'rezajordaan' ); ?></a>
+			<?php if ( function_exists( 'rezajordaan_wishlist_url' ) ) : ?>
+				<a href="<?php echo esc_url( rezajordaan_wishlist_url() ); ?>"><?php esc_html_e( 'علاقه‌مندی‌ها', 'rezajordaan' ); ?></a>
+			<?php endif; ?>
 			<?php foreach ( $header_links as $header_link ) : ?>
 				<a href="<?php echo esc_url( $header_link['url'] ); ?>"><?php echo esc_html( $header_link['label'] ); ?></a>
 			<?php endforeach; ?>
