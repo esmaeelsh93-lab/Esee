@@ -157,9 +157,9 @@ button {
 }
 
 .site-header__inner.has-inner-search {
-	gap: clamp(12px, 2vw, 28px);
+	gap: clamp(10px, 1.4vw, 18px);
 	grid-template-areas: "search nav actions";
-	grid-template-columns: minmax(360px, 1.7fr) minmax(180px, 1fr) auto;
+	grid-template-columns: minmax(220px, 360px) minmax(0, 1fr) auto;
 }
 
 .has-inner-search .site-brand {
@@ -168,16 +168,38 @@ button {
 
 .has-inner-search .header-search {
 	grid-area: search;
+	max-width: 360px;
 	width: 100%;
 }
 
 .has-inner-search .desktop-nav {
+	flex-wrap: nowrap;
+	gap: 4px;
 	grid-area: nav;
 	justify-self: center;
+	max-width: 100%;
+	min-width: 0;
+	overflow: hidden;
+}
+
+.has-inner-search .desktop-nav__link {
+	flex: 0 0 auto;
+	font-size: 13px;
+	padding: 8px 10px;
+	white-space: nowrap;
+}
+
+.has-inner-search .desktop-nav__dropdown {
+	flex: 0 0 auto;
 }
 
 .has-inner-search .header-actions {
+	gap: 6px;
 	grid-area: actions;
+}
+
+.has-inner-search .social-button {
+	display: none;
 }
 
 .site-brand {
@@ -3191,7 +3213,7 @@ body.rezajordaan-archive-cards .rj-archive-card__media [class*="cash"],
 }
 
 /* Responsive */
-@media (max-width: 1050px) {
+@media (max-width: 1180px) {
 	.site-header__inner.has-inner-search {
 		grid-template-areas: "search actions";
 		grid-template-columns: minmax(0, 1fr) auto;
@@ -3201,6 +3223,16 @@ body.rezajordaan-archive-cards .rj-archive-card__media [class*="cash"],
 		display: none;
 	}
 
+	.has-inner-search .header-search {
+		max-width: none;
+	}
+
+	.has-inner-search .menu-toggle {
+		display: flex;
+	}
+}
+
+@media (max-width: 1050px) {
 	.hero__inner {
 		gap: 20px;
 		grid-template-columns: minmax(0, 0.9fr) minmax(420px, 1.1fr);
