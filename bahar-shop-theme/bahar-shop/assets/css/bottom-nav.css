@@ -57,7 +57,7 @@
     transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
   }
 
-  .bahar-bottom-nav__item span {
+  .bahar-bottom-nav__item > span:not(.bahar-bottom-nav__badge-wrap) {
     display: block;
     max-width: 100%;
     overflow: hidden;
