@@ -129,45 +129,49 @@
 	});
 
 	const initProductMarquee = () => {
-		const marquee = document.querySelector("[data-product-marquee]");
-		const track = marquee?.querySelector(".product-marquee__track");
-		if (!marquee || !track || prefersReducedMotion) {
-			return;
-		}
-
-		let resizeTimer;
-		const applyDuration = () => {
-			const distance = track.scrollWidth / 2;
-			if (distance <= 0) {
+		document.querySelectorAll("[data-product-marquee]").forEach((marquee) => {
+			const track = marquee.querySelector(".product-marquee__track");
+			if (!track || prefersReducedMotion) {
 				return;
 			}
 
-			const duration = Math.max(8, distance / marqueeSpeed);
-			track.style.setProperty("--rj-marquee-duration", `${duration}s`);
-			marquee.classList.add("is-animated");
-		};
+			const speedValue = Number.parseFloat(marquee.dataset.speed);
+			const speed = Number.isFinite(speedValue) && speedValue > 0 ? speedValue : marqueeSpeed;
+			let resizeTimer;
 
-		applyDuration();
-		marquee.addEventListener("mouseenter", () => {
-			track.style.animationPlayState = "paused";
+			const applyDuration = () => {
+				const distance = track.scrollWidth / 2;
+				if (distance <= 0) {
+					return;
+				}
+
+				const duration = Math.max(8, distance / speed);
+				track.style.setProperty("--rj-marquee-duration", `${duration}s`);
+				marquee.classList.add("is-animated");
+			};
+
+			applyDuration();
+			marquee.addEventListener("mouseenter", () => {
+				track.style.animationPlayState = "paused";
+			});
+			marquee.addEventListener("mouseleave", () => {
+				track.style.animationPlayState = "running";
+			});
+			marquee.addEventListener("focusin", () => {
+				track.style.animationPlayState = "paused";
+			});
+			marquee.addEventListener("focusout", () => {
+				track.style.animationPlayState = "running";
+			});
+			window.addEventListener(
+				"resize",
+				() => {
+					window.clearTimeout(resizeTimer);
+					resizeTimer = window.setTimeout(applyDuration, 180);
+				},
+				{ passive: true }
+			);
 		});
-		marquee.addEventListener("mouseleave", () => {
-			track.style.animationPlayState = "running";
-		});
-		marquee.addEventListener("focusin", () => {
-			track.style.animationPlayState = "paused";
-		});
-		marquee.addEventListener("focusout", () => {
-			track.style.animationPlayState = "running";
-		});
-		window.addEventListener(
-			"resize",
-			() => {
-				window.clearTimeout(resizeTimer);
-				resizeTimer = window.setTimeout(applyDuration, 180);
-			},
-			{ passive: true }
-		);
 	};
 
 	initProductMarquee();
