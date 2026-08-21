@@ -1,0 +1,921 @@
+/* ── Apple-style buttons ── */
+
+.woocommerce a.button,
+.woocommerce button.button,
+.woocommerce input.button,
+.woocommerce #respond input#submit,
+.woocommerce a.button.alt,
+.woocommerce button.button.alt,
+.woocommerce input.button.alt,
+.single_add_to_cart_button,
+.bahar-product-card__actions .button,
+.woocommerce .bahar-product-card .button,
+.bahar-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 44px !important;
+  padding: 0 1.35rem !important;
+  font-family: Vazirmatn, -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-size: 0.92rem !important;
+  font-weight: 500 !important;
+  letter-spacing: -0.01em !important;
+  line-height: 1.3 !important;
+  color: #ffffff !important;
+  background: #1d1d1f !important;
+  border: none !important;
+  border-radius: 12px !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+  transition: background 0.2s ease, transform 0.15s ease, opacity 0.2s ease !important;
+  text-decoration: none !important;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.woocommerce a.button:hover,
+.woocommerce button.button:hover,
+.woocommerce input.button:hover,
+.single_add_to_cart_button:hover,
+.bahar-product-card__actions .button:hover,
+.bahar-btn:hover {
+  background: #333336 !important;
+  color: #fff !important;
+  transform: scale(1.01);
+}
+
+.woocommerce a.button:active,
+.woocommerce button.button:active,
+.single_add_to_cart_button:active,
+.bahar-product-card__actions .button:active {
+  transform: scale(0.98);
+}
+
+.woocommerce a.button.disabled,
+.woocommerce button.button.disabled,
+.woocommerce a.button:disabled,
+.woocommerce button.button:disabled {
+  opacity: 0.4 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+
+.bahar-btn--ghost {
+  background: #ffffff !important;
+  color: #1d1d1f !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+}
+
+.bahar-btn--ghost:hover {
+  background: #f5f5f7 !important;
+  color: #1d1d1f !important;
+}
+
+.bahar-btn--lg {
+  min-height: 48px !important;
+  padding: 0 1.75rem !important;
+  font-size: 0.95rem !important;
+}
+
+.bahar-btn--small {
+  min-height: 38px !important;
+  font-size: 0.85rem !important;
+}
+
+/* Loop card button */
+.bahar-product-card__actions {
+  position: relative;
+  z-index: 3;
+  padding: 0 1rem 1.1rem;
+}
+
+.bahar-product-card__actions .button {
+  width: 100% !important;
+  min-height: 44px !important;
+}
+
+.bahar-product-card__actions .button.loading {
+  opacity: 0.65 !important;
+  pointer-events: none;
+}
+
+.bahar-product-card__actions .added_to_cart {
+  display: block;
+  margin-top: 0.45rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #1d1d1f;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .bahar-product-card__actions {
+    padding: 0.15rem 0.55rem 0.45rem;
+  }
+
+  .bahar-product-card__cart-wrap,
+  .woocommerce ul.products .bahar-product-card .bahar-product-card__cart-wrap {
+    display: none !important;
+  }
+
+  .woocommerce ul.products .bahar-product-card .bahar-product-card__actions a.button,
+  .woocommerce ul.products .bahar-product-card .bahar-product-card__actions .button {
+    display: none !important;
+    min-height: 0 !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+}
+
+/* Product grid — دسکتاپ ۳ / موبایل ۲ */
+.bahar-products-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.1rem;
+}
+
+@media (max-width: 900px) {
+  .bahar-products-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.55rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .bahar-products-grid {
+    gap: 0.5rem;
+  }
+}
+
+/* Single product summary */
+.bahar-single-product .product_title {
+  font-size: 1.55rem;
+  font-weight: 600;
+  color: #1d1d1f;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.65rem;
+  line-height: 1.35;
+}
+
+.bahar-single-product p.price,
+.bahar-single-product span.price {
+  font-size: 1.25rem !important;
+  font-weight: 600 !important;
+  color: #1d1d1f !important;
+  margin-bottom: 1rem !important;
+}
+
+.bahar-single-product .woocommerce-product-details__short-description {
+  color: #555555;
+  line-height: 1.8;
+  margin-bottom: 1.25rem;
+  font-size: 0.92rem;
+}
+
+.bahar-single-product form.cart {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 0.65rem;
+  margin-top: 0.5rem;
+}
+
+.bahar-single-product form.cart .quantity {
+  margin: 0 !important;
+  display: inline-flex !important;
+  align-items: center;
+  gap: 0;
+  border: 1px solid rgba(255, 142, 199, 0.45);
+  border-radius: 14px;
+  background: #fff;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(232, 74, 154, 0.08);
+}
+
+.bahar-single-product .quantity.bahar-qty-stepper .qty {
+  width: 52px !important;
+  min-height: 44px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  text-align: center !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+.bahar-qty-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  min-height: 44px;
+  border: 0;
+  background: linear-gradient(135deg, rgba(255, 240, 247, 0.95), #fff);
+  color: #e84a9a;
+  font-size: 1.2rem;
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.bahar-qty-btn:hover {
+  background: linear-gradient(135deg, #ff8ec7, #e84a9a);
+  color: #fff;
+}
+
+.bahar-qty-btn--minus {
+  border-inline-end: 1px solid rgba(255, 142, 199, 0.25);
+}
+
+.bahar-qty-btn--plus {
+  border-inline-start: 1px solid rgba(255, 142, 199, 0.25);
+}
+
+.bahar-single-product .quantity .qty {
+  width: 64px !important;
+  min-height: 44px !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+  border-radius: 12px !important;
+  font-size: 0.95rem !important;
+  font-weight: 500 !important;
+  text-align: center !important;
+  background: #fff !important;
+}
+
+.bahar-single-product .quantity.bahar-qty-stepper .qty {
+  width: 52px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+}
+
+.bahar-single-product form.cart .single_add_to_cart_button {
+  flex: 1 !important;
+  min-width: 180px !important;
+  min-height: 48px !important;
+  font-size: 0.95rem !important;
+}
+
+/* Variations — horizontal pill buttons */
+.bahar-variation-box {
+  margin-bottom: 1rem;
+  padding: 1rem 1.05rem 1.05rem;
+  border-radius: 20px;
+  border: 2px solid rgba(162, 210, 255, 0.65);
+  background:
+    linear-gradient(160deg, rgba(245, 249, 255, 0.98), rgba(255, 255, 255, 0.94));
+  box-shadow:
+    0 0 0 1px rgba(205, 180, 219, 0.12),
+    0 12px 32px rgba(162, 210, 255, 0.14);
+}
+
+.bahar-variation-box .bahar-variation-hint {
+  margin-bottom: 0.75rem;
+}
+
+.bahar-variation-box .bahar-variation-clear-wrap {
+  margin-bottom: 0;
+}
+
+.bahar-single-product form.variations_form table.variations {
+  width: 100%;
+  margin-bottom: 0.5rem;
+  border-collapse: separate;
+  border-spacing: 0 0.85rem;
+}
+
+.bahar-single-product form.variations_form table.variations tbody tr {
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.bahar-single-product form.variations_form table.variations td,
+.bahar-single-product form.variations_form table.variations th {
+  padding: 0;
+  border: 0;
+  display: block;
+  width: 100%;
+}
+
+.bahar-single-product form.variations_form table.variations .label,
+.bahar-single-product form.variations_form table.variations td.label,
+.bahar-single-product form.variations_form table.variations th.label,
+.bahar-single-product form.variations_form table.variations .label label,
+.bahar-single-product form.variations_form table.variations label {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  position: absolute !important;
+  clip: rect(0, 0, 0, 0) !important;
+}
+
+.bahar-variation-select {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.bahar-variation-picker {
+  width: 100%;
+}
+
+.bahar-variation-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  align-items: center;
+}
+
+.bahar-variation-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.55rem 1.15rem;
+  border-radius: 999px;
+  border: 1.5px solid rgba(162, 210, 255, 0.7);
+  background: #fff;
+  color: var(--text, #3a3348);
+  font-family: inherit;
+  font-size: 0.86rem;
+  font-weight: 700;
+  cursor: pointer;
+  line-height: 1.3;
+  overflow: visible;
+  isolation: isolate;
+  box-shadow: 0 4px 14px rgba(162, 210, 255, 0.18);
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.22s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    background 0.22s ease;
+}
+
+.bahar-variation-btn::before,
+.bahar-variation-btn::after {
+  content: none !important;
+  display: none !important;
+}
+
+.bahar-variation-btn__label {
+  position: relative;
+  z-index: 1;
+}
+
+.bahar-variation-btn:hover {
+  border-color: var(--orchid, #cdb4db);
+  color: var(--pink-deep, #c277a7);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(205, 180, 219, 0.22);
+}
+
+.bahar-variation-btn.is-active {
+  background: linear-gradient(145deg, #bde0fe 0%, #a2d2ff 55%, #cdb4db 100%);
+  border-color: transparent;
+  color: #2a2438;
+  box-shadow: 0 8px 20px rgba(162, 210, 255, 0.35);
+}
+
+.bahar-variation-btn.is-active::before,
+.bahar-variation-btn.is-active::after {
+  content: none !important;
+  display: none !important;
+}
+
+.bahar-variation-btn.is-popping {
+  animation: bahar-bubble-pop 0.42s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+
+.bahar-variation-btn.is-popping::after {
+  content: none !important;
+  display: none !important;
+}
+
+@keyframes bahar-bubble-pop {
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(1.12);
+  }
+  65% {
+    transform: scale(0.96);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes bahar-bubble-ring {
+  0% {
+    transform: scale(0.4);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(4.2);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bahar-variation-btn.is-popping,
+  .bahar-variation-btn.is-popping::after {
+    animation: none;
+  }
+}
+
+.bahar-variation-btn.is-out-of-stock,
+.bahar-variation-btn:disabled {
+  opacity: 0.72;
+  cursor: not-allowed;
+  transform: none;
+  border-color: rgba(200, 200, 200, 0.8);
+  background: #f7f7f8;
+  color: #9a9aa0;
+  padding-inline-end: 2rem;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.bahar-variation-btn.is-out-of-stock::before,
+.bahar-variation-btn:disabled::before {
+  display: none;
+}
+
+.bahar-variation-btn__x {
+  position: absolute;
+  top: -6px;
+  inset-inline-end: -4px;
+  z-index: 2;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #8a8494;
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 800;
+  line-height: 18px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(58, 51, 72, 0.2);
+}
+
+.bahar-variation-btn.is-out-of-stock .bahar-variation-btn__label {
+  text-decoration: line-through;
+  text-decoration-color: rgba(255, 59, 92, 0.55);
+}
+
+.bahar-single-product .woo-variation-items-wrapper,
+.bahar-single-product .variable-items-wrapper {
+  display: none !important;
+}
+
+.bahar-single-product .reset_variations,
+.bahar-single-product .bahar-reset-variations--hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Variation hint box — above pill buttons */
+.bahar-variation-hint {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  margin-bottom: 0.65rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(255, 240, 247, 0.95), rgba(255, 255, 255, 0.88));
+  border: 1px solid rgba(255, 142, 199, 0.45);
+  box-shadow: 0 6px 18px rgba(232, 74, 154, 0.1);
+  color: var(--pink-deep, #e84a9a);
+  font-size: 0.88rem;
+  font-weight: 700;
+  line-height: 1.55;
+}
+
+.bahar-variation-hint__icon {
+  flex-shrink: 0;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.bahar-variation-hint__text {
+  flex: 1;
+}
+
+/* Clear variation — visible X button */
+.bahar-variation-clear-wrap {
+  display: flex;
+  justify-content: flex-start;
+  margin: 0.15rem 0 0.65rem;
+}
+
+.bahar-variation-clear-wrap[hidden] {
+  display: none !important;
+}
+
+.bahar-variation-clear-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 0.85rem 0.4rem 0.55rem;
+  border-radius: 999px;
+  border: 1.5px solid rgba(255, 142, 199, 0.55);
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--pink-deep, #e84a9a);
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.bahar-variation-clear-btn:hover {
+  background: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(232, 74, 154, 0.18);
+}
+
+.bahar-variation-clear-btn__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff5eb8, #e84a9a);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+/* Mobile sticky add-to-cart bar */
+.bahar-sticky-cart {
+  display: none;
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 9990;
+  padding: 0.55rem 0.75rem calc(0.55rem + env(safe-area-inset-bottom, 0px));
+}
+
+.bahar-sticky-cart__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0.55rem 0.65rem 0.55rem 0.85rem;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(22px) saturate(1.45);
+  -webkit-backdrop-filter: blur(22px) saturate(1.45);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 -8px 32px rgba(232, 74, 154, 0.22), 0 12px 28px rgba(0, 0, 0, 0.08);
+}
+
+.bahar-sticky-cart__price {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--pink-deep, #e84a9a);
+  line-height: 1.35;
+}
+
+.bahar-sticky-cart__price del {
+  opacity: 0.55;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.bahar-sticky-cart__price ins {
+  text-decoration: none;
+}
+
+.bahar-sticky-cart__btn {
+  flex-shrink: 0;
+  min-height: 46px;
+  padding: 0.65rem 1.15rem;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #ff5eb8, #e84a9a);
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 8px 22px rgba(232, 74, 154, 0.38);
+  transition: transform 0.15s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+}
+
+.bahar-sticky-cart__btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 26px rgba(232, 74, 154, 0.45);
+}
+
+.bahar-sticky-cart__btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Add to cart — pink CTA */
+.bahar-single-product .single_add_to_cart_button,
+.bahar-single-product .woocommerce-variation-add-to-cart .button,
+.bahar-single-product button.button.alt.single_add_to_cart_button {
+  background: linear-gradient(135deg, #ff5eb8, #e84a9a) !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+  font-size: 1rem !important;
+  min-height: 52px !important;
+  border-radius: 14px !important;
+  border: none !important;
+  box-shadow: 0 10px 28px rgba(232, 74, 154, 0.38) !important;
+  letter-spacing: 0 !important;
+}
+
+.bahar-single-product .single_add_to_cart_button:hover,
+.bahar-single-product .woocommerce-variation-add-to-cart .button:hover,
+.bahar-single-product button.button.alt.single_add_to_cart_button:hover {
+  background: linear-gradient(135deg, #ff7ec6, #ff5eb8) !important;
+  color: #fff !important;
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 14px 32px rgba(232, 74, 154, 0.45) !important;
+}
+
+.bahar-single-product .single_add_to_cart_button:active,
+.bahar-single-product .woocommerce-variation-add-to-cart .button:active {
+  transform: scale(0.98);
+}
+
+/* Tabs */
+.bahar-single-product .woocommerce-tabs ul.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  list-style: none;
+  margin: 0 0 1rem;
+  padding: 0;
+  border: 0;
+}
+
+.bahar-single-product .woocommerce-tabs ul.tabs::before,
+.bahar-single-product .woocommerce-tabs ul.tabs::after {
+  display: none;
+}
+
+.bahar-single-product .woocommerce-tabs ul.tabs li {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+.bahar-single-product .woocommerce-tabs ul.tabs li a {
+  display: block;
+  padding: 0.55rem 1.1rem;
+  border-radius: 999px;
+  background: #f5f5f7;
+  color: #1d1d1f;
+  font-weight: 500;
+  font-size: 0.88rem;
+}
+
+.bahar-single-product .woocommerce-tabs ul.tabs li.active a {
+  background: #1d1d1f;
+  color: #fff;
+}
+
+.bahar-single-product .woocommerce-tabs .panel {
+  padding: 1.15rem;
+  background: #f5f5f7;
+  border-radius: 16px;
+  font-size: 0.92rem;
+  line-height: 1.85;
+}
+
+.bahar-single-product .product_meta {
+  font-size: 0.82rem;
+  color: #555555;
+  margin-top: 1rem;
+}
+
+.bahar-single-product .product_meta > span {
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+/* Toolbar */
+.bahar-shop-toolbar {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.bahar-price-inputs input,
+.woocommerce-ordering select {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  background: #fff;
+}
+
+/* Messages */
+.woocommerce-message,
+.woocommerce-info,
+.woocommerce-error {
+  border-radius: 14px !important;
+  border-top: 0 !important;
+  background: #fff !important;
+  border: 1px solid rgba(0, 0, 0, 0.06) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04) !important;
+}
+
+.woocommerce .wc-proceed-to-checkout a.checkout-button,
+.woocommerce #payment #place_order {
+  min-height: 48px !important;
+  border-radius: 12px !important;
+}
+
+@media (max-width: 900px) {
+  .bahar-shop-toolbar.is-collapsed {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .bahar-sticky-cart {
+    display: block;
+    bottom: calc(68px + env(safe-area-inset-bottom, 0px));
+    z-index: 10060;
+  }
+
+  body.single-product.bahar-has-bottom-nav {
+    padding-bottom: calc(140px + env(safe-area-inset-bottom, 0px));
+  }
+
+  body.single-product {
+    padding-bottom: calc(140px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .bahar-single-product form.cart {
+    flex-direction: column;
+  }
+
+  .bahar-single-product .woocommerce-variation-add-to-cart,
+  .bahar-single-product form.cart .single_add_to_cart_button {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .bahar-variation-btn {
+    min-height: 38px;
+    padding: 0.45rem 0.85rem;
+    font-size: 0.82rem;
+  }
+
+  .bahar-variation-hint {
+    font-size: 0.84rem;
+    padding: 0.65rem 0.8rem;
+  }
+}
+
+/* Back to shop — mobile first */
+.bahar-product-back {
+  display: none;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 0.85rem;
+  padding: 0.45rem 0.7rem;
+  border-radius: 12px;
+  background: rgba(255, 240, 247, 0.9);
+  border: 1px solid rgba(255, 142, 199, 0.35);
+  color: var(--pink-deep, #e84a9a);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: none;
+  width: fit-content;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.bahar-product-back:hover {
+  background: #fff;
+  transform: translateY(-1px);
+}
+
+.bahar-product-back__icon {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+@media (max-width: 768px) {
+  .bahar-product-back {
+    display: inline-flex;
+  }
+}
+
+/* Trust badges below add-to-cart */
+.bahar-trust-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 0.85rem;
+}
+
+.bahar-trust-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(255, 240, 247, 0.95);
+  border: 1px solid rgba(255, 142, 199, 0.35);
+  color: #3d2435;
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.bahar-trust-badge__icon {
+  font-size: 0.85rem;
+  line-height: 1;
+  color: var(--pink-deep, #e84a9a);
+}
+
+/* Add-to-cart toast */
+.bahar-cart-toast {
+  position: fixed;
+  inset-inline: 0;
+  bottom: calc(88px + env(safe-area-inset-bottom, 0px));
+  z-index: 9995;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  margin: 0 auto;
+  width: fit-content;
+  max-width: calc(100% - 2rem);
+  padding: 0.65rem 1.1rem;
+  border-radius: 999px;
+  background: rgba(61, 36, 53, 0.92);
+  color: #fff;
+  font-size: 0.86rem;
+  font-weight: 700;
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.bahar-cart-toast.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.bahar-cart-toast__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #34c759;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+@media (min-width: 769px) {
+  .bahar-cart-toast {
+    bottom: 1.5rem;
+  }
+}
