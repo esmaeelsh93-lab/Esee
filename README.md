@@ -25,13 +25,13 @@
 
 ### دانلود
 
-**نسخه 1.5.7 (آخرین):**
+**نسخه 1.5.8 (آخرین):**
+
+https://github.com/esmaeelsh93-lab/Esee/releases/download/rezajordaan-1.5.8/rezajordaan-installable.zip
+
+**نسخه 1.5.7:**
 
 https://github.com/esmaeelsh93-lab/Esee/releases/download/rezajordaan-1.5.7/rezajordaan-installable.zip
-
-**نسخه 1.5.6:**
-
-https://github.com/esmaeelsh93-lab/Esee/releases/download/rezajordaan-1.5.6/rezajordaan-installable.zip
 
 اگر لینک Release کار نکرد، از این آدرس مستقیم branch استفاده کنید:
 
