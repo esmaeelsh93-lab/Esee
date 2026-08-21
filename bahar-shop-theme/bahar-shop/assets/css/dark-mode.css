@@ -8,6 +8,8 @@
 [data-theme="dark"] .header-actions__btn,
 [data-theme="dark"] .nav-toggle,
 [data-theme="dark"] .header-insta,
+[data-theme="dark"] .header-whatsapp,
+[data-theme="dark"] .header-call,
 [data-theme="dark"] .header-phone {
   background: var(--surface-elevated);
   border-color: var(--border-subtle);

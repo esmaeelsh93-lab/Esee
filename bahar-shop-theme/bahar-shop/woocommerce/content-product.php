@@ -40,7 +40,6 @@ if ( ! $product->is_in_stock() ) {
 <li <?php wc_product_class( $card_class, $product ); ?>>
 	<div class="bahar-product-card__media<?php echo $slide_count > 1 ? ' has-slider' : ''; ?>" data-bahar-card-gallery>
 		<?php echo bahar_shop_product_card_badges_html( $product ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-		<?php if ( function_exists( 'bahar_shop_wishlist_loop_button' ) ) { bahar_shop_wishlist_loop_button(); } ?>
 		<div class="bahar-product-card__image">
 			<?php foreach ( $image_ids as $index => $image_id ) : ?>
 				<?php
@@ -96,8 +95,9 @@ if ( ! $product->is_in_stock() ) {
 	</a>
 	<div class="bahar-product-card__actions">
 		<a href="<?php echo esc_url( $product->get_permalink() ); ?>" class="bahar-product-card__visit">
-			<?php esc_html_e( 'بازدید', 'bahar-shop' ); ?>
+			<?php esc_html_e( 'دیدن محصول', 'bahar-shop' ); ?>
 		</a>
+		<?php if ( function_exists( 'bahar_shop_wishlist_loop_button' ) ) { bahar_shop_wishlist_loop_button(); } ?>
 		<div class="bahar-product-card__cart-wrap">
 			<?php
 			woocommerce_template_loop_add_to_cart(

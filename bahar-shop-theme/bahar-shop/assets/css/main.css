@@ -28,10 +28,10 @@
     radial-gradient(ellipse 55% 40% at 92% 0%, rgba(205, 180, 219, 0.38), transparent),
     radial-gradient(ellipse 45% 28% at 50% 100%, rgba(255, 200, 221, 0.18), transparent),
     linear-gradient(165deg, #f5f9ff 0%, #ffffff 45%, #faf6fc 100%);
-  --nav-bottom-bg: #ffffff;
+  --nav-bottom-bg: #fff9fc;
   --nav-bottom-text: #5f566c;
-  --nav-bottom-active: #6b9fd4;
-  --nav-bottom-border: rgba(162, 210, 255, 0.55);
+  --nav-bottom-active: #c277a7;
+  --nav-bottom-border: rgba(255, 200, 221, 0.75);
   color-scheme: light;
 }
 
@@ -298,7 +298,10 @@ img {
   }
 
   .main-header__inner .nav-toggle,
-  .main-header__inner .header-insta {
+  .main-header__inner .header-insta,
+  .main-header__inner .header-whatsapp,
+  .main-header__inner .header-call,
+  .main-header__inner .header-mobile-tools {
     display: none;
   }
 
@@ -546,17 +549,57 @@ img {
   position: absolute;
   top: -5px;
   inset-inline-start: -5px;
-  min-width: 20px;
-  height: 20px;
+  min-width: 18px;
+  height: 18px;
   border-radius: var(--radius-pill);
   background: linear-gradient(135deg, var(--pink-neon), var(--pink-deep));
   color: #fff;
-  font-size: 0.72rem;
-  font-weight: 700;
-  display: grid;
+  font-size: 0.68rem;
+  font-weight: 800;
+  display: none;
   place-items: center;
-  padding: 0 5px;
+  padding: 0 4px;
   box-shadow: 0 0 12px rgba(255, 94, 184, 0.5);
+  line-height: 1;
+}
+
+.cart-count.is-visible {
+  display: grid;
+}
+
+.header-mobile-tools {
+  display: none;
+  align-items: center;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+.header-whatsapp,
+.header-call {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(205, 180, 219, 0.45);
+  color: var(--pink-deep);
+  text-decoration: none;
+  box-shadow: 0 6px 16px rgba(205, 180, 219, 0.18);
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.header-whatsapp:hover,
+.header-call:hover {
+  transform: translateY(-1px);
+  color: var(--sky-deep);
+}
+
+.header-whatsapp .icon,
+.header-call .icon {
+  width: 20px;
+  height: 20px;
 }
 
 .icon {
@@ -1205,7 +1248,7 @@ img {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   object-position: center center;
   background: #e8f2fc;
 }
@@ -1275,23 +1318,47 @@ img {
 
 @media (max-width: 900px) {
   .hero--photo {
-    margin-top: 0.55rem;
-    border-radius: 18px;
-    min-height: 320px;
+    width: 100vw;
+    max-width: 100vw;
+    margin: 0;
+    margin-inline: calc(50% - 50vw);
+    border-radius: 0;
+    box-shadow: none;
+    min-height: 50svh;
+    min-height: 50vh;
+  }
+
+  .hero--photo .hero__media picture,
+  .hero--photo .hero__media img {
+    object-fit: cover;
+    object-position: center top;
   }
 
   .hero--photo .hero__content {
-    min-height: 320px;
-    padding: 1.5rem 1rem;
+    align-items: stretch;
+    justify-content: flex-start;
+    text-align: center;
+    min-height: 50svh;
+    min-height: 50vh;
+    padding: calc(0.85rem + env(safe-area-inset-top, 0px)) 1.1rem 1.15rem;
+    gap: 0.35rem;
   }
 
   .hero--photo .hero__brand {
-    font-size: clamp(2rem, 11vw, 2.6rem);
+    margin-top: 0.15rem;
+    font-size: clamp(1.85rem, 9.5vw, 2.55rem);
+  }
+
+  .hero--photo .hero__tagline {
+    font-size: clamp(0.92rem, 3.8vw, 1.1rem);
   }
 
   .hero--photo .hero__cta {
+    align-self: flex-end;
+    margin-top: auto;
+    margin-inline-start: 0;
     font-size: 0.78rem;
-    padding: 0.4rem 1rem;
+    padding: 0.42rem 1rem;
   }
 }
 
@@ -1674,18 +1741,23 @@ html.js-motion .hero--motion .hero__cloud {
 }
 
 .bahar-product-card__image {
-  /* قاب ثابت ۴:۵ — نه نسبت ۷۲۰×۱۲۸۰؛ ارتفاع از کانتینر کنترل می‌شود */
+  /* قاب ثابت ۴:۵ — ارتفاع از تنظیمات بک‌اند قابل تغییر است */
   aspect-ratio: 4 / 5;
   width: 100%;
   max-width: 100%;
   min-height: 0;
-  max-height: 360px;
+  max-height: var(--bahar-card-img-h-desktop, 360px);
   overflow: hidden;
   background: #fff5fa;
   border: 0;
   border-bottom: 1px solid rgba(255, 142, 199, 0.12);
   display: block;
   position: relative;
+}
+
+body.bahar-img-fit--contain .bahar-product-card__slide {
+  object-fit: contain;
+  padding: 0.35rem;
 }
 
 .bahar-product-card__slide {
@@ -1697,9 +1769,9 @@ html.js-motion .hero--motion .hero__cloud {
   height: 100%;
   max-width: 100%;
   max-height: 100%;
-  padding: 0.35rem;
+  padding: 0;
   box-sizing: border-box;
-  object-fit: contain;
+  object-fit: var(--bahar-card-img-fit, cover);
   object-position: center center;
   opacity: 0;
   visibility: hidden;
@@ -1807,7 +1879,7 @@ html.js-motion .hero--motion .hero__cloud {
 .bahar-product-card__actions .button { width: 100% !important; }
 .bahar-product-card__cart-wrap { display: block; }
 
-/* دکمه بازدید — پیش‌فرض مخفی؛ فقط موبایل با عرض کم */
+/* دکمه دیدن محصول — پیش‌فرض مخفی؛ فقط موبایل */
 .bahar-product-card__visit {
   display: none;
   align-items: center;
@@ -1815,8 +1887,8 @@ html.js-motion .hero--motion .hero__cloud {
   width: auto;
   max-width: max-content;
   min-width: 4.5rem;
-  min-height: 26px;
-  height: 26px;
+  min-height: 30px;
+  height: 30px;
   padding: 0 0.7rem;
   border-radius: 8px;
   border: 1px solid rgba(255, 142, 199, 0.4);
@@ -1840,9 +1912,12 @@ html.js-motion .hero--motion .hero__cloud {
   inset-inline-start: 0.55rem;
   z-index: 4;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
   gap: 0.3rem;
   pointer-events: none;
+  max-width: calc(100% - 1.1rem);
 }
 
 .bahar-badge {
@@ -1876,10 +1951,10 @@ html.js-motion .hero--motion .hero__cloud {
 
   .bahar-product-card__image {
     aspect-ratio: 4 / 5;
-    max-height: 280px;
+    max-height: var(--bahar-card-img-h-mobile, 280px);
   }
 
-  .bahar-product-card__slide { padding: 0.3rem; }
+  .bahar-product-card__slide { padding: 0; }
   .bahar-product-card__body { padding: 0.45rem 0.55rem 0.2rem; }
 
   .bahar-product-card .woocommerce-loop-product__title {
@@ -1899,10 +1974,12 @@ html.js-motion .hero--motion .hero__cloud {
   .bahar-product-card__actions {
     padding: 0.15rem 0.55rem 0.45rem;
     display: flex;
+    align-items: center;
     justify-content: flex-start;
+    gap: 0.4rem;
   }
 
-  /* موبایل: حذف انتخاب گزینه‌ها + بازدید باریک */
+  /* موبایل: حذف انتخاب گزینه‌ها + دیدن محصول + قلب */
   .bahar-product-card__cart-wrap,
   .woocommerce ul.products .bahar-product-card .bahar-product-card__cart-wrap,
   .woocommerce ul.products .bahar-product-card .bahar-product-card__actions a.button,
@@ -1922,21 +1999,43 @@ html.js-motion .hero--motion .hero__cloud {
     max-width: max-content;
   }
 
+  .bahar-product-card__actions .bahar-wish-btn {
+    position: static;
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(162, 210, 255, 0.28);
+  }
+
   .bahar-product-card__nav { width: 28px; height: 28px; font-size: 1.1rem; }
   .bahar-badge { font-size: 0.64rem; padding: 0.18rem 0.5rem; }
 }
 
 @media (min-width: 901px) {
   .bahar-product-card__image {
-    max-height: 360px;
+    max-height: var(--bahar-card-img-h-desktop, 360px);
   }
 
   .bahar-product-card__visit {
     display: none !important;
   }
 
+  .bahar-product-card__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .bahar-product-card__actions .bahar-wish-btn {
+    position: static;
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+  }
+
   .bahar-product-card__cart-wrap {
     display: block;
+    flex: 1;
   }
 }
 
@@ -2159,9 +2258,19 @@ html.js-motion .hero--motion .hero__cloud {
   background: rgba(255, 255, 255, 0.7);
   border: 1px solid rgba(255, 142, 199, 0.3);
   color: var(--pink-deep);
+  text-decoration: none;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.footer-social__link:hover {
+  transform: translateY(-2px);
+  color: var(--sky-deep);
 }
 
 .footer-social {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
   margin: 0.5rem 0 0;
 }
 
@@ -2320,27 +2429,36 @@ html.js-motion .hero--motion .hero__cloud {
     height: 40px;
   }
 
-  .site-logo--mobile {
+  .site-logo--mobile,
+  .site-logo--desktop {
     display: none !important;
   }
 
-  .site-logo--desktop {
-    display: block !important;
-  }
-
-  .nav-toggle {
-    display: flex;
-    order: 1;
-  }
-
-  .header-insta {
+  .header-mobile-tools {
     display: inline-flex;
-    order: 2;
+    order: 1;
+    margin-inline-end: 0;
+    margin-inline-start: 0;
+  }
+
+  .nav-toggle,
+  .header-insta,
+  .header-whatsapp,
+  .header-call {
+    display: inline-flex;
+  }
+
+  .header-insta,
+  .header-whatsapp,
+  .header-call {
+    width: 40px;
+    height: 40px;
+    border-radius: 14px;
   }
 
   .primary-nav {
     position: absolute;
-    inset-inline: 1rem;
+    inset-inline: 0.35rem;
     top: calc(100% + 10px);
     display: none;
     background: rgba(255, 255, 255, 0.96);
@@ -2390,11 +2508,13 @@ html.js-motion .hero--motion .hero__cloud {
   .main-header__inner {
     position: relative;
     flex-wrap: nowrap;
-    padding: 0.55rem 0;
+    padding: 0.45rem 0;
+    justify-content: space-between;
+    gap: 0.45rem;
   }
 
   .header-actions {
-    order: 3;
+    order: 2;
     margin-inline-start: auto;
   }
 
@@ -2791,6 +2911,10 @@ html.js-motion .hero--motion .hero__cloud {
   cursor: pointer;
   padding: 0;
   transition: transform 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+
+.bahar-product-card__actions .bahar-wish-btn {
+  position: static;
 }
 
 .bahar-wish-btn svg {

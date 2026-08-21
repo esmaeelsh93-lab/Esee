@@ -296,3 +296,32 @@ function bahar_shop_get_newest_products( $limit = 8 ) {
 		)
 	);
 }
+
+add_filter( 'woocommerce_add_to_cart_fragments', 'bahar_shop_cart_count_fragments' );
+
+/**
+ * Live-update cart count badges in header + bottom nav.
+ *
+ * @param array<string,string> $fragments Woo fragments.
+ * @return array<string,string>
+ */
+function bahar_shop_cart_count_fragments( $fragments ) {
+	$count = ( function_exists( 'WC' ) && WC()->cart ) ? (int) WC()->cart->get_cart_contents_count() : 0;
+	$label = $count > 0 ? (string) $count : '';
+	$class = 'cart-count' . ( $count > 0 ? ' is-visible' : '' );
+
+	$fragments['span.cart-count'] = sprintf(
+		'<span class="%1$s" data-bahar-cart-count>%2$s</span>',
+		esc_attr( $class ),
+		esc_html( $label )
+	);
+
+	$badge_class = 'bahar-bottom-nav__badge' . ( $count > 0 ? ' is-visible' : '' );
+	$fragments['em.bahar-bottom-nav__badge'] = sprintf(
+		'<em class="%1$s" data-bahar-cart-count>%2$s</em>',
+		esc_attr( $badge_class ),
+		esc_html( $label )
+	);
+
+	return $fragments;
+}
