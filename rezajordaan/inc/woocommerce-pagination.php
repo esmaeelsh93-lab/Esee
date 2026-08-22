@@ -361,6 +361,60 @@ add_filter( 'redirect_canonical', 'rezajordaan_preserve_catalog_pagination', 0, 
 add_filter( 'redirect_canonical', 'rezajordaan_preserve_catalog_pagination', 9999, 2 );
 
 /**
+ * Keep /page/N/ when a plugin redirects an old category slug to a new one.
+ *
+ * A rule like شلوار → pants must become شلوار/page/2/ → pants/page/2/,
+ * not pants/ (which looks like pagination is broken).
+ *
+ * @param string $location Redirect target.
+ * @param int    $status   HTTP status.
+ * @return string
+ */
+function rezajordaan_preserve_paged_on_redirect( $location, $status ) {
+	if ( $status < 300 || $status > 399 || ! is_string( $location ) || '' === $location ) {
+		return $location;
+	}
+
+	$requested_path = rezajordaan_requested_path();
+	if ( ! preg_match( '#/page/([0-9]+)/?$#u', $requested_path, $matches ) ) {
+		return $location;
+	}
+
+	$page_number = (int) $matches[1];
+	if ( $page_number < 2 || ! rezajordaan_path_is_catalog( $requested_path ) ) {
+		return $location;
+	}
+
+	$destination_path = rezajordaan_requested_path( $location );
+	if ( '' === $destination_path || preg_match( '#/page/[0-9]+/?$#u', $destination_path ) ) {
+		return $location;
+	}
+
+	if ( ! rezajordaan_path_is_catalog( $destination_path ) ) {
+		return $location;
+	}
+
+	$parts = wp_parse_url( $location );
+	if ( ! is_array( $parts ) ) {
+		return $location;
+	}
+
+	$path  = trailingslashit( isset( $parts['path'] ) ? $parts['path'] : '/' );
+	$built = $path . 'page/' . $page_number . '/';
+
+	if ( ! empty( $parts['scheme'] ) && ! empty( $parts['host'] ) ) {
+		$built = $parts['scheme'] . '://' . $parts['host'] . ( isset( $parts['port'] ) ? ':' . $parts['port'] : '' ) . $built;
+	}
+
+	if ( ! empty( $parts['query'] ) ) {
+		$built .= '?' . $parts['query'];
+	}
+
+	return $built;
+}
+add_filter( 'wp_redirect', 'rezajordaan_preserve_paged_on_redirect', 1000, 2 );
+
+/**
  * Flush rewrite rules once after this pagination fix lands.
  */
 function rezajordaan_maybe_flush_catalog_rewrites() {
