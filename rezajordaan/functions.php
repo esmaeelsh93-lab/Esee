@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'REZAJORDAAN_VERSION', '1.5.11' );
+define( 'REZAJORDAAN_VERSION', '1.5.12' );
 
 require_once get_template_directory() . '/inc/theme-settings.php';
 require_once get_template_directory() . '/inc/page-content.php';
@@ -496,7 +496,10 @@ function rezajordaan_catalog_ordering_args( $args ) {
 	$requested = isset( $_GET['orderby'] ) ? wc_clean( wp_unslash( $_GET['orderby'] ) ) : '';
 
 	if ( '' === $requested || 'menu_order' === $requested || 'date' === $requested ) {
-		$args['orderby'] = 'date ID';
+		$args['orderby'] = array(
+			'date' => 'DESC',
+			'ID'   => 'DESC',
+		);
 		$args['order']   = 'DESC';
 	}
 

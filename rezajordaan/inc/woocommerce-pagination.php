@@ -2,9 +2,9 @@
 /**
  * Keep WooCommerce shop and taxonomy pagination on the requested page.
  *
- * WordPress treats the shop as a singular Page and also strips /page/N/
- * from catalog URLs when `paged` is missing. That 301s every "next" click
- * back to page 1. Restore the page number from the URL and skip that redirect.
+ * Nested product categories (/parent/child/page/2/) are parsed as if "page"
+ * were a child term, then WordPress 301s back to page 1. The shop is a Page,
+ * so /shop/page/2/ is treated as <!--nextpage--> content and also redirected.
  *
  * @package RezaJordaan
  */
@@ -16,10 +16,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Current request path, decoded so Persian category slugs match.
  *
+ * @param string $url Optional absolute or relative URL.
  * @return string
  */
-function rezajordaan_requested_path() {
-	$uri  = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '';
+function rezajordaan_requested_path( $url = '' ) {
+	if ( '' === $url ) {
+		$uri = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '';
+	} else {
+		$uri = $url;
+	}
+
 	$path = wp_parse_url( $uri, PHP_URL_PATH );
 
 	return is_string( $path ) ? rawurldecode( $path ) : '';
@@ -28,10 +34,11 @@ function rezajordaan_requested_path() {
 /**
  * Page number from pretty permalinks or query args.
  *
+ * @param string $url Optional URL to inspect.
  * @return int
  */
-function rezajordaan_requested_page_number() {
-	$path = rezajordaan_requested_path();
+function rezajordaan_requested_page_number( $url = '' ) {
+	$path = rezajordaan_requested_path( $url );
 
 	if ( preg_match( '#/page/([0-9]+)/?$#u', $path, $matches ) ) {
 		return max( 1, (int) $matches[1] );
@@ -43,7 +50,11 @@ function rezajordaan_requested_page_number() {
 		}
 	}
 
-	return max( 1, (int) get_query_var( 'paged' ), (int) get_query_var( 'page' ) );
+	if ( function_exists( 'get_query_var' ) ) {
+		return max( 1, (int) get_query_var( 'paged' ), (int) get_query_var( 'page' ) );
+	}
+
+	return 1;
 }
 
 /**
@@ -56,7 +67,7 @@ function rezajordaan_catalog_path_bases() {
 
 	if ( function_exists( 'wc_get_permalink_structure' ) ) {
 		$permalinks = wc_get_permalink_structure();
-		foreach ( array( 'category_rewrite_slug', 'tag_rewrite_slug', 'product_rewrite_slug' ) as $key ) {
+		foreach ( array( 'category_rewrite_slug', 'tag_rewrite_slug' ) as $key ) {
 			if ( ! empty( $permalinks[ $key ] ) ) {
 				$bases[] = trim( (string) $permalinks[ $key ], '/' );
 			}
@@ -73,46 +84,114 @@ function rezajordaan_catalog_path_bases() {
 		}
 	}
 
-	$bases = array_values( array_unique( array_filter( $bases ) ) );
-
-	return $bases;
+	return array_values( array_unique( array_filter( $bases ) ) );
 }
 
 /**
- * Whether this request is a paginated WooCommerce catalog URL.
+ * Whether a URL path belongs to the shop or a product taxonomy archive.
  *
+ * @param string $path Decoded path.
  * @return bool
  */
-function rezajordaan_is_catalog_paged_request() {
-	$page_number = rezajordaan_requested_page_number();
-	$path        = rezajordaan_requested_path();
-
-	if ( $page_number <= 1 && ! preg_match( '#/page/[0-9]+/?$#u', $path ) ) {
-		return false;
-	}
-
-	if ( function_exists( 'is_shop' ) && ( is_shop() || is_product_taxonomy() || is_post_type_archive( 'product' ) ) ) {
-		return $page_number > 1;
-	}
-
-	if ( ! $path ) {
-		return false;
-	}
-
-	$shop_id  = function_exists( 'wc_get_page_id' ) ? (int) wc_get_page_id( 'shop' ) : 0;
-	$shop_uri = $shop_id > 0 ? trim( (string) get_page_uri( $shop_id ), '/' ) : 'shop';
-
-	if ( $shop_uri && preg_match( '#/' . preg_quote( $shop_uri, '#' ) . '/page/[0-9]+/?$#u', $path ) ) {
-		return true;
-	}
+function rezajordaan_path_is_catalog( $path ) {
+	$path = '/' . trim( (string) $path, '/' ) . '/';
 
 	foreach ( rezajordaan_catalog_path_bases() as $base ) {
-		if ( preg_match( '#/' . preg_quote( $base, '#' ) . '/.+/page/[0-9]+/?$#u', $path ) ) {
+		$base = trim( $base, '/' );
+		if ( '' === $base ) {
+			continue;
+		}
+
+		if ( preg_match( '#/' . preg_quote( $base, '#' ) . '/#u', $path ) ) {
 			return true;
 		}
 	}
 
 	return false;
+}
+
+/**
+ * Shop page URI slug (usually shop).
+ *
+ * @return string
+ */
+function rezajordaan_shop_path_slug() {
+	if ( function_exists( 'wc_get_page_id' ) ) {
+		$shop_id = (int) wc_get_page_id( 'shop' );
+		if ( $shop_id > 0 ) {
+			$shop_uri = get_page_uri( $shop_id );
+			if ( $shop_uri ) {
+				return trim( $shop_uri, '/' );
+			}
+		}
+	}
+
+	return 'shop';
+}
+
+/**
+ * Put catalog /page/N/ rewrite rules first so nested categories keep working.
+ */
+function rezajordaan_add_catalog_pagination_rewrites() {
+	$category_bases = array( 'product-category' );
+	$tag_bases      = array( 'product-tag' );
+
+	if ( function_exists( 'wc_get_permalink_structure' ) ) {
+		$permalinks = wc_get_permalink_structure();
+		if ( ! empty( $permalinks['category_rewrite_slug'] ) ) {
+			$category_bases[] = trim( (string) $permalinks['category_rewrite_slug'], '/' );
+		}
+		if ( ! empty( $permalinks['tag_rewrite_slug'] ) ) {
+			$tag_bases[] = trim( (string) $permalinks['tag_rewrite_slug'], '/' );
+		}
+	}
+
+	foreach ( array_unique( array_filter( $category_bases ) ) as $base ) {
+		add_rewrite_rule(
+			$base . '/(.+?)/page/?([0-9]{1,})/?$',
+			'index.php?product_cat=$matches[1]&paged=$matches[2]',
+			'top'
+		);
+	}
+
+	foreach ( array_unique( array_filter( $tag_bases ) ) as $base ) {
+		add_rewrite_rule(
+			$base . '/(.+?)/page/?([0-9]{1,})/?$',
+			'index.php?product_tag=$matches[1]&paged=$matches[2]',
+			'top'
+		);
+	}
+
+	$shop = rezajordaan_shop_path_slug();
+	if ( $shop ) {
+		add_rewrite_rule(
+			$shop . '/page/?([0-9]{1,})/?$',
+			'index.php?post_type=product&paged=$matches[1]',
+			'top'
+		);
+	}
+}
+add_action( 'init', 'rezajordaan_add_catalog_pagination_rewrites', 8 );
+
+/**
+ * Strip a trailing /page or /page/N that WordPress folded into the term slug.
+ *
+ * @param string $value Term path from rewrite.
+ * @return array{0:string,1:int} Term path and page number (0 if none).
+ */
+function rezajordaan_split_term_paged_path( $value ) {
+	$value = rawurldecode( (string) $value );
+	$page  = 0;
+
+	if ( preg_match( '#^(.+)/page/([0-9]+)$#u', $value, $matches ) ) {
+		return array( $matches[1], (int) $matches[2] );
+	}
+
+	if ( preg_match( '#^(.+)/page$#u', $value, $matches ) ) {
+		return array( $matches[1], 0 );
+	}
+
+	return array( $value, $page );
 }
 
 /**
@@ -122,49 +201,54 @@ function rezajordaan_is_catalog_paged_request() {
  * @return array<string, mixed>
  */
 function rezajordaan_catalog_request_vars( $vars ) {
-	$page_number = 0;
+	$page_number = rezajordaan_requested_page_number();
 
 	if ( ! empty( $vars['paged'] ) ) {
-		$page_number = (int) $vars['paged'];
-	} elseif ( ! empty( $vars['page'] ) ) {
-		$page_number = (int) $vars['page'];
+		$page_number = max( $page_number, (int) $vars['paged'] );
 	}
 
-	if ( $page_number < 2 ) {
-		$page_number = rezajordaan_requested_page_number();
+	if ( ! empty( $vars['page'] ) ) {
+		$page_number = max( $page_number, (int) $vars['page'] );
 	}
 
-	if ( $page_number < 2 ) {
-		return $vars;
+	foreach ( array( 'product_cat', 'product_tag' ) as $tax_var ) {
+		if ( empty( $vars[ $tax_var ] ) || ! is_string( $vars[ $tax_var ] ) ) {
+			continue;
+		}
+
+		list( $term_path, $term_page ) = rezajordaan_split_term_paged_path( $vars[ $tax_var ] );
+		$vars[ $tax_var ]              = $term_path;
+		$page_number                   = max( $page_number, $term_page );
 	}
 
-	$is_catalog = isset( $vars['product_cat'] ) || isset( $vars['product_tag'] ) || ( isset( $vars['post_type'] ) && 'product' === $vars['post_type'] );
-
-	if ( ! empty( $vars['pagename'] ) && preg_match( '#^(.+)/page/([0-9]+)$#u', (string) $vars['pagename'], $matches ) ) {
+	if ( ! empty( $vars['pagename'] ) && is_string( $vars['pagename'] ) && preg_match( '#^(.+)/page/([0-9]+)$#u', $vars['pagename'], $matches ) ) {
 		$vars['pagename'] = $matches[1];
 		$page_number      = max( $page_number, (int) $matches[2] );
 	}
 
 	$shop_id  = function_exists( 'wc_get_page_id' ) ? (int) wc_get_page_id( 'shop' ) : 0;
-	$shop_uri = $shop_id > 0 ? trim( (string) get_page_uri( $shop_id ), '/' ) : '';
+	$shop_uri = $shop_id > 0 ? trim( (string) get_page_uri( $shop_id ), '/' ) : 'shop';
 
-	if ( $shop_id && $shop_uri && ! empty( $vars['pagename'] ) && trim( (string) $vars['pagename'], '/' ) === $shop_uri ) {
-		$is_catalog        = true;
-		$vars['page_id']   = $shop_id;
-		$vars['pagename']  = $shop_uri;
+	$is_catalog = isset( $vars['product_cat'] ) || isset( $vars['product_tag'] ) || ( isset( $vars['post_type'] ) && 'product' === $vars['post_type'] );
+
+	if ( $shop_id && ! empty( $vars['pagename'] ) && trim( (string) $vars['pagename'], '/' ) === $shop_uri ) {
+		$is_catalog       = true;
+		$vars['page_id']  = $shop_id;
+		$vars['pagename'] = $shop_uri;
 	}
 
-	if ( ! $is_catalog && rezajordaan_is_catalog_paged_request() ) {
+	if ( ! $is_catalog && rezajordaan_path_is_catalog( rezajordaan_requested_path() ) ) {
 		$is_catalog = true;
 	}
 
-	if ( $is_catalog ) {
+	if ( $is_catalog && $page_number > 1 ) {
 		$vars['paged'] = $page_number;
+		$vars['page']  = $page_number;
 	}
 
 	return $vars;
 }
-add_filter( 'request', 'rezajordaan_catalog_request_vars', 20 );
+add_filter( 'request', 'rezajordaan_catalog_request_vars', 1 );
 
 /**
  * Force the main catalog query onto the requested page.
@@ -172,18 +256,13 @@ add_filter( 'request', 'rezajordaan_catalog_request_vars', 20 );
  * @param WP_Query $query Current query.
  */
 function rezajordaan_apply_catalog_paged_query( $query ) {
-	if ( is_admin() || ! $query->is_main_query() ) {
+	if ( is_admin() || ! $query instanceof WP_Query || ! $query->is_main_query() ) {
 		return;
 	}
 
+	$path        = rezajordaan_requested_path();
 	$page_number = rezajordaan_requested_page_number();
-	if ( $page_number <= 1 ) {
-		$page_number = max( 1, (int) $query->get( 'paged' ), (int) $query->get( 'page' ) );
-	}
-
-	if ( $page_number <= 1 ) {
-		return;
-	}
+	$page_number = max( $page_number, (int) $query->get( 'paged' ), (int) $query->get( 'page' ) );
 
 	$is_catalog = $query->is_post_type_archive( 'product' ) || $query->is_tax( 'product_cat' ) || $query->is_tax( 'product_tag' );
 
@@ -201,11 +280,11 @@ function rezajordaan_apply_catalog_paged_query( $query ) {
 		$is_catalog = true;
 	}
 
-	if ( ! $is_catalog && rezajordaan_is_catalog_paged_request() ) {
+	if ( ! $is_catalog && rezajordaan_path_is_catalog( $path ) ) {
 		$is_catalog = true;
 	}
 
-	if ( ! $is_catalog ) {
+	if ( ! $is_catalog || $page_number <= 1 ) {
 		return;
 	}
 
@@ -213,8 +292,8 @@ function rezajordaan_apply_catalog_paged_query( $query ) {
 	$query->is_paged = true;
 	$query->is_404   = false;
 }
-add_action( 'pre_get_posts', 'rezajordaan_apply_catalog_paged_query', 9 );
-add_action( 'woocommerce_product_query', 'rezajordaan_apply_catalog_paged_query', 20 );
+add_action( 'pre_get_posts', 'rezajordaan_apply_catalog_paged_query', 1 );
+add_action( 'woocommerce_product_query', 'rezajordaan_apply_catalog_paged_query', 1 );
 
 /**
  * Shop is a Page: WordPress 404s /shop/page/2/ when there is no <!--nextpage-->.
@@ -228,14 +307,11 @@ function rezajordaan_pre_handle_catalog_404( $preempt, $wp_query ) {
 		return $preempt;
 	}
 
-	if ( ! rezajordaan_is_catalog_paged_request() ) {
-		$page_number = max( 1, (int) $wp_query->get( 'paged' ), (int) $wp_query->get( 'page' ) );
-		$is_shop     = function_exists( 'is_shop' ) && is_shop();
-		$is_tax      = function_exists( 'is_product_taxonomy' ) && is_product_taxonomy();
+	$path        = rezajordaan_requested_path();
+	$page_number = rezajordaan_requested_page_number();
 
-		if ( $page_number <= 1 || ( ! $is_shop && ! $is_tax ) ) {
-			return $preempt;
-		}
+	if ( $page_number <= 1 || ! rezajordaan_path_is_catalog( $path ) ) {
+		return $preempt;
 	}
 
 	$wp_query->is_404 = false;
@@ -243,10 +319,13 @@ function rezajordaan_pre_handle_catalog_404( $preempt, $wp_query ) {
 
 	return true;
 }
-add_filter( 'pre_handle_404', 'rezajordaan_pre_handle_catalog_404', 5, 2 );
+add_filter( 'pre_handle_404', 'rezajordaan_pre_handle_catalog_404', 1, 2 );
 
 /**
  * Stop WordPress from 301ing catalog /page/2/ back to page 1.
+ *
+ * Compare the requested URL with the canonical target so nested categories
+ * keep /page/N/ even when is_shop()/is_product_taxonomy() are still false.
  *
  * @param string|false $redirect_url  Canonical redirect target.
  * @param string       $requested_url Original request.
@@ -257,25 +336,29 @@ function rezajordaan_preserve_catalog_pagination( $redirect_url, $requested_url 
 		return $redirect_url;
 	}
 
-	if ( rezajordaan_is_catalog_paged_request() ) {
-		return false;
+	$requested_path = rezajordaan_requested_path( $requested_url );
+	if ( '' === $requested_path ) {
+		$requested_path = rezajordaan_requested_path();
 	}
 
-	$page_number = max( 1, (int) get_query_var( 'paged' ), (int) get_query_var( 'page' ) );
-	if ( $page_number <= 1 ) {
-		$path = (string) wp_parse_url( (string) $requested_url, PHP_URL_PATH );
-		if ( ! preg_match( '#/page/[0-9]+/?$#u', rawurldecode( $path ) ) ) {
-			return $redirect_url;
-		}
+	if ( ! preg_match( '#/page/([0-9]+)/?$#u', $requested_path, $matches ) ) {
+		return $redirect_url;
 	}
 
-	if ( function_exists( 'is_shop' ) && ( is_shop() || is_product_taxonomy() || is_post_type_archive( 'product' ) ) ) {
+	$page_number = (int) $matches[1];
+	if ( $page_number <= 1 || ! rezajordaan_path_is_catalog( $requested_path ) ) {
+		return $redirect_url;
+	}
+
+	$redirect_path = rezajordaan_requested_path( $redirect_url );
+	if ( ! preg_match( '#/page/' . $page_number . '/?$#u', $redirect_path ) ) {
 		return false;
 	}
 
 	return $redirect_url;
 }
-add_filter( 'redirect_canonical', 'rezajordaan_preserve_catalog_pagination', 999, 2 );
+add_filter( 'redirect_canonical', 'rezajordaan_preserve_catalog_pagination', 0, 2 );
+add_filter( 'redirect_canonical', 'rezajordaan_preserve_catalog_pagination', 9999, 2 );
 
 /**
  * Flush rewrite rules once after this pagination fix lands.
