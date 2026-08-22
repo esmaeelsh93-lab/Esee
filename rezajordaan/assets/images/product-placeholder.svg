@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 760" role="img" aria-label="Parisa Crop product placeholder">
+  <defs>
+    <linearGradient id="placeholderBg" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#fbf1e4"/>
+      <stop offset=".48" stop-color="#f4c6cb"/>
+      <stop offset="1" stop-color="#d9ae6e"/>
+    </linearGradient>
+    <linearGradient id="topFill" x1="0" y1="0" x2=".8" y2="1">
+      <stop stop-color="#ee8496"/>
+      <stop offset="1" stop-color="#b3364a"/>
+    </linearGradient>
+  </defs>
+  <rect width="720" height="760" rx="40" fill="url(#placeholderBg)"/>
+  <circle cx="360" cy="340" r="260" fill="#fff" opacity=".25"/>
+  <path d="M359 97c-36 0-65 29-65 65 0 23 14 44 34 55l-9 36" fill="none" stroke="#7a5240" stroke-width="18" stroke-linecap="round"/>
+  <path d="m318 252-191 102c-29 15-18 59 15 59h436c33 0 44-44 15-59L402 252c-26-14-58-14-84 0Z" fill="none" stroke="#c9793e" stroke-width="20" stroke-linejoin="round"/>
+  <path d="m259 377-50 73 45 223h212l45-223-50-73-52 33c-31 20-69 20-100 0l-50-33Z" fill="url(#topFill)" opacity=".92"/>
+  <path d="M295 394c30 17 49 23 65 23 17 0 37-6 66-23" fill="none" stroke="#f4c6cb" stroke-width="8" stroke-linecap="round"/>
+  <path d="M249 615h222" stroke="#f4c6cb" stroke-width="5" stroke-dasharray="9 14" opacity=".8"/>
+  <text x="360" y="718" text-anchor="middle" fill="#7a5240" font-family="Georgia, serif" font-size="27" letter-spacing="6">PARISA CROP</text>
+</svg>
