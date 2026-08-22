@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'REZAJORDAAN_VERSION', '1.5.13' );
+define( 'REZAJORDAAN_VERSION', '1.5.14' );
 
 require_once get_template_directory() . '/inc/theme-settings.php';
 require_once get_template_directory() . '/inc/page-content.php';
@@ -110,7 +110,11 @@ function rezajordaan_enqueue_assets() {
 		'rezajordaan-main',
 		'rezajordaanConfig',
 		array(
-			'marqueeSpeed' => absint( rezajordaan_get_setting( 'marquee_speed' ) ),
+			'marqueeSpeed'  => absint( rezajordaan_get_setting( 'marquee_speed' ) ),
+			'ajaxUrl'       => admin_url( 'admin-ajax.php' ),
+			'loadMoreNonce' => wp_create_nonce( 'rezajordaan_load_more' ),
+			'loadMoreBusy'  => __( 'در حال بارگذاری…', 'rezajordaan' ),
+			'loadMoreDone'  => __( 'همه محصولات نمایش داده شد', 'rezajordaan' ),
 		)
 	);
 }
@@ -444,6 +448,10 @@ function rezajordaan_single_purchase_box_close() {
  * Determine whether the current loop should use the compact archive card.
  */
 function rezajordaan_is_archive_product_card() {
+	if ( ! empty( $GLOBALS['rezajordaan_ajax_archive_cards'] ) ) {
+		return true;
+	}
+
 	if ( is_admin() || ! function_exists( 'is_woocommerce' ) ) {
 		return false;
 	}

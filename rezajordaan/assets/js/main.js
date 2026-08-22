@@ -176,6 +176,82 @@
 
 	initProductMarquee();
 
+	const loadMoreWrap = document.querySelector("[data-load-more]");
+	const loadMoreButton = loadMoreWrap?.querySelector("[data-load-more-button]");
+	const productGrid = document.querySelector(".rezajordaan-archive-cards ul.products");
+	if (loadMoreWrap && loadMoreButton && productGrid) {
+		let config = {};
+		try {
+			config = JSON.parse(loadMoreButton.getAttribute("data-load-more-config") || "{}");
+		} catch (_error) {
+			config = {};
+		}
+
+		const ajaxUrl = window.rezajordaanConfig?.ajaxUrl;
+		const nonce = window.rezajordaanConfig?.loadMoreNonce;
+		const busyLabel = window.rezajordaanConfig?.loadMoreBusy || "در حال بارگذاری…";
+		const doneLabel = window.rezajordaanConfig?.loadMoreDone || "همه محصولات نمایش داده شد";
+		const idleLabel = loadMoreButton.querySelector("span")?.textContent || "بارگذاری بیشتر";
+
+		loadMoreButton.addEventListener("click", async () => {
+			if (loadMoreButton.dataset.busy === "1" || !ajaxUrl || !nonce) return;
+
+			const nextPage = Number(config.page || 1) + 1;
+			loadMoreButton.dataset.busy = "1";
+			loadMoreButton.disabled = true;
+			const label = loadMoreButton.querySelector("span");
+			if (label) label.textContent = busyLabel;
+
+			const body = new URLSearchParams();
+			body.set("action", "rezajordaan_load_more_products");
+			body.set("nonce", nonce);
+			body.set("page", String(nextPage));
+			body.set("max", String(config.max || 1));
+			body.set("taxonomy", config.taxonomy || "");
+			body.set("term", String(config.term || 0));
+			body.set("orderby", config.orderby || "");
+			body.set("min_price", config.min_price || "");
+			body.set("max_price", config.max_price || "");
+			body.set("search", config.search || "");
+			(Array.isArray(config.sizes) ? config.sizes : []).forEach((sizeId) => {
+				body.append("sizes[]", String(sizeId));
+			});
+
+			try {
+				const response = await fetch(ajaxUrl, {
+					method: "POST",
+					credentials: "same-origin",
+					headers: { "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8" },
+					body,
+				});
+				const payload = await response.json();
+				const html = payload?.data?.html || "";
+				const hasMore = Boolean(payload?.success && payload?.data?.hasMore && html);
+
+				if (html) {
+					productGrid.insertAdjacentHTML("beforeend", html);
+					config.page = nextPage;
+					loadMoreButton.setAttribute("data-load-more-config", JSON.stringify(config));
+				}
+
+				if (hasMore) {
+					if (label) label.textContent = idleLabel;
+					loadMoreButton.disabled = false;
+					loadMoreButton.dataset.busy = "0";
+					return;
+				}
+
+				if (label) label.textContent = doneLabel;
+				loadMoreWrap.classList.add("is-complete");
+			} catch (_error) {
+				if (label) label.textContent = idleLabel;
+				loadMoreButton.disabled = false;
+			} finally {
+				loadMoreButton.dataset.busy = "0";
+			}
+		});
+	}
+
 	document.querySelectorAll(".woocommerce-product-gallery").forEach((gallery) => {
 		const track = gallery.querySelector(".woocommerce-product-gallery__wrapper, .flex-viewport .slides");
 		const thumbs = gallery.querySelector(".flex-control-thumbs");

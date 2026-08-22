@@ -2665,6 +2665,24 @@ button {
 	color: var(--rj-rose);
 }
 
+.woocommerce-pagination {
+	display: none;
+}
+
+.rj-load-more {
+	display: flex;
+	justify-content: center;
+	margin: 36px 0 8px;
+}
+
+.rj-load-more.is-complete .rj-button {
+	background: var(--rj-white);
+	box-shadow: none;
+	color: var(--rj-brown);
+	pointer-events: none;
+	transform: none;
+}
+
 .content-empty {
 	background: var(--rj-white);
 	border: 1px dashed var(--rj-gold);
