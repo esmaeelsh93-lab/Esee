@@ -16,10 +16,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function bahar_shop_bottom_nav_defaults() {
 	return array(
-		'bg'     => '#fff9fc',
-		'text'   => '#5f566c',
-		'active' => '#c277a7',
-		'border' => '#ffc8dd',
+		'bg'         => '#fff9fc',
+		'text'       => '#5f566c',
+		'active'     => '#c277a7',
+		'border'     => '#ffc8dd',
+		'custom_css' => '',
 	);
 }
 
@@ -99,113 +100,132 @@ function bahar_shop_sanitize_bottom_nav( $input ) {
 			}
 		}
 	}
+	if ( isset( $input['custom_css'] ) && function_exists( 'bahar_shop_sanitize_custom_css' ) ) {
+		$out['custom_css'] = bahar_shop_sanitize_custom_css( $input['custom_css'] );
+	}
 	return $out;
 }
 
 /**
- * Admin UI.
+ * Admin UI (tabbed).
  */
 function bahar_shop_render_settings_page() {
 	if ( ! current_user_can( 'edit_theme_options' ) ) {
 		return;
 	}
+	$tab   = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : 'general'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$tabs  = array(
+		'general'  => __( 'عمومی', 'bahar-shop' ),
+		'hero'     => __( 'هیرو', 'bahar-shop' ),
+		'header'   => __( 'هدر', 'bahar-shop' ),
+		'footer'   => __( 'فوتر', 'bahar-shop' ),
+		'buttons'  => __( 'دکمه‌ها', 'bahar-shop' ),
+		'images'   => __( 'عکس‌ها', 'bahar-shop' ),
+		'nav'      => __( 'نوار پایین', 'bahar-shop' ),
+	);
+	if ( ! isset( $tabs[ $tab ] ) ) {
+		$tab = 'general';
+	}
 	$c     = bahar_shop_bottom_nav_colors();
 	$sale  = bahar_shop_sale_slider_settings();
 	$image = function_exists( 'bahar_shop_image_settings' ) ? bahar_shop_image_settings() : array();
+	$lm    = function_exists( 'bahar_shop_load_more_settings' ) ? bahar_shop_load_more_settings() : array( 'enabled' => 1, 'label' => 'بارگذاری بیشتر' );
+	$base  = admin_url( 'themes.php?page=bahar-shop-settings' );
 	?>
 	<div class="wrap" dir="rtl">
 		<h1><?php esc_html_e( 'تنظیمات بهار شاپ', 'bahar-shop' ); ?></h1>
-		<p><?php esc_html_e( 'رنگ نوار پایین، اسلایدر تخفیف و نمایش عکس‌های کارت/گالری را اینجا تنظیم کن.', 'bahar-shop' ); ?></p>
+		<nav class="nav-tab-wrapper" style="margin-bottom:1rem;">
+			<?php foreach ( $tabs as $key => $label ) : ?>
+				<a class="nav-tab <?php echo $tab === $key ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( add_query_arg( 'tab', $key, $base ) ); ?>"><?php echo esc_html( $label ); ?></a>
+			<?php endforeach; ?>
+		</nav>
 		<form method="post" action="options.php">
 			<?php settings_fields( 'bahar_shop_settings' ); ?>
 
-			<h2><?php esc_html_e( 'نوار پایین موبایل', 'bahar-shop' ); ?></h2>
-			<table class="form-table" role="presentation">
-				<tr>
-					<th scope="row"><label for="bahar_nav_bg"><?php esc_html_e( 'پس‌زمینه نوار', 'bahar-shop' ); ?></label></th>
-					<td><input type="color" id="bahar_nav_bg" name="bahar_shop_bottom_nav[bg]" value="<?php echo esc_attr( $c['bg'] ); ?>" /></td>
-				</tr>
-				<tr>
-					<th scope="row"><label for="bahar_nav_text"><?php esc_html_e( 'رنگ متن / آیکون', 'bahar-shop' ); ?></label></th>
-					<td><input type="color" id="bahar_nav_text" name="bahar_shop_bottom_nav[text]" value="<?php echo esc_attr( $c['text'] ); ?>" /></td>
-				</tr>
-				<tr>
-					<th scope="row"><label for="bahar_nav_active"><?php esc_html_e( 'رنگ فعال', 'bahar-shop' ); ?></label></th>
-					<td><input type="color" id="bahar_nav_active" name="bahar_shop_bottom_nav[active]" value="<?php echo esc_attr( $c['active'] ); ?>" /></td>
-				</tr>
-				<tr>
-					<th scope="row"><label for="bahar_nav_border"><?php esc_html_e( 'رنگ حاشیه', 'bahar-shop' ); ?></label></th>
-					<td><input type="color" id="bahar_nav_border" name="bahar_shop_bottom_nav[border]" value="<?php echo esc_attr( $c['border'] ); ?>" /></td>
-				</tr>
-			</table>
+			<?php if ( 'general' === $tab ) : ?>
+				<h2><?php esc_html_e( 'اسلایدر تخفیف و بارگذاری بیشتر', 'bahar-shop' ); ?></h2>
+				<table class="form-table" role="presentation">
+					<tr>
+						<th><?php esc_html_e( 'اسلایدر تخفیف', 'bahar-shop' ); ?></th>
+						<td>
+							<label><input type="checkbox" name="bahar_shop_sale_slider[enabled]" value="1" <?php checked( ! empty( $sale['enabled'] ) ); ?> /> <?php esc_html_e( 'فعال در صفحه اصلی', 'bahar-shop' ); ?></label>
+						</td>
+					</tr>
+					<tr>
+						<th><label for="bahar_sale_speed"><?php esc_html_e( 'سرعت اسلایدر (ثانیه)', 'bahar-shop' ); ?></label></th>
+						<td><input type="number" id="bahar_sale_speed" name="bahar_shop_sale_slider[speed]" value="<?php echo esc_attr( (int) $sale['speed'] ); ?>" min="10" max="120" /></td>
+					</tr>
+					<tr>
+						<th><?php esc_html_e( 'بارگذاری بیشتر محصولات', 'bahar-shop' ); ?></th>
+						<td>
+							<label><input type="checkbox" name="bahar_shop_load_more[enabled]" value="1" <?php checked( ! empty( $lm['enabled'] ) ); ?> /> <?php esc_html_e( 'در فروشگاه و دسته‌بندی‌ها به‌جای صفحه‌بندی کلاسیک', 'bahar-shop' ); ?></label>
+						</td>
+					</tr>
+					<tr>
+						<th><?php esc_html_e( 'متن دکمه بارگذاری', 'bahar-shop' ); ?></th>
+						<td><input type="text" class="regular-text" name="bahar_shop_load_more[label]" value="<?php echo esc_attr( $lm['label'] ?? 'بارگذاری بیشتر' ); ?>" /></td>
+					</tr>
+				</table>
+			<?php elseif ( 'hero' === $tab && function_exists( 'bahar_shop_render_hero_fields' ) ) : ?>
+				<?php bahar_shop_render_hero_fields(); ?>
+			<?php elseif ( 'header' === $tab && function_exists( 'bahar_shop_render_header_fields' ) ) : ?>
+				<?php bahar_shop_render_header_fields(); ?>
+			<?php elseif ( 'footer' === $tab && function_exists( 'bahar_shop_render_footer_fields' ) ) : ?>
+				<?php bahar_shop_render_footer_fields(); ?>
+			<?php elseif ( 'buttons' === $tab && function_exists( 'bahar_shop_render_button_fields' ) ) : ?>
+				<?php bahar_shop_render_button_fields(); ?>
+			<?php elseif ( 'images' === $tab ) : ?>
+				<table class="form-table" role="presentation">
+					<tr>
+						<th><?php esc_html_e( 'پر کردن قاب کارت', 'bahar-shop' ); ?></th>
+						<td>
+							<label style="display:block;margin-bottom:.4rem;"><input type="radio" name="bahar_shop_image_settings[fit_mode]" value="cover" <?php checked( ( $image['fit_mode'] ?? 'cover' ), 'cover' ); ?> /> <?php esc_html_e( 'پر کردن قاب (ممکن است کمی برش بخورد)', 'bahar-shop' ); ?></label>
+							<label style="display:block;"><input type="radio" name="bahar_shop_image_settings[fit_mode]" value="contain" <?php checked( ( $image['fit_mode'] ?? '' ), 'contain' ); ?> /> <?php esc_html_e( 'حالت امن — عکس کامل بدون برش', 'bahar-shop' ); ?></label>
+						</td>
+					</tr>
+					<tr>
+						<th><?php esc_html_e( 'گالری صفحه محصول', 'bahar-shop' ); ?></th>
+						<td>
+							<label style="display:block;margin-bottom:.4rem;"><input type="radio" name="bahar_shop_image_settings[gallery_fit]" value="cover" <?php checked( ( $image['gallery_fit'] ?? 'cover' ), 'cover' ); ?> /> <?php esc_html_e( 'پر کردن قاب', 'bahar-shop' ); ?></label>
+							<label style="display:block;"><input type="radio" name="bahar_shop_image_settings[gallery_fit]" value="contain" <?php checked( ( $image['gallery_fit'] ?? '' ), 'contain' ); ?> /> <?php esc_html_e( 'حالت امن', 'bahar-shop' ); ?></label>
+						</td>
+					</tr>
+					<tr>
+						<th><?php esc_html_e( 'ارتفاع عکس کارت دسکتاپ', 'bahar-shop' ); ?></th>
+						<td><input type="number" name="bahar_shop_image_settings[card_height_desktop]" value="<?php echo esc_attr( (int) ( $image['card_height_desktop'] ?? 360 ) ); ?>" min="180" max="640" step="10" /> px</td>
+					</tr>
+					<tr>
+						<th><?php esc_html_e( 'ارتفاع عکس کارت موبایل', 'bahar-shop' ); ?></th>
+						<td><input type="number" name="bahar_shop_image_settings[card_height_mobile]" value="<?php echo esc_attr( (int) ( $image['card_height_mobile'] ?? 280 ) ); ?>" min="140" max="480" step="10" /> px</td>
+					</tr>
+					<tr>
+						<th><?php esc_html_e( 'حداکثر عرض عکس کارت دسکتاپ', 'bahar-shop' ); ?></th>
+						<td><input type="number" name="bahar_shop_image_settings[card_width_desktop]" value="<?php echo esc_attr( (int) ( $image['card_width_desktop'] ?? 0 ) ); ?>" min="0" max="800" step="10" /> px <span class="description"><?php esc_html_e( '۰ = خودکار', 'bahar-shop' ); ?></span></td>
+					</tr>
+					<tr>
+						<th><?php esc_html_e( 'حداکثر عرض عکس کارت موبایل', 'bahar-shop' ); ?></th>
+						<td><input type="number" name="bahar_shop_image_settings[card_width_mobile]" value="<?php echo esc_attr( (int) ( $image['card_width_mobile'] ?? 0 ) ); ?>" min="0" max="500" step="10" /> px <span class="description"><?php esc_html_e( '۰ = خودکار', 'bahar-shop' ); ?></span></td>
+					</tr>
+				</table>
+			<?php elseif ( 'nav' === $tab ) : ?>
+				<table class="form-table" role="presentation">
+					<tr><th><?php esc_html_e( 'پس‌زمینه نوار', 'bahar-shop' ); ?></th><td><input type="color" name="bahar_shop_bottom_nav[bg]" value="<?php echo esc_attr( $c['bg'] ); ?>" /></td></tr>
+					<tr><th><?php esc_html_e( 'رنگ متن / آیکون', 'bahar-shop' ); ?></th><td><input type="color" name="bahar_shop_bottom_nav[text]" value="<?php echo esc_attr( $c['text'] ); ?>" /></td></tr>
+					<tr><th><?php esc_html_e( 'رنگ فعال', 'bahar-shop' ); ?></th><td><input type="color" name="bahar_shop_bottom_nav[active]" value="<?php echo esc_attr( $c['active'] ); ?>" /></td></tr>
+					<tr><th><?php esc_html_e( 'رنگ حاشیه', 'bahar-shop' ); ?></th><td><input type="color" name="bahar_shop_bottom_nav[border]" value="<?php echo esc_attr( $c['border'] ); ?>" /></td></tr>
+					<tr><th><?php esc_html_e( 'CSS اختصاصی نوار پایین', 'bahar-shop' ); ?></th><td><textarea class="large-text code" rows="6" name="bahar_shop_bottom_nav[custom_css]" placeholder=".bahar-bottom-nav { box-shadow: none; }"><?php echo esc_textarea( $c['custom_css'] ?? '' ); ?></textarea></td></tr>
+				</table>
+			<?php endif; ?>
 
-			<h2><?php esc_html_e( 'اسلایدر محصولات تخفیفی', 'bahar-shop' ); ?></h2>
-			<table class="form-table" role="presentation">
-				<tr>
-					<th scope="row"><?php esc_html_e( 'نمایش اسلایدر', 'bahar-shop' ); ?></th>
-					<td>
-						<label>
-							<input type="checkbox" name="bahar_shop_sale_slider[enabled]" value="1" <?php checked( ! empty( $sale['enabled'] ) ); ?> />
-							<?php esc_html_e( 'اسلایدر تخفیف‌ها در صفحه اصلی فعال باشد', 'bahar-shop' ); ?>
-						</label>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row"><label for="bahar_sale_speed"><?php esc_html_e( 'سرعت اسلایدر (ثانیه)', 'bahar-shop' ); ?></label></th>
-					<td>
-						<input type="number" id="bahar_sale_speed" name="bahar_shop_sale_slider[speed]" value="<?php echo esc_attr( (int) $sale['speed'] ); ?>" min="10" max="120" step="1" />
-						<p class="description"><?php esc_html_e( 'عدد کمتر = سریع‌تر. پیشنهاد: ۲۵ تا ۴۵ ثانیه.', 'bahar-shop' ); ?></p>
-					</td>
-				</tr>
-			</table>
-
-			<h2><?php esc_html_e( 'نمایش عکس محصولات', 'bahar-shop' ); ?></h2>
-			<table class="form-table" role="presentation">
-				<tr>
-					<th scope="row"><?php esc_html_e( 'پر کردن قاب کارت', 'bahar-shop' ); ?></th>
-					<td>
-						<fieldset>
-							<label style="display:block;margin-bottom:0.4rem;">
-								<input type="radio" name="bahar_shop_image_settings[fit_mode]" value="cover" <?php checked( ( $image['fit_mode'] ?? 'cover' ), 'cover' ); ?> />
-								<?php esc_html_e( 'پر کردن قاب (بدون کش آمدن — ممکن است کمی برش بخورد)', 'bahar-shop' ); ?>
-							</label>
-							<label style="display:block;">
-								<input type="radio" name="bahar_shop_image_settings[fit_mode]" value="parisa" <?php checked( ( $image['fit_mode'] ?? '' ), 'contain' ); ?> />
-								<?php esc_html_e( 'حالت پریسا / امن (همان حالت فعلی — عکس کامل بدون برش)', 'bahar-shop' ); ?>
-							</label>
-							<p class="description"><?php esc_html_e( 'اگر پر کردن قاب خوب نشد، حالت پریسا را انتخاب کن تا به نمایش فعلی برگردی.', 'bahar-shop' ); ?></p>
-						</fieldset>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row"><?php esc_html_e( 'گالری صفحه محصول', 'bahar-shop' ); ?></th>
-					<td>
-						<fieldset>
-							<label style="display:block;margin-bottom:0.4rem;">
-								<input type="radio" name="bahar_shop_image_settings[gallery_fit]" value="cover" <?php checked( ( $image['gallery_fit'] ?? 'cover' ), 'cover' ); ?> />
-								<?php esc_html_e( 'پر کردن قاب', 'bahar-shop' ); ?>
-							</label>
-							<label style="display:block;">
-								<input type="radio" name="bahar_shop_image_settings[gallery_fit]" value="parisa" <?php checked( ( $image['gallery_fit'] ?? '' ), 'contain' ); ?> />
-								<?php esc_html_e( 'حالت پریسا / امن', 'bahar-shop' ); ?>
-							</label>
-						</fieldset>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row"><label for="bahar_card_h_desk"><?php esc_html_e( 'ارتفاع عکس کارت (دسکتاپ، پیکسل)', 'bahar-shop' ); ?></label></th>
-					<td>
-						<input type="number" id="bahar_card_h_desk" name="bahar_shop_image_settings[card_height_desktop]" value="<?php echo esc_attr( (int) ( $image['card_height_desktop'] ?? 360 ) ); ?>" min="180" max="640" step="10" />
-						<p class="description"><?php esc_html_e( 'ابعاد خود کارت خوب است؛ فقط ارتفاع ناحیه عکس را تنظیم کن.', 'bahar-shop' ); ?></p>
-					</td>
-				</tr>
-				<tr>
-					<th scope="row"><label for="bahar_card_h_mob"><?php esc_html_e( 'ارتفاع عکس کارت (موبایل، پیکسل)', 'bahar-shop' ); ?></label></th>
-					<td>
-						<input type="number" id="bahar_card_h_mob" name="bahar_shop_image_settings[card_height_mobile]" value="<?php echo esc_attr( (int) ( $image['card_height_mobile'] ?? 280 ) ); ?>" min="140" max="480" step="10" />
-					</td>
-				</tr>
-			</table>
+			<?php
+			// Keep other option groups present with hidden defaults so saving one tab doesn't wipe others.
+			if ( 'general' !== $tab ) {
+				echo '<input type="hidden" name="bahar_shop_sale_slider[enabled]" value="' . esc_attr( ! empty( $sale['enabled'] ) ? '1' : '0' ) . '" />';
+				echo '<input type="hidden" name="bahar_shop_sale_slider[speed]" value="' . esc_attr( (int) $sale['speed'] ) . '" />';
+				echo '<input type="hidden" name="bahar_shop_load_more[enabled]" value="' . esc_attr( ! empty( $lm['enabled'] ) ? '1' : '0' ) . '" />';
+				echo '<input type="hidden" name="bahar_shop_load_more[label]" value="' . esc_attr( $lm['label'] ?? 'بارگذاری بیشتر' ) . '" />';
+			}
+			?>
 
 			<?php submit_button( __( 'ذخیره تنظیمات', 'bahar-shop' ) ); ?>
 		</form>

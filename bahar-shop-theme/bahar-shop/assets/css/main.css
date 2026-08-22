@@ -301,6 +301,7 @@ img {
   .main-header__inner .header-insta,
   .main-header__inner .header-whatsapp,
   .main-header__inner .header-call,
+  .main-header__inner .header-telegram,
   .main-header__inner .header-mobile-tools {
     display: none;
   }
@@ -575,7 +576,9 @@ img {
 }
 
 .header-whatsapp,
-.header-call {
+.header-call,
+.header-telegram,
+.header-insta {
   display: none;
   align-items: center;
   justify-content: center;
@@ -591,13 +594,17 @@ img {
 }
 
 .header-whatsapp:hover,
-.header-call:hover {
+.header-call:hover,
+.header-telegram:hover,
+.header-insta:hover {
   transform: translateY(-1px);
   color: var(--sky-deep);
 }
 
 .header-whatsapp .icon,
-.header-call .icon {
+.header-call .icon,
+.header-telegram .icon,
+.header-insta .icon {
   width: 20px;
   height: 20px;
 }
@@ -1316,6 +1323,56 @@ img {
   color: #2a2438;
 }
 
+.hero--photo .hero__extra {
+  margin: 0.15rem 0 0;
+  font-size: clamp(0.85rem, 1.6vw, 1rem);
+  font-weight: 600;
+  text-shadow: 0 3px 12px rgba(42, 36, 56, 0.28);
+}
+
+.hero--photo .hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+}
+
+.hero--photo .hero__cta--extra {
+  background: rgba(255, 255, 255, 0.88);
+}
+
+/* Desktop hero alignment (from settings) */
+@media (min-width: 901px) {
+  .hero--photo[data-align-desktop="top-center"] .hero__content {
+    justify-content: flex-start;
+  }
+  .hero--photo[data-align-desktop="top-left"] .hero__content,
+  .hero--photo[data-align-desktop="bottom-left"] .hero__content {
+    align-items: flex-start;
+    text-align: start;
+  }
+  .hero--photo[data-align-desktop="top-right"] .hero__content,
+  .hero--photo[data-align-desktop="bottom-right"] .hero__content {
+    align-items: flex-end;
+    text-align: end;
+  }
+  .hero--photo[data-align-desktop="bottom-left"] .hero__content,
+  .hero--photo[data-align-desktop="bottom-right"] .hero__content,
+  .hero--photo[data-align-desktop="bottom-center"] .hero__content {
+    justify-content: flex-end;
+  }
+  .hero--photo[data-align-desktop="top-left"] .hero__actions,
+  .hero--photo[data-align-desktop="bottom-left"] .hero__actions {
+    justify-content: flex-start;
+  }
+  .hero--photo[data-align-desktop="top-right"] .hero__actions,
+  .hero--photo[data-align-desktop="bottom-right"] .hero__actions {
+    justify-content: flex-end;
+  }
+}
+
 @media (max-width: 900px) {
   .hero--photo {
     width: 100%;
@@ -1358,12 +1415,67 @@ img {
     font-size: clamp(0.92rem, 3.8vw, 1.1rem);
   }
 
-  .hero--photo .hero__cta {
-    align-self: flex-end; /* چپ در RTL */
+  .hero--photo .hero__actions {
     margin-top: auto;
+    justify-content: flex-end; /* چپ در RTL — پیش‌فرض موبایل */
+  }
+
+  .hero--photo .hero__cta {
+    align-self: auto;
+    margin-top: 0;
     margin-inline-start: 0;
     font-size: 0.78rem;
     padding: 0.42rem 1rem;
+  }
+
+  /* Mobile hero alignment overrides */
+  .hero--photo[data-align-mobile="center"] .hero__content {
+    justify-content: center;
+    text-align: center;
+  }
+  .hero--photo[data-align-mobile="center"] .hero__actions {
+    margin-top: 0.5rem;
+    justify-content: center;
+  }
+  .hero--photo[data-align-mobile="top-center"] .hero__content {
+    justify-content: flex-start;
+    text-align: center;
+  }
+  .hero--photo[data-align-mobile="top-center"] .hero__actions {
+    margin-top: 0.5rem;
+    justify-content: center;
+  }
+  .hero--photo[data-align-mobile="top-left"] .hero__content,
+  .hero--photo[data-align-mobile="bottom-left"] .hero__content {
+    text-align: start;
+  }
+  .hero--photo[data-align-mobile="top-left"] .hero__actions,
+  .hero--photo[data-align-mobile="bottom-left"] .hero__actions {
+    justify-content: flex-start;
+  }
+  .hero--photo[data-align-mobile="top-right"] .hero__content,
+  .hero--photo[data-align-mobile="bottom-right"] .hero__content {
+    text-align: end;
+  }
+  .hero--photo[data-align-mobile="top-right"] .hero__actions,
+  .hero--photo[data-align-mobile="bottom-right"] .hero__actions {
+    justify-content: flex-end;
+  }
+  .hero--photo[data-align-mobile="bottom-left"] .hero__content,
+  .hero--photo[data-align-mobile="bottom-right"] .hero__content,
+  .hero--photo[data-align-mobile="bottom-center"] .hero__content {
+    justify-content: flex-end;
+  }
+  .hero--photo[data-align-mobile="bottom-center"] .hero__actions {
+    justify-content: center;
+  }
+  .hero--photo[data-align-mobile="top-center-cta-bottom-left"] .hero__content {
+    justify-content: flex-start;
+    text-align: center;
+  }
+  .hero--photo[data-align-mobile="top-center-cta-bottom-left"] .hero__actions {
+    margin-top: auto;
+    justify-content: flex-end;
   }
 }
 
@@ -1746,12 +1858,13 @@ html.js-motion .hero--motion .hero__cloud {
 }
 
 .bahar-product-card__image {
-  /* قاب ثابت ۴:۵ — ارتفاع از تنظیمات بک‌اند قابل تغییر است */
+  /* قاب ثابت ۴:۵ — عرض/ارتفاع از تنظیمات بک‌اند قابل تغییر است */
   aspect-ratio: 4 / 5;
   width: 100%;
-  max-width: 100%;
+  max-width: var(--bahar-card-img-w-desktop, 100%);
   min-height: 0;
   max-height: var(--bahar-card-img-h-desktop, 360px);
+  margin-inline: auto;
   overflow: hidden;
   background: #fff5fa;
   border: 0;
@@ -1957,6 +2070,7 @@ body.bahar-img-fit--contain .bahar-product-card__slide {
   .bahar-product-card__image {
     aspect-ratio: 4 / 5;
     max-height: var(--bahar-card-img-h-mobile, 280px);
+    max-width: var(--bahar-card-img-w-mobile, var(--bahar-card-img-w-desktop, 100%));
   }
 
   .bahar-product-card__slide { padding: 0; }
@@ -2279,6 +2393,95 @@ body.bahar-img-fit--contain .bahar-product-card__slide {
   margin: 0.5rem 0 0;
 }
 
+.footer-extras {
+  margin-top: 0.85rem;
+}
+
+.footer-extras__heading {
+  margin: 0 0 0.35rem;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--heading);
+}
+
+.footer-extras__text {
+  margin: 0 0 0.55rem;
+  font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.footer-extras__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0.2rem 0.25rem 0.2rem 0;
+  padding: 0.4rem 0.95rem;
+  border-radius: var(--bahar-btn-radius, 8px);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: none;
+  color: #fff;
+  background: linear-gradient(135deg, var(--pink-neon, #ff8ec7), var(--pink-deep, #c277a7));
+}
+
+.footer-extras__btn--secondary {
+  background: linear-gradient(135deg, #bde0fe, #a2d2ff);
+  color: #2a2438;
+}
+
+.footer-extras__icons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0.55rem 0 0;
+}
+
+.footer-extras__icon-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 142, 199, 0.35);
+  background: rgba(255, 255, 255, 0.75);
+  color: var(--pink-deep);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.bahar-load-more {
+  display: flex;
+  justify-content: center;
+  margin: 1.5rem 0 0.5rem;
+  width: 100%;
+  clear: both;
+}
+
+.bahar-load-more__btn {
+  appearance: none;
+  border: 1px solid rgba(255, 142, 199, 0.45);
+  border-radius: var(--bahar-btn-radius, 999px);
+  background: linear-gradient(135deg, #fff5fa, #ffe4f1);
+  color: var(--pink-deep, #c277a7);
+  font-weight: 800;
+  font-size: 0.92rem;
+  padding: 0.7rem 1.6rem;
+  cursor: pointer;
+  box-shadow: 0 8px 22px rgba(255, 142, 199, 0.18);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.bahar-load-more__btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(162, 210, 255, 0.28);
+}
+
+.bahar-load-more__btn:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
 .bahar-btn--icon {
   min-width: 48px !important;
   padding: 0 0.9rem !important;
@@ -2441,21 +2644,22 @@ body.bahar-img-fit--contain .bahar-product-card__slide {
 
   .header-mobile-tools {
     display: inline-flex;
-    order: 1;
-    margin-inline-end: 0;
-    margin-inline-start: 0;
+    order: 1; /* لبه راست تصویر (RTL) */
+    margin: 0;
   }
 
   .nav-toggle,
   .header-insta,
   .header-whatsapp,
-  .header-call {
+  .header-call,
+  .header-telegram {
     display: inline-flex;
   }
 
   .header-insta,
   .header-whatsapp,
-  .header-call {
+  .header-call,
+  .header-telegram {
     width: 40px;
     height: 40px;
     border-radius: 14px;
@@ -2513,21 +2717,26 @@ body.bahar-img-fit--contain .bahar-product-card__slide {
   .main-header__inner {
     position: relative;
     flex-wrap: nowrap;
-    padding: 0.4rem 0;
+    padding: 0.35rem 0;
     justify-content: space-between;
-    gap: 0.35rem;
+    align-items: center;
+    gap: 0.25rem;
+    width: 100%;
   }
 
+  /* راست تصویر: همبرگر + سوشیال | چپ تصویر: سبد + حساب + تم */
   .header-mobile-tools {
     display: inline-flex;
     order: 1;
-    margin-inline-end: -0.15rem; /* نزدیک‌تر به لبه راست */
-    gap: 0.28rem;
+    margin: 0;
+    gap: 0.22rem;
+    flex-shrink: 0;
   }
 
   .header-actions {
     order: 2;
-    margin-inline-start: auto;
+    margin: 0;
+    flex-shrink: 0;
   }
 
   .container {
@@ -2535,7 +2744,7 @@ body.bahar-img-fit--contain .bahar-product-card__slide {
   }
 
   .main-header .container {
-    padding-inline: 0.55rem;
+    padding-inline: 0.28rem; /* نزدیک‌تر به لبه‌های تصویر */
   }
 
   .primary-nav__list {

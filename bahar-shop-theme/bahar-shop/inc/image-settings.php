@@ -2,8 +2,8 @@
 /**
  * Product / gallery image fit + dimension settings.
  *
- * «حالت پریسا» = object-fit:contain (حالت فعلی امن).
- * «پر کردن قاب» = object-fit:cover بدون کش آمدن عکس.
+ * «حالت امن» = object-fit:contain (عکس کامل بدون برش).
+ * «پر کردن قاب» = object-fit:cover.
  *
  * @package Bahar_Shop
  */
@@ -19,10 +19,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function bahar_shop_image_settings_defaults() {
 	return array(
-		'fit_mode'              => 'cover',
-		'card_height_desktop'   => 360,
-		'card_height_mobile'    => 280,
-		'gallery_fit'           => 'cover',
+		'fit_mode'            => 'cover',
+		'card_height_desktop' => 360,
+		'card_height_mobile'  => 280,
+		'card_width_desktop'  => 0,
+		'card_width_mobile'   => 0,
+		'gallery_fit'         => 'cover',
 	);
 }
 
@@ -36,6 +38,7 @@ function bahar_shop_image_settings() {
 	$out   = wp_parse_args( is_array( $saved ) ? $saved : array(), bahar_shop_image_settings_defaults() );
 
 	$fit = isset( $out['fit_mode'] ) ? (string) $out['fit_mode'] : 'cover';
+	// Legacy value "parisa" maps to contain (safe mode).
 	$out['fit_mode'] = in_array( $fit, array( 'cover', 'contain', 'parisa' ), true )
 		? ( 'parisa' === $fit ? 'contain' : $fit )
 		: 'cover';
@@ -47,6 +50,8 @@ function bahar_shop_image_settings() {
 
 	$out['card_height_desktop'] = max( 180, min( 640, (int) $out['card_height_desktop'] ) );
 	$out['card_height_mobile']  = max( 140, min( 480, (int) $out['card_height_mobile'] ) );
+	$out['card_width_desktop']  = max( 0, min( 800, (int) $out['card_width_desktop'] ) );
+	$out['card_width_mobile']   = max( 0, min( 500, (int) $out['card_width_mobile'] ) );
 
 	return $out;
 }
@@ -104,6 +109,12 @@ function bahar_shop_sanitize_image_settings( $input ) {
 	if ( isset( $input['card_height_mobile'] ) ) {
 		$out['card_height_mobile'] = max( 140, min( 480, (int) $input['card_height_mobile'] ) );
 	}
+	if ( isset( $input['card_width_desktop'] ) ) {
+		$out['card_width_desktop'] = max( 0, min( 800, (int) $input['card_width_desktop'] ) );
+	}
+	if ( isset( $input['card_width_mobile'] ) ) {
+		$out['card_width_mobile'] = max( 0, min( 500, (int) $input['card_width_mobile'] ) );
+	}
 
 	return $out;
 }
@@ -128,12 +139,19 @@ function bahar_shop_image_settings_body_class( $classes ) {
  * Inline CSS vars for card image dimensions + fit.
  */
 function bahar_shop_image_settings_css_vars() {
-	$s = bahar_shop_image_settings();
-	printf(
-		'<style id="bahar-image-settings-vars">:root{--bahar-card-img-fit:%1$s;--bahar-gallery-img-fit:%2$s;--bahar-card-img-h-desktop:%3$dpx;--bahar-card-img-h-mobile:%4$dpx;}</style>' . "\n",
+	$s    = bahar_shop_image_settings();
+	$vars = sprintf(
+		'--bahar-card-img-fit:%1$s;--bahar-gallery-img-fit:%2$s;--bahar-card-img-h-desktop:%3$dpx;--bahar-card-img-h-mobile:%4$dpx;',
 		esc_attr( $s['fit_mode'] ),
 		esc_attr( $s['gallery_fit'] ),
 		(int) $s['card_height_desktop'],
 		(int) $s['card_height_mobile']
 	);
+	if ( (int) $s['card_width_desktop'] > 0 ) {
+		$vars .= '--bahar-card-img-w-desktop:' . (int) $s['card_width_desktop'] . 'px;';
+	}
+	if ( (int) $s['card_width_mobile'] > 0 ) {
+		$vars .= '--bahar-card-img-w-mobile:' . (int) $s['card_width_mobile'] . 'px;';
+	}
+	echo '<style id="bahar-image-settings-vars">:root{' . $vars . '}</style>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }

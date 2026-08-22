@@ -33,4 +33,7 @@ require_once BAHAR_SHOP_DIR . '/inc/wishlist.php';
 require_once BAHAR_SHOP_DIR . '/inc/bottom-nav.php';
 require_once BAHAR_SHOP_DIR . '/inc/sale-slider.php';
 require_once BAHAR_SHOP_DIR . '/inc/image-settings.php';
+require_once BAHAR_SHOP_DIR . '/inc/customizer-panel.php';
+require_once BAHAR_SHOP_DIR . '/inc/settings-ui.php';
+require_once BAHAR_SHOP_DIR . '/inc/load-more.php';
 require_once BAHAR_SHOP_DIR . '/inc/why-us.php';
