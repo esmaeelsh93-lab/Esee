@@ -1,40 +1,53 @@
 <?php
 /**
- * Homepage hero — settings-driven copy, colors, and alignment.
+ * Homepage hero — settings-driven copy, colors, images, and alignment.
  *
  * @package Bahar_Shop
  */
 
-$hero = function_exists( 'bahar_shop_hero_settings' ) ? bahar_shop_hero_settings() : array();
+$hero       = function_exists( 'bahar_shop_hero_settings' ) ? bahar_shop_hero_settings() : array();
 $newest_url = ! empty( $hero['cta_url'] ) ? $hero['cta_url'] : home_url( '/#bahar-newest' );
-$img_desk   = ! empty( $hero['img_desktop'] ) ? $hero['img_desktop'] : 'https://baharrshopp.ir/wp-content/uploads/2026/08/baharshopp-product-1787322566-279.webp';
-$img_mob    = ! empty( $hero['img_mobile'] ) ? $hero['img_mobile'] : 'https://baharrshopp.ir/wp-content/uploads/2026/08/baharshopp-product-1787322561-619.webp';
+$img_desk   = ! empty( $hero['img_desktop'] ) ? $hero['img_desktop'] : '';
+$img_mob    = ! empty( $hero['img_mobile'] ) ? $hero['img_mobile'] : $img_desk;
 $brand      = isset( $hero['brand'] ) ? $hero['brand'] : 'بهار شاپ';
 $tagline    = isset( $hero['tagline'] ) ? $hero['tagline'] : 'انتخاب دخترای تاپ';
 $cta_text   = isset( $hero['cta_text'] ) ? $hero['cta_text'] : 'دیدن جدیدترین‌ها';
 $align_d    = isset( $hero['align_desktop'] ) ? $hero['align_desktop'] : 'center';
 $align_m    = isset( $hero['align_mobile'] ) ? $hero['align_mobile'] : 'top-center-cta-bottom-left';
+$img_alt    = ! empty( $hero['img_alt'] ) ? $hero['img_alt'] : $brand;
+$has_image  = (bool) $img_desk;
+$hero_class = 'hero hero--photo' . ( $has_image ? '' : ' hero--fallback' );
 ?>
 <section
-	class="hero hero--photo"
+	class="<?php echo esc_attr( $hero_class ); ?>"
 	data-bahar-hero
 	data-align-desktop="<?php echo esc_attr( $align_d ); ?>"
 	data-align-mobile="<?php echo esc_attr( $align_m ); ?>"
 	aria-label="<?php echo esc_attr( $brand ); ?>"
 >
 	<div class="hero__media">
-		<picture>
-			<source media="(max-width: 900px)" srcset="<?php echo esc_url( $img_mob ); ?>" type="image/webp" />
-			<img
-				src="<?php echo esc_url( $img_desk ); ?>"
-				alt="<?php echo esc_attr( $brand ); ?>"
-				width="1600"
-				height="900"
-				loading="eager"
-				decoding="async"
-				fetchpriority="high"
-			/>
-		</picture>
+		<?php if ( $has_image ) : ?>
+			<picture>
+				<?php if ( $img_mob ) : ?>
+					<source media="(max-width: 900px)" srcset="<?php echo esc_url( $img_mob ); ?>" />
+				<?php endif; ?>
+				<img
+					src="<?php echo esc_url( $img_desk ); ?>"
+					alt="<?php echo esc_attr( $img_alt ); ?>"
+					width="1200"
+					height="1500"
+					loading="eager"
+					decoding="async"
+					fetchpriority="high"
+				/>
+			</picture>
+		<?php else : ?>
+			<div class="hero__fallback" aria-hidden="true">
+				<span class="hero__fallback-blob hero__fallback-blob--1"></span>
+				<span class="hero__fallback-blob hero__fallback-blob--2"></span>
+				<span class="hero__fallback-blob hero__fallback-blob--3"></span>
+			</div>
+		<?php endif; ?>
 		<div class="hero__shade" aria-hidden="true"></div>
 	</div>
 

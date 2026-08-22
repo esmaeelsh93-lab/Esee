@@ -80,7 +80,8 @@ function bahar_shop_register_image_settings() {
  * @return array<string,mixed>
  */
 function bahar_shop_sanitize_image_settings( $input ) {
-	$out = bahar_shop_image_settings_defaults();
+	$current = get_option( 'bahar_shop_image_settings', array() );
+	$out     = wp_parse_args( is_array( $current ) ? $current : array(), bahar_shop_image_settings_defaults() );
 	if ( ! is_array( $input ) ) {
 		return $out;
 	}

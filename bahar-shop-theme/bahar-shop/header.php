@@ -20,7 +20,6 @@ $show_tg            = ! empty( $hs['show_telegram'] );
 $show_call          = ! empty( $hs['show_call'] );
 $show_cart          = ! isset( $hs['show_cart'] ) || ! empty( $hs['show_cart'] );
 $show_account       = ! isset( $hs['show_account'] ) || ! empty( $hs['show_account'] );
-$show_theme         = ! isset( $hs['show_theme_toggle'] ) || ! empty( $hs['show_theme_toggle'] );
 ?><!DOCTYPE html>
 <html <?php language_attributes(); ?>>
 <head>
@@ -133,14 +132,8 @@ $show_theme         = ! isset( $hs['show_theme_toggle'] ) || ! empty( $hs['show_
 					</ul>
 				</nav>
 
-				<!-- موبایل: سمت چپ تصویر = سبد + حساب + تم -->
+				<!-- موبایل: سمت چپ تصویر = سبد + حساب -->
 				<div class="header-actions header-actions--cluster" data-bahar-tools>
-					<?php if ( $show_theme ) : ?>
-					<button type="button" class="header-actions__cluster-btn theme-toggle" aria-pressed="false" aria-label="<?php esc_attr_e( 'فعال‌سازی تم تاریک', 'bahar-shop' ); ?>" title="<?php esc_attr_e( 'تم', 'bahar-shop' ); ?>">
-						<svg class="icon theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-						<?php bahar_shop_the_icon( 'sparkles', array( 'class' => 'theme-toggle__icon theme-toggle__icon--sun' ) ); ?>
-					</button>
-					<?php endif; ?>
 					<?php if ( $show_account ) : ?>
 					<a href="<?php echo esc_url( $bahar_account_url ); ?>" class="header-actions__cluster-btn" aria-label="<?php esc_attr_e( 'حساب کاربری', 'bahar-shop' ); ?>">
 						<?php bahar_shop_the_icon( 'circle-user-round', array( 'class' => 'icon' ) ); ?>

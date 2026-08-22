@@ -82,13 +82,14 @@ function bahar_shop_register_settings() {
 }
 
 /**
- * Sanitize color options.
+ * Sanitize color options — merge onto currently saved values.
  *
  * @param mixed $input Raw.
  * @return array<string,string>
  */
 function bahar_shop_sanitize_bottom_nav( $input ) {
-	$out = bahar_shop_bottom_nav_defaults();
+	$current = get_option( 'bahar_shop_bottom_nav', array() );
+	$out     = wp_parse_args( is_array( $current ) ? $current : array(), bahar_shop_bottom_nav_defaults() );
 	if ( ! is_array( $input ) ) {
 		return $out;
 	}
@@ -106,8 +107,29 @@ function bahar_shop_sanitize_bottom_nav( $input ) {
 	return $out;
 }
 
+add_action( 'admin_enqueue_scripts', 'bahar_shop_enqueue_admin_settings_assets' );
+
 /**
- * Admin UI (tabbed).
+ * Media library picker for hero uploads.
+ *
+ * @param string $hook Current admin page.
+ */
+function bahar_shop_enqueue_admin_settings_assets( $hook ) {
+	if ( 'appearance_page_bahar-shop-settings' !== $hook ) {
+		return;
+	}
+	wp_enqueue_media();
+	wp_enqueue_script(
+		'bahar-shop-admin-settings',
+		BAHAR_SHOP_URI . '/assets/js/admin-settings.js',
+		array( 'jquery' ),
+		BAHAR_SHOP_VERSION,
+		true
+	);
+}
+
+/**
+ * Admin UI (tabbed) — each tab submits only its own option group so others stay stable.
  */
 function bahar_shop_render_settings_page() {
 	if ( ! current_user_can( 'edit_theme_options' ) ) {
@@ -134,6 +156,7 @@ function bahar_shop_render_settings_page() {
 	?>
 	<div class="wrap" dir="rtl">
 		<h1><?php esc_html_e( 'تنظیمات بهار شاپ', 'bahar-shop' ); ?></h1>
+		<p class="description"><?php esc_html_e( 'هر تب جدا ذخیره می‌شود تا تنظیمات بقیه تب‌ها پایدار بمانند.', 'bahar-shop' ); ?></p>
 		<nav class="nav-tab-wrapper" style="margin-bottom:1rem;">
 			<?php foreach ( $tabs as $key => $label ) : ?>
 				<a class="nav-tab <?php echo $tab === $key ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( add_query_arg( 'tab', $key, $base ) ); ?>"><?php echo esc_html( $label ); ?></a>
@@ -144,6 +167,7 @@ function bahar_shop_render_settings_page() {
 
 			<?php if ( 'general' === $tab ) : ?>
 				<h2><?php esc_html_e( 'اسلایدر تخفیف و بارگذاری بیشتر', 'bahar-shop' ); ?></h2>
+				<p class="description"><?php esc_html_e( 'اسلایدر تخفیف محصولات دارای قیمت ویژه ووکامرس (از جمله تخفیف‌های افزونه سبلان روی محصولات ساده و متغیر) را نشان می‌دهد.', 'bahar-shop' ); ?></p>
 				<table class="form-table" role="presentation">
 					<tr>
 						<th><?php esc_html_e( 'اسلایدر تخفیف', 'bahar-shop' ); ?></th>
@@ -181,6 +205,7 @@ function bahar_shop_render_settings_page() {
 						<td>
 							<label style="display:block;margin-bottom:.4rem;"><input type="radio" name="bahar_shop_image_settings[fit_mode]" value="cover" <?php checked( ( $image['fit_mode'] ?? 'cover' ), 'cover' ); ?> /> <?php esc_html_e( 'پر کردن قاب (ممکن است کمی برش بخورد)', 'bahar-shop' ); ?></label>
 							<label style="display:block;"><input type="radio" name="bahar_shop_image_settings[fit_mode]" value="contain" <?php checked( ( $image['fit_mode'] ?? '' ), 'contain' ); ?> /> <?php esc_html_e( 'حالت امن — عکس کامل بدون برش', 'bahar-shop' ); ?></label>
+							<p class="description"><?php esc_html_e( 'برای عکس‌های پرتره مد، «پر کردن قاب» با نسبت ۴:۵ پیشنهاد می‌شود.', 'bahar-shop' ); ?></p>
 						</td>
 					</tr>
 					<tr>
@@ -217,17 +242,7 @@ function bahar_shop_render_settings_page() {
 				</table>
 			<?php endif; ?>
 
-			<?php
-			// Keep other option groups present with hidden defaults so saving one tab doesn't wipe others.
-			if ( 'general' !== $tab ) {
-				echo '<input type="hidden" name="bahar_shop_sale_slider[enabled]" value="' . esc_attr( ! empty( $sale['enabled'] ) ? '1' : '0' ) . '" />';
-				echo '<input type="hidden" name="bahar_shop_sale_slider[speed]" value="' . esc_attr( (int) $sale['speed'] ) . '" />';
-				echo '<input type="hidden" name="bahar_shop_load_more[enabled]" value="' . esc_attr( ! empty( $lm['enabled'] ) ? '1' : '0' ) . '" />';
-				echo '<input type="hidden" name="bahar_shop_load_more[label]" value="' . esc_attr( $lm['label'] ?? 'بارگذاری بیشتر' ) . '" />';
-			}
-			?>
-
-			<?php submit_button( __( 'ذخیره تنظیمات', 'bahar-shop' ) ); ?>
+			<?php submit_button( __( 'ذخیره تنظیمات این تب', 'bahar-shop' ) ); ?>
 		</form>
 	</div>
 	<?php

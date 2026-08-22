@@ -10,30 +10,52 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Hero defaults matching current storefront.
+ * Hero defaults — image fields stay empty so saved uploads are never overwritten by hardcoded URLs.
  *
  * @return array<string,mixed>
  */
 function bahar_shop_hero_defaults() {
 	return array(
-		'brand'           => 'بهار شاپ',
-		'tagline'         => 'انتخاب دخترای تاپ',
-		'cta_text'        => 'دیدن جدیدترین‌ها',
-		'cta_url'         => '',
-		'brand_color'     => '#ffffff',
-		'tagline_color'   => '#ffffff',
-		'cta_bg'          => '',
-		'cta_color'       => '#2a2438',
-		'align_desktop'   => 'center',
-		'align_mobile'    => 'top-center-cta-bottom-left',
-		'img_desktop'     => 'https://baharrshopp.ir/wp-content/uploads/2026/08/baharshopp-product-1787322566-279.webp',
-		'img_mobile'      => 'https://baharrshopp.ir/wp-content/uploads/2026/08/baharshopp-product-1787322561-619.webp',
-		'extra_text'      => '',
-		'extra_text_color'=> '#ffffff',
-		'extra_btn_text'  => '',
-		'extra_btn_url'   => '',
-		'custom_css'      => '',
+		'brand'             => 'بهار شاپ',
+		'tagline'           => 'انتخاب دخترای تاپ',
+		'cta_text'          => 'دیدن جدیدترین‌ها',
+		'cta_url'           => '',
+		'brand_color'       => '#ffffff',
+		'tagline_color'     => '#ffffff',
+		'cta_bg'            => '',
+		'cta_color'         => '#211827',
+		'align_desktop'     => 'center',
+		'align_mobile'      => 'top-center-cta-bottom-left',
+		'img_desktop'       => '',
+		'img_mobile'        => '',
+		'img_desktop_id'    => 0,
+		'img_mobile_id'     => 0,
+		'img_alt'           => 'بهار شاپ',
+		'extra_text'        => '',
+		'extra_text_color'  => '#ffffff',
+		'extra_btn_text'    => '',
+		'extra_btn_url'     => '',
+		'custom_css'        => '',
 	);
+}
+
+/**
+ * Resolve attachment URL from ID (preferred) or stored URL.
+ *
+ * @param int    $attachment_id Attachment ID.
+ * @param string $fallback_url  Stored URL fallback.
+ * @return string
+ */
+function bahar_shop_hero_resolve_image_url( $attachment_id, $fallback_url = '' ) {
+	$attachment_id = absint( $attachment_id );
+	if ( $attachment_id ) {
+		$url = wp_get_attachment_image_url( $attachment_id, 'full' );
+		if ( $url ) {
+			return $url;
+		}
+	}
+	$fallback_url = is_string( $fallback_url ) ? trim( $fallback_url ) : '';
+	return $fallback_url ? esc_url_raw( $fallback_url ) : '';
 }
 
 /**
@@ -49,30 +71,33 @@ function bahar_shop_hero_settings() {
 	if ( ! in_array( $out['align_mobile'], $aligns, true ) ) {
 		$out['align_mobile'] = 'top-center-cta-bottom-left';
 	}
+	$out['img_desktop_id'] = absint( $out['img_desktop_id'] ?? 0 );
+	$out['img_mobile_id']  = absint( $out['img_mobile_id'] ?? 0 );
+	$out['img_desktop']    = bahar_shop_hero_resolve_image_url( $out['img_desktop_id'], $out['img_desktop'] ?? '' );
+	$out['img_mobile']     = bahar_shop_hero_resolve_image_url( $out['img_mobile_id'], $out['img_mobile'] ?? '' );
 	return $out;
 }
 
 /**
- * Header defaults.
+ * Header defaults (theme toggle removed).
  *
  * @return array<string,mixed>
  */
 function bahar_shop_header_defaults() {
 	return array(
-		'bg'               => '',
-		'text_color'       => '',
-		'show_theme_toggle'=> 1,
-		'show_account'     => 1,
-		'show_cart'        => 1,
-		'show_call'        => 0,
-		'instagram_url'    => 'https://instagram.com/baharcollectionss',
-		'whatsapp_url'     => 'https://wa.me/989035233046',
-		'telegram_url'     => '',
-		'phone_url'        => 'tel:+989035233046',
-		'show_instagram'   => 1,
-		'show_whatsapp'    => 1,
-		'show_telegram'    => 0,
-		'custom_css'       => '',
+		'bg'             => '',
+		'text_color'     => '',
+		'show_account'   => 1,
+		'show_cart'      => 1,
+		'show_call'      => 0,
+		'instagram_url'  => 'https://instagram.com/baharcollectionss',
+		'whatsapp_url'   => 'https://wa.me/989035233046',
+		'telegram_url'   => '',
+		'phone_url'      => 'tel:+989035233046',
+		'show_instagram' => 1,
+		'show_whatsapp'  => 1,
+		'show_telegram'  => 0,
+		'custom_css'     => '',
 	);
 }
 
@@ -82,7 +107,7 @@ function bahar_shop_header_defaults() {
 function bahar_shop_header_settings() {
 	$saved = get_option( 'bahar_shop_header', array() );
 	$out   = wp_parse_args( is_array( $saved ) ? $saved : array(), bahar_shop_header_defaults() );
-	foreach ( array( 'show_theme_toggle', 'show_account', 'show_cart', 'show_call', 'show_instagram', 'show_whatsapp', 'show_telegram' ) as $flag ) {
+	foreach ( array( 'show_account', 'show_cart', 'show_call', 'show_instagram', 'show_whatsapp', 'show_telegram' ) as $flag ) {
 		$out[ $flag ] = ! empty( $out[ $flag ] ) ? 1 : 0;
 	}
 	return $out;
@@ -125,14 +150,14 @@ function bahar_shop_footer_settings() {
  */
 function bahar_shop_button_defaults() {
 	return array(
-		'visit_bg'        => '#fff5fa',
-		'visit_color'     => '#c277a7',
-		'visit_border'    => '#ff8ec7',
+		'visit_bg'        => '#FFF1F7',
+		'visit_color'     => '#7C3AED',
+		'visit_border'    => '#F1DCE8',
 		'variations_bg'   => '',
 		'variations_color'=> '',
 		'add_cart_bg'     => '',
 		'add_cart_color'  => '',
-		'radius'          => 8,
+		'radius'          => 12,
 		'custom_css'      => '',
 	);
 }
@@ -200,21 +225,38 @@ function bahar_shop_register_extended_settings() {
  * @return array<string,mixed>
  */
 function bahar_shop_sanitize_hero( $input ) {
-	$out = bahar_shop_hero_defaults();
+	$current = get_option( 'bahar_shop_hero', array() );
+	$out     = wp_parse_args( is_array( $current ) ? $current : array(), bahar_shop_hero_defaults() );
 	if ( ! is_array( $input ) ) {
 		return $out;
 	}
-	$text_keys = array( 'brand', 'tagline', 'cta_text', 'extra_text', 'extra_btn_text' );
+	$text_keys = array( 'brand', 'tagline', 'cta_text', 'extra_text', 'extra_btn_text', 'img_alt' );
 	foreach ( $text_keys as $key ) {
 		if ( isset( $input[ $key ] ) ) {
 			$out[ $key ] = sanitize_text_field( $input[ $key ] );
 		}
 	}
-	foreach ( array( 'cta_url', 'extra_btn_url', 'img_desktop', 'img_mobile' ) as $key ) {
+	foreach ( array( 'cta_url', 'extra_btn_url' ) as $key ) {
 		if ( isset( $input[ $key ] ) ) {
 			$out[ $key ] = esc_url_raw( trim( (string) $input[ $key ] ) );
 		}
 	}
+
+	foreach ( array( 'desktop', 'mobile' ) as $slot ) {
+		$id_key  = 'img_' . $slot . '_id';
+		$url_key = 'img_' . $slot;
+		if ( isset( $input[ $id_key ] ) ) {
+			$out[ $id_key ] = absint( $input[ $id_key ] );
+		}
+		if ( ! empty( $out[ $id_key ] ) ) {
+			$resolved = wp_get_attachment_image_url( (int) $out[ $id_key ], 'full' );
+			$out[ $url_key ] = $resolved ? esc_url_raw( $resolved ) : '';
+		} elseif ( isset( $input[ $url_key ] ) ) {
+			$out[ $url_key ] = esc_url_raw( trim( (string) $input[ $url_key ] ) );
+			$out[ $id_key ]  = 0;
+		}
+	}
+
 	foreach ( array( 'brand_color', 'tagline_color', 'cta_bg', 'cta_color', 'extra_text_color' ) as $key ) {
 		if ( ! empty( $input[ $key ] ) ) {
 			$color = sanitize_hex_color( $input[ $key ] );
@@ -242,7 +284,8 @@ function bahar_shop_sanitize_hero( $input ) {
  * @return array<string,mixed>
  */
 function bahar_shop_sanitize_header( $input ) {
-	$out = bahar_shop_header_defaults();
+	$current = get_option( 'bahar_shop_header', array() );
+	$out     = wp_parse_args( is_array( $current ) ? $current : array(), bahar_shop_header_defaults() );
 	if ( ! is_array( $input ) ) {
 		return $out;
 	}
@@ -268,9 +311,10 @@ function bahar_shop_sanitize_header( $input ) {
 			$out['phone_url'] = esc_url_raw( $phone );
 		}
 	}
-	foreach ( array( 'show_theme_toggle', 'show_account', 'show_cart', 'show_call', 'show_instagram', 'show_whatsapp', 'show_telegram' ) as $flag ) {
+	foreach ( array( 'show_account', 'show_cart', 'show_call', 'show_instagram', 'show_whatsapp', 'show_telegram' ) as $flag ) {
 		$out[ $flag ] = ! empty( $input[ $flag ] ) ? 1 : 0;
 	}
+	unset( $out['show_theme_toggle'] );
 	if ( isset( $input['custom_css'] ) ) {
 		$out['custom_css'] = bahar_shop_sanitize_custom_css( $input['custom_css'] );
 	}
@@ -282,7 +326,8 @@ function bahar_shop_sanitize_header( $input ) {
  * @return array<string,mixed>
  */
 function bahar_shop_sanitize_footer( $input ) {
-	$out = bahar_shop_footer_defaults();
+	$current = get_option( 'bahar_shop_footer', array() );
+	$out     = wp_parse_args( is_array( $current ) ? $current : array(), bahar_shop_footer_defaults() );
 	if ( ! is_array( $input ) ) {
 		return $out;
 	}
@@ -307,7 +352,8 @@ function bahar_shop_sanitize_footer( $input ) {
  * @return array<string,mixed>
  */
 function bahar_shop_sanitize_buttons( $input ) {
-	$out = bahar_shop_button_defaults();
+	$current = get_option( 'bahar_shop_buttons', array() );
+	$out     = wp_parse_args( is_array( $current ) ? $current : array(), bahar_shop_button_defaults() );
 	if ( ! is_array( $input ) ) {
 		return $out;
 	}
@@ -333,7 +379,8 @@ function bahar_shop_sanitize_buttons( $input ) {
  * @return array<string,mixed>
  */
 function bahar_shop_sanitize_load_more( $input ) {
-	$out = bahar_shop_load_more_defaults();
+	$current = get_option( 'bahar_shop_load_more', array() );
+	$out     = wp_parse_args( is_array( $current ) ? $current : array(), bahar_shop_load_more_defaults() );
 	if ( ! is_array( $input ) ) {
 		return $out;
 	}
@@ -421,10 +468,10 @@ function bahar_shop_print_customizer_css() {
 	$rules[] = '.hero--photo .hero__brand{color:var(--bahar-hero-brand-color,#fff);}';
 	$rules[] = '.hero--photo .hero__tagline{color:var(--bahar-hero-tagline-color,#fff);}';
 	$rules[] = '.hero--photo .hero__cta{color:var(--bahar-hero-cta-color,#2a2438);}';
-	$rules[] = '.hero--photo .hero__cta{background:var(--bahar-hero-cta-bg,linear-gradient(135deg,#bde0fe,#ffc8dd));}';
+	$rules[] = '.hero--photo .hero__cta{background:var(--bahar-hero-cta-bg,linear-gradient(135deg,#7C3AED,#EC4899));}';
 
-	$rules[] = '.bahar-product-card__visit{background:var(--bahar-btn-visit-bg,#fff5fa);color:var(--bahar-btn-visit-color,#c277a7);border-color:var(--bahar-btn-visit-border,#ff8ec7);border-radius:var(--bahar-btn-radius,8px);}';
-	$rules[] = '.bahar-variations-ui .bahar-attr-btn,.bahar-product-card__actions .button{border-radius:var(--bahar-btn-radius,8px);}';
+	$rules[] = '.bahar-product-card__visit{background:var(--bahar-btn-visit-bg,#FFF1F7);color:var(--bahar-btn-visit-color,#7C3AED);border-color:var(--bahar-btn-visit-border,#F1DCE8);border-radius:var(--bahar-btn-radius,12px);}';
+	$rules[] = '.bahar-variations-ui .bahar-attr-btn,.bahar-product-card__actions .button{border-radius:var(--bahar-btn-radius,12px);}';
 	if ( ! empty( $buttons['variations_bg'] ) || ! empty( $buttons['variations_color'] ) ) {
 		$rules[] = '.bahar-variations-ui .bahar-attr-btn,.single_variation_wrap .button{';
 		if ( ! empty( $buttons['variations_bg'] ) ) {

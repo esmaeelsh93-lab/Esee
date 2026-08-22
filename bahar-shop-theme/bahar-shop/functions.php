@@ -26,7 +26,6 @@ require_once BAHAR_SHOP_DIR . '/inc/variations-ui.php';
 require_once BAHAR_SHOP_DIR . '/inc/sticky-cart.php';
 require_once BAHAR_SHOP_DIR . '/inc/product-quantity.php';
 require_once BAHAR_SHOP_DIR . '/inc/product-ux.php';
-require_once BAHAR_SHOP_DIR . '/inc/theme-mode.php';
 require_once BAHAR_SHOP_DIR . '/inc/search.php';
 require_once BAHAR_SHOP_DIR . '/inc/performance.php';
 require_once BAHAR_SHOP_DIR . '/inc/wishlist.php';

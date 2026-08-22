@@ -14,6 +14,8 @@ $shop_url   = wc_get_page_permalink( 'shop' );
 
 <?php get_template_part( 'template-parts/home', 'hero' ); ?>
 
+<div class="bahar-section-halo" aria-hidden="true"></div>
+
 <section class="home-search-categories">
 	<?php get_template_part( 'template-parts/home', 'search' ); ?>
 
@@ -38,7 +40,11 @@ $shop_url   = wc_get_page_permalink( 'shop' );
 	</section>
 </section>
 
+<div class="bahar-section-halo bahar-section-halo--soft" aria-hidden="true"></div>
+
 <?php get_template_part( 'template-parts/home', 'sale-slider' ); ?>
+
+<div class="bahar-section-halo" aria-hidden="true"></div>
 
 <section id="bahar-newest" class="section newest-section">
 	<div class="container">
