@@ -13,62 +13,45 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Vazir', 'IRANSans';
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            background-color: #f5f5f5;
             padding: 20px;
             line-height: 1.8;
             color: #333;
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 900px;
             margin: 0 auto;
             background: white;
-            border-radius: 20px;
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
 
         header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 50px 30px;
-            text-align: center;
-            border-bottom: 5px solid #ff6b6b;
+            background-color: #ffffff;
+            padding: 30px;
+            border-bottom: 2px solid #333;
         }
 
         header h1 {
-            font-size: 2.8em;
-            margin-bottom: 15px;
+            font-size: 2.2em;
+            margin-bottom: 10px;
             font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         header p {
-            font-size: 1.2em;
-            opacity: 0.95;
-            font-weight: 300;
-        }
-
-        .badge {
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 8px 20px;
-            border-radius: 25px;
-            margin-top: 20px;
-            font-size: 0.95em;
-            font-weight: 600;
-            border: 1px solid rgba(255, 255, 255, 0.4);
+            font-size: 1em;
+            color: #666;
         }
 
         nav {
-            background: linear-gradient(to bottom, #f8f9fa, #ffffff);
-            border-bottom: 2px solid #e9ecef;
+            background-color: #f9f9f9;
+            border-bottom: 1px solid #ddd;
             padding: 0;
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         }
 
         nav ul {
@@ -76,372 +59,50 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
+            max-width: 900px;
+            margin: 0 auto;
         }
 
         nav a {
             display: block;
-            padding: 16px 22px;
-            color: #667eea;
+            padding: 12px 18px;
+            color: #333;
             text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            border-bottom: 3px solid transparent;
+            font-weight: 500;
+            font-size: 0.95em;
+            transition: background 0.2s;
+            border-bottom: 2px solid transparent;
         }
 
         nav a:hover {
-            background: #f0f2f9;
-            border-bottom-color: #667eea;
-            color: #764ba2;
+            background-color: #f0f0f0;
+            border-bottom-color: #333;
         }
 
         .content {
-            padding: 50px 35px;
+            padding: 40px;
         }
 
         section {
-            margin-bottom: 60px;
-            scroll-margin-top: 120px;
+            margin-bottom: 50px;
+            scroll-margin-top: 100px;
         }
 
         h2 {
-            color: #667eea;
-            font-size: 2.2em;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 3px solid #ff6b6b;
-            display: inline-block;
+            color: #000;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #333;
             font-weight: 700;
         }
 
         h3 {
-            color: #764ba2;
-            font-size: 1.5em;
-            margin-top: 30px;
-            margin-bottom: 18px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 600;
-        }
-
-        h3::before {
-            content: '▸';
-            color: #ff6b6b;
+            color: #333;
             font-size: 1.3em;
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 20px;
-            margin: 25px 0;
-        }
-
-        .feature-card {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            padding: 28px;
-            border-radius: 12px;
-            border-right: 5px solid #667eea;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-        }
-
-        .feature-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.25);
-        }
-
-        .feature-card h4 {
-            color: #667eea;
-            font-size: 1.2em;
-            margin-bottom: 12px;
-            font-weight: 700;
-        }
-
-        .feature-card p {
-            color: #555;
-            font-size: 0.98em;
-            line-height: 1.6;
-        }
-
-        .step-list {
-            list-style: none;
-            counter-reset: step-counter;
-        }
-
-        .step-list li {
-            counter-increment: step-counter;
-            margin-bottom: 25px;
-            padding-left: 60px;
-            position: relative;
-        }
-
-        .step-list li::before {
-            content: counter(step-counter);
-            position: absolute;
-            right: 0;
-            top: 0;
-            width: 45px;
-            height: 45px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 1.2em;
-            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
-        }
-
-        .step-list li strong {
-            color: #667eea;
-            font-size: 1.08em;
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        .step-list li p {
-            color: #666;
-            margin: 5px 0;
-        }
-
-        .note {
-            background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
-            border-right: 5px solid #ffc107;
-            padding: 18px 22px;
-            border-radius: 8px;
-            margin: 25px 0;
-            color: #856404;
-            font-size: 0.98em;
-            line-height: 1.7;
-        }
-
-        .note::before {
-            content: '⚠️ ';
-            font-weight: bold;
-            margin-left: 8px;
-        }
-
-        .success {
-            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
-            border-right: 5px solid #28a745;
-            padding: 18px 22px;
-            border-radius: 8px;
-            margin: 25px 0;
-            color: #155724;
-            font-size: 0.98em;
-            line-height: 1.7;
-        }
-
-        .success::before {
-            content: '✓ ';
-            font-weight: bold;
-            margin-left: 8px;
-        }
-
-        .info {
-            background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
-            border-right: 5px solid #17a2b8;
-            padding: 18px 22px;
-            border-radius: 8px;
-            margin: 25px 0;
-            color: #0c5460;
-            font-size: 0.98em;
-            line-height: 1.7;
-        }
-
-        .info::before {
-            content: 'ℹ️ ';
-            font-weight: bold;
-            margin-left: 8px;
-        }
-
-        .paper-sizes {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 18px;
-            margin: 25px 0;
-        }
-
-        .paper-size-card {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border: 2px solid #e9ecef;
-            padding: 18px;
-            border-radius: 10px;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .paper-size-card:hover {
-            border-color: #667eea;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.15);
-        }
-
-        .paper-size-card strong {
-            color: #667eea;
-            display: block;
-            margin-bottom: 10px;
-            font-size: 1.15em;
-        }
-
-        .paper-size-card p {
-            color: #666;
-            font-size: 0.92em;
-            margin: 5px 0;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 25px 0;
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        table thead {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        table th {
-            padding: 16px 18px;
-            text-align: right;
+            margin-top: 25px;
+            margin-bottom: 15px;
             font-weight: 600;
-            font-size: 0.98em;
-        }
-
-        table td {
-            padding: 14px 18px;
-            border-bottom: 1px solid #e9ecef;
-            font-size: 0.95em;
-        }
-
-        table tbody tr:hover {
-            background: #f8f9fa;
-        }
-
-        .faq-item {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-right: 5px solid #667eea;
-            padding: 22px;
-            border-radius: 10px;
-            margin-bottom: 18px;
-            transition: all 0.3s ease;
-        }
-
-        .faq-item:hover {
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.1);
-        }
-
-        .faq-item strong {
-            color: #667eea;
-            display: block;
-            margin-bottom: 12px;
-            font-size: 1.08em;
-        }
-
-        .faq-item p {
-            color: #555;
-            margin: 8px 0;
-            line-height: 1.7;
-        }
-
-        .faq-item ul {
-            margin: 12px 0 12px 25px;
-            color: #555;
-        }
-
-        .faq-item li {
-            margin: 6px 0;
-        }
-
-        footer {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-top: 2px solid #e9ecef;
-            padding: 35px;
-            text-align: center;
-            color: #666;
-        }
-
-        footer h3 {
-            color: #667eea;
-            border: none;
-            margin-bottom: 10px;
-        }
-
-        footer h3::before {
-            display: none;
-        }
-
-        footer a {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        footer a:hover {
-            color: #764ba2;
-            text-decoration: underline;
-        }
-
-        .version-info {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 25px;
-            font-size: 0.92em;
-            margin-top: 20px;
-            font-weight: 600;
-        }
-
-        .icon {
-            font-size: 1.3em;
-        }
-
-        code {
-            background: #f8f9fa;
-            padding: 2px 6px;
-            border-radius: 4px;
-            color: #667eea;
-            font-family: 'Courier New', monospace;
-            font-weight: 600;
-        }
-
-        @media (max-width: 768px) {
-            header h1 {
-                font-size: 2em;
-            }
-
-            .content {
-                padding: 25px 20px;
-            }
-
-            nav ul {
-                flex-direction: column;
-            }
-
-            nav a {
-                border-bottom: 3px solid transparent;
-                border-right: 3px solid transparent;
-            }
-
-            nav a:hover {
-                border-right-color: #667eea;
-                border-bottom-color: transparent;
-            }
-
-            .feature-grid {
-                grid-template-columns: 1fr;
-            }
-
-            h2 {
-                font-size: 1.7em;
-            }
         }
 
         p {
@@ -459,15 +120,199 @@
             margin: 8px 0;
             line-height: 1.7;
         }
+
+        ol {
+            margin: 15px 0 15px 30px;
+            color: #555;
+        }
+
+        ol li {
+            margin: 10px 0;
+            line-height: 1.7;
+        }
+
+        ol li strong {
+            color: #000;
+        }
+
+        code {
+            background-color: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #333;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .note {
+            background-color: #fffbf0;
+            border-right: 4px solid #333;
+            padding: 15px 20px;
+            border-radius: 4px;
+            margin: 20px 0;
+            color: #555;
+            font-size: 0.95em;
+        }
+
+        .note strong {
+            color: #000;
+        }
+
+        .success {
+            background-color: #f0f8f0;
+            border-right: 4px solid #333;
+            padding: 15px 20px;
+            border-radius: 4px;
+            margin: 20px 0;
+            color: #555;
+        }
+
+        .success strong {
+            color: #000;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        table thead {
+            background-color: #f5f5f5;
+            border-bottom: 2px solid #333;
+        }
+
+        table th {
+            padding: 12px 15px;
+            text-align: right;
+            font-weight: 600;
+            color: #000;
+        }
+
+        table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+            color: #555;
+        }
+
+        table tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .faq-item {
+            background-color: #f9f9f9;
+            border-right: 3px solid #333;
+            padding: 18px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        .faq-item strong {
+            color: #000;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .faq-item p {
+            color: #555;
+            margin: 8px 0;
+        }
+
+        .paper-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .paper-card {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .paper-card strong {
+            color: #000;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .paper-card p {
+            color: #666;
+            font-size: 0.9em;
+            margin: 3px 0;
+        }
+
+        footer {
+            background-color: #f9f9f9;
+            border-top: 1px solid #ddd;
+            padding: 30px;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        footer a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .step-title {
+            font-weight: 600;
+            color: #000;
+            margin-bottom: 5px;
+        }
+
+        .step-desc {
+            color: #555;
+            margin-left: 0;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.6em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            nav ul {
+                flex-direction: column;
+            }
+
+            nav a {
+                border-right: 2px solid transparent;
+                border-bottom: none;
+            }
+
+            nav a:hover {
+                border-right-color: #333;
+                border-bottom-color: transparent;
+            }
+
+            .paper-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <!-- Header -->
         <header>
-            <h1>🖨️ پرینت هوشمند شجاعی</h1>
-            <p>راهنمای کامل و جامع کاربری افزونه چاپ گروهی ووکامرس</p>
-            <span class="badge">نسخه 1.3.0</span>
+            <h1>راهنمای کاربری - پرینت هوشمند شجاعی</h1>
+            <p>آموزش کامل نحوه استفاده از افزونه چاپ گروهی ووکامرس (نسخه 1.3.0)</p>
         </header>
 
         <!-- Navigation -->
@@ -479,7 +324,6 @@
                 <li><a href="#usage">استفاده</a></li>
                 <li><a href="#settings">تنظیمات</a></li>
                 <li><a href="#faq">سوالات</a></li>
-                <li><a href="#support">پشتیبانی</a></li>
             </ul>
         </nav>
 
@@ -487,257 +331,220 @@
         <div class="content">
             <!-- About Section -->
             <section id="about">
-                <h2><span class="icon">ℹ️</span> درباره افزونه</h2>
-                <p>افزونه <strong>پرینت هوشمند شجاعی</strong> یک ابزار قدرتمند و کاربرپسند برای چاپ گروهی سفارش‌های ووکامرس است. این افزونه به شما امکان می‌دهد تا:</p>
+                <h2>درباره افزونه</h2>
+                <p>افزونه «پرینت هوشمند شجاعی» ابزاری برای چاپ گروهی سفارش‌های ووکامرس است. این افزونه به شما کمک می‌کند تا:</p>
                 <ul>
-                    <li>صد‌ها سفارش را به‌صورت خودکار و گروهی چاپ کنید</li>
-                    <li>فاکتورهای حرفه‌ای و زیبا تهیه کنید</li>
-                    <li>فاکتورها را با سربرگ و لوگوی شرکتتان شخصی‌سازی کنید</li>
+                    <li>صد‌ها سفارش را یکبار چاپ کنید</li>
+                    <li>فاکتورهای حرفه‌ای تهیه کنید</li>
+                    <li>سربرگ و لوگوی شرکت خود را اضافه کنید</li>
                     <li>از اندازه‌های مختلف کاغذ استفاده کنید</li>
-                    <li>زمان و انرژی خود را صرفه‌جویی کنید</li>
                 </ul>
                 <div class="success">
-                    ✓ این افزونه هرگز به داده‌های سفارش‌های شما تغییری نمی‌دهد! فقط آن‌ها را می‌خواند و فاکتور چاپی تهیه می‌کند.
+                    <strong>نکته مهم:</strong> این افزونه تنها سفارش‌ها را می‌خواند و هیچ تغییری در داده‌های سفارش ایجاد نمی‌کند.
                 </div>
             </section>
 
             <!-- Features Section -->
             <section id="features">
-                <h2><span class="icon">⭐</span> ویژگی‌های کلیدی</h2>
-                <div class="feature-grid">
-                    <div class="feature-card">
-                        <h4>🎨 تب‌های جداگانه</h4>
-                        <p>تب‌های مجزایی برای عملیات چاپ و تنظیمات برای راحتی بیشتر</p>
-                    </div>
-                    <div class="feature-card">
-                        <h4>📄 چاپ جداگانه</h4>
-                        <p>هر سفارش در یک برگه چاپ مجزا برای نظم و تنظیم</p>
-                    </div>
-                    <div class="feature-card">
-                        <h4>📋 توضیحات مشتری</h4>
-                        <p>نمایش یادداشت‌ها و نکات مشتری روی فاکتور</p>
-                    </div>
-                    <div class="feature-card">
-                        <h4>📮 برچسب ارسال</h4>
-                        <p>برچسب روش ارسال برای هر سفارش</p>
-                    </div>
-                    <div class="feature-card">
-                        <h4>📐 اندازه‌های متعدد</h4>
-                        <p>A4، A5، A6، Letter و سفارشی</p>
-                    </div>
-                    <div class="feature-card">
-                        <h4>🖤 چاپ مقتصد</h4>
-                        <p>بهینه‌سازی برای چاپ سیاه‌وسفید</p>
-                    </div>
-                    <div class="feature-card">
-                        <h4>✅ علامت چاپ‌شده</h4>
-                        <p>نشانه‌گذاری خودکار سفارش‌های چاپ‌شده</p>
-                    </div>
-                    <div class="feature-card">
-                        <h4>🖼️ سربرگ سفارشی</h4>
-                        <p>آپلود تصویر لوگو از کتابخانه رسانه</p>
-                    </div>
-                </div>
+                <h2>ویژگی‌های افزونه</h2>
+                <ul>
+                    <li>تب‌های جداگانه برای چاپ و تنظیمات</li>
+                    <li>چاپ هر سفارش در یک برگه مجزا</li>
+                    <li>نمایش توضیحات و نکات مشتری روی فاکتور</li>
+                    <li>نمایش روش ارسال برای هر سفارش</li>
+                    <li>اندازه‌های کاغذ: A4، A5، A6، Letter</li>
+                    <li>پشتیبانی از اندازه‌های سفارشی</li>
+                    <li>چاپ سیاه‌وسفید برای کاهش مصرف رنگ</li>
+                    <li>نشانه‌گذاری خودکار سفارش‌های چاپ‌شده</li>
+                    <li>آپلود لوگو و سربرگ شرکت</li>
+                    <li>سازگاری با HPOS و ذخیره‌سازی کلاسیک</li>
+                </ul>
             </section>
 
             <!-- Installation Section -->
             <section id="installation">
-                <h2><span class="icon">📦</span> نصب و فعال‌سازی</h2>
+                <h2>نصب افزونه</h2>
                 
-                <h3>نیاز‌های سیستم</h3>
+                <h3>نیازمندی‌ها</h3>
                 <table>
                     <thead>
                         <tr>
-                            <th>مورد</th>
-                            <th>نسخه مورد نیاز</th>
+                            <th>نیاز</th>
+                            <th>نسخه</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>🌐 وردپرس</td>
+                            <td>وردپرس</td>
                             <td>6.0 یا بالاتر</td>
                         </tr>
                         <tr>
-                            <td>🐘 PHP</td>
+                            <td>PHP</td>
                             <td>7.4 یا بالاتر</td>
                         </tr>
                         <tr>
-                            <td>🛒 ووکامرس</td>
+                            <td>ووکامرس</td>
                             <td>7.0 یا بالاتر</td>
                         </tr>
                     </tbody>
                 </table>
 
                 <h3>مراحل نصب</h3>
-                <ol class="step-list">
+                <ol>
                     <li>
-                        <strong>دانلود فایل ZIP</strong>
-                        <p>فایل <code>woocommerce-bulk-order-print-1.3.0.zip</code> را دانلود کنید.</p>
+                        <div class="step-title">فایل ZIP را دانلود کنید</div>
+                        <div class="step-desc">فایل <code>woocommerce-bulk-order-print-1.3.0.zip</code> را دانلود کنید.</div>
                     </li>
                     <li>
-                        <strong>ورود به پنل مدیریت</strong>
-                        <p>به آدرس <code>wp-admin</code> وارد شوید.</p>
+                        <div class="step-title">وارد پنل وردپرس شوید</div>
+                        <div class="step-desc">به آدرس <code>wp-admin</code> وارد شوید.</div>
                     </li>
                     <li>
-                        <strong>بخش افزونه‌ها</strong>
-                        <p>از منوی سمت چپ: <strong>افزونه‌ها → افزودن جدید</strong></p>
+                        <div class="step-title">به بخش افزونه‌ها بروید</div>
+                        <div class="step-desc">از منوی چپ: <strong>افزونه‌ها → افزودن جدید</strong></div>
                     </li>
                     <li>
-                        <strong>بارگذاری فایل</strong>
-                        <p>دکمه <strong>«بارگذاری افزونه»</strong> را کلیک کنید و فایل ZIP را انتخاب کنید.</p>
+                        <div class="step-title">فایل را بارگذاری کنید</div>
+                        <div class="step-desc">دکمه «بارگذاری افزونه» را کلیک کنید و فایل ZIP را انتخاب کنید.</div>
                     </li>
                     <li>
-                        <strong>فعال‌سازی</strong>
-                        <p>بعد از نصب، دکمه <strong>«فعال‌سازی»</strong> را کلیک کنید.</p>
+                        <div class="step-title">افزونه را فعال کنید</div>
+                        <div class="step-desc">بعد از نصب، دکمه «فعال‌سازی» را کلیک کنید.</div>
                     </li>
                     <li>
-                        <strong>شروع به کار</strong>
-                        <p>منوی <strong>ووکامرس → پرینت هوشمند شجاعی</strong> ظاهر می‌شود.</p>
+                        <div class="step-title">افزونه آماده است</div>
+                        <div class="step-desc">منوی <strong>ووکامرس → پرینت هوشمند شجاعی</strong> ظاهر می‌شود.</div>
                     </li>
                 </ol>
 
                 <div class="note">
-                    ⚠️ ووکامرس باید قبل از فعال‌سازی این افزونه نصب و فعال باشد.
+                    <strong>مهم:</strong> ووکامرس باید قبل از فعال‌سازی این افزونه نصب و فعال باشد.
                 </div>
             </section>
 
             <!-- Usage Section -->
             <section id="usage">
-                <h2><span class="icon">🚀</span> نحوه استفاده</h2>
+                <h2>نحوه استفاده</h2>
 
-                <h3>مرحله اول: ورود به بخش چاپ</h3>
-                <ol class="step-list">
-                    <li>
-                        <strong>وارد پنل وردپرس شوید</strong>
-                        <p>از نام کاربری و رمز عبور خود استفاده کنید.</p>
-                    </li>
-                    <li>
-                        <strong>از منوی ووکامرس، بر روی «پرینت هوشمند شجاعی» کلیک کنید</strong>
-                    </li>
-                    <li>
-                        <strong>به تب «عملیات چاپ» بروید</strong>
-                        <p>این تب به‌طور پیش‌فرض باز است.</p>
-                    </li>
+                <h3>مرحله 1: ورود به بخش چاپ</h3>
+                <ol>
+                    <li>به پنل وردپرس وارد شوید</li>
+                    <li>از منوی ووکامرس، بر روی «پرینت هوشمند شجاعی» کلیک کنید</li>
+                    <li>تب «عملیات چاپ» باز می‌شود</li>
                 </ol>
 
-                <h3>مرحله دوم: انتخاب سفارش‌ها</h3>
-                <p>سفارش‌های ووکامرس نمایش داده می‌شوند. برای انتخاب:</p>
+                <h3>مرحله 2: انتخاب سفارش‌ها</h3>
+                <p>فهرست تمام سفارش‌های شما نمایش داده می‌شود. برای انتخاب:</p>
                 <ul>
-                    <li>بر روی <strong>چک‌باکس</strong> کنار هر سفارش کلیک کنید</li>
-                    <li>یا از دکمه <strong>«انتخاب همه»</strong> برای انتخاب تمام سفارش‌ها استفاده کنید</li>
-                    <li>سفارش‌های انتخاب‌شده را می‌توانید <strong>رفع انتخاب</strong> کنید</li>
+                    <li>کادر مربعی کنار هر سفارش را کلیک کنید</li>
+                    <li>یا دکمه «انتخاب همه» برای انتخاب تمام سفارش‌ها</li>
+                    <li>برای رفع انتخاب، دوباره روی کادر کلیک کنید</li>
                 </ul>
 
-                <h3>مرحله سوم: نمایش قبل از چاپ</h3>
-                <ol class="step-list">
+                <h3>مرحله 3: نمایش قبل از چاپ</h3>
+                <ol>
                     <li>
-                        <strong>دکمه «نمایش قبل از چاپ» را کلیک کنید</strong>
-                        <p>فاکتورها در یک صفحه جدید نمایش داده می‌شوند.</p>
+                        <div class="step-title">دکمه «نمایش قبل از چاپ» را کلیک کنید</div>
+                        <div class="step-desc">فاکتورهای انتخاب‌شده در صفحه جدید نمایش داده می‌شوند.</div>
                     </li>
                     <li>
-                        <strong>بررسی فاکتورها</strong>
-                        <p>صفحات چاپی را بررسی کنید و اطمینان حاصل کنید همه چیز درست است.</p>
+                        <div class="step-title">بررسی فاکتورها</div>
+                        <div class="step-desc">صفحات را بررسی کنید و مطمئن شوید همه چیز درست است.</div>
                     </li>
                 </ol>
 
-                <h3>مرحله چهارم: چاپ</h3>
-                <ol class="step-list">
+                <h3>مرحله 4: چاپ</h3>
+                <ol>
                     <li>
-                        <strong>برنامه چاپ وب‌گاه را باز کنید</strong>
-                        <p>از <strong>Ctrl+P</strong> (یا <strong>Cmd+P</strong> در مک) استفاده کنید.</p>
+                        <div class="step-title">فتح پنجره چاپ</div>
+                        <div class="step-desc">کلیدهای <strong>Ctrl+P</strong> (در ویندوز) یا <strong>Cmd+P</strong> (در مک) را فشار دهید.</div>
                     </li>
                     <li>
-                        <strong>تنظیمات چاپ</strong>
-                        <p>اندازه کاغذ، جهت، حاشیه‌ها و دیگر گزینه‌ها را تنظیم کنید.</p>
+                        <div class="step-title">تنظیم گزینه‌های چاپ</div>
+                        <div class="step-desc">اندازه کاغذ، حاشیه‌ها و سایر تنظیمات را انجام دهید.</div>
                     </li>
                     <li>
-                        <strong>چاپ</strong>
-                        <p>دکمه «چاپ» را کلیک کنید یا «ذخیره به عنوان PDF» را انتخاب کنید.</p>
+                        <div class="step-title">چاپ یا ذخیره</div>
+                        <div class="step-desc">«چاپ» را کلیک کنید یا «ذخیره به عنوان PDF» را انتخاب کنید.</div>
                     </li>
                 </ol>
 
                 <div class="success">
-                    ✓ سفارش‌های چاپ‌شده خودکار با علامت «چاپ‌شده» نشانه‌گذاری می‌شوند!
+                    <strong>توجه:</strong> سفارش‌های چاپ‌شده خودکار با علامت «چاپ‌شده» نشانه‌گذاری می‌شوند.
                 </div>
             </section>
 
             <!-- Settings Section -->
             <section id="settings">
-                <h2><span class="icon">⚙️</span> تنظیمات</h2>
+                <h2>تنظیمات افزونه</h2>
 
-                <p>بر روی تب <strong>«تنظیمات»</strong> کلیک کنید تا گزینه‌های زیر را مشاهده کنید:</p>
+                <p>برای دسترسی به تنظیمات، بر روی تب <strong>«تنظیمات»</strong> کلیک کنید.</p>
 
                 <h3>اندازه کاغذ</h3>
-                <div class="paper-sizes">
-                    <div class="paper-size-card">
+                <div class="paper-grid">
+                    <div class="paper-card">
                         <strong>A4</strong>
-                        <p>210 × 297 mm</p>
+                        <p>210 × 297 میلی‌متر</p>
                         <p>استاندارد</p>
                     </div>
-                    <div class="paper-size-card">
+                    <div class="paper-card">
                         <strong>A5</strong>
-                        <p>148 × 210 mm</p>
+                        <p>148 × 210 میلی‌متر</p>
                         <p>نیم A4</p>
                     </div>
-                    <div class="paper-size-card">
+                    <div class="paper-card">
                         <strong>A6</strong>
-                        <p>105 × 148 mm</p>
+                        <p>105 × 148 میلی‌متر</p>
                         <p>برچسب</p>
                     </div>
-                    <div class="paper-size-card">
+                    <div class="paper-card">
                         <strong>Letter</strong>
-                        <p>8.5 × 11 in</p>
+                        <p>8.5 × 11 اینچ</p>
                         <p>آمریکایی</p>
-                    </div>
-                    <div class="paper-size-card">
-                        <strong>سفارشی</strong>
-                        <p>هر اندازه</p>
-                        <p>بر حسب سانتی‌متر</p>
                     </div>
                 </div>
 
-                <h3>اندازه کاغذ سفارشی</h3>
-                <div class="info">
-                    ℹ️ اگر می‌خواهید از اندازه کاغذی غیرمعمول استفاده کنید:
-                </div>
-                <ol class="step-list">
+                <h3>استفاده از اندازه سفارشی</h3>
+                <ol>
                     <li>
-                        <strong>«نوع کاغذ» را روی «ابعاد سفارشی» تغییر دهید</strong>
+                        <div class="step-title">نوع کاغذ را تغییر دهید</div>
+                        <div class="step-desc">«نوع کاغذ» را روی «ابعاد سفارشی» تنظیم کنید.</div>
                     </li>
                     <li>
-                        <strong>عرض کاغذ را وارد کنید</strong>
-                        <p>عرض را بر حسب سانتی‌متر (بین 5 تا 100)</p>
+                        <div class="step-title">عرض را وارد کنید</div>
+                        <div class="step-desc">عرض کاغذ را بر حسب سانتی‌متر (بین 5 تا 100) وارد کنید.</div>
                     </li>
                     <li>
-                        <strong>طول کاغذ را وارد کنید</strong>
-                        <p>طول را بر حسب سانتی‌متر (بین 5 تا 100)</p>
+                        <div class="step-title">طول را وارد کنید</div>
+                        <div class="step-desc">طول کاغذ را بر حسب سانتی‌متر (بین 5 تا 100) وارد کنید.</div>
                     </li>
                     <li>
-                        <strong>تنظیمات را ذخیره کنید</strong>
-                        <p>دکمه «ذخیره تنظیمات» را کلیک کنید.</p>
+                        <div class="step-title">ذخیره کنید</div>
+                        <div class="step-desc">دکمه «ذخیره تنظیمات» را کلیک کنید.</div>
                     </li>
                 </ol>
 
-                <h3>سربرگ و لوگو</h3>
-                <ol class="step-list">
+                <h3>آپلود سربرگ/لوگو</h3>
+                <ol>
                     <li>
-                        <strong>دکمه «انتخاب تصویر» را کلیک کنید</strong>
+                        <div class="step-title">دکمه «انتخاب تصویر» را کلیک کنید</div>
                     </li>
                     <li>
-                        <strong>تصویر را انتخاب یا بارگذاری کنید</strong>
-                        <p>از کتابخانه رسانه ووکامرس استفاده کنید.</p>
+                        <div class="step-title">تصویر را انتخاب کنید</div>
+                        <div class="step-desc">تصویری از کتابخانه رسانه ووکامرس انتخاب کنید یا جدید آپلود کنید.</div>
                     </li>
                     <li>
-                        <strong>تصویر را تأیید کنید</strong>
-                        <p>دکمه «انتخاب» را کلیک کنید.</p>
+                        <div class="step-title">تصویر را تأیید کنید</div>
+                        <div class="step-desc">دکمه «انتخاب» را کلیک کنید.</div>
                     </li>
                     <li>
-                        <strong>تنظیمات را ذخیره کنید</strong>
+                        <div class="step-title">ذخیره کنید</div>
+                        <div class="step-desc">دکمه «ذخیره تنظیمات» را کلیک کنید.</div>
                     </li>
                 </ol>
 
                 <div class="note">
-                    ⚠️ توصیه می‌شود تصاویری با عرض 1200 پیکسل و ارتفاع تا 200 پیکسل استفاده کنید. فرمت‌های قابل قبول: JPG، PNG و GIF.
+                    <strong>توصیه:</strong> بهترین اندازه برای لوگو، عرض 1200 پیکسل و ارتفاع تا 200 پیکسل است. فرمت‌های قابل قبول: JPG، PNG و GIF.
                 </div>
 
                 <h3>سایر تنظیمات</h3>
@@ -751,19 +558,15 @@
                     <tbody>
                         <tr>
                             <td><strong>چاپ سیاه‌وسفید</strong></td>
-                            <td>بهینه‌سازی فاکتورها برای چاپ سیاه‌وسفید و کاهش مصرف رنگ</td>
+                            <td>برای کاهش مصرف رنگ تونر و چاپ مقتصد</td>
                         </tr>
                         <tr>
                             <td><strong>نمایش توضیحات</strong></td>
-                            <td>نمایش یادداشت‌های و نکات مشتری روی فاکتور</td>
+                            <td>نمایش یادداشت‌های مشتری روی فاکتور</td>
                         </tr>
                         <tr>
-                            <td><strong>نمایش نحوه ارسال</strong></td>
-                            <td>نمایش روش ارسال و شرکت حمل‌ونقل روی فاکتور</td>
-                        </tr>
-                        <tr>
-                            <td><strong>حاشیه‌های صفحه</strong></td>
-                            <td>تنظیم حاشیه‌های چپ و راست صفحه چاپ</td>
+                            <td><strong>نمایش روش ارسال</strong></td>
+                            <td>نمایش نحوه ارسال و شرکت حمل‌ونقل</td>
                         </tr>
                     </tbody>
                 </table>
@@ -771,197 +574,71 @@
 
             <!-- FAQ Section -->
             <section id="faq">
-                <h2><span class="icon">❓</span> سوالات متداول</h2>
+                <h2>سوالات متداول</h2>
 
                 <div class="faq-item">
-                    <strong>س: آیا این افزونه سفارش‌های را تغییر می‌دهد؟</strong>
-                    <p>خیر، هرگز! این افزونه تنها سفارش‌های خود را می‌خواند و فقط تنظیمات افزونه را ذخیره می‌کند. هیچ داده‌ی سفارش تغییر نمی‌کند.</p>
+                    <strong>س: آیا افزونه داده‌های سفارش را تغییر می‌دهد؟</strong>
+                    <p>خیر، هرگز نه. افزونه تنها سفارش‌ها را می‌خواند و تنظیمات خود را ذخیره می‌کند. اطلاعات سفارش تغییری نمی‌کند.</p>
                 </div>
 
                 <div class="faq-item">
-                    <strong>س: چگونه سفارش‌های قبلاً چاپ‌شده را شناسایی کنم؟</strong>
-                    <p>سفارش‌های چاپ‌شده خودکار با علامت «چاپ‌شده» ✓ در لیست نشانه‌گذاری می‌شوند. شما همچنین می‌توانید بر روی ستون وضعیت کلیک کنید تا تنها سفارش‌های چاپ‌نشده را مشاهده کنید.</p>
+                    <strong>س: چگونه سفارش‌های چاپ‌شده را پیدا کنم؟</strong>
+                    <p>سفارش‌های چاپ‌شده با علامت «چاپ‌شده» نشانه‌گذاری می‌شوند. شما می‌توانید بر روی ستون وضعیت کلیک کنید تا تنها سفارش‌های چاپ‌نشده را ببینید.</p>
+                </div>
+
+                <div class="faq-item">
+                    <strong>س: می‌توانم چند سفارش را با هم چاپ کنم؟</strong>
+                    <p>بله، شما می‌توانید تعداد نامحدودی سفارش را انتخاب کنید. هر سفارش در یک برگه مجزا چاپ می‌شود.</p>
                 </div>
 
                 <div class="faq-item">
                     <strong>س: اندازه کاغذ سفارشی چگونه کار می‌کند؟</strong>
-                    <p>نوع کاغذ را روی «ابعاد سفارشی» تغییر دهید و عرض و طول را به سانتی‌متر وارد کنید. برای مثال: عرض 10cm و طول 15cm برای یک اندازه کوچک.</p>
+                    <p>نوع کاغذ را روی «ابعاد سفارشی» تنظیم کنید و عرض و طول را به سانتی‌متر وارد کنید. برای مثال: 10cm عرض و 15cm طول.</p>
                 </div>
 
                 <div class="faq-item">
-                    <strong>س: تصویر سربرگ چه اندازه‌ای باید باشد؟</strong>
-                    <p>توصیه می‌شود تصویری با عرض 1200 پیکسل و ارتفاع تا 200 پیکسل استفاده کنید. فرمت‌های قابل قبول: JPG، PNG و GIF.</p>
-                </div>
-
-                <div class="faq-item">
-                    <strong>س: چاپ سیاه‌وسفید چه نفعی دارد؟</strong>
-                    <p>این گزینه فاکتورها را برای چاپ سیاه‌وسفید بهینه می‌کند و باعث کاهش مصرف رنگ تونر می‌شود. مناسب برای کسب‌وکارهایی که مقدار زیادی فاکتور چاپ می‌کنند.</p>
+                    <strong>س: چاپ سیاه‌وسفید چه فائده‌ای دارد؟</strong>
+                    <p>فاکتورها برای چاپ سیاه‌وسفید بهینه می‌شوند و مصرف رنگ تونر کاهش می‌یابد. برای کسب‌وکارهایی که زیاد چاپ می‌کنند، صرفه‌جویی هزینه قابل توجه است.</p>
                 </div>
 
                 <div class="faq-item">
                     <strong>س: آیا افزونه با HPOS سازگار است؟</strong>
-                    <p>بله! نسخه 1.3.0 به‌طور کامل با ووکامرس HPOS (Custom Order Tables) و ذخیره‌سازی کلاسیک سازگار است.</p>
+                    <p>بله، افزونه به‌طور کامل با ووکامرس HPOS (Custom Order Tables) و ذخیره‌سازی کلاسیک سازگار است.</p>
                 </div>
 
                 <div class="faq-item">
                     <strong>س: چگونه فاکتور را به‌جای چاپ ذخیره کنم؟</strong>
-                    <p>نمایش قبل از چاپ را باز کنید، سپس از Ctrl+P (یا Cmd+P در مک) استفاده کرده و در پنجره چاپ «ذخیره به عنوان PDF» را انتخاب کنید.</p>
+                    <p>نمایش قبل از چاپ را باز کنید، سپس Ctrl+P (یا Cmd+P) را فشار دهید و «ذخیره به عنوان PDF» را انتخاب کنید.</p>
                 </div>
 
                 <div class="faq-item">
-                    <strong>س: آیا می‌توانم چند سفارش را یکباره چاپ کنم؟</strong>
-                    <p>بله! شما می‌توانید تعداد نامحدودی سفارش را انتخاب کنید. هر سفارش در یک برگه مجزا چاپ می‌شود.</p>
+                    <strong>س: بهترین زمان برای چاپ گروهی کی است؟</strong>
+                    <p>پایان روز کاری یا شروع هفته، زمان مناسبی است. این زمان شما را از مراجعات یکی‌یکی مشتریان برای چاپ فاکتور می‌رهاند.</p>
                 </div>
 
                 <div class="faq-item">
-                    <strong>س: اگر مشکلی پیدا کنم، چه کنم؟</strong>
-                    <p>لطفاً بخش پشتیبانی را مشاهده کنید یا از طریق GitHub issues درخواست کمک کنید.</p>
-                </div>
-            </section>
-
-            <!-- Tips Section -->
-            <section id="tips">
-                <h2><span class="icon">💡</span> نکات و توصیه‌های مفید</h2>
-                <div class="feature-grid">
-                    <div class="feature-card">
-                        <h4>🖨️ چاپ تست</h4>
-                        <p>قبل از چاپ گروهی، یک سفارش را به عنوان نمونه چاپ کنید.</p>
-                    </div>
-                    <div class="feature-card">
-                        <h4>📱 دستگاه‌های مختلف</h4>
-                        <p>بهتر است افزونه را از رایانه یا تبلت استفاده کنید.</p>
-                    </div>
-                    <div class="feature-card">
-                        <h4>🎨 لوگو شرکت</h4>
-                        <p>لوگوی خود را بارگذاری کنید تا فاکتورها حرفه‌ای‌تر به‌نظر برسند.</p>
-                    </div>
-                    <div class="feature-card">
-                        <h4>⏰ زمان‌بندی بهتر</h4>
-                        <p>بهترین زمان: پایان روز کاری یا شروع هفته.</p>
-                    </div>
-                    <div class="feature-card">
-                        <h4>📊 فیلتر کردن سفارش‌ها</h4>
-                        <p>سفارش‌ها را بر اساس تاریخ و وضعیت فیلتر کنید.</p>
-                    </div>
-                    <div class="feature-card">
-                        <h4>✅ بررسی دوبار</h4>
-                        <p>قبل از چاپ، لیست سفارش‌ها را دوبار بررسی کنید.</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Support Section -->
-            <section id="support">
-                <h2><span class="icon">📞</span> پشتیبانی و تماس</h2>
-
-                <h3>کجا کمک بگیریم؟</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>منبع</th>
-                            <th>لینک</th>
-                            <th>توضیح</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>GitHub</strong></td>
-                            <td><a href="https://github.com/esmaeelsh93-lab/Esee" target="_blank">esmaeelsh93-lab/Esee</a></td>
-                            <td>کد منبع و صفحه اصلی</td>
-                        </tr>
-                        <tr>
-                            <td><strong>مسائل</strong></td>
-                            <td><a href="https://github.com/esmaeelsh93-lab/Esee/issues" target="_blank">Issues</a></td>
-                            <td>گزارش مشکلات و درخواست‌های جدید</td>
-                        </tr>
-                        <tr>
-                            <td><strong>بحث‌ها</strong></td>
-                            <td><a href="https://github.com/esmaeelsh93-lab/Esee/discussions" target="_blank">Discussions</a></td>
-                            <td>بحث و سؤال عمومی</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <h3>نحوه گزارش مشکل</h3>
-                <ol class="step-list">
-                    <li>
-                        <strong>مشکل را دقیق توضیح دهید</strong>
-                        <p>مثلاً: «هنگام انتخاب بیش از 100 سفارش، صفحه بند می‌خورد»</p>
-                    </li>
-                    <li>
-                        <strong>مراحل تکرار مشکل را بنویسید</strong>
-                        <p>قدم به قدم توضیح دهید که مشکل چگونه رخ می‌دهد.</p>
-                    </li>
-                    <li>
-                        <strong>اطلاعات سیستم را بدهید</strong>
-                        <p>نسخه وردپرس، ووکامرس و PHP را ذکر کنید.</p>
-                    </li>
-                    <li>
-                        <strong>اسکرین‌شات یا ویدیو اضافه کنید</strong>
-                        <p>اگر ممکن است، اسکرین‌شات مشکل را بفرستید.</p>
-                    </li>
-                    <li>
-                        <strong>مشکل را در GitHub ثبت کنید</strong>
-                        <p>لطفاً از <a href="https://github.com/esmaeelsh93-lab/Esee/issues/new" target="_blank">فرم جدید</a> استفاده کنید.</p>
-                    </li>
-                </ol>
-
-                <div class="note">
-                    ⚠️ قبل از گزارش مشکل، اطمینان حاصل کنید که:
-                    <ul style="margin: 10px 0 0 20px; color: #856404;">
-                        <li>ووکامرس فعال و به‌روز است</li>
-                        <li>نسخه PHP حداقل 7.4 است</li>
-                        <li>دسترسی‌های لازم برای چاپ دارید</li>
-                    </ul>
-                </div>
-            </section>
-
-            <!-- Version History -->
-            <section id="changelog">
-                <h2><span class="icon">📅</span> تاریخچه نسخه‌ها</h2>
-
-                <div class="faq-item">
-                    <strong>نسخه 1.3.0 (فعلی)</strong>
-                    <ul>
-                        <li>✅ جداسازی تب عملیات چاپ و تنظیمات</li>
-                        <li>✅ یک سفارش در هر برگه چاپ</li>
-                        <li>✅ نمایش توضیحات مشتری</li>
-                        <li>✅ برچسب «نحوه ارسال»</li>
-                        <li>✅ اندازه‌های کاغذ استاندارد و سفارشی</li>
-                        <li>✅ چاپ سیاه‌وسفید</li>
-                        <li>✅ علامت چاپ‌شده کنار سفارش‌ها</li>
-                        <li>✅ رفع آپلود تصویر سربرگ با Media Library</li>
-                    </ul>
-                </div>
-
-                <div class="success">
-                    ✓ اطمینان حاصل کنید که نسخه جدیدترین نسخه را استفاده می‌کنید!
+                    <strong>س: تصویر سربرگ چه اندازه‌ای باید باشد؟</strong>
+                    <p>عرض 1200 پیکسل و ارتفاع تا 200 پیکسل. فرمت‌های قابل قبول: JPG، PNG و GIF.</p>
                 </div>
             </section>
         </div>
 
         <!-- Footer -->
         <footer>
-            <h3>🖨️ پرینت هوشمند شجاعی</h3>
-            <p>یک افزونه قدرتمند و حرفه‌ای برای چاپ گروهی سفارش‌های ووکامرس</p>
-            <p style="margin: 20px 0 15px 0; font-size: 0.95em;">
-                <strong>توسعه‌دهندگان:</strong> Shojaei / to3edev
+            <p><strong>پرینت هوشمند شجاعی</strong> - نسخه 1.3.0</p>
+            <p>افزونه‌ای برای چاپ گروهی سفارش‌های ووکامرس</p>
+            <p style="margin-top: 15px;">
+                <a href="https://github.com/esmaeelsh93-lab/Esee" target="_blank">صفحه GitHub</a> | 
+                <a href="https://github.com/esmaeelsh93-lab/Esee/issues" target="_blank">گزارش مشکل</a>
             </p>
-            <p style="margin: 15px 0;">
-                <a href="https://github.com/esmaeelsh93-lab/Esee" target="_blank">🔗 صفحه GitHub</a> &nbsp;|&nbsp; 
-                <a href="https://github.com/esmaeelsh93-lab/Esee/issues" target="_blank">🐛 گزارش مشکل</a>
-            </p>
-            <div class="version-info">
-                نسخه 1.3.0
-            </div>
-            <p style="margin-top: 25px; color: #999; font-size: 0.85em;">
-                &copy; 1403 تمام حقوق محفوظ است | ترخیص‌نامه: GPLv2 یا بالاتر
+            <p style="margin-top: 15px; color: #999; font-size: 0.85em;">
+                توسعه‌دهندگان: Shojaei / to3edev | ترخیص‌نامه: GPLv2 یا بالاتر
             </p>
         </footer>
     </div>
 
     <script>
-        // Smooth scrolling for navigation links
+        // Smooth scrolling for navigation
         document.querySelectorAll('nav a').forEach(link => {
             link.addEventListener('click', function (e) {
                 const href = this.getAttribute('href');
@@ -971,24 +648,6 @@
                     if (target) {
                         target.scrollIntoView({ behavior: 'smooth' });
                     }
-                }
-            });
-        });
-
-        // Active nav link highlighting
-        window.addEventListener('scroll', () => {
-            const sections = document.querySelectorAll('section');
-            let current = '';
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                if (window.pageYOffset >= sectionTop - 150) {
-                    current = section.getAttribute('id');
-                }
-            });
-            document.querySelectorAll('nav a').forEach(link => {
-                link.style.borderBottomColor = 'transparent';
-                if (link.getAttribute('href') === '#' + current) {
-                    link.style.borderBottomColor = '#667eea';
                 }
             });
         });
