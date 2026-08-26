@@ -1,0 +1,56 @@
+/* Homepage sale products slider */
+
+.sale-slider-section {
+  padding-top: 0.5rem;
+}
+
+.sale-slider {
+  overflow: hidden;
+  border-radius: 22px;
+  padding: 0.35rem 0;
+}
+
+.sale-slider__track {
+  overflow: hidden;
+}
+
+.sale-slider__grid {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 1rem;
+  width: max-content;
+  margin: 0;
+  padding: 0.25rem 0.1rem 0.75rem;
+  list-style: none;
+  will-change: transform;
+}
+
+.sale-slider__grid > .bahar-product-card,
+.sale-slider__grid > li.product {
+  flex: 0 0 min(240px, 72vw);
+  width: min(240px, 72vw);
+  max-width: min(240px, 72vw);
+}
+
+@media (min-width: 901px) {
+  .sale-slider__grid > .bahar-product-card,
+  .sale-slider__grid > li.product {
+    flex-basis: 220px;
+    width: 220px;
+    max-width: 220px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sale-slider__grid {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .sale-slider__grid > .bahar-product-card,
+  .sale-slider__grid > li.product {
+    flex: 1 1 calc(50% - 0.5rem);
+    width: auto;
+    max-width: none;
+  }
+}

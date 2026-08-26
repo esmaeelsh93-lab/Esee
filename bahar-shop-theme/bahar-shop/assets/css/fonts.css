@@ -1,0 +1,15 @@
+/**
+ * Vazirmatn — variable font, font-display: swap (Lighthouse / FCP).
+ * Only one woff2 request instead of the full CDN font-face pack.
+ */
+
+@font-face {
+  font-family: Vazirmatn;
+  src: url("https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/fonts/webfonts/Vazirmatn%5Bwght%5D.woff2")
+    format("woff2-variations"),
+    url("https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/fonts/webfonts/Vazirmatn%5Bwght%5D.woff2")
+    format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
