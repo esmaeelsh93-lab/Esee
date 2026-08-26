@@ -1,0 +1,435 @@
+/**
+ * Bahar Shop — تم تاریک «رز نیمه‌شب»
+ * Overrides for hardcoded light colors across theme CSS files.
+ */
+
+/* ── Header & nav ── */
+
+[data-theme="dark"] .header-actions__btn,
+[data-theme="dark"] .nav-toggle,
+[data-theme="dark"] .header-insta,
+[data-theme="dark"] .header-whatsapp,
+[data-theme="dark"] .header-call,
+[data-theme="dark"] .header-phone {
+  background: var(--surface-elevated);
+  border-color: var(--border-subtle);
+  color: var(--pink);
+}
+
+[data-theme="dark"] .top-bar__link,
+[data-theme="dark"] .top-bar__tagline {
+  color: var(--muted);
+}
+
+[data-theme="dark"] .primary-nav__list a,
+[data-theme="dark"] .shj-nav-list > .menu-item > a {
+  color: var(--text);
+}
+
+[data-theme="dark"] .primary-nav__list .sub-menu,
+[data-theme="dark"] .shj-dynamic-mega {
+  background: var(--surface);
+  border-color: var(--border-subtle);
+}
+
+[data-theme="dark"] .primary-nav__list .sub-menu a:hover,
+[data-theme="dark"] .shj-nav-list .sub-menu a:hover {
+  background: rgba(200, 150, 175, 0.1);
+}
+
+/* ── Product cards ── */
+
+[data-theme="dark"] .bahar-product-card__image {
+  background: var(--surface-elevated);
+  border-color: var(--border-subtle);
+}
+
+[data-theme="dark"] .bahar-product-card {
+  border-color: var(--border-subtle);
+  background: var(--glass-bg);
+}
+
+[data-theme="dark"] .woocommerce-loop-product__title,
+[data-theme="dark"] .bahar-product-card__body {
+  color: var(--text);
+}
+
+[data-theme="dark"] .bahar-product-card__nav {
+  background: var(--surface-elevated);
+  color: var(--pink);
+  border-color: var(--border-subtle);
+}
+
+[data-theme="dark"] .bahar-product-card__dot {
+  background: rgba(200, 160, 180, 0.28);
+}
+
+[data-theme="dark"] .bahar-badge--oos {
+  background: rgba(50, 42, 58, 0.88);
+  border: 1px solid var(--border-subtle);
+}
+
+/* ── Category cards ── */
+
+[data-theme="dark"] .cat-card--photo {
+  background: var(--surface);
+  border-color: var(--border-subtle);
+  box-shadow: var(--shadow);
+}
+
+[data-theme="dark"] .cat-card__photo-wrap,
+[data-theme="dark"] .cat-card__photo {
+  background: var(--surface-elevated);
+}
+
+[data-theme="dark"] .cat-card__title {
+  color: var(--heading);
+}
+
+[data-theme="dark"] .cat-card__count {
+  color: var(--muted);
+}
+
+/* ── Pages & articles ── */
+
+[data-theme="dark"] .page-article__thumb,
+[data-theme="dark"] .page-article,
+[data-theme="dark"] .woocommerce-products-header {
+  color: var(--text);
+}
+
+[data-theme="dark"] .page-article__thumb {
+  background: var(--surface);
+}
+
+[data-theme="dark"] .page-article h1,
+[data-theme="dark"] .page-article h2,
+[data-theme="dark"] .woocommerce-products-header__title {
+  color: var(--heading);
+}
+
+[data-theme="dark"] .hero__photo {
+  border-color: rgba(200, 160, 180, 0.22);
+  background: var(--surface-elevated);
+}
+
+[data-theme="dark"] .hero__cloud {
+  background: rgba(58, 48, 69, 0.72);
+}
+
+[data-theme="dark"] .hero__brand,
+[data-theme="dark"] .hero__line {
+  color: var(--hero-ink);
+}
+
+/* ── Search & hero ── */
+
+[data-theme="dark"] .bahar-search__input,
+[data-theme="dark"] .bahar-search__wrap input[type="search"] {
+  background: var(--surface-elevated);
+  color: var(--text);
+  border-color: var(--border-subtle);
+}
+
+[data-theme="dark"] .bahar-search__input::placeholder {
+  color: var(--muted);
+}
+
+[data-theme="dark"] .bahar-search__results {
+  background: var(--surface);
+  border-color: var(--border-subtle);
+}
+
+[data-theme="dark"] .bahar-search__item {
+  color: var(--text);
+  border-color: var(--border-subtle);
+}
+
+[data-theme="dark"] .bahar-search__item:hover {
+  background: rgba(200, 150, 175, 0.08);
+}
+
+/* ── Footer ── */
+
+[data-theme="dark"] .site-footer {
+  color: var(--muted);
+}
+
+[data-theme="dark"] .site-footer a {
+  color: var(--pink);
+}
+
+[data-theme="dark"] .footer-col__title {
+  color: var(--heading);
+}
+
+/* ── WooCommerce buttons (dark: ملایم، بدون نئون) ── */
+
+[data-theme="dark"] .woocommerce a.button,
+[data-theme="dark"] .woocommerce button.button,
+[data-theme="dark"] .woocommerce input.button,
+[data-theme="dark"] .single_add_to_cart_button,
+[data-theme="dark"] .bahar-product-card__actions .button,
+[data-theme="dark"] .bahar-btn {
+  background: #b87a96 !important;
+  color: #f8f2f5 !important;
+}
+
+[data-theme="dark"] .woocommerce a.button:hover,
+[data-theme="dark"] .woocommerce button.button:hover,
+[data-theme="dark"] .single_add_to_cart_button:hover,
+[data-theme="dark"] .bahar-product-card__actions .button:hover,
+[data-theme="dark"] .bahar-btn:hover {
+  background: #c48aa6 !important;
+  color: #faf5f8 !important;
+}
+
+[data-theme="dark"] .woocommerce a.button.alt,
+[data-theme="dark"] .woocommerce button.button.alt {
+  background: var(--surface-elevated) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--border-subtle) !important;
+}
+
+/* ── Shop toolbar & filters ── */
+
+[data-theme="dark"] .bahar-shop-toolbar,
+[data-theme="dark"] .bahar-shop-toolbar__inner {
+  background: var(--surface);
+  border-color: var(--border-subtle);
+}
+
+[data-theme="dark"] .bahar-shop-toolbar select,
+[data-theme="dark"] .bahar-shop-toolbar .orderby {
+  background: var(--surface-elevated);
+  color: var(--text);
+  border-color: var(--border-subtle);
+}
+
+[data-theme="dark"] .woocommerce-result-count,
+[data-theme="dark"] .woocommerce-ordering label {
+  color: var(--muted);
+}
+
+/* ── Single product ── */
+
+[data-theme="dark"] .bahar-single-product {
+  background: var(--surface);
+  border-color: var(--border-subtle);
+  box-shadow: var(--shadow);
+}
+
+[data-theme="dark"] .bahar-single-product .product_title,
+[data-theme="dark"] .bahar-single-product .price,
+[data-theme="dark"] .bahar-single-product .woocommerce-product-details__short-description {
+  color: var(--text);
+}
+
+[data-theme="dark"] .woocommerce-product-gallery,
+[data-theme="dark"] .bahar-gallery-main {
+  background: var(--surface-elevated);
+  border-color: var(--border-subtle);
+}
+
+[data-theme="dark"] .bahar-gallery-nav,
+[data-theme="dark"] .bahar-gallery-thumb {
+  background: var(--surface-elevated);
+  border-color: var(--border-subtle);
+  color: var(--pink);
+}
+
+[data-theme="dark"] .bahar-gallery-thumb.is-active,
+[data-theme="dark"] .bahar-gallery-thumb:hover {
+  border-color: var(--pink-deep);
+}
+
+[data-theme="dark"] .bahar-variation-btn {
+  background: var(--surface-elevated);
+  border-color: var(--border-subtle);
+  color: var(--text);
+}
+
+[data-theme="dark"] .bahar-variation-btn.is-selected,
+[data-theme="dark"] .bahar-variation-btn:hover {
+  background: rgba(200, 150, 175, 0.14);
+  border-color: var(--pink-deep);
+  color: var(--heading);
+}
+
+[data-theme="dark"] .bahar-variation-box {
+  border-color: rgba(200, 137, 164, 0.55);
+  background: var(--surface);
+  box-shadow:
+    0 0 0 1px rgba(200, 160, 180, 0.1),
+    0 12px 32px rgba(0, 0, 0, 0.22);
+}
+
+[data-theme="dark"] .bahar-variation-hint {
+  background: var(--surface-elevated);
+  border-color: var(--border-subtle);
+  color: var(--pink);
+}
+
+[data-theme="dark"] .bahar-product-back {
+  background: var(--surface);
+  border-color: var(--border-subtle);
+  color: var(--pink);
+}
+
+[data-theme="dark"] .bahar-product-back:hover {
+  background: var(--surface-elevated);
+}
+
+[data-theme="dark"] .bahar-trust-badge {
+  background: var(--surface);
+  border-color: var(--border-subtle);
+  color: var(--text);
+}
+
+[data-theme="dark"] .bahar-single-product .woocommerce-tabs ul.tabs li a {
+  background: var(--surface-elevated);
+  color: var(--text);
+}
+
+[data-theme="dark"] .bahar-single-product .woocommerce-tabs ul.tabs li.active a {
+  background: #b87a96;
+  color: #f8f2f5;
+}
+
+[data-theme="dark"] .bahar-single-product .woocommerce-tabs .panel {
+  background: var(--surface-elevated);
+  color: var(--text);
+}
+
+[data-theme="dark"] .bahar-sticky-cart {
+  background: rgba(46, 38, 58, 0.92);
+  border-top-color: var(--border-subtle);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+[data-theme="dark"] .bahar-sticky-cart__price {
+  color: var(--pink);
+}
+
+[data-theme="dark"] table.variations td.label label {
+  color: var(--muted);
+}
+
+/* ── Cart & checkout ── */
+
+[data-theme="dark"] .woocommerce-message,
+[data-theme="dark"] .woocommerce-info,
+[data-theme="dark"] .woocommerce-error,
+[data-theme="dark"] .woocommerce-notice {
+  background: var(--surface) !important;
+  border-color: var(--border-subtle) !important;
+  color: var(--text) !important;
+}
+
+[data-theme="dark"] .woocommerce-cart-form,
+[data-theme="dark"] .cart_totals,
+[data-theme="dark"] .woocommerce-checkout-review-order,
+[data-theme="dark"] .woocommerce-billing-fields,
+[data-theme="dark"] .woocommerce-shipping-fields,
+[data-theme="dark"] .woocommerce-additional-fields {
+  background: var(--surface);
+  border-color: var(--border-subtle);
+  color: var(--text);
+}
+
+[data-theme="dark"] .shop_table th,
+[data-theme="dark"] .shop_table td {
+  border-color: var(--border-subtle);
+  color: var(--text);
+}
+
+[data-theme="dark"] .shop_table thead th {
+  background: var(--surface-elevated);
+  color: var(--heading);
+}
+
+[data-theme="dark"] .woocommerce-cart .coupon input,
+[data-theme="dark"] .woocommerce form .input-text,
+[data-theme="dark"] .woocommerce form select,
+[data-theme="dark"] .select2-container--default .select2-selection--single {
+  background: var(--surface-elevated) !important;
+  color: var(--text) !important;
+  border-color: var(--border-subtle) !important;
+}
+
+[data-theme="dark"] .woocommerce-cart .coupon input::placeholder,
+[data-theme="dark"] .woocommerce form .input-text::placeholder {
+  color: var(--muted);
+}
+
+[data-theme="dark"] .cart-subtotal,
+[data-theme="dark"] .order-total,
+[data-theme="dark"] .woocommerce-checkout-review-order-table .amount {
+  color: var(--pink);
+}
+
+/* ── Quantity stepper ── */
+
+[data-theme="dark"] .bahar-qty-stepper {
+  background: var(--surface-elevated);
+  border-color: var(--border-subtle);
+}
+
+[data-theme="dark"] .bahar-qty-stepper__btn {
+  color: var(--pink);
+}
+
+[data-theme="dark"] .bahar-qty-stepper__input {
+  color: var(--text);
+}
+
+/* ── Toast ── */
+
+[data-theme="dark"] .bahar-cart-toast {
+  background: rgba(58, 48, 69, 0.94);
+  color: var(--text);
+  border: 1px solid var(--border-subtle);
+}
+
+[data-theme="dark"] .bahar-cart-toast__icon {
+  background: var(--pink-deep);
+  color: #f8f2f5;
+}
+
+/* ── Mega menu ── */
+
+[data-theme="dark"] .shj-mega-panel,
+[data-theme="dark"] .shj-mega-col,
+[data-theme="dark"] .shj-mega-links a {
+  color: var(--text);
+}
+
+[data-theme="dark"] .shj-mega-col__title {
+  color: var(--heading);
+}
+
+[data-theme="dark"] .shj-mega-links a:hover {
+  color: var(--pink);
+}
+
+/* ── Misc inputs ── */
+
+[data-theme="dark"] input,
+[data-theme="dark"] textarea,
+[data-theme="dark"] select {
+  color-scheme: dark;
+}
+
+[data-theme="dark"] .woocommerce-pagination a,
+[data-theme="dark"] .woocommerce-pagination span {
+  background: var(--surface-elevated);
+  color: var(--text);
+  border-color: var(--border-subtle);
+}
+
+[data-theme="dark"] .woocommerce-pagination .current {
+  background: #b87a96;
+  color: #f8f2f5;
+  border-color: transparent;
+}
