@@ -1,0 +1,112 @@
+/* تم آیکون baharrshopp.ir — فقط فایل‌های استاتیک تم */
+:root {
+  --icon-lilac: #cdb4db;
+  --icon-pink-light: #ffc8dd;
+  --icon-pink: #ffafcc;
+  --icon-blue-light: #bde0fe;
+  --icon-blue: #a2d2ff;
+  --icon-default: #5f566c;
+  --icon-active: #6b9fd4;
+}
+
+.bahar-icon,
+.icon.bahar-icon {
+  width: 1.25em;
+  height: 1.25em;
+  display: block;
+  flex-shrink: 0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  color: inherit;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.icon,
+.bahar-icon-wrap {
+  color: var(--icon-default);
+}
+
+.icon:hover,
+.icon:focus-visible,
+.icon.is-active,
+.bahar-icon-wrap:hover,
+.bahar-icon-wrap:focus-visible,
+.bahar-icon-wrap.is-active,
+.bahar-bottom-nav__item.is-active,
+.bahar-bottom-nav__item:hover {
+  color: var(--icon-active);
+}
+
+.header-actions__cluster-btn .bahar-icon,
+.header-actions__cluster-btn .icon {
+  width: 20px;
+  height: 20px;
+  color: inherit;
+}
+
+.bahar-bottom-nav__item .bahar-icon {
+  width: 22px;
+  height: 22px;
+  margin: 0 auto;
+}
+
+.nav-icon.bahar-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.shj-nav-list > li > a {
+  gap: 0.45rem;
+}
+
+.shj-nav-list .nav-emoji {
+  display: none;
+}
+
+.shj-nav-list .nav-icon {
+  color: var(--icon-default);
+}
+
+.shj-nav-list > li:hover > a .nav-icon,
+.shj-nav-list > li.current-menu-item > a .nav-icon {
+  color: var(--icon-active);
+  transform: translateY(-1px);
+}
+
+.bahar-wish-btn .bahar-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.bahar-wish-btn.is-active .bahar-icon {
+  fill: currentColor;
+  stroke: currentColor;
+}
+
+.nav-toggle .bahar-icon {
+  width: 22px;
+  height: 22px;
+}
+
+.nav-toggle.is-open .bahar-icon--menu {
+  display: none;
+}
+
+.nav-toggle:not(.is-open) .bahar-icon--x {
+  display: none;
+}
+
+.nav-toggle__icon {
+  /* fallback bars if SVG missing */
+}
+
+.nav-toggle .bahar-icon + .nav-toggle__bars {
+  display: none;
+}
+
+.nav-toggle:not(:has(.bahar-icon)) .nav-toggle__bars {
+  display: flex;
+}
