@@ -1,0 +1,736 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="سبلان؛ افزونه مدیریت هوشمند موجودی، قیمت و عملیات انبار ووکامرس"
+    />
+    <meta name="theme-color" content="#fffaf4" />
+    <title>سبلان | مدیریت هوشمند انبار ووکامرس</title>
+    <link rel="icon" type="image/png" href="assets/images/plugin-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">رفتن به محتوای اصلی</a>
+
+    <header class="site-header" id="top">
+      <div class="nav-shell">
+        <a class="brand" href="#top" aria-label="سبلان، صفحه اصلی">
+          <img src="assets/images/plugin-icon.png" alt="" width="48" height="48" />
+          <span>
+            <strong>سبلان</strong>
+            <small>مدیریت هوشمند انبار</small>
+          </span>
+        </a>
+
+        <nav class="desktop-nav" aria-label="منوی اصلی">
+          <a href="#features">امکانات</a>
+          <a href="#showcase">محیط افزونه</a>
+          <a href="#how-it-works">نحوه کار</a>
+          <a href="#faq">سؤالات متداول</a>
+        </nav>
+
+        <div class="nav-actions">
+          <button class="theme-toggle" type="button" aria-label="فعال‌سازی حالت شب">
+            <svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"></path>
+            </svg>
+            <svg class="moon-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M20.5 14.4A8.5 8.5 0 0 1 9.6 3.5 8.5 8.5 0 1 0 20.5 14.4Z"></path>
+            </svg>
+          </button>
+          <a
+            class="button button-small"
+            href="https://www.zhaket.com/web/sabalan-stock-manager-plugin"
+            target="_blank"
+            rel="noopener"
+          >
+            خرید افزونه
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m9 18 6-6-6-6"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero">
+        <div class="hero-glow hero-glow-one"></div>
+        <div class="hero-glow hero-glow-two"></div>
+        <div class="container hero-grid">
+          <div class="hero-copy reveal">
+            <div class="eyebrow">
+              <span class="eyebrow-dot"></span>
+              افزونه حرفه‌ای انبارداری ووکامرس
+            </div>
+            <h1>
+              انبار شلوغت را
+              <span>با یک کلیک</span>
+              مرتب کن.
+            </h1>
+            <p>
+              موجودی، قیمت و محصولات متغیر را از یک پنل سریع و فارسی مدیریت کن؛
+              بدون رفت‌وآمد میان ده‌ها صفحه و بدون خطای ثبت دستی.
+            </p>
+            <div class="hero-actions">
+              <a
+                class="button button-large"
+                href="https://www.zhaket.com/web/sabalan-stock-manager-plugin"
+                target="_blank"
+                rel="noopener"
+              >
+                خرید از ژاکت
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="m9 18 6-6-6-6"></path>
+                </svg>
+              </a>
+              <a class="text-link" href="#showcase">
+                مشاهده محیط افزونه
+                <span class="play-icon">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="m9 7 8 5-8 5Z"></path>
+                  </svg>
+                </span>
+              </a>
+            </div>
+            <ul class="hero-checks" aria-label="ویژگی‌های کلیدی">
+              <li>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg>
+                سازگار با HPOS
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg>
+                محصولات ساده و متغیر
+              </li>
+              <li>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg>
+                رابط کاملاً فارسی
+              </li>
+            </ul>
+          </div>
+
+          <div class="warehouse-wrap reveal" data-delay="120">
+            <div class="warehouse-card" id="warehouseCard">
+              <div class="warehouse-topbar">
+                <div>
+                  <span class="live-dot"></span>
+                  وضعیت انبار
+                </div>
+                <span class="warehouse-status">نیازمند نظم‌دهی</span>
+              </div>
+
+              <div class="warehouse-scene" aria-label="نمایش تعاملی مرتب‌سازی انبار">
+                <div class="scene-backlight"></div>
+                <div class="shelf shelf-one">
+                  <span></span><span></span><span></span>
+                </div>
+                <div class="shelf shelf-two">
+                  <span></span><span></span><span></span>
+                </div>
+                <div class="forklift">
+                  <span class="forklift-light"></span>
+                  <span class="forklift-cabin"></span>
+                  <span class="forklift-body"></span>
+                  <span class="forklift-fork"></span>
+                  <i class="wheel wheel-one"></i>
+                  <i class="wheel wheel-two"></i>
+                </div>
+                <div class="box box-1"><i></i><b>SKU 103</b></div>
+                <div class="box box-2"><i></i><b>SKU 214</b></div>
+                <div class="box box-3"><i></i><b>SKU 381</b></div>
+                <div class="box box-4"><i></i><b>SKU 442</b></div>
+                <div class="box box-5"><i></i><b>SKU 506</b></div>
+                <div class="box box-6"><i></i><b>SKU 670</b></div>
+                <div class="box box-7"><i></i><b>SKU 731</b></div>
+                <div class="box box-8"><i></i><b>SKU 892</b></div>
+                <div class="dust dust-one"></div>
+                <div class="dust dust-two"></div>
+                <div class="floor-line"></div>
+                <div class="organized-check" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"></path></svg>
+                </div>
+              </div>
+
+              <button class="organize-button" id="organizeButton" type="button" aria-pressed="false">
+                <span class="button-spark">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="m12 3 1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3Z"></path>
+                    <path d="m19 15 .75 2.25L22 18l-2.25.75L19 21l-.75-2.25L16 18l2.25-.75L19 15Z"></path>
+                  </svg>
+                </span>
+                <span class="organize-label">مرتب‌سازی هوشمند انبار</span>
+                <span class="button-arrow">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
+                </span>
+              </button>
+              <p class="interaction-hint">برای دیدن قدرت سبلان کلیک کنید</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="signal-strip" aria-label="مزیت‌های سبلان">
+        <div class="container signal-grid">
+          <div>
+            <strong>۱۰۰٪</strong>
+            <span>فارسی و راست‌چین</span>
+          </div>
+          <div>
+            <strong>۱ کلیک</strong>
+            <span>تا ویرایش موجودی</span>
+          </div>
+          <div>
+            <strong>۲۴/۷</strong>
+            <span>دسترسی از موبایل</span>
+          </div>
+          <div>
+            <strong>۰</strong>
+            <span>صفحه اضافه برای ویرایش</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section problem-section">
+        <div class="container">
+          <div class="section-heading centered reveal">
+            <span class="kicker">یک پنل، تمام عملیات انبار</span>
+            <h2>مدیریت انبار نباید شبیه پیدا کردن سوزن در انبار باشد.</h2>
+            <p>
+              سبلان کارهای پراکنده و زمان‌بر ووکامرس را در یک فضای سریع، دقیق و
+              قابل‌کنترل کنار هم می‌آورد.
+            </p>
+          </div>
+          <div class="problem-grid">
+            <article class="problem-card reveal">
+              <span class="card-number">۰۱</span>
+              <div class="feature-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4M8 11h6M11 8v6"></path>
+                </svg>
+              </div>
+              <h3>پیدا کردن فوری کالا</h3>
+              <p>جست‌وجو با نام، SKU، بارکد یا دسته‌بندی؛ حتی میان هزاران محصول.</p>
+            </article>
+            <article class="problem-card featured reveal" data-delay="80">
+              <span class="card-number">۰۲</span>
+              <div class="feature-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 20V10M10 20V4M16 20v-7M22 20H2"></path>
+                  <path d="m3 6 6-4 6 5 6-3"></path>
+                </svg>
+              </div>
+              <h3>کنترل دقیق موجودی و قیمت</h3>
+              <p>افزایش، کاهش و تغییر قیمت محصولات ساده و تمام متغیرها از یک صفحه.</p>
+            </article>
+            <article class="problem-card reveal" data-delay="160">
+              <span class="card-number">۰۳</span>
+              <div class="feature-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 3 4 7v5c0 5 3.4 8 8 9 4.6-1 8-4 8-9V7l-8-4Z"></path>
+                  <path d="m9 12 2 2 4-5"></path>
+                </svg>
+              </div>
+              <h3>دسترسی امن کارکنان</h3>
+              <p>مجوز مشاهده، موجودی و قیمت را برای هر نقش دقیق و جداگانه تعیین کنید.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section product-intro">
+        <div class="container intro-grid">
+          <div class="intro-visual reveal">
+            <div class="image-backdrop"></div>
+            <img
+              src="assets/images/quick-look.png"
+              alt="معرفی افزونه سبلان و امکانات اصلی آن"
+              loading="lazy"
+            />
+            <div class="floating-chip chip-top">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18h16M6 18V8h12v10M9 8V5h6v3"></path></svg>
+              مدیریت متمرکز
+            </div>
+            <div class="floating-chip chip-bottom">
+              <span></span>
+              آماده برای ووکامرس
+            </div>
+          </div>
+          <div class="intro-copy reveal" data-delay="100">
+            <span class="kicker">سبلان در یک نگاه</span>
+            <h2>از جست‌وجوی محصول تا ثبت آخرین تغییر؛ همه‌چیز زیر یک سقف.</h2>
+            <p>
+              به‌جای باز کردن صفحه تک‌تک محصولات، تمام عملیات روزانه انبار را در
+              پنلی طراحی‌شده برای سرعت انجام دهید.
+            </p>
+            <ul class="benefit-list">
+              <li>
+                <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg></span>
+                نمایش و ویرایش همه متغیرهای یک محصول
+              </li>
+              <li>
+                <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg></span>
+                ثبت خودکار تاریخچه تغییر موجودی و قیمت
+              </li>
+              <li>
+                <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg></span>
+                تجربه روان روی موبایل، تبلت و دسکتاپ
+              </li>
+            </ul>
+            <a class="arrow-link" href="#features">
+              دیدن تمام قابلیت‌ها
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section features-section" id="features">
+        <div class="container">
+          <div class="section-heading split-heading reveal">
+            <div>
+              <span class="kicker">امکاناتی برای کار واقعی</span>
+              <h2>هر چیزی که برای یک انبار دقیق و سریع نیاز دارید.</h2>
+            </div>
+            <p>
+              از لحظه پیدا کردن کالا تا بررسی اینکه چه کسی موجودی آن را تغییر داده،
+              سبلان مسیر را کوتاه می‌کند.
+            </p>
+          </div>
+
+          <div class="bento-grid">
+            <article class="bento-card bento-search reveal">
+              <div class="bento-copy">
+                <span class="mini-label">جست‌وجوی پیشرفته</span>
+                <h3>نام، کد کالا یا بارکد؛ هر طور که راحتید.</h3>
+                <p>محصول و متغیر موردنظر را بدون اتلاف وقت پیدا کنید.</p>
+              </div>
+              <div class="search-demo" aria-hidden="true">
+                <div class="fake-search">
+                  <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg>
+                  <span class="typing-text">SKU: 2776</span>
+                  <i></i>
+                </div>
+                <div class="fake-result">
+                  <div class="result-thumb"></div>
+                  <div><b>محصول پیدا شد</b><span>موجودی: ۱۲ عدد</span></div>
+                  <em>موجود</em>
+                </div>
+              </div>
+            </article>
+
+            <article class="bento-card bento-stock reveal" data-delay="70">
+              <div class="bento-copy">
+                <span class="mini-label">ویرایش سریع</span>
+                <h3>کم و زیاد کردن موجودی، بدون بارگذاری دوباره.</h3>
+              </div>
+              <div class="counter-demo" aria-hidden="true">
+                <button tabindex="-1">−</button><strong>۲۴</strong><button tabindex="-1">+</button>
+              </div>
+              <span class="saved-badge">
+                <svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"></path></svg>
+                تغییرات ذخیره شد
+              </span>
+            </article>
+
+            <article class="bento-card bento-log reveal">
+              <div class="log-orbit" aria-hidden="true">
+                <span class="orbit-center">
+                  <svg viewBox="0 0 24 24"><path d="M12 8v5l3 2"></path><circle cx="12" cy="12" r="9"></circle></svg>
+                </span>
+                <i class="orbit-dot dot-1"></i><i class="orbit-dot dot-2"></i><i class="orbit-dot dot-3"></i>
+              </div>
+              <div class="bento-copy">
+                <span class="mini-label">تاریخچه شفاف</span>
+                <h3>هر تغییر، با زمان و نام کاربر ثبت می‌شود.</h3>
+                <p>برای پیگیری خطاها دیگر نیازی به حدس زدن نیست.</p>
+              </div>
+            </article>
+
+            <article class="bento-card bento-access reveal" data-delay="70">
+              <div class="bento-copy">
+                <span class="mini-label">کنترل دسترسی</span>
+                <h3>هر کاربر، فقط به‌اندازه مسئولیتش.</h3>
+                <p>مجوز تغییر قیمت و موجودی را مستقل از هم مدیریت کنید.</p>
+              </div>
+              <div class="people-stack" aria-hidden="true">
+                <span>ا</span><span>م</span><span>ف</span><i>+۳</i>
+              </div>
+              <div class="access-switches" aria-hidden="true">
+                <div><span>ویرایش موجودی</span><i class="on"></i></div>
+                <div><span>تغییر قیمت</span><i></i></div>
+              </div>
+            </article>
+
+            <article class="bento-card bento-scan reveal">
+              <div class="scan-visual" aria-hidden="true">
+                <div class="barcode">
+                  <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+                </div>
+                <span class="scan-line"></span>
+                <svg viewBox="0 0 24 24"><path d="M3 9V4h5M16 4h5v5M21 15v5h-5M8 20H3v-5"></path></svg>
+              </div>
+              <div class="bento-copy">
+                <span class="mini-label">پشتیبانی از بارکدخوان</span>
+                <h3>اسکن کنید، پیدا کنید، ثبت کنید.</h3>
+              </div>
+            </article>
+
+            <article class="bento-card bento-responsive reveal" data-delay="70">
+              <div class="device-visual" aria-hidden="true">
+                <div class="laptop"><span><i></i><i></i><i></i></span></div>
+                <div class="phone"><span><i></i><i></i></span></div>
+              </div>
+              <div class="bento-copy">
+                <span class="mini-label">همیشه در دسترس</span>
+                <h3>انبارتان را از هر دستگاهی مدیریت کنید.</h3>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section showcase-section" id="showcase">
+        <div class="container">
+          <div class="section-heading centered reveal">
+            <span class="kicker">محیط واقعی افزونه</span>
+            <h2>طراحی‌شده تا از همان کلیک اول آشنا باشد.</h2>
+            <p>روی هر تصویر بزنید و جزئیات محیط سبلان را از نزدیک ببینید.</p>
+          </div>
+
+          <div class="showcase-tabs reveal" role="tablist" aria-label="تصاویر محیط افزونه">
+            <button type="button" class="showcase-tab active" role="tab" aria-selected="true" data-tab="inventory">
+              موجودی و قیمت
+            </button>
+            <button type="button" class="showcase-tab" role="tab" aria-selected="false" data-tab="search">
+              جست‌وجوی کالا
+            </button>
+            <button type="button" class="showcase-tab" role="tab" aria-selected="false" data-tab="access">
+              دسترسی و لاگ
+            </button>
+            <button type="button" class="showcase-tab" role="tab" aria-selected="false" data-tab="learn">
+              پنل و آموزش
+            </button>
+          </div>
+
+          <div class="showcase-browser reveal" data-delay="80">
+            <div class="browser-bar">
+              <div class="browser-dots"><i></i><i></i><i></i></div>
+              <div class="browser-address">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V8a5 5 0 0 1 10 0v3"></path><rect x="5" y="11" width="14" height="10" rx="2"></rect></svg>
+                پنل مدیریت سبلان
+              </div>
+              <span>Sabalan</span>
+            </div>
+            <div class="showcase-panel active" id="panel-inventory" role="tabpanel">
+              <div class="panel-copy">
+                <span>ویرایش گروهی</span>
+                <h3>تمام متغیرها، موجودی و قیمت در یک نمای متمرکز</h3>
+                <p>بدون خروج از صفحه، هر متغیر را ببینید و تغییرات را همان‌جا ذخیره کنید.</p>
+              </div>
+              <button
+                class="image-zoom"
+                type="button"
+                data-image="assets/images/stock-price-variations.jpg"
+                data-alt="نمای ویرایش موجودی، قیمت و متغیرهای محصولات در سبلان"
+              >
+                <img src="assets/images/stock-price-variations.jpg" alt="ویرایش موجودی و قیمت محصولات متغیر" loading="lazy" />
+                <span><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4M11 8v6M8 11h6"></path></svg></span>
+              </button>
+            </div>
+            <div class="showcase-panel" id="panel-search" role="tabpanel" hidden>
+              <div class="panel-copy">
+                <span>جست‌وجوی منعطف</span>
+                <h3>کالا را با نام یا کد اختصاصی آن پیدا کنید</h3>
+                <p>سبلان محصول اصلی و تمام زیرمجموعه‌های متغیر آن را یکجا نمایش می‌دهد.</p>
+              </div>
+              <div class="panel-image-pair">
+                <button class="image-zoom" type="button" data-image="assets/images/search-by-sku.jpg" data-alt="جست‌وجوی کالا با SKU">
+                  <img src="assets/images/search-by-sku.jpg" alt="جست‌وجوی کالا با SKU" loading="lazy" />
+                </button>
+                <button class="image-zoom" type="button" data-image="assets/images/search-by-name.jpg" data-alt="جست‌وجوی کالا با نام">
+                  <img src="assets/images/search-by-name.jpg" alt="جست‌وجوی کالا با نام" loading="lazy" />
+                </button>
+              </div>
+            </div>
+            <div class="showcase-panel" id="panel-access" role="tabpanel" hidden>
+              <div class="panel-copy">
+                <span>امنیت و شفافیت</span>
+                <h3>دسترسی‌ها را تعیین و تمام تغییرات را پیگیری کنید</h3>
+                <p>مشخص است چه کسی، چه چیزی را و در چه زمانی تغییر داده است.</p>
+              </div>
+              <div class="panel-image-pair">
+                <button class="image-zoom" type="button" data-image="assets/images/access-settings.jpg" data-alt="تنظیمات سطح دسترسی کاربران">
+                  <img src="assets/images/access-settings.jpg" alt="تنظیمات سطح دسترسی کاربران" loading="lazy" />
+                </button>
+                <button class="image-zoom" type="button" data-image="assets/images/change-log.jpg" data-alt="لاگ تغییرات افزونه">
+                  <img src="assets/images/change-log.jpg" alt="ثبت لاگ تغییرات موجودی و قیمت" loading="lazy" />
+                </button>
+              </div>
+            </div>
+            <div class="showcase-panel" id="panel-learn" role="tabpanel" hidden>
+              <div class="panel-copy">
+                <span>شروع بدون سردرگمی</span>
+                <h3>پنل اصلی ساده، آموزش همیشه در دسترس</h3>
+                <p>راهنمای داخلی افزونه کمک می‌کند تیم شما بدون آموزش پیچیده شروع به کار کند.</p>
+              </div>
+              <div class="panel-image-pair">
+                <button class="image-zoom" type="button" data-image="assets/images/main-tab.jpg" data-alt="تب اصلی افزونه سبلان">
+                  <img src="assets/images/main-tab.jpg" alt="تب اصلی افزونه سبلان" loading="lazy" />
+                </button>
+                <button class="image-zoom" type="button" data-image="assets/images/tutorial-tab.jpg" data-alt="تب آموزش افزونه سبلان">
+                  <img src="assets/images/tutorial-tab.jpg" alt="تب آموزش افزونه سبلان" loading="lazy" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="quick-action-card reveal">
+            <div>
+              <span class="kicker">برای عملیات پرتکرار</span>
+              <h3>موجودی را فقط یک واحد کم کنید؛ سریع‌تر از همیشه.</h3>
+              <p>برای ثبت خروج روزانه کالا، لازم نیست عدد جدید را محاسبه یا تایپ کنید.</p>
+            </div>
+            <button
+              class="image-zoom quick-action-image"
+              type="button"
+              data-image="assets/images/quick-decrease.jpg"
+              data-alt="قابلیت کم کردن یک واحدی موجودی"
+            >
+              <img src="assets/images/quick-decrease.jpg" alt="کم کردن یک واحدی موجودی محصول" loading="lazy" />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="section workflow-section" id="how-it-works">
+        <div class="container workflow-grid">
+          <div class="workflow-copy reveal">
+            <span class="kicker">ساده از ابتدا تا انتها</span>
+            <h2>سه قدم تا یک انبار به‌روز.</h2>
+            <p>فرآیند روزانه‌ای که همه اعضای تیم می‌توانند سریع یاد بگیرند.</p>
+            <ol class="steps">
+              <li class="active">
+                <span>۱</span>
+                <div>
+                  <h3>محصول را پیدا کنید</h3>
+                  <p>نام، کد کالا یا بارکد را وارد کنید.</p>
+                </div>
+              </li>
+              <li>
+                <span>۲</span>
+                <div>
+                  <h3>تغییر موردنظر را انجام دهید</h3>
+                  <p>موجودی یا قیمت را برای محصول و متغیرها ویرایش کنید.</p>
+                </div>
+              </li>
+              <li>
+                <span>۳</span>
+                <div>
+                  <h3>با خیال راحت ذخیره کنید</h3>
+                  <p>تغییر ثبت می‌شود و در تاریخچه باقی می‌ماند.</p>
+                </div>
+              </li>
+            </ol>
+          </div>
+          <div class="workflow-visual reveal" data-delay="100">
+            <img src="assets/images/cover-secondary.png" alt="افزونه سبلان، مدیریت حرفه‌ای انبار ووکامرس" loading="lazy" />
+            <div class="workflow-stamp">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg>
+              سریع، امن، دقیق
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section compatibility-section">
+        <div class="container">
+          <div class="compatibility-card reveal">
+            <div>
+              <span class="kicker light">هماهنگ با فروشگاه شما</span>
+              <h2>برای ووکامرس امروز ساخته شده.</h2>
+              <p>سازگار با زیرساخت‌های جدید ووکامرس و آماده رشد همراه فروشگاه شما.</p>
+            </div>
+            <div class="compatibility-badges">
+              <span>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18V6l8-3 8 3v12l-8 3-8-3Z"></path><path d="m4 6 8 3 8-3M12 9v12"></path></svg>
+                WooCommerce
+              </span>
+              <span>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14v16H5zM9 4v16M15 4v16"></path></svg>
+                HPOS
+              </span>
+              <span>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect></svg>
+                WooCommerce Blocks
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section infographic-section">
+        <div class="container infographic-grid">
+          <div class="infographic-copy reveal">
+            <span class="kicker">همه‌چیز در یک قاب</span>
+            <h2>مرور کامل قابلیت‌های سبلان</h2>
+            <p>
+              امکانات اصلی، ویژگی‌های حرفه‌ای و پاسخ سؤال‌های پرتکرار را در این
+              اینفوگرافی یکجا ببینید.
+            </p>
+            <button
+              class="button button-outline image-zoom"
+              type="button"
+              data-image="assets/images/infographic.png"
+              data-alt="اینفوگرافی کامل افزونه مدیریت انبار سبلان"
+            >
+              نمایش در اندازه کامل
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M21 16v5h-5M3 16v5h5"></path></svg>
+            </button>
+          </div>
+          <button
+            class="infographic-preview image-zoom reveal"
+            data-delay="100"
+            type="button"
+            data-image="assets/images/infographic.png"
+            data-alt="اینفوگرافی کامل افزونه مدیریت انبار سبلان"
+          >
+            <img src="assets/images/infographic.png" alt="پیش‌نمایش اینفوگرافی افزونه سبلان" loading="lazy" />
+            <span>برای بزرگ‌نمایی کلیک کنید</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="section faq-section" id="faq">
+        <div class="container faq-grid">
+          <div class="faq-heading reveal">
+            <span class="kicker">پاسخ کوتاه و روشن</span>
+            <h2>سؤالی مانده؟</h2>
+            <p>پاسخ مهم‌ترین پرسش‌ها پیش از شروع کار با سبلان.</p>
+            <img src="assets/images/cover-primary.png" alt="نمای معرفی افزونه سبلان" loading="lazy" />
+          </div>
+          <div class="accordion reveal" data-delay="80">
+            <div class="accordion-item open">
+              <button type="button" aria-expanded="true">
+                سبلان دقیقاً چه کاری انجام می‌دهد؟
+                <span><i></i><i></i></span>
+              </button>
+              <div class="accordion-content">
+                <p>موجودی و قیمت محصولات ساده و متغیر ووکامرس را از یک پنل متمرکز مدیریت می‌کند و تاریخچه تغییرات را نگه می‌دارد.</p>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <button type="button" aria-expanded="false">
+                آیا با بارکدخوان کار می‌کند؟
+                <span><i></i><i></i></span>
+              </button>
+              <div class="accordion-content">
+                <p>بله، می‌توانید بارکد را اسکن کنید تا محصول سریع پیدا شود و عملیات خروج یا تغییر موجودی را انجام دهید.</p>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <button type="button" aria-expanded="false">
+                امکان محدود کردن دسترسی کارکنان وجود دارد؟
+                <span><i></i><i></i></span>
+              </button>
+              <div class="accordion-content">
+                <p>بله، دسترسی مشاهده انبار، ویرایش موجودی و تغییر قیمت را می‌توانید به‌صورت تفکیک‌شده مدیریت کنید.</p>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <button type="button" aria-expanded="false">
+                محصولات متغیر و HPOS پشتیبانی می‌شوند؟
+                <span><i></i><i></i></span>
+              </button>
+              <div class="accordion-content">
+                <p>بله، سبلان از محصولات ساده و متغیر، HPOS و WooCommerce Blocks پشتیبانی می‌کند.</p>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <button type="button" aria-expanded="false">
+                روی موبایل هم قابل استفاده است؟
+                <span><i></i><i></i></span>
+              </button>
+              <div class="accordion-content">
+                <p>بله، رابط افزونه برای موبایل و تبلت بهینه شده تا عملیات انبار را در محل انجام دهید.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="final-cta">
+        <div class="cta-pattern"></div>
+        <div class="container final-cta-inner reveal">
+          <img src="assets/images/plugin-icon.png" alt="" width="72" height="72" />
+          <span>وقتشه انبارت نفس راحتی بکشه</span>
+          <h2>کمتر جست‌وجو کن.<br />دقیق‌تر مدیریت کن.</h2>
+          <p>سبلان را نصب کنید و کنترل موجودی و قیمت را به یک کار ساده تبدیل کنید.</p>
+          <a
+            class="button button-light button-large"
+            href="https://www.zhaket.com/web/sabalan-stock-manager-plugin"
+            target="_blank"
+            rel="noopener"
+          >
+            خرید افزونه سبلان از ژاکت
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
+          </a>
+          <small>خرید امن، دریافت به‌روزرسانی و پشتیبانی از طریق ژاکت</small>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-top">
+        <a class="brand footer-brand" href="#top">
+          <img src="assets/images/plugin-icon.png" alt="" width="48" height="48" />
+          <span><strong>سبلان</strong><small>مدیریت هوشمند انبار ووکامرس</small></span>
+        </a>
+        <nav aria-label="پیوندهای پایین صفحه">
+          <a href="#features">امکانات</a>
+          <a href="#showcase">تصاویر افزونه</a>
+          <a href="#faq">سؤالات متداول</a>
+          <a
+            href="https://www.zhaket.com/web/sabalan-stock-manager-plugin"
+            target="_blank"
+            rel="noopener"
+          >خرید از ژاکت</a>
+        </nav>
+      </div>
+      <div class="container footer-bottom">
+        <p>سبلان؛ مدیریت ساده‌تر، انبار دقیق‌تر.</p>
+        <a
+          href="https://www.zhaket.com/web/sabalan-stock-manager-plugin"
+          target="_blank"
+          rel="noopener"
+        >
+          مشاهده صفحه محصول در ژاکت
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
+        </a>
+      </div>
+    </footer>
+
+    <dialog class="lightbox" id="lightbox" aria-label="نمایش تصویر">
+      <button class="lightbox-close" type="button" aria-label="بستن تصویر">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+      </button>
+      <div class="lightbox-content">
+        <img src="" alt="" />
+      </div>
+    </dialog>
+
+    <button class="back-to-top" type="button" aria-label="بازگشت به بالای صفحه">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m18 15-6-6-6 6"></path></svg>
+    </button>
+  </body>
+</html>
