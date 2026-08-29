@@ -1,0 +1,5 @@
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="to3edev logo mark, concept 2, monochrome black">
+  <rect x="8" y="8" width="48" height="48" rx="18" fill="none" stroke="#12131A" stroke-width="4"/>
+  <line x1="24" y1="42" x2="39" y2="23" stroke="#12131A" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="40" cy="22" r="5" fill="#12131A"/>
+</svg>
