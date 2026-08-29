@@ -381,6 +381,23 @@ class WBOP_Plugin {
 						<input type="number" step="0.1" min="3" max="30" id="wbop-print-margin" name="wbop_settings[print_margin]" value="<?php echo esc_attr( (string) $settings['print_margin'] ); ?>">
 					</td>
 				</tr>
+				<tr>
+					<th scope="row"><label for="wbop-font-size"><?php echo esc_html( 'سایز فونت چاپ' ); ?></label></th>
+					<td>
+						<select name="wbop_settings[font_size]" id="wbop-font-size">
+							<?php foreach ( WBOP_Settings::font_sizes() as $value => $meta ) : ?>
+								<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $settings['font_size'], $value ); ?>>
+									<?php
+									echo esc_html(
+										$meta['label'] . ' — متن ' . $meta['body'] . 'px'
+									);
+									?>
+								</option>
+							<?php endforeach; ?>
+						</select>
+						<p class="description"><?php echo esc_html( 'پیش‌فرض «کمی بزرگ» یک پله از سایز قبلی خواناتر است. برای برگه‌های شلوغ می‌توانید کوچک‌تر انتخاب کنید.' ); ?></p>
+					</td>
+				</tr>
 			</table>
 
 			<?php submit_button( 'ذخیره تنظیمات' ); ?>

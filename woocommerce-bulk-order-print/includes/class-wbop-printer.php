@@ -52,6 +52,7 @@ class WBOP_Printer {
 
 		$settings = WBOP_Settings::get();
 		$page_css = WBOP_Settings::page_size_css( $settings );
+		$fonts    = WBOP_Settings::font_metrics( $settings );
 
 		nocache_headers();
 		header( 'Content-Type: text/html; charset=UTF-8' );
@@ -59,7 +60,7 @@ class WBOP_Printer {
 		echo '<!DOCTYPE html><html lang="fa" dir="rtl"><head><meta charset="utf-8">';
 		echo '<meta name="viewport" content="width=device-width, initial-scale=1">';
 		echo '<title>' . esc_html( 'چاپ سفارش‌ها' ) . '</title>';
-		echo '<style>' . $this->print_css( $page_css ) . '</style>';
+		echo '<style>' . $this->print_css( $page_css, $fonts ) . '</style>';
 		echo '</head><body class="wbop-print-body">';
 		echo '<div class="wbop-print-toolbar no-print">';
 		echo '<button type="button" onclick="window.print()">' . esc_html( 'چاپ' ) . '</button> ';
@@ -99,23 +100,38 @@ class WBOP_Printer {
 	 * Compact black-and-white print CSS.
 	 *
 	 * @param string $page_css Safe @page rule.
+	 * @param array  $fonts    Safe font metrics (body/title/meta px).
 	 * @return string
 	 */
-	private function print_css( $page_css ) {
+	private function print_css( $page_css, $fonts = array() ) {
+		$body  = isset( $fonts['body'] ) ? absint( $fonts['body'] ) : 12;
+		$title = isset( $fonts['title'] ) ? absint( $fonts['title'] ) : 15;
+		$meta  = isset( $fonts['meta'] ) ? absint( $fonts['meta'] ) : 11;
+		if ( $body < 8 || $body > 20 ) {
+			$body = 12;
+		}
+		if ( $title < 10 || $title > 24 ) {
+			$title = 15;
+		}
+		if ( $meta < 7 || $meta > 18 ) {
+			$meta = 11;
+		}
+		$pad = max( 3, (int) round( $body * 0.35 ) );
+
 		$css  = $page_css;
-		$css .= 'html,body{margin:0;padding:0;background:#fff;color:#111;font-family:Tahoma,Arial,sans-serif;font-size:11px;line-height:1.35;}';
+		$css .= 'html,body{margin:0;padding:0;background:#fff;color:#111;font-family:Tahoma,Arial,sans-serif;font-size:' . $body . 'px;line-height:1.4;}';
 		$css .= '.wbop-print-body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}';
 		$css .= '.no-print{display:block;}';
 		$css .= '.wbop-print-toolbar{padding:10px 12px;background:#f5f5f5;border-bottom:1px solid #999;margin-bottom:10px;}';
 		$css .= '.wbop-print-toolbar button,.wbop-print-toolbar a{font-family:Tahoma,Arial,sans-serif;font-size:13px;margin-left:8px;}';
-		$css .= '.wbop-print-order{break-inside:avoid;page-break-inside:avoid;border:1px solid #777;padding:8px;box-sizing:border-box;background:#fff;}';
+		$css .= '.wbop-print-order{break-inside:avoid;page-break-inside:avoid;border:1px solid #777;padding:' . $pad . 'px;box-sizing:border-box;background:#fff;}';
 		$css .= '.wbop-print-order:not(:last-child){break-after:page;page-break-after:always;margin-bottom:0;}';
 		$css .= '.wbop-print-order:last-child{break-after:auto;page-break-after:auto;}';
-		$css .= '.wbop-block{break-inside:avoid;page-break-inside:avoid;margin:0 0 6px;}';
+		$css .= '.wbop-block{break-inside:avoid;page-break-inside:avoid;margin:0 0 ' . max( 4, (int) round( $body * 0.45 ) ) . 'px;}';
 		$css .= '.wbop-header{display:flex;align-items:center;justify-content:space-between;gap:8px;border-bottom:1px solid #777;padding-bottom:6px;margin-bottom:6px;}';
 		$css .= '.wbop-header img{max-height:42px;max-width:160px;width:auto;height:auto;filter:grayscale(100%);-webkit-filter:grayscale(100%);}';
-		$css .= '.wbop-title{font-size:14px;font-weight:700;margin:0;}';
-		$css .= '.wbop-meta{color:#444;font-size:10px;}';
+		$css .= '.wbop-title{font-size:' . $title . 'px;font-weight:700;margin:0;}';
+		$css .= '.wbop-meta{color:#444;font-size:' . $meta . 'px;}';
 		$css .= '.wbop-grid{display:flex;gap:8px;}';
 		$css .= '.wbop-grid > div{flex:1;border:1px solid #999;padding:5px 6px;}';
 		$css .= '.wbop-label{font-weight:700;margin-bottom:2px;}';

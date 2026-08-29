@@ -4,7 +4,7 @@ Tags: woocommerce, orders, print, invoice, bulk
 Requires at least: 6.0
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 WC requires at least: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -20,6 +20,7 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 * نمایش توضیحات مشتری روی فاکتور
 * برچسب «نحوه ارسال»
 * اندازه‌های A4 / A5 / A6 / Letter و ابعاد سفارشی (سانتی‌متر)
+* تنظیم سایز فونت چاپ (چند سایز کوچک‌تر و بزرگ‌تر)
 * بهینه‌سازی چاپ سیاه‌وسفید
 * علامت چاپ‌شده برای سفارش‌هایی که قبلاً پرینت گرفته‌اند
 * آپلود تصویر سربرگ از کتابخانه رسانه
@@ -41,6 +42,10 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 == Changelog ==
 
+= 1.3.1 =
+* تنظیم سایز فونت چاپ با چند گزینه
+* پیش‌فرض «کمی بزرگ» (یک پله از سایز قبلی)
+
 = 1.3.0 =
 * جداسازی تب عملیات چاپ و تنظیمات
 * یک سفارش در هر برگه چاپ
@@ -53,5 +58,5 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 == Upgrade Notice ==
 
-= 1.3.0 =
-نسخه کامل با تنظیمات کاغذ، چاپ تک‌برگی و رفع آپلود تصویر.
+= 1.3.1 =
+تنظیم سایز فونت چاپ اضافه شد؛ پیش‌فرض کمی بزرگ‌تر و خواناتر است.

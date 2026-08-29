@@ -85,8 +85,8 @@ foreach ( $required as $rel ) {
 }
 
 $main = file_get_contents( $root . '/woocommerce-bulk-order-print.php' );
-wbop_assert( false !== strpos( $main, "Version:     1.3.0" ), 'plugin header version 1.3.0' );
-wbop_assert( false !== strpos( $main, "WBOP_VERSION', '1.3.0'" ), 'WBOP_VERSION constant' );
+wbop_assert( false !== strpos( $main, "Version:     1.3.1" ), 'plugin header version 1.3.1' );
+wbop_assert( false !== strpos( $main, "WBOP_VERSION', '1.3.1'" ), 'WBOP_VERSION constant' );
 wbop_assert( false !== strpos( $main, 'custom_order_tables' ), 'HPOS compatibility declared' );
 wbop_assert( false !== strpos( $main, 'پرینت هوشمند شجاعی' ), 'Persian plugin name' );
 
@@ -108,6 +108,7 @@ wbop_assert( false !== strpos( $plugin, 'لطفاً حداقل یک سفارش �
 wbop_assert( false !== strpos( $plugin, 'wbop-printed-badge' ), 'printed badge in list' );
 wbop_assert( false !== strpos( $plugin, 'wp_enqueue_media' ), 'media library enqueued' );
 wbop_assert( false !== strpos( $plugin, 'admin-post.php' ), 'POST via admin-post' );
+wbop_assert( false !== strpos( $plugin, 'سایز فونت چاپ' ), 'font size setting label' );
 
 $settings_js = file_get_contents( $root . '/assets/admin-settings.js' );
 wbop_assert( false !== strpos( $settings_js, 'wp.media' ), 'media uploader uses wp.media' );
@@ -159,6 +160,20 @@ $css_inject = WBOP_Settings::page_size_css(
 );
 wbop_assert( false === strpos( $css_inject, 'display:none' ), 'CSS injection blocked' );
 wbop_assert( false !== strpos( $css_inject, 'size:14.8cm 20cm' ) || false !== strpos( $css_inject, 'size:14.8cm' ), 'unsafe width falls back' );
+
+$font_default = WBOP_Settings::sanitize_font_size( 'hack' );
+wbop_assert( 'lg' === $font_default, 'invalid font size falls back to lg' );
+$font_lg = WBOP_Settings::font_metrics( array( 'font_size' => 'lg' ) );
+wbop_assert( 12 === $font_lg['body'], 'lg body font is 12px (one step larger)' );
+$font_md = WBOP_Settings::font_metrics( array( 'font_size' => 'md' ) );
+wbop_assert( 11 === $font_md['body'], 'md body font is previous 11px' );
+$font_clean = WBOP_Settings::sanitize(
+	array(
+		'font_size'  => 'xxl',
+		'paper_type' => 'a5',
+	)
+);
+wbop_assert( 'xxl' === $font_clean['font_size'], 'xxl font size accepted' );
 
 // PHP syntax lint.
 $php_files = array(

@@ -3,7 +3,7 @@
  * Plugin Name: پرینت هوشمند شجاعی
  * Plugin URI:  https://github.com/esmaeelsh93-lab/esee
  * Description: چاپ گروهی و هوشمند سفارش‌های ووکامرس با پشتیبانی از HPOS، اندازه‌های مختلف کاغذ و ابعاد سفارشی.
- * Version:     1.3.0
+ * Version:     1.3.1
  * Author:      Shojaei / to3edev
  * Text Domain: woocommerce-bulk-order-print
  * Requires at least: 6.0
@@ -14,7 +14,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'WBOP_VERSION', '1.3.0' );
+define( 'WBOP_VERSION', '1.3.1' );
 define( 'WBOP_FILE', __FILE__ );
 define( 'WBOP_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WBOP_URL', plugin_dir_url( __FILE__ ) );

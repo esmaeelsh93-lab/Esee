@@ -31,6 +31,8 @@ class WBOP_Settings {
 			'paper_width'    => 14.8,
 			'paper_height'   => 21.0,
 			'print_margin'   => 7.0,
+			// One step larger than the original compact 11px print size.
+			'font_size'      => 'lg',
 		);
 	}
 
@@ -46,6 +48,84 @@ class WBOP_Settings {
 			'a6'     => 'A6',
 			'letter' => 'Letter',
 			'custom' => 'ابعاد سفارشی',
+		);
+	}
+
+	/**
+	 * Allowed print font size presets (px for body / title / meta).
+	 *
+	 * @return array
+	 */
+	public static function font_sizes() {
+		return array(
+			'xs'  => array(
+				'label' => 'خیلی کوچک',
+				'body'  => 9,
+				'title' => 11,
+				'meta'  => 8,
+			),
+			'sm'  => array(
+				'label' => 'کوچک',
+				'body'  => 10,
+				'title' => 12,
+				'meta'  => 9,
+			),
+			'md'  => array(
+				'label' => 'معمولی (قبلی)',
+				'body'  => 11,
+				'title' => 14,
+				'meta'  => 10,
+			),
+			'lg'  => array(
+				'label' => 'کمی بزرگ (پیشنهادی)',
+				'body'  => 12,
+				'title' => 15,
+				'meta'  => 11,
+			),
+			'xl'  => array(
+				'label' => 'بزرگ',
+				'body'  => 13,
+				'title' => 16,
+				'meta'  => 12,
+			),
+			'xxl' => array(
+				'label' => 'خیلی بزرگ',
+				'body'  => 15,
+				'title' => 18,
+				'meta'  => 13,
+			),
+		);
+	}
+
+	/**
+	 * Resolve a safe font size preset.
+	 *
+	 * @param mixed $value Raw value.
+	 * @return string
+	 */
+	public static function sanitize_font_size( $value ) {
+		$key = sanitize_key( (string) $value );
+		$sizes = self::font_sizes();
+		if ( ! array_key_exists( $key, $sizes ) ) {
+			return 'lg';
+		}
+		return $key;
+	}
+
+	/**
+	 * Font metrics for print CSS.
+	 *
+	 * @param array|null $settings Settings override.
+	 * @return array{body:int,title:int,meta:int}
+	 */
+	public static function font_metrics( $settings = null ) {
+		$settings = is_array( $settings ) ? wp_parse_args( $settings, self::defaults() ) : self::get();
+		$key      = self::sanitize_font_size( isset( $settings['font_size'] ) ? $settings['font_size'] : 'lg' );
+		$sizes    = self::font_sizes();
+		return array(
+			'body'  => (int) $sizes[ $key ]['body'],
+			'title' => (int) $sizes[ $key ]['title'],
+			'meta'  => (int) $sizes[ $key ]['meta'],
 		);
 	}
 
@@ -162,6 +242,10 @@ class WBOP_Settings {
 		);
 		$out['print_margin'] = self::sanitize_margin(
 			isset( $input['print_margin'] ) ? wp_unslash( $input['print_margin'] ) : $defaults['print_margin']
+		);
+
+		$out['font_size'] = self::sanitize_font_size(
+			isset( $input['font_size'] ) ? wp_unslash( $input['font_size'] ) : $defaults['font_size']
 		);
 
 		return $out;
