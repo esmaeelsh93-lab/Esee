@@ -1,0 +1,668 @@
+/**
+ * Damavand SaaS design layer — overlays legacy admin-style without removing features.
+ * Author: اسماعیل شجاعی
+ */
+
+.damavand-saas {
+	--dm-bg: #F6F8FB;
+	--dm-card: #FFFFFF;
+	--dm-primary: #2563EB;
+	--dm-primary-hover: #1D4ED8;
+	--dm-success: #16A34A;
+	--dm-warning: #D97706;
+	--dm-danger: #DC2626;
+	--dm-border: #E6EAF0;
+	--dm-text: #111827;
+	--dm-muted: #6B7280;
+	--dm-radius: 12px;
+	--dm-shadow: 0 1px 2px rgba(17, 24, 39, 0.04), 0 6px 18px rgba(17, 24, 39, 0.04);
+	--dm-focus: 0 0 0 3px rgba(37, 99, 235, 0.28);
+}
+
+body.toplevel_page_shojaei-seo #wpcontent,
+body[class*="shojaei-seo"] #wpcontent {
+	background: var(--dm-bg, #F6F8FB);
+}
+
+.damavand-saas.shojaei-seo-wrap {
+	max-width: none;
+	margin: 0;
+	padding: 0 16px 40px;
+	color: var(--dm-text);
+}
+
+.damavand-saas .damavand-credit-bar,
+.damavand-saas .shojaei-seo-header {
+	display: none !important;
+}
+
+/* Compact non-sticky header */
+.damavand-app-header {
+	position: relative;
+	top: auto;
+	z-index: 1;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px 16px;
+	margin: 10px 0 0;
+	padding: 10px 14px;
+	background: var(--dm-card);
+	border: 1px solid var(--dm-border);
+	border-bottom: none;
+	border-radius: var(--dm-radius) var(--dm-radius) 0 0;
+	box-shadow: none;
+}
+
+.damavand-app-header__brand {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	min-width: 0;
+}
+
+.damavand-app-header__mark {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 34px;
+	height: 34px;
+	border-radius: 9px;
+	background: #EFF6FF;
+	color: var(--dm-primary);
+	flex-shrink: 0;
+}
+
+.damavand-app-header__mark .dm-icon {
+	width: 18px;
+	height: 18px;
+}
+
+.damavand-app-header__title {
+	margin: 0;
+	font-size: 1.05rem;
+	font-weight: 700;
+	line-height: 1.3;
+	color: var(--dm-text);
+}
+
+.damavand-app-header__sub {
+	margin: 1px 0 0;
+	font-size: 12px;
+	line-height: 1.4;
+	color: var(--dm-muted);
+}
+
+.damavand-app-header__ver {
+	font-size: 11px;
+	font-weight: 600;
+	color: var(--dm-primary);
+	background: #EFF6FF;
+	border: 1px solid #DBEAFE;
+	padding: 2px 8px;
+	border-radius: 999px;
+	white-space: nowrap;
+}
+
+.damavand-app-header__credit {
+	margin: 0;
+	font-size: 11px;
+	color: var(--dm-muted);
+}
+
+/* Primary nav — single compact row (scroll on small screens) */
+.damavand-saas .shojaei-seo-tabs--primary.damavand-app-nav {
+	position: relative;
+	top: auto;
+	z-index: 1;
+	display: flex;
+	flex-wrap: nowrap;
+	align-items: center;
+	gap: 4px;
+	margin: 0 0 16px;
+	padding: 6px 8px;
+	background: var(--dm-card);
+	border: 1px solid var(--dm-border);
+	border-radius: 0 0 var(--dm-radius) var(--dm-radius);
+	box-shadow: var(--dm-shadow);
+	overflow-x: auto;
+	overflow-y: hidden;
+	-webkit-overflow-scrolling: touch;
+	scrollbar-width: thin;
+}
+
+.damavand-saas .shojaei-tab {
+	display: inline-flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 6px;
+	flex: 0 0 auto;
+	min-height: 34px;
+	padding: 6px 10px;
+	border-radius: 8px;
+	border: 1px solid transparent;
+	background: transparent;
+	color: var(--dm-text);
+	text-decoration: none;
+	white-space: nowrap;
+	transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.damavand-saas .shojaei-tab-hint {
+	display: none !important;
+}
+
+.damavand-saas .shojaei-tab:hover,
+.damavand-saas .shojaei-tab:focus-visible {
+	background: #F8FAFC;
+	border-color: var(--dm-border);
+	outline: none;
+	box-shadow: var(--dm-focus);
+}
+
+.damavand-saas .shojaei-tab.is-active {
+	background: #EFF6FF;
+	border-color: #BFDBFE;
+	color: var(--dm-primary);
+}
+
+.damavand-saas .shojaei-tab-label {
+	font-size: 12.5px;
+	font-weight: 600;
+}
+
+.damavand-saas .shojaei-tab-icon {
+	display: inline-flex;
+	color: var(--dm-primary);
+	opacity: 0.95;
+	line-height: 0;
+}
+
+.damavand-saas .shojaei-tab-badge {
+	background: var(--dm-danger);
+	color: #fff;
+	border-radius: 999px;
+	font-size: 10px;
+	padding: 1px 6px;
+	margin-inline-start: 2px;
+}
+
+.dm-icon {
+	display: block;
+	flex-shrink: 0;
+}
+
+/* Content canvas */
+.damavand-saas .damavand-app-main,
+.damavand-saas .shojaei-seo-content {
+	max-width: 1120px;
+}
+
+.damavand-saas .shojaei-card,
+.damavand-saas .shojaei-settings-panel,
+.damavand-saas .shojaei-pulse-stat,
+.damavand-saas .damavand-migrate-hero,
+.damavand-saas .damavand-aa-guide {
+	background: var(--dm-card) !important;
+	border: 1px solid var(--dm-border) !important;
+	border-radius: var(--dm-radius) !important;
+	box-shadow: var(--dm-shadow);
+	padding: 16px 18px;
+	color: var(--dm-text);
+}
+
+/* Fit-to-content category panels */
+.dm-cat-grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 12px;
+	align-items: start;
+	margin-bottom: 12px;
+}
+
+.dm-panel {
+	background: var(--dm-card);
+	border: 1px solid var(--dm-border);
+	border-radius: var(--dm-radius);
+	box-shadow: var(--dm-shadow);
+	padding: 14px 16px;
+}
+
+.dm-panel--hero {
+	margin-bottom: 12px;
+}
+
+.dm-panel--fit {
+	height: auto;
+	align-self: start;
+}
+
+.dm-panel__head {
+	display: flex;
+	align-items: flex-start;
+	gap: 10px;
+	margin-bottom: 10px;
+}
+
+.dm-panel__ico {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 34px;
+	height: 34px;
+	border-radius: 9px;
+	background: #EFF6FF;
+	color: var(--dm-primary);
+	flex-shrink: 0;
+}
+
+.dm-panel__title {
+	margin: 0;
+	font-size: 0.98rem;
+	font-weight: 700;
+	color: var(--dm-text);
+}
+
+.dm-panel__desc {
+	margin: 4px 0 0;
+	font-size: 13px;
+	line-height: 1.65;
+	color: var(--dm-muted);
+}
+
+.dm-panel__meta {
+	margin: 12px 0 0;
+	font-size: 12px;
+	color: var(--dm-muted);
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 6px;
+}
+
+.dm-panel__ico-inline {
+	display: inline-flex;
+	color: var(--dm-primary);
+}
+
+.dm-source-grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 8px;
+}
+
+.dm-source-card {
+	display: flex;
+	gap: 10px;
+	align-items: flex-start;
+	padding: 10px 12px;
+	border-radius: 10px;
+	border: 1px solid var(--dm-border);
+	background: #FAFBFC;
+}
+
+.dm-source-card.is-on {
+	border-color: #BBF7D0;
+	background: #F0FDF4;
+}
+
+.dm-source-card.is-off {
+	opacity: 0.92;
+}
+
+.dm-source-card__ico {
+	color: var(--dm-primary);
+	line-height: 0;
+	margin-top: 2px;
+}
+
+.dm-source-card__body {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	min-width: 0;
+}
+
+.dm-source-card__state {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	font-size: 12px;
+	color: var(--dm-muted);
+}
+
+.dm-source-card.is-on .dm-source-card__state {
+	color: var(--dm-success);
+}
+
+.dm-source-card__extra {
+	font-size: 11px;
+	color: var(--dm-muted);
+	font-style: normal;
+}
+
+.dm-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	align-items: center;
+}
+
+.dm-check {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 13px;
+}
+
+.dm-tip {
+	display: flex;
+	gap: 8px;
+	align-items: flex-start;
+	margin-top: 12px;
+	padding: 10px 12px;
+	border-radius: 10px;
+	background: #FFFBEB;
+	border: 1px solid #FDE68A;
+	color: #92400E;
+	font-size: 12.5px;
+	line-height: 1.65;
+}
+
+.dm-tip .dm-icon {
+	color: #D97706;
+	margin-top: 2px;
+}
+
+.damavand-saas .shojaei-card h3,
+.damavand-saas .shojaei-card h4,
+.damavand-saas .shojaei-settings-intro h3 {
+	color: var(--dm-text) !important;
+	font-weight: 700;
+	letter-spacing: -0.01em;
+}
+
+.damavand-saas .shojaei-desc,
+.damavand-saas .description,
+.damavand-saas .shojaei-module-note {
+	color: var(--dm-muted) !important;
+	line-height: 1.7;
+}
+
+.damavand-saas .button-primary,
+.damavand-saas .button.button-primary {
+	background: var(--dm-primary) !important;
+	border-color: var(--dm-primary) !important;
+	color: #fff !important;
+	border-radius: 10px !important;
+	min-height: 38px;
+	padding: 0 14px;
+	box-shadow: none !important;
+	text-shadow: none !important;
+}
+
+.damavand-saas .button-primary:hover,
+.damavand-saas .button.button-primary:hover {
+	background: var(--dm-primary-hover) !important;
+	border-color: var(--dm-primary-hover) !important;
+}
+
+.damavand-saas .button:not(.button-primary):not(.button-link-delete) {
+	border-radius: 10px !important;
+	min-height: 38px;
+	border-color: var(--dm-border) !important;
+	background: #fff !important;
+	color: var(--dm-text) !important;
+}
+
+.damavand-saas .button:focus-visible,
+.damavand-saas a:focus-visible,
+.damavand-saas input:focus-visible,
+.damavand-saas select:focus-visible,
+.damavand-saas textarea:focus-visible {
+	outline: none;
+	box-shadow: var(--dm-focus) !important;
+	border-color: var(--dm-primary) !important;
+}
+
+.damavand-saas .shojaei-tone-safe { color: var(--dm-success) !important; }
+.damavand-saas .shojaei-tone-warning { color: var(--dm-warning) !important; }
+.damavand-saas .shojaei-tone-error { color: var(--dm-danger) !important; }
+
+.damavand-saas .shojaei-setting-item {
+	display: flex;
+	align-items: flex-start;
+	gap: 10px;
+	padding: 12px 14px;
+	border: 1px solid var(--dm-border);
+	border-radius: 12px;
+	background: #FAFBFC;
+	min-height: 48px;
+}
+
+.damavand-saas .shojaei-setting-item input[type="checkbox"] {
+	width: 18px;
+	height: 18px;
+	margin-top: 2px;
+	accent-color: var(--dm-primary);
+}
+
+.damavand-saas .shojaei-settings-grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 10px;
+}
+
+.damavand-saas .shojaei-settings-form > p.submit,
+.damavand-saas .shojaei-settings-form .shojaei-save-bar,
+.damavand-saas .shojaei-settings-savebar {
+	position: sticky;
+	bottom: 12px;
+	z-index: 90;
+	margin-top: 20px;
+	padding: 12px 16px;
+	background: rgba(255, 255, 255, 0.94);
+	border: 1px solid var(--dm-border);
+	border-radius: 12px;
+	backdrop-filter: blur(8px);
+	box-shadow: var(--dm-shadow);
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 12px;
+}
+
+.damavand-saas table.widefat {
+	border: 1px solid var(--dm-border);
+	border-radius: 12px;
+	overflow: hidden;
+	box-shadow: none;
+}
+
+.damavand-saas table.widefat thead th {
+	background: #F8FAFC;
+	color: var(--dm-muted);
+	font-weight: 600;
+	border-bottom: 1px solid var(--dm-border);
+}
+
+.damavand-saas .shojaei-subnav {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 14px;
+	padding: 8px 10px;
+	background: var(--dm-card);
+	border: 1px solid var(--dm-border);
+	border-radius: 10px;
+}
+
+.damavand-saas .shojaei-subnav-pill {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.damavand-saas .shojaei-subnav-ico {
+	display: inline-flex;
+	line-height: 0;
+	color: var(--dm-primary);
+}
+
+.damavand-saas .shojaei-accordion-item {
+	border: 1px solid var(--dm-border);
+	border-radius: 12px;
+	background: var(--dm-card);
+	margin-bottom: 10px;
+	overflow: hidden;
+}
+
+.damavand-saas .shojaei-accordion-header {
+	min-height: 48px;
+	padding: 10px 14px;
+}
+
+.damavand-saas .shojaei-accordion-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	border-radius: 8px;
+	background: #EFF6FF;
+	color: var(--dm-primary);
+}
+
+.damavand-saas .shojaei-ops-hero,
+.damavand-saas .shojaei-ops-step {
+	background: var(--dm-card) !important;
+	border-color: var(--dm-border) !important;
+	box-shadow: var(--dm-shadow);
+}
+
+.damavand-saas .shojaei-ops-hero h2,
+.damavand-saas .shojaei-ops-step strong {
+	color: var(--dm-primary) !important;
+}
+
+.damavand-saas .damavand-migrate-glass,
+.damavand-saas .damavand-aa-guide {
+	background: #F8FAFC !important;
+	border-color: var(--dm-border) !important;
+	box-shadow: none !important;
+	backdrop-filter: none !important;
+	color: var(--dm-text) !important;
+}
+
+.damavand-saas .damavand-aa-guide h3,
+.damavand-saas .damavand-migrate-glass__title {
+	color: var(--dm-text) !important;
+}
+
+.dm-ready-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.dm-ready-list li {
+	padding: 10px 12px;
+	border-radius: 12px;
+	background: var(--dm-card, #fff);
+	border-inline-start: 3px solid #c0392b;
+}
+
+.dm-ready-list li.is-ok {
+	border-inline-start-color: #148c50;
+}
+
+.dm-ready-list li strong {
+	display: block;
+}
+
+.dm-ready-list li em {
+	display: block;
+	font-style: normal;
+	font-size: 12px;
+	color: #5c6b7a;
+	margin-block-start: 4px;
+}
+
+.dm-ready-cta {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 10px;
+	margin-block-start: 14px;
+}
+
+@media (max-width: 960px) {
+	.dm-cat-grid,
+	.damavand-saas .shojaei-settings-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.damavand-saas .shojaei-ops-pipeline {
+		grid-template-columns: repeat(2, 1fr) !important;
+	}
+}
+
+@media (max-width: 600px) {
+	.damavand-saas.shojaei-seo-wrap {
+		padding: 0 8px 28px;
+	}
+
+	.damavand-saas .shojaei-ops-pipeline {
+		grid-template-columns: 1fr !important;
+	}
+
+	.damavand-app-header__credit {
+		width: 100%;
+	}
+
+	.damavand-saas .shojaei-tab-label {
+		font-size: 12px;
+	}
+}
+
+.damavand-saas .shojaei-edu-banner {
+	display: flex;
+	align-items: flex-start;
+	gap: 12px;
+	padding: 14px 16px;
+	margin-bottom: 14px;
+	background: var(--dm-card);
+	border: 1px solid var(--dm-border);
+	border-radius: var(--dm-radius);
+	box-shadow: var(--dm-shadow);
+}
+
+.damavand-saas .shojaei-edu-banner__ico {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	border-radius: 10px;
+	background: #EFF6FF;
+	color: var(--dm-primary);
+	flex-shrink: 0;
+}
+
+.damavand-saas .shojaei-edu-banner h2 {
+	margin: 0 0 4px;
+	font-size: 1.05rem;
+}
+
+.damavand-saas .shojaei-edu-banner p {
+	margin: 0;
+	color: var(--dm-muted);
+	font-size: 13px;
+	line-height: 1.6;
+}
+

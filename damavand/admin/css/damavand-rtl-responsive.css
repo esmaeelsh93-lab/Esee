@@ -1,0 +1,265 @@
+/**
+ * Damavand Phase 4 — RTL logical properties + mobile (≤782px) polish.
+ * Loaded after damavand-saas / admin-style. Does not wipe legacy rules.
+ */
+
+/* ——— Logical spacing overrides (admin Damavand shell) ——— */
+.damavand-saas.shojaei-seo-wrap {
+	padding-inline: 16px;
+	padding-block: 0 40px;
+}
+
+.damavand-saas .shojaei-accordion-meta {
+	margin-inline: 8px 0;
+	margin-block: 0;
+}
+
+.damavand-saas .shojaei-accordion-content ul,
+.damavand-saas .shojaei-edu-tip ol,
+.damavand-saas .dm-tip {
+	padding-inline-start: 1.2em;
+	padding-inline-end: 0;
+}
+
+.damavand-saas .shojaei-accordion-item,
+.damavand-saas .notice.inline,
+.damavand-saas .dm-panel,
+.damavand-saas .shojaei-card {
+	border-inline-start-width: 0;
+}
+
+/* Blue accent on the inline-start edge (RTL-safe) */
+.damavand-saas .shojaei-card.is-accent,
+.damavand-saas .dm-source-card.is-on {
+	border-inline-start: 3px solid var(--dm-primary, #2563EB);
+}
+
+.damavand-saas .shojaei-accordion-header {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 10px;
+	text-align: start;
+}
+
+.damavand-saas .shojaei-accordion-title {
+	flex: 1;
+	min-width: 0;
+	text-align: start;
+}
+
+.damavand-saas .shojaei-accordion-chevron {
+	margin-inline-start: auto;
+	margin-inline-end: 0;
+	transition: transform 0.18s ease;
+}
+
+.damavand-saas .shojaei-accordion-item.is-open .shojaei-accordion-chevron {
+	transform: rotate(180deg);
+}
+
+/* Lucide / SVG icons that imply direction */
+.damavand-saas [dir="rtl"] .dm-icon-flip-x,
+html[dir="rtl"] .damavand-saas .dm-icon-flip-x {
+	transform: scaleX(-1);
+}
+
+/* Forms & touch */
+.damavand-saas input[type="text"],
+.damavand-saas input[type="number"],
+.damavand-saas input[type="url"],
+.damavand-saas input[type="search"],
+.damavand-saas select,
+.damavand-saas textarea {
+	text-align: start;
+	max-width: 100%;
+}
+
+.damavand-saas .button,
+.damavand-saas .button-primary {
+	min-height: 36px;
+}
+
+.damavand-saas .dm-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	align-items: center;
+}
+
+.damavand-saas .dm-actions .button {
+	flex: 0 1 auto;
+}
+
+/* Nav scroll — RTL friendly */
+.damavand-saas .shojaei-seo-tabs--primary.damavand-app-nav {
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
+	scrollbar-width: thin;
+	direction: rtl;
+}
+
+/* ——— Tables → cards on WP admin mobile breakpoint ——— */
+@media screen and (max-width: 782px) {
+	.damavand-saas.shojaei-seo-wrap {
+		padding-inline: 8px;
+		padding-block-end: 28px;
+	}
+
+	.damavand-app-header {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 10px;
+	}
+
+	.damavand-app-header__brand {
+		width: 100%;
+	}
+
+	.damavand-saas .dm-cat-grid,
+	.damavand-saas .shojaei-settings-grid,
+	.damavand-saas .dm-source-grid {
+		grid-template-columns: 1fr !important;
+	}
+
+	.damavand-saas .dm-actions {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.damavand-saas .dm-actions .button {
+		width: 100%;
+		justify-content: center;
+		min-height: 44px;
+		font-size: 14px;
+	}
+
+	.damavand-saas .button,
+	.damavand-saas .button-primary,
+	.damavand-saas input[type="text"],
+	.damavand-saas input[type="number"],
+	.damavand-saas select,
+	.damavand-saas textarea {
+		min-height: 44px;
+		font-size: 15px;
+	}
+
+	/* Cardify widefat tables on mobile */
+	.damavand-saas table.widefat.dm-responsive-table,
+	.damavand-saas table.widefat.shojaei-table {
+		border: 0;
+		background: transparent;
+		box-shadow: none;
+	}
+
+	.damavand-saas table.dm-responsive-table thead,
+	.damavand-saas table.shojaei-table thead {
+		display: none;
+	}
+
+	.damavand-saas table.dm-responsive-table,
+	.damavand-saas table.dm-responsive-table tbody,
+	.damavand-saas table.dm-responsive-table tr,
+	.damavand-saas table.dm-responsive-table td,
+	.damavand-saas table.shojaei-table,
+	.damavand-saas table.shojaei-table tbody,
+	.damavand-saas table.shojaei-table tr,
+	.damavand-saas table.shojaei-table td {
+		display: block;
+		width: 100% !important;
+		box-sizing: border-box;
+	}
+
+	.damavand-saas table.dm-responsive-table tr,
+	.damavand-saas table.shojaei-table tr {
+		margin-block-end: 12px;
+		padding: 12px;
+		border: 1px solid var(--dm-border, #E6EAF0);
+		border-radius: 12px;
+		background: var(--dm-card, #fff);
+		box-shadow: var(--dm-shadow);
+	}
+
+	.damavand-saas table.dm-responsive-table td,
+	.damavand-saas table.shojaei-table td {
+		border: 0 !important;
+		padding: 6px 0 !important;
+		text-align: start !important;
+	}
+
+	.damavand-saas table.dm-responsive-table td::before {
+		content: attr(data-label);
+		display: block;
+		font-size: 11px;
+		font-weight: 700;
+		color: var(--dm-muted, #6B7280);
+		margin-block-end: 2px;
+	}
+
+	.damavand-saas table.dm-responsive-table td:not([data-label])::before,
+	.damavand-saas table.dm-responsive-table td[data-label=""]::before {
+		content: none;
+		display: none;
+	}
+
+	.damavand-saas table.dm-responsive-table td:empty {
+		display: none;
+	}
+
+	.damavand-saas .shojaei-ops-pipeline {
+		grid-template-columns: 1fr !important;
+	}
+
+	.damavand-saas .damavand-migrate-progress__bar {
+		height: 10px;
+	}
+
+	.dm-ready-cta {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.dm-ready-cta .button {
+		width: 100%;
+		min-height: 44px;
+	}
+}
+
+/* ——— Product editor: slug + score metaboxes (outside .damavand-saas) ——— */
+#shojaei-slug-box,
+.dm-score {
+	direction: rtl;
+	text-align: start;
+}
+
+#shojaei-slug-box .shojaei-slug-score,
+.dm-score__num {
+	unicode-bidi: isolate;
+}
+
+#shojaei-slug-box .button,
+.dm-score .button {
+	min-height: 40px;
+}
+
+@media screen and (max-width: 782px) {
+	#shojaei-slug-box .button,
+	.dm-score .button,
+	.dm-score__field input,
+	.dm-score__field textarea {
+		width: 100%;
+		min-height: 44px;
+		box-sizing: border-box;
+	}
+
+	#side-sortables .dm-score__checks li,
+	#shojaei-slug-box .shojaei-slug-tips li {
+		padding-inline: 10px;
+	}
+}
+
+/* Sitemap debug row codes */
+.damavand-saas .shojaei-sitemap-table code {
+	word-break: break-all;
+	white-space: normal;
+}
