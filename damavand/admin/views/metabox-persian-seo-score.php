@@ -21,9 +21,6 @@ $serp_title = $title !== '' ? $title : (string) $post->post_title;
 $serp_desc  = $desc !== '' ? $desc : '';
 $serp_url   = isset( $serp_url ) ? (string) $serp_url : (string) get_permalink( $post );
 $site_name  = isset( $site_name ) ? (string) $site_name : wp_strip_all_tags( get_bloginfo( 'name' ) );
-$size_raw   = ( 'product' === $post->post_type && class_exists( 'Damavand_Size_Chart' ) )
-	? Damavand_Size_Chart::get_raw( (int) $post->ID )
-	: '';
 $focus_display = $focus !== '' ? $focus : (string) $post->post_title;
 ?>
 <div class="dm-score" id="damavand-seo-score-box" dir="rtl" data-post-id="<?php echo esc_attr( (string) (int) $post->ID ); ?>" data-focus-auto="<?php echo esc_attr( '' === $focus ? '1' : '0' ); ?>">
@@ -67,11 +64,6 @@ $focus_display = $focus !== '' ? $focus : (string) $post->post_title;
 					<span><?php esc_html_e( 'کلمات مرتبط', 'shojaei-seo-for-woo' ); ?></span>
 					<input type="text" name="damavand_seo_score_related" id="dm-score-related" value="<?php echo esc_attr( isset( $related ) ? (string) $related : '' ); ?>" placeholder="<?php esc_attr_e( 'با ویرگول جدا کنید — مثلاً: ونس، چرم، سفید، مردانه', 'shojaei-seo-for-woo' ); ?>" />
 				</label>
-				<label class="dm-score__field">
-					<span><?php esc_html_e( 'جدول سایزبندی', 'shojaei-seo-for-woo' ); ?></span>
-					<textarea name="damavand_size_chart_raw" id="dm-size-chart-raw" rows="4" placeholder="<?php echo esc_attr( "سایز\tقد\tدور سینه\nM\t170\t96\nL\t175\t100" ); ?>"><?php echo esc_textarea( $size_raw ); ?></textarea>
-					<em class="dm-score__meta"><?php esc_html_e( 'قبل از توضیح کوتاه در صفحه محصول نمایش داده می‌شود (جدا از توضیحات سئو).', 'shojaei-seo-for-woo' ); ?></em>
-				</label>
 				<?php endif; ?>
 
 				<p class="dm-score__tpl-row">
@@ -89,8 +81,9 @@ $focus_display = $focus !== '' ? $focus : (string) $post->post_title;
 						<textarea id="dm-ollama-extra" rows="3" placeholder="<?php esc_attr_e( 'جنس، برند، کاربرد، تفاوت با مدل‌های مشابه، نکات فروش…', 'shojaei-seo-for-woo' ); ?>"></textarea>
 					</label>
 					<label class="dm-score__field">
-						<span><?php esc_html_e( 'سایزبندی برای ذخیره در فیلد جدول', 'shojaei-seo-for-woo' ); ?></span>
-						<textarea id="dm-ollama-sizes" rows="3" placeholder="<?php echo esc_attr( "سایز\tقد\tدور سینه\nM\t170\t96" ); ?>"><?php echo esc_textarea( $size_raw ); ?></textarea>
+						<span><?php esc_html_e( 'سایزبندی (فقط برای تولید متن AI — ذخیره نمی‌شود)', 'shojaei-seo-for-woo' ); ?></span>
+						<textarea id="dm-ollama-sizes" rows="3" placeholder="<?php echo esc_attr( "سایز\tقد\tدور سینه\nM\t170\t96" ); ?>"></textarea>
+						<em class="dm-score__meta"><?php esc_html_e( 'اختیاری؛ اگر پر شود فقط به پرامپت AI می‌رود تا توضیح محصول دقیق‌تر شود.', 'shojaei-seo-for-woo' ); ?></em>
 					</label>
 					<p class="dm-score__ollama-actions">
 						<button type="button" class="button button-primary" id="dm-auto-seo-run"><?php esc_html_e( 'سئو خودکار محصول', 'shojaei-seo-for-woo' ); ?></button>

@@ -813,7 +813,7 @@ final class Damavand_Persian_SEO_Score {
 		if ( '' === $focus ) {
 			$focus = class_exists( 'Damavand_SEO_Meta' ) ? Damavand_SEO_Meta::get_focus_keyword( (int) $post->ID ) : '';
 		}
-		$serp_url  = (string) get_permalink( $post );
+$serp_url  = (string) get_permalink( $post );
 		$site_name = wp_strip_all_tags( get_bloginfo( 'name' ) );
 		$faq_count = class_exists( 'Damavand_FAQ_Box' ) ? count( Damavand_FAQ_Box::get_stored( (int) $post->ID ) ) : 0;
 		$related   = class_exists( 'Damavand_Content_Analyzer' )
@@ -882,14 +882,6 @@ final class Damavand_Persian_SEO_Score {
 			} else {
 				update_post_meta( $post_id, Damavand_Content_Analyzer::META_RELATED, Damavand_Content_Analyzer::normalize_related_input( $related ) );
 			}
-		}
-
-		// Persist size chart from SEO metabox (synced with WooCommerce field).
-		if ( 'product' === $post->post_type && isset( $_POST['damavand_size_chart_raw'] ) && class_exists( 'Damavand_Size_Chart' ) ) {
-			Damavand_Size_Chart::save(
-				(int) $post_id,
-				sanitize_textarea_field( wp_unslash( $_POST['damavand_size_chart_raw'] ) )
-			);
 		}
 
 		// Per-post robots (Rank Math parity — explicit merchant control).

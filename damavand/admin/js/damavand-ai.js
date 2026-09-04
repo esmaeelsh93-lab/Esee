@@ -19,7 +19,7 @@
 		if (!keyword) {
 			keyword = title;
 		}
-		var sizes = ($('#dm-ollama-sizes').val() || $('#dm-size-chart-raw').val() || '').toString();
+		var sizes = ($('#dm-ollama-sizes').val() || '').toString();
 		return {
 			nonce: damavandAI.nonce,
 			post_id: postId(),
@@ -162,19 +162,11 @@
 		setStatus(d.draft_message || damavandAI.i18n.draftReady || damavandAI.i18n.done);
 	}
 
-	function syncSizeChartUi() {
-		var sizes = ($('#dm-ollama-sizes').val() || '').toString();
-		if (sizes && $('#dm-size-chart-raw').length) {
-			$('#dm-size-chart-raw').val(sizes);
-		}
-	}
-
 	function afterContentGenerated() {
 		if (typeof window.damavandFetchLinks === 'function') {
 			window.damavandFetchLinks(true);
 		}
 		$('#dm-score-links').prop('hidden', false);
-		syncSizeChartUi();
 	}
 
 	function applyResult(kind, d) {

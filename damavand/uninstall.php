@@ -121,6 +121,9 @@ foreach ( array(
 $wpdb->query(
 	"DELETE FROM {$wpdb->postmeta} WHERE meta_key LIKE '\\_shojaei\\_seo\\_%'"
 );
+$wpdb->query(
+	"DELETE FROM {$wpdb->postmeta} WHERE meta_key IN ('_damavand_size_chart_raw', '_damavand_size_chart_html')"
+);
 
 $upload = wp_upload_dir();
 if ( ! empty( $upload['basedir'] ) ) {

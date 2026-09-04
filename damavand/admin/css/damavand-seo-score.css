@@ -554,27 +554,3 @@
 	flex-wrap: wrap;
 	gap: 6px;
 }
-
-.damavand-size-chart {
-	margin: 0 0 1rem;
-}
-
-.damavand-size-chart__title {
-	margin: 0 0 0.5rem;
-	font-size: 1.05em;
-}
-
-.damavand-size-chart table,
-.damavand-size-table table {
-	width: 100%;
-	border-collapse: collapse;
-	text-align: center;
-}
-
-.damavand-size-chart th,
-.damavand-size-chart td,
-.damavand-size-table th,
-.damavand-size-table td {
-	border: 1px solid #ddd;
-	padding: 6px 8px;
-}

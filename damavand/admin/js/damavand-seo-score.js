@@ -975,12 +975,5 @@
 			}
 		});
 
-		/* Keep AI sizes field in sync with persistent size chart */
-		$('#dm-size-chart-raw').on('input', function () {
-			$('#dm-ollama-sizes').val($(this).val());
-		});
-		$('#dm-ollama-sizes').on('input', function () {
-			$('#dm-size-chart-raw').val($(this).val());
-		});
 	});
 })(jQuery);

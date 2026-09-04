@@ -342,6 +342,11 @@ class Shojaei_SEO_Activator {
 			self::cleanup_removed_merchandising_options();
 		}
 
+		// 1.33: remove Damavand size-chart postmeta (feature deleted).
+		if ( version_compare( $installed, '1.33.0', '<' ) ) {
+			self::cleanup_removed_size_chart_meta();
+		}
+
 		if ( class_exists( 'Shojaei_SEO_Jobs' ) ) {
 			Shojaei_SEO_Jobs::migrate_from_options();
 		}
@@ -381,6 +386,19 @@ class Shojaei_SEO_Activator {
 		foreach ( $orphans as $opt ) {
 			delete_option( $opt );
 		}
+	}
+
+	/**
+	 * حذف postmeta جدول سایزبندی Damavand (فیچر حذف‌شده).
+	 * کلیدها: `_damavand_size_chart_raw` و `_damavand_size_chart_html`.
+	 */
+	public static function cleanup_removed_size_chart_meta(): void {
+		global $wpdb;
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$wpdb->query(
+			"DELETE FROM {$wpdb->postmeta}
+			WHERE meta_key IN ('_damavand_size_chart_raw', '_damavand_size_chart_html')"
+		);
 	}
 
 	/**

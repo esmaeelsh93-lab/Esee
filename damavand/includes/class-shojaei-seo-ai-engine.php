@@ -998,9 +998,7 @@ class Shojaei_SEO_AI_Engine {
 			case 'short_desc':
 				return Shojaei_SEO_AI_Client::clean_html( $raw );
 			case 'long_desc':
-				$html = Shojaei_SEO_AI_Client::clean_html( $raw );
-				self::persist_size_chart_from_ctx( $ctx );
-				return $html;
+				return Shojaei_SEO_AI_Client::clean_html( $raw );
 			case 'faq':
 				$json = Shojaei_SEO_AI_Client::extract_json( $raw );
 				if ( empty( $json['faqs'] ) || ! is_array( $json['faqs'] ) ) {
@@ -1018,7 +1016,6 @@ class Shojaei_SEO_AI_Engine {
 					'short_desc' => isset( $json['short_desc'] ) ? Shojaei_SEO_AI_Client::clean_html( (string) $json['short_desc'] ) : '',
 					'long_desc'  => isset( $json['long_desc'] ) ? Shojaei_SEO_AI_Client::clean_html( (string) $json['long_desc'] ) : '',
 				);
-				self::persist_size_chart_from_ctx( $ctx );
 				if ( ! empty( $ctx['post_id'] ) && $pack['meta_title'] && ! ( class_exists( 'Shojaei_SEO_Store_Profile' ) && Shojaei_SEO_Store_Profile::draft_mode() ) ) {
 					update_post_meta( (int) $ctx['post_id'], '_damavand_seo_title', $pack['meta_title'] );
 				}
@@ -1308,8 +1305,6 @@ class Shojaei_SEO_AI_Engine {
 			}
 		}
 
-		$sizes = class_exists( 'Damavand_Size_Chart' ) ? Damavand_Size_Chart::get_raw( $post_id ) : '';
-
 		return array(
 			'post_id'    => $post_id,
 			'title'      => $title,
@@ -1318,25 +1313,8 @@ class Shojaei_SEO_AI_Engine {
 			'attributes' => implode( '؛ ', $attrs ),
 			'image_ids'  => $image_ids,
 			'extra'      => '',
-			'sizes'      => $sizes,
+			'sizes'      => '',
 		);
-	}
-
-	/**
-	 * Save size chart meta from AI context (not into long description HTML).
-	 *
-	 * @param array<string,mixed> $ctx Context.
-	 */
-	private static function persist_size_chart_from_ctx( array $ctx ): void {
-		$post_id = (int) ( $ctx['post_id'] ?? 0 );
-		$sizes   = trim( (string) ( $ctx['sizes'] ?? '' ) );
-		if ( $post_id < 1 || '' === $sizes || ! class_exists( 'Damavand_Size_Chart' ) ) {
-			return;
-		}
-		if ( class_exists( 'Shojaei_SEO_Store_Profile' ) && Shojaei_SEO_Store_Profile::draft_mode() ) {
-			return;
-		}
-		Damavand_Size_Chart::save( $post_id, $sizes );
 	}
 
 	/**
