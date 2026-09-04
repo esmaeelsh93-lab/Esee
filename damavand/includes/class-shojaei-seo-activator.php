@@ -20,7 +20,7 @@ class Shojaei_SEO_Activator {
 			self::create_tables();
 			self::set_default_options();
 			self::migrate_ollama_to_ai();
-			self::migrate_gemini_model_ids();
+			self::migrate_openrouter_ai();
 			self::schedule_cron_events();
 			update_option( 'shojaei_seo_db_version', DAMAVAND_SEO_DB_VERSION );
 
@@ -488,7 +488,7 @@ class Shojaei_SEO_Activator {
 
 		foreach ( array(
 			'shojaei_seo_ai_provider' => 'openrouter',
-			'shojaei_seo_ai_model'    => 'meta-llama/llama-3.3-70b-instruct',
+			'shojaei_seo_ai_model'    => 'meta-llama/llama-3.3-70b-instruct:free',
 			'shojaei_seo_ai_timeout'  => 30,
 		) as $opt => $default ) {
 			if ( false === get_option( $opt, false ) ) {
@@ -515,24 +515,33 @@ class Shojaei_SEO_Activator {
 	}
 
 	/**
-	 * Map retired Gemini model ids saved in options (1.59.1+).
+	 * Migrate legacy providers/models to OpenRouter free models (1.60+).
 	 */
-	public static function migrate_gemini_model_ids(): void {
+	public static function migrate_openrouter_ai(): void {
 		if ( ! class_exists( 'Shojaei_SEO_AI_Client' ) ) {
 			return;
 		}
 		$provider = sanitize_key( (string) get_option( 'shojaei_seo_ai_provider', '' ) );
-		if ( 'gemini' !== $provider ) {
-			return;
+		if ( in_array( $provider, array( 'groq', 'gemini' ), true ) ) {
+			update_option( 'shojaei_seo_ai_provider', 'openrouter', false );
 		}
 		$model = trim( (string) get_option( 'shojaei_seo_ai_model', '' ) );
 		if ( '' === $model ) {
 			return;
 		}
-		$mapped = Shojaei_SEO_AI_Client::map_model_to_provider( $model, 'gemini' );
+		$mapped = Shojaei_SEO_AI_Client::map_model_to_provider( $model, 'openrouter' );
 		if ( $mapped !== $model ) {
 			update_option( 'shojaei_seo_ai_model', $mapped, false );
 		}
+	}
+
+	/**
+	 * Map retired Gemini model ids saved in options (1.59.1+).
+	 *
+	 * @deprecated 1.60.0 Use migrate_openrouter_ai().
+	 */
+	public static function migrate_gemini_model_ids(): void {
+		self::migrate_openrouter_ai();
 	}
 
 	/**

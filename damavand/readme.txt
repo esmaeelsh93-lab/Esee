@@ -4,7 +4,7 @@ Tags: seo, woocommerce, redirect, inventory, out-of-stock, internal-links
 Requires at least: 6.0
 Tested up to: 6.7
 Requires PHP: 8.0
-Stable tag: 1.59.2
+Stable tag: 1.60.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -65,6 +65,12 @@ Inventory-aware SEO — تصمیم‌گیری سئو بر اساس موجودی 
 با آپلود فایل JSON مربوط به Service Account — بدون OAuth و بدون Refresh Token.
 
 == Changelog ==
+
+= 1.60.0 =
+* فقط OpenRouter با مدل‌های رایگان (:free) — Gemini و Groq از UI حذف شد
+* AI محدود به Alt تصاویر و کلمات مرتبط (نه سئو خودکار، متا، FAQ، بسته کامل)
+* مهاجرت خودکار provider و مدل‌های پولی/قدیمی به OpenRouter :free
+* Alt بدون vision (متن‌محور) برای سازگاری با مدل‌های رایگان
 
 = 1.59.2 =
 * Gemini 3.x: thinkingLevel=MINIMAL برای سرعت و جلوگیری از خروجی کوتاه (بودجه توکن قبلاً صرف reasoning می‌شد)

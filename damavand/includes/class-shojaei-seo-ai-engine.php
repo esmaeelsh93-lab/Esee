@@ -14,19 +14,21 @@ class Shojaei_SEO_AI_Engine {
 
 	public const JOB_ALT = 'ai_alt_batch';
 
-	/** @var array<int,string> */
+	/** Kinds exposed to admin UI / AJAX (Alt + related keywords only). */
+	public const PUBLIC_KINDS = array( 'related_keywords', 'alt_texts' );
+
+	/** @var array<int,string> Legacy kinds kept for internal reference. */
 	private static $kinds = array(
-		'keywords',
-		'meta_titles',
-		'meta_desc',
-		'short_desc',
-		'long_desc',
-		'faq',
+		'related_keywords',
 		'alt_texts',
-		'full_pack',
-		'llms_txt',
-		'slug',
 	);
+
+	/**
+	 * @return array<int,string>
+	 */
+	public static function public_kinds(): array {
+		return self::PUBLIC_KINDS;
+	}
 
 	/**
 	 * Init hooks.
@@ -37,12 +39,9 @@ class Shojaei_SEO_AI_Engine {
 		$actions = array(
 			'shojaei_ai_generate'        => 'ajax_generate',
 			'shojaei_ai_test_connection' => 'ajax_test_connection',
-			'shojaei_ai_itemlist'        => 'ajax_itemlist',
-			'shojaei_ai_write_llms'      => 'ajax_write_llms',
 			'shojaei_ai_bulk_alt_start'  => 'ajax_bulk_alt_start',
 			'shojaei_ai_bulk_alt_status' => 'ajax_bulk_alt_status',
 			'shojaei_ai_bulk_alt_run'    => 'ajax_bulk_alt_run',
-			'shojaei_ai_validate_seo'    => 'ajax_validate_seo',
 		);
 		foreach ( $actions as $hook => $method ) {
 			add_action( 'wp_ajax_' . $hook, array( __CLASS__, $method ) );
@@ -83,20 +82,16 @@ class Shojaei_SEO_AI_Engine {
 			array(
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 				'nonce'   => wp_create_nonce( 'shojaei_ai' ),
-				'enabled'   => Shojaei_SEO_AI_Client::is_configured(),
-				'draftMode' => class_exists( 'Shojaei_SEO_Store_Profile' ) && Shojaei_SEO_Store_Profile::draft_mode(),
+				'enabled'      => Shojaei_SEO_AI_Client::is_configured(),
+				'allowedKinds' => self::PUBLIC_KINDS,
 				'modelPresets' => Shojaei_SEO_AI_Client::model_presets(),
-				'i18n'      => array(
+				'i18n'         => array(
 					'working'   => __( 'در حال تولید…', 'shojaei-seo-for-woo' ),
 					'error'     => __( 'خطا در ارتباط با سرور.', 'shojaei-seo-for-woo' ),
 					'done'      => __( 'انجام شد.', 'shojaei-seo-for-woo' ),
-					'pickTitle' => __( 'یک عنوان را انتخاب کنید.', 'shojaei-seo-for-woo' ),
 					'testing'   => __( 'در حال تست اتصال…', 'shojaei-seo-for-woo' ),
 					'timeout'   => __( 'زمان انتظار تمام شد. دوباره تلاش کنید.', 'shojaei-seo-for-woo' ),
-					'autoSeo'   => __( 'سئو خودکار', 'shojaei-seo-for-woo' ),
 					'rateLimit' => __( 'تعداد درخواست زیاد است. یک دقیقه صبر کنید.', 'shojaei-seo-for-woo' ),
-					'draftReady' => __( 'پیش‌نویس آماده — بررسی و اعمال کنید.', 'shojaei-seo-for-woo' ),
-					'draftApply' => __( 'اعمال پیش‌نویس', 'shojaei-seo-for-woo' ),
 				),
 			)
 		);
@@ -112,8 +107,8 @@ class Shojaei_SEO_AI_Engine {
 			wp_send_json_error( array( 'message' => __( 'موتور تولید خاموش است یا کلید API ذخیره نشده.', 'shojaei-seo-for-woo' ) ) );
 		}
 		$kind = isset( $_POST['job_kind'] ) ? sanitize_key( wp_unslash( $_POST['job_kind'] ) ) : ''; // phpcs:ignore
-		if ( ! in_array( $kind, self::$kinds, true ) ) {
-			wp_send_json_error( array( 'message' => __( 'نوع درخواست نامعتبر است.', 'shojaei-seo-for-woo' ) ) );
+		if ( ! in_array( $kind, self::PUBLIC_KINDS, true ) ) {
+			wp_send_json_error( array( 'message' => __( 'این قابلیت AI غیرفعال است. فقط Alt تصاویر و کلمات مرتبط مجاز هستند.', 'shojaei-seo-for-woo' ) ) );
 		}
 		self::relax_time_limits();
 		$result = self::run_kind( $kind, self::context_from_post(), self::extra_from_post( $kind ) );
@@ -357,17 +352,11 @@ class Shojaei_SEO_AI_Engine {
 	 * @return array<string,mixed>|string|WP_Error
 	 */
 	public static function run_kind( string $kind, array $ctx, array $extra = array() ) {
+		if ( ! in_array( $kind, self::PUBLIC_KINDS, true ) ) {
+			return new WP_Error( 'ai_kind', __( 'این قابلیت AI غیرفعال است.', 'shojaei-seo-for-woo' ) );
+		}
 		if ( 'alt_texts' === $kind ) {
 			return self::run_alt_texts( $ctx, $extra );
-		}
-		if ( 'itemlist' === $kind ) {
-			return self::build_itemlist( $ctx );
-		}
-		if ( 'long_desc' === $kind ) {
-			return self::run_long_desc( $ctx, $extra );
-		}
-		if ( 'full_pack' === $kind ) {
-			return self::run_full_pack( $ctx, $extra );
 		}
 
 		$prompt = self::build_prompt( $kind, $ctx, $extra );
@@ -381,15 +370,7 @@ class Shojaei_SEO_AI_Engine {
 			return $raw;
 		}
 
-		if ( 'llms_txt' === $kind ) {
-			$content = trim( $raw );
-			update_option( 'shojaei_seo_llms_txt', $content, false );
-			return $content;
-		}
-
-		$result = self::shape_result( $kind, $raw, $ctx );
-
-		return $result;
+		return self::shape_result( $kind, $raw, $ctx );
 	}
 
 	/**
@@ -727,20 +708,10 @@ class Shojaei_SEO_AI_Engine {
 	 */
 	public static function opts_for_kind( string $kind ): array {
 		$map = array(
-			'keywords'           => array( 'max_tokens' => 512, 'timeout' => 45, 'temperature' => 0.2, 'response_mime' => 'application/json' ),
-			'meta_titles'        => array( 'max_tokens' => 512, 'timeout' => 45, 'temperature' => 0.3, 'response_mime' => 'application/json' ),
-			'meta_desc'          => array( 'max_tokens' => 320, 'timeout' => 45, 'temperature' => 0.3 ),
-			'slug'               => array( 'max_tokens' => 120, 'timeout' => 35, 'temperature' => 0.1 ),
-			'short_desc'         => array( 'max_tokens' => 768, 'timeout' => 55, 'temperature' => 0.4 ),
-			'long_desc_outline'  => array( 'max_tokens' => 1200, 'timeout' => 60, 'temperature' => 0.45, 'response_mime' => 'application/json' ),
-			'long_desc'          => array( 'max_tokens' => 4096, 'timeout' => 150, 'temperature' => 0.55 ),
-			'faq'                => array( 'max_tokens' => 1200, 'timeout' => 60, 'temperature' => 0.4, 'response_mime' => 'application/json' ),
-			'full_pack_meta'     => array( 'max_tokens' => 1536, 'timeout' => 75, 'temperature' => 0.4, 'response_mime' => 'application/json' ),
-			'llms_txt'           => array( 'max_tokens' => 1200, 'timeout' => 60, 'temperature' => 0.3 ),
-			'alt_texts'          => array( 'max_tokens' => 120, 'timeout'  => 45, 'temperature' => 0.2, 'vision_model' => Shojaei_SEO_AI_Client::VISION_MODEL ),
+			'related_keywords' => array( 'max_tokens' => 400, 'timeout' => 45, 'temperature' => 0.2, 'response_mime' => 'application/json' ),
+			'alt_texts'        => array( 'max_tokens' => 120, 'timeout' => 45, 'temperature' => 0.2 ),
 		);
-		$opts = $map[ $kind ] ?? array( 'max_tokens' => 768, 'timeout' => 45 );
-		return Shojaei_SEO_AI_Client::adjust_opts_for_provider( $opts );
+		return $map[ $kind ] ?? array( 'max_tokens' => 256, 'timeout' => 45 );
 	}
 
 	/**
@@ -859,6 +830,15 @@ class Shojaei_SEO_AI_Engine {
 		$meta_s  = class_exists( 'Shojaei_SEO_Store_Profile' ) ? Shojaei_SEO_Store_Profile::expand_meta_suffix( $title ) : '';
 
 		switch ( $kind ) {
+			case 'related_keywords':
+				return $store . sprintf(
+					"برای محصول فروشگاهی فارسی، ۴ تا ۸ کلمه یا عبارت مرتبط (LSI) پیشنهاد بده — نه کلمه کلیدی اصلی.\nعنوان: %s\nکلمه کلیدی اصلی (فقط برای زمینه): %s\nدسته: %s\nویژگی‌ها: %s\nاطلاعات: %s\n\nقوانین:\n- فقط عبارات فارسی فروشگاهی\n- بدون تکرار کلمه کلیدی اصلی\n- کوتاه (۱–۳ کلمه هر عبارت)\n- با ویرگول فارسی جدا می‌شوند\n\nفقط JSON:\n{\"related\":[\"...\",\"...\"]}",
+					$title,
+					$keyword,
+					$cats,
+					$attrs,
+					$extra_t
+				);
 			case 'keywords':
 				return $store . sprintf(
 					"عنوان محصول: %s\nدسته‌بندی: %s\nویژگی‌ها: %s\nاطلاعات: %s\n۵ کلمه کلیدی فارسی فروشگاهی پیشنهاد بده (یک اصلی و ۴ فرعی). فقط JSON:\n{\"primary\":\"...\",\"secondary\":[\"...\",\"...\",\"...\",\"...\"]}",
@@ -986,6 +966,30 @@ class Shojaei_SEO_AI_Engine {
 	 */
 	private static function shape_result( string $kind, string $raw, array $ctx ) {
 		switch ( $kind ) {
+			case 'related_keywords':
+				$json = Shojaei_SEO_AI_Client::extract_json( $raw );
+				$list = array();
+				if ( ! empty( $json['related'] ) && is_array( $json['related'] ) ) {
+					$list = $json['related'];
+				} elseif ( ! empty( $json['secondary'] ) && is_array( $json['secondary'] ) ) {
+					$list = $json['secondary'];
+				}
+				$related = '';
+				if ( $list && class_exists( 'Damavand_Content_Analyzer' ) ) {
+					$related = Damavand_Content_Analyzer::normalize_related_input( implode( ', ', array_map( 'strval', $list ) ) );
+				} elseif ( $list ) {
+					$related = implode( '، ', array_map( 'sanitize_text_field', $list ) );
+				}
+				if ( '' !== $related && ! empty( $ctx['post_id'] ) ) {
+					$meta_key = class_exists( 'Damavand_Content_Analyzer' )
+						? Damavand_Content_Analyzer::META_RELATED
+						: '_damavand_seo_related_keywords';
+					update_post_meta( (int) $ctx['post_id'], $meta_key, $related );
+				}
+				return array(
+					'related' => $related,
+					'raw'     => '' === $related ? trim( $raw ) : '',
+				);
 			case 'keywords':
 				$json = Shojaei_SEO_AI_Client::extract_json( $raw );
 				return ! empty( $json['primary'] ) ? $json : array( 'raw' => trim( $raw ) );
@@ -1058,26 +1062,16 @@ class Shojaei_SEO_AI_Engine {
 			$hint = self::attachment_hint( $id );
 
 			$prompt = sprintf(
-				"تصویر محصول فروشگاه ایرانی را ببین.\nیک alt فارسی منحصربه‌فرد بنویس (۶–۱۴ کلمه، سئو، بدون گیومه).\nعنوان محصول: %s\nکلمه کلیدی: %s\nنقش این تصویر: %s\n%s\n\nفقط متن alt — برای هر تصویر متفاوت باشد.",
+				"Alt فارسی سئو برای تصویر %d از %d محصول فروشگاه ایرانی.\nعنوان: %s\nکلمه کلیدی: %s\nنقش: %s\n%s\n\n۶–۱۴ کلمه، بدون گیومه، منحصربه‌فرد. فقط متن alt.",
+				$index + 1,
+				$total,
 				(string) ( $ctx['title'] ?? '' ),
 				(string) ( $ctx['keyword'] ?? '' ),
 				$role,
 				$hint
 			);
 
-			$alt = Shojaei_SEO_AI_Client::chat_with_image( $prompt, $id, $opts );
-			if ( is_wp_error( $alt ) ) {
-				$fallback = sprintf(
-					"Alt فارسی سئو برای تصویر %d از %d محصول.\nعنوان: %s\nکلمه کلیدی: %s\nنقش: %s\n%s\nحداکثر ۱۲۵ کاراکتر. فقط alt منحصربه‌فرد.",
-					$index + 1,
-					$total,
-					(string) ( $ctx['title'] ?? '' ),
-					(string) ( $ctx['keyword'] ?? '' ),
-					$role,
-					$hint
-				);
-				$alt = Shojaei_SEO_AI_Client::chat( $fallback, $opts );
-			}
+			$alt = Shojaei_SEO_AI_Client::chat( $prompt, $opts );
 
 			if ( is_wp_error( $alt ) ) {
 				$results[ $id ] = array( 'error' => $alt->get_error_message() );

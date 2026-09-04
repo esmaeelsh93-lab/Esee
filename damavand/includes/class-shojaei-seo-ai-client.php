@@ -1,6 +1,6 @@
 <?php
 /**
- * Cloud AI client — OpenRouter (relay) / Gemini (direct).
+ * Cloud AI client — OpenRouter (free models) for Alt + related keywords.
  *
  * @package Shojaei_SEO_For_Woo
  */
@@ -33,7 +33,7 @@ class Shojaei_SEO_AI_Client {
 	public const GROQ_DIRECT_CHAT = 'https://api.groq.com/openai/v1/chat/completions';
 
 	public const GROQ_DEFAULT_MODEL = 'llama-3.3-70b-versatile';
-	public const OR_DEFAULT_MODEL   = 'meta-llama/llama-3.3-70b-instruct';
+	public const OR_DEFAULT_MODEL   = 'meta-llama/llama-3.3-70b-instruct:free';
 	public const GEMINI_DEFAULT_MODEL = 'gemini-3.6-flash';
 	public const VISION_MODEL       = 'google/gemini-2.5-flash';
 
@@ -61,33 +61,25 @@ class Shojaei_SEO_AI_Client {
 	public static function active_providers(): array {
 		return array(
 			self::PROVIDER_OPENROUTER,
-			self::PROVIDER_GEMINI,
 		);
 	}
 
 	/**
-	 * Normalize stored provider (Groq legacy → OpenRouter).
+	 * Normalize stored provider (legacy groq/gemini → OpenRouter).
 	 *
 	 * @param string $provider Raw provider id.
-	 * @return string openrouter|gemini
+	 * @return string openrouter
 	 */
 	public static function normalize_provider( string $provider ): string {
-		$provider = sanitize_key( $provider );
-		if ( self::PROVIDER_GEMINI === $provider ) {
-			return self::PROVIDER_GEMINI;
-		}
-		if ( self::PROVIDER_GROQ === $provider ) {
-			return self::PROVIDER_OPENROUTER;
-		}
+		unset( $provider );
 		return self::PROVIDER_OPENROUTER;
 	}
 
 	/**
-	 * @return string openrouter|gemini
+	 * @return string openrouter
 	 */
 	public static function provider(): string {
-		$p = sanitize_key( (string) Shojaei_SEO_Helpers::get_option( self::OPT_PROVIDER, self::PROVIDER_OPENROUTER ) );
-		return self::normalize_provider( $p );
+		return self::PROVIDER_OPENROUTER;
 	}
 
 	/**
@@ -232,17 +224,12 @@ class Shojaei_SEO_AI_Client {
 				array( 'id' => 'qwen-2.5-32b', 'label' => 'Qwen 2.5 32B' ),
 			),
 			self::PROVIDER_OPENROUTER => array(
-				array( 'id' => 'meta-llama/llama-3.3-70b-instruct', 'label' => 'Llama 3.3 70B Instruct' ),
-				array( 'id' => 'meta-llama/llama-3.1-8b-instruct', 'label' => 'Llama 3.1 8B Instruct' ),
-				array( 'id' => 'groq/llama-3.3-70b-versatile', 'label' => 'Llama 3.3 — Groq سریع (OpenRouter)' ),
-				array( 'id' => 'qwen/qwen-2.5-7b-instruct', 'label' => 'Qwen 2.5 7B' ),
-				array( 'id' => 'qwen/qwen-2.5-72b-instruct', 'label' => 'Qwen 2.5 72B' ),
+				array( 'id' => 'meta-llama/llama-3.3-70b-instruct:free', 'label' => 'Llama 3.3 70B — رایگان (OpenRouter)' ),
+				array( 'id' => 'meta-llama/llama-3.2-3b-instruct:free', 'label' => 'Llama 3.2 3B — رایگان' ),
+				array( 'id' => 'qwen/qwen-2.5-7b-instruct:free', 'label' => 'Qwen 2.5 7B — رایگان' ),
+				array( 'id' => 'google/gemma-2-9b-it:free', 'label' => 'Gemma 2 9B — رایگان' ),
 			),
-			self::PROVIDER_GEMINI     => array(
-				array( 'id' => 'gemini-3.6-flash', 'label' => 'Gemini 3.6 Flash (پیشنهادی — Free Tier)' ),
-				array( 'id' => 'gemini-3.5-flash-lite', 'label' => 'Gemini 3.5 Flash Lite (سبک‌تر)' ),
-				array( 'id' => 'gemini-3.5-flash', 'label' => 'Gemini 3.5 Flash' ),
-			),
+			self::PROVIDER_GEMINI     => array(),
 		);
 	}
 
@@ -290,66 +277,42 @@ class Shojaei_SEO_AI_Client {
 		$provider = self::normalize_provider( $provider );
 
 		if ( '' === $model || '__custom__' === $model ) {
-			if ( self::PROVIDER_GEMINI === $provider ) {
-				return self::GEMINI_DEFAULT_MODEL;
-			}
-			return self::PROVIDER_OPENROUTER === $provider ? self::OR_DEFAULT_MODEL : self::GROQ_DEFAULT_MODEL;
+			return self::OR_DEFAULT_MODEL;
 		}
 
-		if ( self::PROVIDER_GEMINI === $provider ) {
-			$model = preg_replace( '#^models/#', '', $model );
-			$retired = self::retired_gemini_models();
-			if ( isset( $retired[ $model ] ) ) {
-				return $retired[ $model ];
-			}
-			if ( in_array( $model, self::model_ids_for_provider( self::PROVIDER_GEMINI ), true ) ) {
-				return $model;
-			}
-			if ( preg_match( '#^gemini-[0-9]+(\.[0-9]+)?(-[a-z0-9-]+)*$#i', $model ) ) {
-				return $model;
-			}
-			return self::GEMINI_DEFAULT_MODEL;
-		}
-
-		$cross = array(
-			'llama-3.3-70b-versatile'             => 'meta-llama/llama-3.3-70b-instruct',
-			'llama-3.1-8b-instant'                => 'meta-llama/llama-3.1-8b-instruct',
-			'qwen-2.5-32b'                        => 'qwen/qwen-2.5-7b-instruct',
-			'meta-llama/llama-3.3-70b-instruct'   => 'llama-3.3-70b-versatile',
-			'meta-llama/llama-3.1-8b-instruct'    => 'llama-3.1-8b-instant',
-			'qwen/qwen-2.5-32b-instruct'          => 'qwen/qwen-2.5-7b-instruct',
-			'qwen/qwen3-32b'                      => 'qwen/qwen-2.5-7b-instruct',
-			'qwen/qwen-2.5-7b-instruct'           => 'qwen-2.5-32b',
-			'qwen/qwen-2.5-72b-instruct'          => 'qwen-2.5-32b',
-			'groq/llama-3.3-70b-versatile'        => 'llama-3.3-70b-versatile',
+		$legacy = array(
+			'llama-3.3-70b-versatile'           => self::OR_DEFAULT_MODEL,
+			'llama-3.1-8b-instant'              => 'meta-llama/llama-3.2-3b-instruct:free',
+			'qwen-2.5-32b'                      => 'qwen/qwen-2.5-7b-instruct:free',
+			'meta-llama/llama-3.3-70b-instruct' => self::OR_DEFAULT_MODEL,
+			'meta-llama/llama-3.1-8b-instruct'  => 'meta-llama/llama-3.2-3b-instruct:free',
+			'qwen/qwen-2.5-32b-instruct'        => 'qwen/qwen-2.5-7b-instruct:free',
+			'qwen/qwen3-32b'                    => 'qwen/qwen-2.5-7b-instruct:free',
+			'qwen/qwen-2.5-7b-instruct'         => 'qwen/qwen-2.5-7b-instruct:free',
+			'qwen/qwen-2.5-72b-instruct'        => self::OR_DEFAULT_MODEL,
+			'groq/llama-3.3-70b-versatile'      => self::OR_DEFAULT_MODEL,
 		);
 
-		if ( self::PROVIDER_OPENROUTER === $provider && str_contains( $model, '/' ) ) {
-			return $model;
+		if ( isset( $legacy[ $model ] ) ) {
+			return $legacy[ $model ];
 		}
 
-		if ( in_array( $model, self::model_ids_for_provider( $provider ), true ) ) {
-			return $model;
+		if ( preg_match( '#^gemini-#i', $model ) || preg_match( '#^models/gemini-#i', $model ) ) {
+			return self::OR_DEFAULT_MODEL;
 		}
 
-		if ( self::PROVIDER_OPENROUTER === $provider ) {
-			if ( isset( $cross[ $model ] ) && str_contains( $cross[ $model ], '/' ) ) {
-				return $cross[ $model ];
+		if ( str_contains( $model, '/' ) ) {
+			if ( str_ends_with( $model, ':free' ) ) {
+				return $model;
 			}
-			if ( false === strpos( $model, '/' ) ) {
-				return self::OR_DEFAULT_MODEL;
+			$with_free = $model . ':free';
+			if ( in_array( $with_free, self::model_ids_for_provider( self::PROVIDER_OPENROUTER ), true ) ) {
+				return $with_free;
 			}
 			return self::OR_DEFAULT_MODEL;
 		}
 
-		if ( isset( $cross[ $model ] ) && false === strpos( $cross[ $model ], '/' ) ) {
-			return $cross[ $model ];
-		}
-		if ( str_contains( $model, '/' ) ) {
-			return self::GROQ_DEFAULT_MODEL;
-		}
-
-		return self::GROQ_DEFAULT_MODEL;
+		return self::OR_DEFAULT_MODEL;
 	}
 
 	/**
@@ -382,18 +345,8 @@ class Shojaei_SEO_AI_Client {
 	 * Route by configured provider and optional API key prefix (sk-or- / gsk_).
 	 */
 	public static function route_from_api_key( string $api_key = '' ): string {
-		$configured = self::provider();
-		if ( self::PROVIDER_GEMINI === $configured ) {
-			return self::PROVIDER_GEMINI;
-		}
-		$key = '' !== $api_key ? trim( $api_key ) : self::api_key();
-		if ( str_starts_with( $key, 'sk-or-' ) ) {
-			return self::PROVIDER_OPENROUTER;
-		}
-		if ( str_starts_with( $key, 'gsk_' ) ) {
-			return self::PROVIDER_GROQ;
-		}
-		return $configured;
+		unset( $api_key );
+		return self::PROVIDER_OPENROUTER;
 	}
 
 	/**
@@ -432,7 +385,7 @@ class Shojaei_SEO_AI_Client {
 		}
 		$key = self::api_key();
 		if ( '' === $key ) {
-			return new WP_Error( 'ai_no_key', __( 'کلید API وارد نشده. از تنظیمات سئو دماوند کلید OpenRouter یا Gemini را ذخیره کنید.', 'shojaei-seo-for-woo' ) );
+			return new WP_Error( 'ai_no_key', __( 'کلید API وارد نشده. از تنظیمات سئو دماوند کلید OpenRouter را ذخیره کنید.', 'shojaei-seo-for-woo' ) );
 		}
 
 		$system = isset( $opts['system'] ) ? (string) $opts['system'] : self::default_system_prompt();

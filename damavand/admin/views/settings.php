@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
 		<p class="shojaei-desc"><?php esc_html_e( 'هر بخش را باز کنید، سوئیچ‌ها را تنظیم کنید، پایین صفحه ذخیره کنید.', 'shojaei-seo-for-woo' ); ?></p>
 		<p class="shojaei-settings-jump" style="margin-top:8px;">
 			<a href="#shojaei-content-server"><strong><?php esc_html_e( 'سرور تولید محتوا', 'shojaei-seo-for-woo' ); ?></strong></a>
-			<?php esc_html_e( ' — Groq/OpenRouter و llms.txt', 'shojaei-seo-for-woo' ); ?>
+			<?php esc_html_e( ' — OpenRouter (Alt + کلمات مرتبط)', 'shojaei-seo-for-woo' ); ?>
 		</p>
 	</div>
 
@@ -199,7 +199,7 @@ defined( 'ABSPATH' ) || exit;
 			</button>
 			<div class="shojaei-accordion-body">
 				<div class="shojaei-accordion-content">
-					<p class="shojaei-module-note"><?php esc_html_e( 'تولید محتوای سئو با Groq یا OpenRouter — کلید API خودتان.', 'shojaei-seo-for-woo' ); ?></p>
+					<p class="shojaei-module-note"><?php esc_html_e( 'Alt تصاویر و کلمات مرتبط با OpenRouter (مدل‌های رایگان).', 'shojaei-seo-for-woo' ); ?></p>
 					<p class="shojaei-settings-jump">
 						<a href="#shojaei-content-server"><?php esc_html_e( 'تنظیم Provider، کلید API، تست اتصال و llms.txt ↓', 'shojaei-seo-for-woo' ); ?></a>
 					</p>
@@ -937,7 +937,7 @@ defined( 'ABSPATH' ) || exit;
 		</div>
 
 		<p class="shojaei-settings-jump" style="margin-top:12px;">
-			<a href="#shojaei-content-server"><?php esc_html_e( 'تولید محتوا (Groq/OpenRouter) ↓', 'shojaei-seo-for-woo' ); ?></a>
+			<a href="#shojaei-content-server"><?php esc_html_e( 'هوش مصنوعی (OpenRouter) ↓', 'shojaei-seo-for-woo' ); ?></a>
 		</p>
 
 		<div id="shojaei-uninstall-policy" class="shojaei-uninstall-policy" style="margin-top:18px;padding:14px;border:1px solid #dcdcde;border-radius:8px;background:#fff;">

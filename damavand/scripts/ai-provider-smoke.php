@@ -68,11 +68,6 @@ if ( ! function_exists( 'get_bloginfo' ) ) {
 		return 'Test Shop';
 	}
 }
-if ( ! function_exists( 'wp_strip_all_tags' ) ) {
-	function wp_strip_all_tags( $str ) { // phpcs:ignore
-		return strip_tags( (string) $str );
-	}
-}
 
 $smoke_options = array(
 	'shojaei_seo_ai_provider' => 'gemini',
@@ -92,50 +87,43 @@ function assert_eq( string $label, $expected, $actual ): void {
 }
 
 assert_eq( 'normalize groq → openrouter', 'openrouter', Shojaei_SEO_AI_Client::normalize_provider( 'groq' ) );
-assert_eq( 'normalize gemini', 'gemini', Shojaei_SEO_AI_Client::normalize_provider( 'gemini' ) );
-assert_eq( 'provider() reads gemini', 'gemini', Shojaei_SEO_AI_Client::provider() );
+assert_eq( 'normalize gemini → openrouter', 'openrouter', Shojaei_SEO_AI_Client::normalize_provider( 'gemini' ) );
+assert_eq( 'provider() always openrouter', 'openrouter', Shojaei_SEO_AI_Client::provider() );
 assert_eq(
-	'map openrouter model on gemini → default flash',
-	'gemini-3.6-flash',
-	Shojaei_SEO_AI_Client::map_model_to_provider( 'meta-llama/llama-3.3-70b-instruct', 'gemini' )
-);
-assert_eq(
-	'retire gemini-2.0-flash',
-	'gemini-3.6-flash',
-	Shojaei_SEO_AI_Client::map_model_to_provider( 'gemini-2.0-flash', 'gemini' )
-);
-assert_eq(
-	'gemini endpoint',
-	'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent',
-	Shojaei_SEO_AI_Client::gemini_endpoint( 'gemini-3.6-flash' )
-);
-assert_eq(
-	'route gemini when configured',
-	'gemini',
-	Shojaei_SEO_AI_Client::route_from_api_key( 'any-auth-key-without-prefix' )
-);
-assert_eq( 'gemini 3.x thinking detect', true, Shojaei_SEO_AI_Client::is_gemini_thinking_model( 'gemini-3.6-flash' ) );
-assert_eq(
-	'gemini opts floor tokens',
-	768,
-	Shojaei_SEO_AI_Client::adjust_opts_for_provider( array( 'max_tokens' => 350 ), 'gemini-3.6-flash' )['max_tokens']
-);
-
-$smoke_options['shojaei_seo_ai_provider'] = 'openrouter';
-assert_eq(
-	'route sk-or when openrouter configured',
-	'openrouter',
-	Shojaei_SEO_AI_Client::route_from_api_key( 'sk-or-test-key' )
-);
-assert_eq(
-	'openrouter model unchanged',
-	'meta-llama/llama-3.3-70b-instruct',
+	'map paid openrouter model → free default',
+	'meta-llama/llama-3.3-70b-instruct:free',
 	Shojaei_SEO_AI_Client::map_model_to_provider( 'meta-llama/llama-3.3-70b-instruct', 'openrouter' )
+);
+assert_eq(
+	'map gemini model → free default',
+	'meta-llama/llama-3.3-70b-instruct:free',
+	Shojaei_SEO_AI_Client::map_model_to_provider( 'gemini-3.6-flash', 'openrouter' )
+);
+assert_eq(
+	'map groq legacy id → free default',
+	'meta-llama/llama-3.3-70b-instruct:free',
+	Shojaei_SEO_AI_Client::map_model_to_provider( 'llama-3.3-70b-versatile', 'openrouter' )
+);
+assert_eq(
+	'route always openrouter',
+	'openrouter',
+	Shojaei_SEO_AI_Client::route_from_api_key( 'any-key' )
+);
+assert_eq(
+	'free model unchanged',
+	'qwen/qwen-2.5-7b-instruct:free',
+	Shojaei_SEO_AI_Client::map_model_to_provider( 'qwen/qwen-2.5-7b-instruct:free', 'openrouter' )
 );
 
 $presets = Shojaei_SEO_AI_Client::model_presets();
-assert_eq( 'gemini presets exist', true, isset( $presets['gemini'] ) && count( $presets['gemini'] ) >= 3 );
-assert_eq( 'active providers', array( 'openrouter', 'gemini' ), Shojaei_SEO_AI_Client::active_providers() );
+assert_eq( 'openrouter presets are free', true, isset( $presets['openrouter'] ) && count( $presets['openrouter'] ) >= 3 );
+foreach ( $presets['openrouter'] as $row ) {
+	if ( ! str_ends_with( $row['id'], ':free' ) ) {
+		++$failures;
+		fwrite( STDERR, "FAIL: preset not free: {$row['id']}\n" );
+	}
+}
+assert_eq( 'active providers', array( 'openrouter' ), Shojaei_SEO_AI_Client::active_providers() );
 
 if ( $failures > 0 ) {
 	fwrite( STDERR, "\n{$failures} assertion(s) failed.\n" );

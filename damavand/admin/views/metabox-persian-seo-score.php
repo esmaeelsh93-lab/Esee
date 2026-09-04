@@ -75,36 +75,16 @@ $focus_display = $focus !== '' ? $focus : (string) $post->post_title;
 			<?php if ( 'product' === $post->post_type && class_exists( 'Shojaei_SEO_AI_Client' ) && Shojaei_SEO_AI_Client::is_enabled() ) : ?>
 			<div class="dm-score__panel" data-dm-panel="ai" hidden>
 				<div class="dm-score__ollama" id="dm-ollama-panel">
-					<p class="description"><?php esc_html_e( 'تولید ساخت‌یافته: طرح → مقاله → FAQ. ضدتکرار فعال است. کلمه کلیدی پیش‌فرض = عنوان محصول.', 'shojaei-seo-for-woo' ); ?></p>
+					<p class="description"><?php esc_html_e( 'هوش مصنوعی فقط برای Alt تصاویر و کلمات مرتبط — OpenRouter با مدل‌های رایگان.', 'shojaei-seo-for-woo' ); ?></p>
 					<label class="dm-score__field">
-						<span><?php esc_html_e( 'اطلاعات تکمیلی محصول (برای تنوع متن)', 'shojaei-seo-for-woo' ); ?></span>
-						<textarea id="dm-ollama-extra" rows="3" placeholder="<?php esc_attr_e( 'جنس، برند، کاربرد، تفاوت با مدل‌های مشابه، نکات فروش، راهنمای سایز…', 'shojaei-seo-for-woo' ); ?>"></textarea>
+						<span><?php esc_html_e( 'اطلاعات تکمیلی محصول (اختیاری)', 'shojaei-seo-for-woo' ); ?></span>
+						<textarea id="dm-ollama-extra" rows="3" placeholder="<?php esc_attr_e( 'جنس، برند، کاربرد، رنگ، سایز…', 'shojaei-seo-for-woo' ); ?>"></textarea>
 					</label>
 					<p class="dm-score__ollama-actions">
-						<button type="button" class="button button-primary" id="dm-auto-seo-run"><?php esc_html_e( 'سئو خودکار محصول', 'shojaei-seo-for-woo' ); ?></button>
-						<button type="button" class="button" data-ai="keywords"><?php esc_html_e( 'کلمه کلیدی', 'shojaei-seo-for-woo' ); ?></button>
-						<button type="button" class="button" data-ai="meta_titles"><?php esc_html_e( 'عنوان‌ها', 'shojaei-seo-for-woo' ); ?></button>
-						<button type="button" class="button" data-ai="meta_desc"><?php esc_html_e( 'توضیح متا', 'shojaei-seo-for-woo' ); ?></button>
-						<button type="button" class="button" data-ai="short_desc"><?php esc_html_e( 'توضیح کوتاه', 'shojaei-seo-for-woo' ); ?></button>
-						<button type="button" class="button" data-ai="long_desc"><?php esc_html_e( 'توضیح کامل', 'shojaei-seo-for-woo' ); ?></button>
-						<button type="button" class="button" data-ai="faq"><?php esc_html_e( 'FAQ', 'shojaei-seo-for-woo' ); ?></button>
-						<button type="button" class="button" data-ai="alt_texts"><?php esc_html_e( 'Alt', 'shojaei-seo-for-woo' ); ?></button>
-						<button type="button" class="button" data-ai="slug"><?php esc_html_e( 'نامک', 'shojaei-seo-for-woo' ); ?></button>
-						<button type="button" class="button button-primary" data-ai="full_pack"><?php esc_html_e( 'بسته کامل', 'shojaei-seo-for-woo' ); ?></button>
+						<button type="button" class="button button-primary" data-ai="related_keywords"><?php esc_html_e( 'کلمات مرتبط', 'shojaei-seo-for-woo' ); ?></button>
+						<button type="button" class="button" data-ai="alt_texts"><?php esc_html_e( 'Alt تصاویر', 'shojaei-seo-for-woo' ); ?></button>
 					</p>
-					<div id="dm-auto-seo-progress" class="dm-score__auto-seo" hidden>
-						<div class="dm-score__auto-seo-bar" aria-hidden="true"><span id="dm-auto-seo-bar-fill"></span></div>
-						<p class="description" id="dm-auto-seo-step"></p>
-						<ul id="dm-auto-seo-checklist" class="dm-score__auto-checklist"></ul>
-					</div>
-					<div id="dm-ollama-titles" class="dm-score__ollama-titles" hidden></div>
-					<pre id="dm-ollama-schema-pre" class="dm-score__schema-pre" dir="ltr" hidden></pre>
 					<p class="description" id="dm-ollama-status" aria-live="polite"></p>
-				</div>
-				<div class="dm-score__ai-draft" id="dm-ai-draft-panel" hidden>
-					<p class="description" id="dm-ai-draft-msg"></p>
-					<button type="button" class="button button-primary" id="dm-ai-draft-apply"><?php esc_html_e( 'اعمال پیش‌نویس', 'shojaei-seo-for-woo' ); ?></button>
-					<button type="button" class="button" id="dm-ai-draft-discard"><?php esc_html_e( 'رد پیش‌نویس', 'shojaei-seo-for-woo' ); ?></button>
 				</div>
 			</div>
 			<?php endif; ?>
