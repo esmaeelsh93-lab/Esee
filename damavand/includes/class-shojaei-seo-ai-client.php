@@ -714,42 +714,6 @@ class Shojaei_SEO_AI_Client {
 	}
 
 	/**
-	 * @param string $raw_sizes Raw size lines.
-	 */
-	public static function build_size_table_html( string $raw_sizes ): string {
-		$raw_sizes = trim( $raw_sizes );
-		if ( '' === $raw_sizes ) {
-			return '';
-		}
-		$lines = array_filter( array_map( 'trim', preg_split( '/\r\n|\r|\n/', $raw_sizes ) ) );
-		if ( empty( $lines ) ) {
-			return '';
-		}
-		$rows = '';
-		foreach ( $lines as $i => $line ) {
-			if ( str_contains( $line, "\t" ) ) {
-				$cells = array_map( 'esc_html', explode( "\t", $line ) );
-				if ( 0 === $i ) {
-					$rows .= '<tr>' . implode( '', array_map( static fn( $c ) => '<th>' . $c . '</th>', $cells ) ) . '</tr>';
-				} else {
-					$rows .= '<tr>' . implode( '', array_map( static fn( $c ) => '<td>' . $c . '</td>', $cells ) ) . '</tr>';
-				}
-				continue;
-			}
-			if ( str_contains( $line, '|' ) ) {
-				$parts = array_map( 'trim', explode( '|', $line, 2 ) );
-				$rows .= '<tr><td>' . esc_html( $parts[0] ) . '</td><td>' . esc_html( $parts[1] ?? '' ) . '</td></tr>';
-			} else {
-				$rows .= '<tr><td colspan="2">' . esc_html( $line ) . '</td></tr>';
-			}
-		}
-		if ( '' === $rows ) {
-			return '';
-		}
-		return '<div class="damavand-size-table" style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;text-align:center"><tbody>' . $rows . '</tbody></table></div>';
-	}
-
-	/**
 	 * System prompt for Persian SEO.
 	 */
 	public static function default_system_prompt(): string {

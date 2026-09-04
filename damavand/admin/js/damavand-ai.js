@@ -19,14 +19,12 @@
 		if (!keyword) {
 			keyword = title;
 		}
-		var sizes = ($('#dm-ollama-sizes').val() || '').toString();
 		return {
 			nonce: damavandAI.nonce,
 			post_id: postId(),
 			title: title,
 			keyword: keyword,
-			extra: ($('#dm-ollama-extra').val() || '').toString(),
-			sizes: sizes
+			extra: ($('#dm-ollama-extra').val() || '').toString()
 		};
 	}
 

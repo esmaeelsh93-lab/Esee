@@ -78,12 +78,7 @@ $focus_display = $focus !== '' ? $focus : (string) $post->post_title;
 					<p class="description"><?php esc_html_e( 'تولید ساخت‌یافته: طرح → مقاله → FAQ. ضدتکرار فعال است. کلمه کلیدی پیش‌فرض = عنوان محصول.', 'shojaei-seo-for-woo' ); ?></p>
 					<label class="dm-score__field">
 						<span><?php esc_html_e( 'اطلاعات تکمیلی محصول (برای تنوع متن)', 'shojaei-seo-for-woo' ); ?></span>
-						<textarea id="dm-ollama-extra" rows="3" placeholder="<?php esc_attr_e( 'جنس، برند، کاربرد، تفاوت با مدل‌های مشابه، نکات فروش…', 'shojaei-seo-for-woo' ); ?>"></textarea>
-					</label>
-					<label class="dm-score__field">
-						<span><?php esc_html_e( 'سایزبندی (فقط برای تولید متن AI — ذخیره نمی‌شود)', 'shojaei-seo-for-woo' ); ?></span>
-						<textarea id="dm-ollama-sizes" rows="3" placeholder="<?php echo esc_attr( "سایز\tقد\tدور سینه\nM\t170\t96" ); ?>"></textarea>
-						<em class="dm-score__meta"><?php esc_html_e( 'اختیاری؛ اگر پر شود فقط به پرامپت AI می‌رود تا توضیح محصول دقیق‌تر شود.', 'shojaei-seo-for-woo' ); ?></em>
+						<textarea id="dm-ollama-extra" rows="3" placeholder="<?php esc_attr_e( 'جنس، برند، کاربرد، تفاوت با مدل‌های مشابه، نکات فروش، راهنمای سایز…', 'shojaei-seo-for-woo' ); ?>"></textarea>
 					</label>
 					<p class="dm-score__ollama-actions">
 						<button type="button" class="button button-primary" id="dm-auto-seo-run"><?php esc_html_e( 'سئو خودکار محصول', 'shojaei-seo-for-woo' ); ?></button>

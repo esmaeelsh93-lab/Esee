@@ -1216,14 +1216,12 @@ class Shojaei_SEO_AI_Engine {
 		$title   = isset( $_POST['title'] ) ? sanitize_text_field( wp_unslash( $_POST['title'] ) ) : ''; // phpcs:ignore
 		$keyword = isset( $_POST['keyword'] ) ? sanitize_text_field( wp_unslash( $_POST['keyword'] ) ) : ''; // phpcs:ignore
 		$extra   = isset( $_POST['extra'] ) ? sanitize_textarea_field( wp_unslash( $_POST['extra'] ) ) : ''; // phpcs:ignore
-		$sizes   = isset( $_POST['sizes'] ) ? sanitize_textarea_field( wp_unslash( $_POST['sizes'] ) ) : ''; // phpcs:ignore
 
 		$ctx = array(
 			'post_id'    => $post_id,
 			'title'      => $title,
 			'keyword'    => $keyword,
 			'extra'      => $extra,
-			'sizes'      => $sizes,
 			'categories' => '',
 			'attributes' => '',
 			'image_ids'  => array(),
@@ -1313,7 +1311,6 @@ class Shojaei_SEO_AI_Engine {
 			'attributes' => implode( '؛ ', $attrs ),
 			'image_ids'  => $image_ids,
 			'extra'      => '',
-			'sizes'      => '',
 		);
 	}
 
