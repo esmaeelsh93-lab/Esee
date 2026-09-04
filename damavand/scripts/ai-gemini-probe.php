@@ -20,7 +20,7 @@ if ( ! function_exists( 'curl_init' ) ) {
 	exit( 0 );
 }
 
-$url  = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+$url  = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent';
 $body = wp_json_encode(
 	array(
 		'contents' => array(

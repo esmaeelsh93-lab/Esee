@@ -4,7 +4,7 @@ Tags: seo, woocommerce, redirect, inventory, out-of-stock, internal-links
 Requires at least: 6.0
 Tested up to: 6.7
 Requires PHP: 8.0
-Stable tag: 1.59.0
+Stable tag: 1.59.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -65,6 +65,10 @@ Inventory-aware SEO — تصمیم‌گیری سئو بر اساس موجودی 
 با آپلود فایل JSON مربوط به Service Account — بدون OAuth و بدون Refresh Token.
 
 == Changelog ==
+
+= 1.59.1 =
+* Gemini: پیش‌فرض و لیست مدل‌ها به نسل 3.x (gemini-3.6-flash) — رفع 404 مدل‌های منسوخ 2.0/1.5
+* مهاجرت خودکار gemini-2.0-flash و مدل‌های قدیمی هنگام فعال‌سازی/بارگذاری افزونه
 
 = 1.59.0 =
 * Provider Gemini: اتصال مستقیم به Gemini API (Google AI Studio) با Free Tier، مدل‌های قابل انتخاب، تست اتصال و پیام خطای فارسی

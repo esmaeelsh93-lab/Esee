@@ -34,7 +34,7 @@ class Shojaei_SEO_AI_Client {
 
 	public const GROQ_DEFAULT_MODEL = 'llama-3.3-70b-versatile';
 	public const OR_DEFAULT_MODEL   = 'meta-llama/llama-3.3-70b-instruct';
-	public const GEMINI_DEFAULT_MODEL = 'gemini-2.0-flash';
+	public const GEMINI_DEFAULT_MODEL = 'gemini-3.6-flash';
 	public const VISION_MODEL       = 'google/gemini-2.5-flash';
 
 	public const GEMINI_API_BASE = 'https://generativelanguage.googleapis.com/v1beta';
@@ -239,10 +239,9 @@ class Shojaei_SEO_AI_Client {
 				array( 'id' => 'qwen/qwen-2.5-72b-instruct', 'label' => 'Qwen 2.5 72B' ),
 			),
 			self::PROVIDER_GEMINI     => array(
-				array( 'id' => 'gemini-2.0-flash', 'label' => 'Gemini 2.0 Flash (پیشنهادی — Free Tier)' ),
-				array( 'id' => 'gemini-2.0-flash-lite', 'label' => 'Gemini 2.0 Flash Lite' ),
-				array( 'id' => 'gemini-1.5-flash', 'label' => 'Gemini 1.5 Flash' ),
-				array( 'id' => 'gemini-1.5-pro', 'label' => 'Gemini 1.5 Pro' ),
+				array( 'id' => 'gemini-3.6-flash', 'label' => 'Gemini 3.6 Flash (پیشنهادی — Free Tier)' ),
+				array( 'id' => 'gemini-3.5-flash-lite', 'label' => 'Gemini 3.5 Flash Lite (سبک‌تر)' ),
+				array( 'id' => 'gemini-3.5-flash', 'label' => 'Gemini 3.5 Flash' ),
 			),
 		);
 	}
@@ -269,6 +268,21 @@ class Shojaei_SEO_AI_Client {
 	}
 
 	/**
+	 * Retired Gemini model ids → current replacements (Google API, 2026).
+	 *
+	 * @return array<string,string>
+	 */
+	public static function retired_gemini_models(): array {
+		return array(
+			'gemini-2.0-flash'      => 'gemini-3.6-flash',
+			'gemini-2.0-flash-lite' => 'gemini-3.5-flash-lite',
+			'gemini-1.5-flash'      => 'gemini-3.6-flash',
+			'gemini-1.5-pro'        => 'gemini-3.6-flash',
+			'gemini-1.5-flash-8b'   => 'gemini-3.5-flash-lite',
+		);
+	}
+
+	/**
 	 * Map legacy / cross-provider model id to the active provider.
 	 */
 	public static function map_model_to_provider( string $model, string $provider ): string {
@@ -284,10 +298,14 @@ class Shojaei_SEO_AI_Client {
 
 		if ( self::PROVIDER_GEMINI === $provider ) {
 			$model = preg_replace( '#^models/#', '', $model );
+			$retired = self::retired_gemini_models();
+			if ( isset( $retired[ $model ] ) ) {
+				return $retired[ $model ];
+			}
 			if ( in_array( $model, self::model_ids_for_provider( self::PROVIDER_GEMINI ), true ) ) {
 				return $model;
 			}
-			if ( preg_match( '#^gemini-[a-z0-9.-]+$#i', $model ) ) {
+			if ( preg_match( '#^gemini-[0-9]+(\.[0-9]+)?(-[a-z0-9-]+)*$#i', $model ) ) {
 				return $model;
 			}
 			return self::GEMINI_DEFAULT_MODEL;
@@ -1095,6 +1113,16 @@ class Shojaei_SEO_AI_Client {
 				return __( 'سقف Free Tier Gemini پر شده. چند دقیقه صبر کنید یا مدل سبک‌تر (Flash Lite) انتخاب کنید.', 'shojaei-seo-for-woo' );
 			}
 			return __( 'سقف رایگان درخواست پر شده. چند دقیقه صبر کنید یا مدل سبک‌تر انتخاب کنید.', 'shojaei-seo-for-woo' );
+		}
+		if ( 404 === $code && self::PROVIDER_GEMINI === $route ) {
+			if ( preg_match( '/no longer available|deprecated/i', $api ) ) {
+				return sprintf(
+					/* translators: %s: current default model id */
+					__( 'مدل Gemini انتخاب‌شده منسوخ شده. افزونه را به‌روز کنید یا مدل «%s» را انتخاب کنید.', 'shojaei-seo-for-woo' ),
+					self::GEMINI_DEFAULT_MODEL
+				);
+			}
+			return __( 'مدل Gemini پیدا نشد. از لیست مدل‌های افزونه یک مدل جدید انتخاب کنید.', 'shojaei-seo-for-woo' );
 		}
 		if ( self::PROVIDER_GEMINI === $route && 'INVALID_ARGUMENT' === $status ) {
 			return __( 'درخواست Gemini نامعتبر است. مدل انتخاب‌شده یا محتوای درخواست را بررسی کنید.', 'shojaei-seo-for-woo' );

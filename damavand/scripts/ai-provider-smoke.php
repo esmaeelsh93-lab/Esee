@@ -96,13 +96,18 @@ assert_eq( 'normalize gemini', 'gemini', Shojaei_SEO_AI_Client::normalize_provid
 assert_eq( 'provider() reads gemini', 'gemini', Shojaei_SEO_AI_Client::provider() );
 assert_eq(
 	'map openrouter model on gemini → default flash',
-	'gemini-2.0-flash',
+	'gemini-3.6-flash',
 	Shojaei_SEO_AI_Client::map_model_to_provider( 'meta-llama/llama-3.3-70b-instruct', 'gemini' )
 );
 assert_eq(
+	'retire gemini-2.0-flash',
+	'gemini-3.6-flash',
+	Shojaei_SEO_AI_Client::map_model_to_provider( 'gemini-2.0-flash', 'gemini' )
+);
+assert_eq(
 	'gemini endpoint',
-	'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent',
-	Shojaei_SEO_AI_Client::gemini_endpoint( 'gemini-2.0-flash' )
+	'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent',
+	Shojaei_SEO_AI_Client::gemini_endpoint( 'gemini-3.6-flash' )
 );
 assert_eq(
 	'route gemini when configured',

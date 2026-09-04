@@ -20,6 +20,7 @@ class Shojaei_SEO_Activator {
 			self::create_tables();
 			self::set_default_options();
 			self::migrate_ollama_to_ai();
+			self::migrate_gemini_model_ids();
 			self::schedule_cron_events();
 			update_option( 'shojaei_seo_db_version', DAMAVAND_SEO_DB_VERSION );
 
@@ -436,6 +437,7 @@ class Shojaei_SEO_Activator {
 
 		update_option( 'damavand_seo_plugin_version', DAMAVAND_SEO_VERSION, false );
 		self::migrate_ollama_to_ai();
+		self::migrate_gemini_model_ids();
 		if ( class_exists( 'Shojaei_SEO_AI_Client' ) ) {
 			Shojaei_SEO_AI_Client::model();
 		}
@@ -509,6 +511,27 @@ class Shojaei_SEO_Activator {
 					);
 				}
 			}
+		}
+	}
+
+	/**
+	 * Map retired Gemini model ids saved in options (1.59.1+).
+	 */
+	public static function migrate_gemini_model_ids(): void {
+		if ( ! class_exists( 'Shojaei_SEO_AI_Client' ) ) {
+			return;
+		}
+		$provider = sanitize_key( (string) get_option( 'shojaei_seo_ai_provider', '' ) );
+		if ( 'gemini' !== $provider ) {
+			return;
+		}
+		$model = trim( (string) get_option( 'shojaei_seo_ai_model', '' ) );
+		if ( '' === $model ) {
+			return;
+		}
+		$mapped = Shojaei_SEO_AI_Client::map_model_to_provider( $model, 'gemini' );
+		if ( $mapped !== $model ) {
+			update_option( 'shojaei_seo_ai_model', $mapped, false );
 		}
 	}
 
