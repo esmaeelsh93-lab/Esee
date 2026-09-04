@@ -41,6 +41,111 @@
         }
     });
 
+    /**
+     * Settings deep-links (#shojaei-performance, #shojaei-content-server, …):
+     * open the matching <details> and scroll — do NOT leave content-server stealing focus.
+     */
+    function shojaeiOpenSettingsHash() {
+        var hash = window.location.hash || '';
+        if (!hash || hash.indexOf('#shojaei-') !== 0) {
+            return false;
+        }
+        var $target = $(hash);
+        if (!$target.length) {
+            return false;
+        }
+
+        var $details = $target.is('details') ? $target : $target.find('> details.shojaei-details').first();
+        if (!$details.length) {
+            $details = $target.closest('details.shojaei-details');
+        }
+
+        // Close other settings panels so the right one is visible.
+        $('.shojaei-settings-panel > details.shojaei-details').each(function () {
+            if ($details.length && this === $details[0]) {
+                return;
+            }
+            this.open = false;
+        });
+
+        if ($details.length) {
+            $details.prop('open', true);
+            if ($details[0]) {
+                $details[0].open = true;
+            }
+        }
+
+        // Accordion jump targets (e.g. #shojaei-acc-content-server).
+        if ($target.hasClass('shojaei-accordion-item')) {
+            var $root = $target.closest('.shojaei-accordion');
+            $root.find('> .shojaei-accordion-item').removeClass('is-open');
+            $root.find('> .shojaei-accordion-item > .shojaei-accordion-body').hide();
+            $root.find('> .shojaei-accordion-item > .shojaei-accordion-header').attr('aria-expanded', 'false');
+            $target.addClass('is-open');
+            $target.children('.shojaei-accordion-body').show();
+            $target.children('.shojaei-accordion-header').attr('aria-expanded', 'true');
+        }
+
+        window.setTimeout(function () {
+            if ($target[0] && $target[0].scrollIntoView) {
+                $target[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }, 50);
+        return true;
+    }
+
+    $(function () {
+        shojaeiOpenSettingsHash();
+    });
+    $(window).on('hashchange', function () {
+        shojaeiOpenSettingsHash();
+    });
+
+    function shojaeiJobsQueueOp(op, extra) {
+        var $st = $('#shojaei-jobs-actions-status');
+        var payload = $.extend({
+            action: 'shojaei_seo_jobs_queue',
+            nonce: shojaeiSeoAdmin.nonce,
+            jobs_op: op
+        }, extra || {});
+        $st.text('...');
+        return $.post(shojaeiSeoAdmin.ajaxUrl, payload).done(function (res) {
+            if (res && res.success) {
+                $st.text((res.data && res.data.message) || (shojaeiSeoAdmin.i18n.success || 'OK'));
+                if (op === 'ack_errors') {
+                    $('#shojaei-jobs-failed-banner, #shojaei-jobs-failed-table').slideUp(150);
+                    $('#shojaei-jobs-ack-errors').prop('disabled', true);
+                }
+            } else {
+                $st.text((res && res.data && res.data.message) || (shojaeiSeoAdmin.i18n.error || 'Error'));
+            }
+        }).fail(function () {
+            $st.text(shojaeiSeoAdmin.i18n.error || 'Error');
+        });
+    }
+
+    $(document).on('click', '#shojaei-jobs-run-tick', function () {
+        var $btn = $(this).prop('disabled', true);
+        shojaeiJobsQueueOp('run_tick').always(function () {
+            $btn.prop('disabled', false);
+        });
+    });
+    $(document).on('click', '#shojaei-jobs-cancel-stale', function () {
+        var $btn = $(this).prop('disabled', true);
+        shojaeiJobsQueueOp('cancel_stale').always(function () {
+            $btn.prop('disabled', false);
+        });
+    });
+    $(document).on('click', '#shojaei-jobs-ack-errors', function () {
+        if (!window.confirm('هشدار داشبورد برای جاب‌های ناموفق پاک شود؟ (صف فعال دست نمی‌خورد)')) {
+            return;
+        }
+        var $btn = $(this).prop('disabled', true);
+        shojaeiJobsQueueOp('ack_errors', { delete_failed: 0 }).always(function () {
+            $btn.prop('disabled', false);
+        });
+    });
+
     /* Select all */
     $('#shojaei-select-all').on('change', function () {
         $('.shojaei-product-check').prop('checked', $(this).is(':checked'));

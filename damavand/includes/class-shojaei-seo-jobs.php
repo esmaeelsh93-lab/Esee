@@ -292,6 +292,106 @@ class Shojaei_SEO_Jobs {
 	}
 
 	/**
+	 * Option key: admin acknowledged job errors up to this UTC datetime.
+	 */
+	public const ERRORS_ACK_OPTION = 'shojaei_seo_job_errors_acked_at';
+
+	/**
+	 * Count failed jobs since ack (default: last 7 days, excluding dismissed).
+	 */
+	public static function count_failed_unacked( int $within_seconds = WEEK_IN_SECONDS ): int {
+		global $wpdb;
+		$table = self::table();
+		$since = gmdate( 'Y-m-d H:i:s', time() - max( HOUR_IN_SECONDS, $within_seconds ) );
+		$acked = (string) get_option( self::ERRORS_ACK_OPTION, '' );
+		if ( $acked !== '' && $acked > $since ) {
+			$since = $acked;
+		}
+		return (int) $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$table} WHERE status = %s AND updated_at > %s",
+				self::STATUS_FAILED,
+				$since
+			)
+		);
+	}
+
+	/**
+	 * List recent failed jobs (for settings UI).
+	 *
+	 * @param int $limit Limit.
+	 * @return array<int,array>
+	 */
+	public static function list_failed( int $limit = 10 ): array {
+		global $wpdb;
+		$limit = max( 1, min( 50, $limit ) );
+		$table = self::table();
+		$since = gmdate( 'Y-m-d H:i:s', time() - WEEK_IN_SECONDS );
+		$rows  = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT * FROM {$table} WHERE status = %s AND updated_at >= %s ORDER BY updated_at DESC LIMIT %d",
+				self::STATUS_FAILED,
+				$since,
+				$limit
+			),
+			ARRAY_A
+		);
+		if ( ! $rows ) {
+			return array();
+		}
+		return array_map( array( __CLASS__, 'row_to_job' ), $rows );
+	}
+
+	/**
+	 * Acknowledge / clear dashboard warning for failed jobs (does not delete history unless $delete).
+	 *
+	 * @param bool $delete Also delete failed rows from the jobs table.
+	 * @return array{acked_at:string,deleted:int}
+	 */
+	public static function acknowledge_failed_errors( bool $delete = false ): array {
+		$acked = gmdate( 'Y-m-d H:i:s' );
+		update_option( self::ERRORS_ACK_OPTION, $acked, false );
+		$deleted = 0;
+		if ( $delete ) {
+			global $wpdb;
+			$table   = self::table();
+			$deleted = (int) $wpdb->query(
+				$wpdb->prepare(
+					"DELETE FROM {$table} WHERE status = %s",
+					self::STATUS_FAILED
+				)
+			);
+		}
+		return array(
+			'acked_at' => $acked,
+			'deleted'  => $deleted,
+		);
+	}
+
+	/**
+	 * Cancel stale running jobs (lock older than reclaim window).
+	 *
+	 * @return int Cancelled count.
+	 */
+	public static function cancel_stale_running(): int {
+		global $wpdb;
+		$table = self::table();
+		$cut   = gmdate( 'Y-m-d H:i:s', time() - ( defined( 'MINUTE_IN_SECONDS' ) ? 30 * MINUTE_IN_SECONDS : 1800 ) );
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		return (int) $wpdb->query(
+			$wpdb->prepare(
+				"UPDATE {$table} SET status = %s, message = %s, updated_at = %s
+				WHERE status = %s AND updated_at < %s",
+				self::STATUS_CANCELLED,
+				__( 'لغو خودکار — جاب گیرکرده (قفل کهنه)', 'shojaei-seo-for-woo' ),
+				gmdate( 'Y-m-d H:i:s' ),
+				self::STATUS_RUNNING,
+				$cut
+			)
+		);
+	}
+
+	/**
 	 * Cron / AS entry: process one chunk of next or given job.
 	 *
 	 * @param string|null $job_key Optional job key.

@@ -741,7 +741,7 @@ defined( 'ABSPATH' ) || exit;
 	</div>
 
 	<div class="shojaei-card shojaei-settings-panel" id="shojaei-performance">
-		<details class="shojaei-details">
+		<details class="shojaei-details" id="shojaei-performance-details">
 			<summary class="shojaei-details-summary">
 				<span class="dashicons dashicons-performance"></span>
 				<?php esc_html_e( 'صف Job و عملکرد', 'shojaei-seo-for-woo' ); ?>
@@ -750,8 +750,10 @@ defined( 'ABSPATH' ) || exit;
 		<p class="shojaei-desc"><?php esc_html_e( 'عملیات سنگین به‌صورت Job در جدول اختصاصی ذخیره می‌شوند و در batchهای کوچک اجرا می‌گردند. رانر: Action Scheduler (در صورت وجود) + Ajax/REST هنگام حضور ادمین + cron داخلی به‌عنوان fallback — نه اتکای کامل به WP-Cron.', 'shojaei-seo-for-woo' ); ?></p>
 
 		<?php
-		$runner = class_exists( 'Shojaei_SEO_Jobs' ) ? Shojaei_SEO_Jobs::runner_label() : 'internal_cron_ajax';
-		$active = class_exists( 'Shojaei_SEO_Jobs' ) ? Shojaei_SEO_Jobs::count_active() : 0;
+		$runner       = class_exists( 'Shojaei_SEO_Jobs' ) ? Shojaei_SEO_Jobs::runner_label() : 'internal_cron_ajax';
+		$active       = class_exists( 'Shojaei_SEO_Jobs' ) ? Shojaei_SEO_Jobs::count_active() : 0;
+		$failed_count = class_exists( 'Shojaei_SEO_Jobs' ) ? Shojaei_SEO_Jobs::count_failed_unacked() : 0;
+		$failed_jobs  = class_exists( 'Shojaei_SEO_Jobs' ) ? Shojaei_SEO_Jobs::list_failed( 8 ) : array();
 		?>
 		<p class="description">
 			<?php
@@ -763,6 +765,32 @@ defined( 'ABSPATH' ) || exit;
 			);
 			?>
 		</p>
+
+		<?php if ( $failed_count > 0 ) : ?>
+			<div class="shojaei-edu-tip shojaei-edu-warn" id="shojaei-jobs-failed-banner" style="margin:12px 0;">
+				<span class="dashicons dashicons-warning"></span>
+				<?php
+				printf(
+					/* translators: %d: failed jobs */
+					esc_html__( '%d جاب ناموفق در هفتهٔ اخیر — اگر صف فعال خالی است، معمولاً خطای قدیمی است؛ با دکمه زیر هشدار داشبورد را پاک کنید.', 'shojaei-seo-for-woo' ),
+					(int) $failed_count
+				);
+				?>
+			</div>
+		<?php endif; ?>
+
+		<p class="shojaei-jobs-actions" style="display:flex;flex-wrap:wrap;gap:8px;margin:12px 0;">
+			<button type="button" class="button button-primary" id="shojaei-jobs-run-tick">
+				<?php esc_html_e( 'اجرای یک تیک صف الان', 'shojaei-seo-for-woo' ); ?>
+			</button>
+			<button type="button" class="button" id="shojaei-jobs-cancel-stale">
+				<?php esc_html_e( 'لغو جاب‌های گیرکرده', 'shojaei-seo-for-woo' ); ?>
+			</button>
+			<button type="button" class="button" id="shojaei-jobs-ack-errors" <?php disabled( $failed_count < 1 ); ?>>
+				<?php esc_html_e( 'پاک‌سازی هشدار جاب‌های ناموفق', 'shojaei-seo-for-woo' ); ?>
+			</button>
+		</p>
+		<p class="description" id="shojaei-jobs-actions-status" style="margin-top:0;"></p>
 
 		<div class="shojaei-form-grid">
 			<div class="shojaei-form-group">
@@ -778,7 +806,7 @@ defined( 'ABSPATH' ) || exit;
 		</div>
 
 		<?php
-		$batch_jobs = class_exists( 'Shojaei_SEO_Jobs' ) ? Shojaei_SEO_Jobs::list_jobs( 5 ) : array();
+		$batch_jobs = class_exists( 'Shojaei_SEO_Jobs' ) ? Shojaei_SEO_Jobs::list_jobs( 8 ) : array();
 		$status_labels = array(
 			'pending'   => __( 'در صف', 'shojaei-seo-for-woo' ),
 			'queued'    => __( 'در صف', 'shojaei-seo-for-woo' ),
@@ -788,8 +816,31 @@ defined( 'ABSPATH' ) || exit;
 			'cancelled' => __( 'لغو', 'shojaei-seo-for-woo' ),
 		);
 		?>
+		<?php if ( ! empty( $failed_jobs ) ) : ?>
+			<h4 style="margin:16px 0 8px;"><?php esc_html_e( 'جاب‌های ناموفق اخیر', 'shojaei-seo-for-woo' ); ?></h4>
+			<table class="widefat striped" id="shojaei-jobs-failed-table">
+				<thead>
+					<tr>
+						<th><?php esc_html_e( 'نوع', 'shojaei-seo-for-woo' ); ?></th>
+						<th><?php esc_html_e( 'پیام / خطا', 'shojaei-seo-for-woo' ); ?></th>
+						<th><?php esc_html_e( 'زمان', 'shojaei-seo-for-woo' ); ?></th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach ( $failed_jobs as $fj ) : ?>
+						<tr>
+							<td><code><?php echo esc_html( (string) ( $fj['type'] ?? '' ) ); ?></code></td>
+							<td><?php echo esc_html( (string) ( $fj['last_error'] ?? $fj['message'] ?? '' ) ); ?></td>
+							<td dir="ltr"><?php echo esc_html( (string) ( $fj['updated_at'] ?? '' ) ); ?></td>
+						</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
+		<?php endif; ?>
+
 		<?php if ( ! empty( $batch_jobs ) ) : ?>
-			<table class="widefat striped" style="margin-top:16px;" id="shojaei-jobs-table">
+			<h4 style="margin:16px 0 8px;"><?php esc_html_e( 'آخرین جاب‌ها', 'shojaei-seo-for-woo' ); ?></h4>
+			<table class="widefat striped" style="margin-top:8px;" id="shojaei-jobs-table">
 				<thead>
 					<tr>
 						<th><?php esc_html_e( 'نوع', 'shojaei-seo-for-woo' ); ?></th>
@@ -843,7 +894,7 @@ defined( 'ABSPATH' ) || exit;
 	</div>
 
 	<div class="shojaei-card shojaei-settings-panel" id="shojaei-content-server">
-		<details class="shojaei-details" open>
+		<details class="shojaei-details" id="shojaei-content-server-details">
 			<summary class="shojaei-details-summary">
 				<span class="dashicons dashicons-edit"></span>
 				<?php esc_html_e( 'سرور تولید محتوا', 'shojaei-seo-for-woo' ); ?>

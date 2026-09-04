@@ -50,6 +50,7 @@ class Shojaei_SEO_Admin {
 		add_action( 'wp_ajax_shojaei_seo_schema_scan', array( $this, 'ajax_schema_scan' ) );
 		add_action( 'wp_ajax_shojaei_seo_disable_wc_schema', array( $this, 'ajax_disable_wc_schema' ) );
 		add_action( 'wp_ajax_shojaei_seo_batch_status', array( $this, 'ajax_batch_status' ) );
+		add_action( 'wp_ajax_shojaei_seo_jobs_queue', array( $this, 'ajax_jobs_queue' ) );
 		add_action( 'wp_ajax_shojaei_seo_gsc_upload', array( $this, 'ajax_gsc_upload' ) );
 		add_action( 'wp_ajax_shojaei_seo_gsc_verify', array( $this, 'ajax_gsc_verify' ) );
 		add_action( 'wp_ajax_shojaei_seo_gsc_disconnect', array( $this, 'ajax_gsc_disconnect' ) );
@@ -1417,6 +1418,77 @@ JS;
 			'jobs'       => Shojaei_SEO_Batch::list_jobs( 8 ),
 			'batch_size' => Shojaei_SEO_Batch::batch_size(),
 		) );
+	}
+
+	/**
+	 * AJAX: Job queue tools — run tick, ack failed errors, cancel stale.
+	 */
+	public function ajax_jobs_queue(): void {
+		check_ajax_referer( 'shojaei_seo_admin_nonce', 'nonce' );
+
+		if ( ! Shojaei_SEO_Helpers::user_can_admin() ) {
+			wp_send_json_error( array( 'message' => __( 'دسترسی ندارید.', 'shojaei-seo-for-woo' ) ) );
+		}
+		if ( ! class_exists( 'Shojaei_SEO_Jobs' ) ) {
+			wp_send_json_error( array( 'message' => __( 'صف جاب در دسترس نیست.', 'shojaei-seo-for-woo' ) ) );
+		}
+
+		$op = sanitize_key( wp_unslash( $_POST['jobs_op'] ?? '' ) );
+
+		switch ( $op ) {
+			case 'run_tick':
+				$result = Shojaei_SEO_Jobs::run_next();
+				wp_send_json_success(
+					array(
+						'message' => ! empty( $result['idle'] )
+							? __( 'صف خالی است — جاب فعالی برای اجرا نبود.', 'shojaei-seo-for-woo' )
+							: (string) ( $result['message'] ?? __( 'یک تیک صف اجرا شد.', 'shojaei-seo-for-woo' ) ),
+						'result'  => $result,
+						'active'  => Shojaei_SEO_Jobs::count_active(),
+						'failed'  => Shojaei_SEO_Jobs::count_failed_unacked(),
+					)
+				);
+				break;
+
+			case 'ack_errors':
+				$delete = ! empty( $_POST['delete_failed'] );
+				$out    = Shojaei_SEO_Jobs::acknowledge_failed_errors( (bool) $delete );
+				wp_send_json_success(
+					array(
+						'message' => $delete
+							? sprintf(
+								/* translators: %d: deleted rows */
+								__( 'هشدار پاک شد و %d جاب ناموفق از جدول حذف شد.', 'shojaei-seo-for-woo' ),
+								(int) $out['deleted']
+							)
+							: __( 'هشدار داشبورد برای جاب‌های ناموفق پاک شد. صف فعال دست نخورده است.', 'shojaei-seo-for-woo' ),
+						'acked_at' => $out['acked_at'],
+						'deleted'  => $out['deleted'],
+						'failed'   => Shojaei_SEO_Jobs::count_failed_unacked(),
+					)
+				);
+				break;
+
+			case 'cancel_stale':
+				$n = Shojaei_SEO_Jobs::cancel_stale_running();
+				wp_send_json_success(
+					array(
+						'message' => $n > 0
+							? sprintf(
+								/* translators: %d: cancelled */
+								__( '%d جاب گیرکرده لغو شد.', 'shojaei-seo-for-woo' ),
+								$n
+							)
+							: __( 'جاب گیرکرده‌ای پیدا نشد.', 'shojaei-seo-for-woo' ),
+						'cancelled' => $n,
+						'active'    => Shojaei_SEO_Jobs::count_active(),
+					)
+				);
+				break;
+
+			default:
+				wp_send_json_error( array( 'message' => __( 'عملیات نامعتبر.', 'shojaei-seo-for-woo' ) ) );
+		}
 	}
 
 	/**

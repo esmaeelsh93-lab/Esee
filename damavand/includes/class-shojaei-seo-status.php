@@ -208,11 +208,15 @@ class Shojaei_SEO_Status {
 			global $wpdb;
 			$table = Shojaei_SEO_Jobs::table();
 			$since = gmdate( 'Y-m-d H:i:s', time() - WEEK_IN_SECONDS );
-			$rows  = $wpdb->get_results(
+			$acked = (string) get_option( Shojaei_SEO_Jobs::ERRORS_ACK_OPTION, '' );
+			if ( $acked !== '' && $acked > $since ) {
+				$since = $acked;
+			}
+			$rows = $wpdb->get_results(
 				$wpdb->prepare(
 					"SELECT job_key, type, message, last_error, updated_at, failed
 					FROM {$table}
-					WHERE status = %s AND updated_at >= %s
+					WHERE status = %s AND updated_at > %s
 					ORDER BY updated_at DESC
 					LIMIT %d",
 					Shojaei_SEO_Jobs::STATUS_FAILED,
