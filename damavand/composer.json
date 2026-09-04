@@ -1,0 +1,22 @@
+{
+  "name": "shojaei/seo-for-woo",
+  "description": "Damavand SEO for WooCommerce",
+  "require": {
+    "php": ">=8.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^10.5"
+  },
+  "scripts": {
+    "check-version": "bash scripts/check-version-sync.sh",
+    "test": [
+      "@check-version",
+      "phpunit -c tests/phpunit.xml"
+    ],
+    "self-test": "@php -r \"echo 'Use: wp eval-file seo-core/bin/run-self-test.php' . PHP_EOL;\"",
+    "zip": [
+      "@check-version",
+      "bash scripts/build-zip.sh"
+    ]
+  }
+}

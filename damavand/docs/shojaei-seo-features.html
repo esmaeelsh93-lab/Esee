@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Shojaei SEO for Woo — قابلیت‌ها و اثر عملیات</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #0b1c2c;
+      --ink-soft: #3a5166;
+      --paper: #f3f7fb;
+      --card: #ffffff;
+      --line: #d7e3ef;
+      --blue: #1565c0;
+      --blue-deep: #0d47a1;
+      --teal: #00897b;
+      --amber: #ef6c00;
+      --green: #2e7d32;
+      --shadow: 0 18px 50px rgba(13, 71, 161, 0.08);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "Vazirmatn", Tahoma, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 600px at 100% -10%, rgba(21, 101, 192, 0.18), transparent 55%),
+        radial-gradient(900px 500px at -10% 20%, rgba(0, 137, 123, 0.12), transparent 50%),
+        linear-gradient(180deg, #eaf2fa 0%, var(--paper) 28%, #eef3f8 100%);
+      line-height: 1.75;
+    }
+
+    a { color: var(--blue); text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    .wrap {
+      width: min(1120px, calc(100% - 2rem));
+      margin-inline: auto;
+    }
+
+    /* —— Hero —— */
+    .hero {
+      position: relative;
+      padding: 4.5rem 0 3.5rem;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 8% 5% auto auto;
+      width: 280px;
+      height: 280px;
+      border-radius: 40% 60% 55% 45%;
+      background: linear-gradient(135deg, rgba(21,101,192,.25), rgba(0,137,123,.18));
+      filter: blur(2px);
+      animation: floatBlob 9s ease-in-out infinite;
+      z-index: 0;
+    }
+    @keyframes floatBlob {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      50% { transform: translate(-18px, 22px) rotate(8deg); }
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 1.25rem;
+      max-width: 760px;
+    }
+    .brand {
+      font-family: Syne, Vazirmatn, sans-serif;
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      margin: 0;
+      background: linear-gradient(120deg, var(--blue-deep), var(--teal));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: brandIn .8s ease both;
+    }
+    .hero h2 {
+      margin: 0;
+      font-size: clamp(1.15rem, 2.4vw, 1.55rem);
+      font-weight: 700;
+      color: var(--ink);
+      animation: brandIn .9s .08s ease both;
+    }
+    .hero p.lead {
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 1.05rem;
+      max-width: 58ch;
+      animation: brandIn 1s .14s ease both;
+    }
+    @keyframes brandIn {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: none; }
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .55rem;
+      margin-top: .4rem;
+      animation: brandIn 1.05s .2s ease both;
+    }
+    .chip {
+      background: rgba(255,255,255,.78);
+      border: 1px solid var(--line);
+      padding: .35rem .75rem;
+      border-radius: 999px;
+      font-size: .82rem;
+      color: var(--ink-soft);
+      backdrop-filter: blur(8px);
+    }
+    .chip strong { color: var(--blue-deep); font-weight: 700; }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .75rem;
+      margin-top: .6rem;
+      animation: brandIn 1.1s .26s ease both;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      border: 0;
+      border-radius: 12px;
+      padding: .85rem 1.25rem;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--blue), var(--blue-deep));
+      color: #fff;
+      box-shadow: 0 10px 28px rgba(21,101,192,.35);
+    }
+    .btn-ghost {
+      background: #fff;
+      color: var(--ink);
+      border: 1px solid var(--line);
+    }
+
+    /* —— Sections —— */
+    section { padding: 2.75rem 0; }
+    .sec-head {
+      display: grid;
+      gap: .35rem;
+      margin-bottom: 1.5rem;
+    }
+    .sec-head .eyebrow {
+      color: var(--teal);
+      font-weight: 700;
+      font-size: .85rem;
+      letter-spacing: .04em;
+    }
+    .sec-head h3 {
+      margin: 0;
+      font-size: clamp(1.45rem, 3vw, 2rem);
+      font-weight: 800;
+    }
+    .sec-head p {
+      margin: 0;
+      color: var(--ink-soft);
+      max-width: 62ch;
+    }
+
+    /* —— Feature grid —— */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+    @media (max-width: 900px) {
+      .feature-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 560px) {
+      .feature-grid { grid-template-columns: 1fr; }
+    }
+
+    .feat {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 1.2rem 1.25rem 1.3rem;
+      box-shadow: var(--shadow);
+      transition: transform .25s ease, border-color .25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .feat::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--blue), var(--teal));
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform .3s ease;
+    }
+    .feat:hover { transform: translateY(-4px); border-color: #b9d0e8; }
+    .feat:hover::after { transform: scaleX(1); }
+    .feat .num {
+      font-family: Syne, sans-serif;
+      font-size: .78rem;
+      font-weight: 800;
+      color: var(--blue);
+      opacity: .7;
+    }
+    .feat h4 {
+      margin: .35rem 0 .4rem;
+      font-size: 1.05rem;
+      font-weight: 800;
+    }
+    .feat p {
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: .92rem;
+    }
+
+    /* —— Details —— */
+    .details {
+      display: grid;
+      gap: .75rem;
+    }
+    details.block {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    details.block[open] { border-color: #a9c7e6; }
+    details.block summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 1.05rem 1.25rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    details.block summary::-webkit-details-marker { display: none; }
+    details.block summary::after {
+      content: "+";
+      font-family: Syne, sans-serif;
+      font-size: 1.35rem;
+      color: var(--blue);
+      transition: transform .2s ease;
+    }
+    details.block[open] summary::after {
+      content: "−";
+    }
+    .detail-body {
+      padding: 0 1.25rem 1.2rem;
+      color: var(--ink-soft);
+      border-top: 1px dashed var(--line);
+    }
+    .detail-body ul {
+      margin: .75rem 0 0;
+      padding-right: 1.1rem;
+    }
+    .detail-body li { margin: .35rem 0; }
+    .tag {
+      display: inline-block;
+      font-size: .72rem;
+      font-weight: 700;
+      padding: .2rem .55rem;
+      border-radius: 999px;
+      background: #e3f2fd;
+      color: var(--blue-deep);
+      margin-left: .5rem;
+      vertical-align: middle;
+    }
+    .tag.core { background: #e0f2f1; color: #00695c; }
+    .tag.trust { background: #fff3e0; color: #e65100; }
+
+    /* —— Mockup —— */
+    .mock-frame {
+      background: linear-gradient(160deg, #ffffff, #eef5fc);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 1rem;
+      box-shadow: var(--shadow);
+      position: relative;
+    }
+    .mock-frame::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: 28px;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(21,101,192,.45), rgba(0,137,123,.25), transparent 60%);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+    .mock-chrome {
+      display: flex;
+      gap: .4rem;
+      margin-bottom: .85rem;
+      padding-inline: .25rem;
+    }
+    .mock-chrome span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #cfd8dc;
+    }
+    .mock-chrome span:nth-child(1) { background: #ef9a9a; }
+    .mock-chrome span:nth-child(2) { background: #ffe082; }
+    .mock-chrome span:nth-child(3) { background: #a5d6a7; }
+    .mock-img {
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+    .mock-caption {
+      margin-top: 1rem;
+      color: var(--ink-soft);
+      font-size: .92rem;
+      text-align: center;
+    }
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: .6rem 1rem;
+      margin-top: .75rem;
+      font-size: .82rem;
+      color: var(--ink-soft);
+    }
+    .legend i {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-left: .35rem;
+      vertical-align: middle;
+    }
+
+    /* —— Role table —— */
+    .roles {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--line);
+    }
+    .roles th, .roles td {
+      padding: .85rem 1rem;
+      text-align: right;
+      border-bottom: 1px solid var(--line);
+      font-size: .92rem;
+    }
+    .roles th {
+      background: #e8f1fb;
+      font-weight: 800;
+      color: var(--blue-deep);
+    }
+    .roles tr:last-child td { border-bottom: 0; }
+    .roles td strong { color: var(--teal); }
+
+    footer {
+      padding: 2.5rem 0 3rem;
+      color: var(--ink-soft);
+      font-size: .88rem;
+      text-align: center;
+    }
+    footer .ver {
+      display: inline-block;
+      margin-top: .5rem;
+      padding: .25rem .7rem;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid var(--line);
+      font-weight: 700;
+      color: var(--blue-deep);
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap hero-inner">
+      <p class="brand">Shojaei SEO</p>
+      <h2>لایه عملیاتی سئو برای ووکامرس — نه جایگزین Rank Math / Yoast</h2>
+      <p class="lead">
+        Inventory-aware SEO: تصمیم بر اساس موجودی، مدت ناموجودی، جایگزین واقعی، ریدایرکت و بازیابی ایندکس.
+        با Undo، Dry-Run، صف Job و گزارش اثر قابل‌اندازه‌گیری.
+      </p>
+      <div class="chips">
+        <span class="chip"><strong>v1.10.2</strong> اثر و آمار</span>
+        <span class="chip">Event-driven</span>
+        <span class="chip">Rule Engine</span>
+        <span class="chip">همزیستی با Yoast / Rank Math</span>
+      </div>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#features">مشاهده قابلیت‌ها</a>
+        <a class="btn btn-ghost" href="#mockup">پیش‌نمایش صفحه آمار</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- 1) Features first -->
+    <section id="features">
+      <div class="wrap">
+        <div class="sec-head">
+          <span class="eyebrow">۰۱ — قابلیت‌ها</span>
+          <h3>چی می‌سازد، در یک نگاه</h3>
+          <p>هسته محصول عملیات موجودی و ریدایرکت است؛ متا و اسکیمای تکراری عمداً به افزونه SEO واگذار می‌شود.</p>
+        </div>
+        <div class="feature-grid">
+          <article class="feat">
+            <div class="num">01</div>
+            <h4>Out-of-stock SEO</h4>
+            <p>چرخه چندسطحی ناموجودی، noindex کنترل‌شده، پیشنهاد جایگزین و تصمیم تدریجی.</p>
+          </article>
+          <article class="feat">
+            <div class="num">02</div>
+            <h4>Redirect Logic</h4>
+            <p>۳۰۱ / ۳۰۲ / ۴۱۰ با اعتبارسنجی حلقه، آستانه شباهت و صف اعمال امن.</p>
+          </article>
+          <article class="feat">
+            <div class="num">03</div>
+            <h4>Dry-Run + Undo واقعی</h4>
+            <p>پیش‌نمایش قبل از اجرا، ثبت قبل/بعد، بازگشت تکی و دسته‌ای.</p>
+          </article>
+          <article class="feat">
+            <div class="num">04</div>
+            <h4>Job Queue</h4>
+            <p>جدول اختصاصی، batch کوچک، retry محدود — بدون وابستگی به Redis/SaaS.</p>
+          </article>
+          <article class="feat">
+            <div class="num">05</div>
+            <h4>Event-driven</h4>
+            <p>تصمیم با تغییر موجودی، قیمت، انتشار و دسته — نه اسکن کور سنگین.</p>
+          </article>
+          <article class="feat">
+            <div class="num">06</div>
+            <h4>لینک‌سازی قانون‌محور</h4>
+            <p>سقف لینک، blacklist/whitelist، بدون لینک به noindex/ریدایرکت، کنترل کامل توسط فروشگاه.</p>
+          </article>
+          <article class="feat">
+            <div class="num">07</div>
+            <h4>همزیستی SEO plugins</h4>
+            <p>Meta خاموش؛ Product/Breadcrumb با احترام به Yoast/Rank Math واگذار می‌شود.</p>
+          </article>
+          <article class="feat">
+            <div class="num">08</div>
+            <h4>اثر و آمار</h4>
+            <p>شمارش ۳۰۱/۳۰۲/۴۱۰، سلامت عملیات قبل→الان، نمودار روند، پروفایل فروشگاهی.</p>
+          </article>
+          <article class="feat">
+            <div class="num">09</div>
+            <h4>Schema Detector</h4>
+            <p>تشخیص خروجی موازی + بنر مدیر برای خاموش‌کردن اسکیمای ووکامرس با یک کلیک.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2) Detailed explanations -->
+    <section id="details">
+      <div class="wrap">
+        <div class="sec-head">
+          <span class="eyebrow">۰۲ — توضیحات تکمیلی</span>
+          <h3>هر قابلیت دقیقاً چه می‌کند؟</h3>
+          <p>برای فروش و آموزش داخلی: کوتاه، صادق، بدون ادعای جادویی گوگل.</p>
+        </div>
+
+        <div class="details">
+          <details class="block" open>
+            <summary>عملیات موجودی (Inventory-aware SEO) <span class="tag core">هسته</span></summary>
+            <div class="detail-body">
+              <p>به‌جای ریدایرکت فوری همه ناموجودها، محصول وارد فازهای زمانی می‌شود: پیام صفحه، پیشنهاد جایگزین، کاهش اولویت لینک، noindex، و در نهایت کاندید ریدایرکت. تصمیم از Rule Engine مرکزی می‌آید تا رفتار در کل افزونه یکدست بماند.</p>
+              <ul>
+                <li>آستانه‌های قابل تنظیم (یا پروفایل مد / الکترونیک / عمومی)</li>
+                <li>قفل Page Value برای محصولات ارزشمند</li>
+                <li>Dry-Run پیش‌فرض برای شروع امن در بازار ایران</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="block">
+            <summary>منطق ریدایرکت ۳۰۱ / ۳۰۲ / ۴۱۰ <span class="tag core">هسته</span></summary>
+            <div class="detail-body">
+              <p>مزیت رقابتی افزونه: پیدا کردن جایگزین هم‌دسته با امتیاز شباهت، جلوگیری از حلقه ریدایرکت، و اعمال از طریق صف Job با امکان Undo. ۳۰۲ برای موقت، ۳۰۱ برای دائمی، ۴۱۰ وقتی مسیر جایگزینی منطقی نیست.</p>
+            </div>
+          </details>
+
+          <details class="block">
+            <summary>اعتماد عملیاتی: Dry-Run، Undo، مرکز وضعیت <span class="tag trust">اعتماد</span></summary>
+            <div class="detail-body">
+              <p>اپراتور اول می‌بیند «چه تغییری، روی چند آیتم، با چه ریسک»؛ بعد از همان پیش‌نمایش اجرا می‌کند. هر batch قابل بازگشت است. داشبورد وضعیت‌محور می‌گوید امن / هشدار / نیازمند اقدام / خطا — نه فقط فرم تنظیمات.</p>
+            </div>
+          </details>
+
+          <details class="block">
+            <summary>صف Job و معماری Event-driven</summary>
+            <div class="detail-body">
+              <p>WP-Cron به‌تنهایی برای کاتالوگ بزرگ کافی نیست. جاب‌ها در جدول اختصاصی با وضعیت pending/running/done/failed ذخیره می‌شوند و با batch کوچک و retry محدود جلو می‌روند. Event-driven یعنی وقتی موجودی عوض شد Rule Engine صدا زده می‌شود؛ جاب روزانه فقط reconcile سبک است.</p>
+            </div>
+          </details>
+
+          <details class="block">
+            <summary>لینک‌سازی داخلی محافظه‌کار</summary>
+            <div class="detail-body">
+              <p>سقف سخت در صفحه، تراکم در ۱۰۰۰ کلمه، فاصله حداقل، بدون لینک در هدینگ/دکمه/منو، بدون مقصد noindex یا ریدایرکت‌شده، بدون anchor تکراری. اولویت با دسته، برند، ویژگی و جایگزین واقعی. Whitelist/Blacklist قابل کنترل توسط فروشگاه.</p>
+            </div>
+          </details>
+
+          <details class="block">
+            <summary>همزیستی با Yoast و Rank Math</summary>
+            <div class="detail-body">
+              <p>جنگ خروجی متا نداریم. Meta Title/Description پیش‌فرض خاموش است. اگر افزونه SEO فعال باشد و «احترام» روشن باشد، Product/Breadcrumb چاپ نمی‌شود؛ FAQ اختیاری می‌ماند. ریدایرکت و OOS هسته این افزونه است.</p>
+              <table class="roles" style="margin-top:1rem;">
+                <thead>
+                  <tr><th>بخش</th><th>مالک پیشنهادی</th><th>نقش</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Meta Title/Description</td><td>Yoast / Rank Math</td><td>خاموش در این افزونه</td></tr>
+                  <tr><td>Schema Product</td><td>افزونه SEO + Detector</td><td>بدون خروجی تکراری</td></tr>
+                  <tr><td>Redirect Logic</td><td><strong>Shojaei SEO</strong></td><td>هسته</td></tr>
+                  <tr><td>Out-of-stock SEO</td><td><strong>Shojaei SEO</strong></td><td>هسته</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </details>
+
+          <details class="block">
+            <summary>اثر و آمار + سلامت عملیات <span class="tag">v1.10</span></summary>
+            <div class="detail-body">
+              <p>تب «اثر و آمار» نشان می‌دهد واقعاً چه کرده‌اید: چند ۳۰۱، چند ۳۰۲، چند ۴۱۰، چند noindex، چند لینک، چند درخواست GSC. درصد «سلامت عملیات» با baseline نصب مقایسه می‌شود — با زیرنویس صریح که این عدد رتبه گوگل نیست، بلکه نظم عملیات موجودی و ایندکس‌پذیری است.</p>
+              <ul>
+                <li>دونات تفکیک ریدایرکت + روند ۳۰ روزه SVG</li>
+                <li>پروفایل فروشگاهی: عمومی / مد / الکترونیک</li>
+                <li>لایه سبک GSC اگر متصل باشد</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="block">
+            <summary>تشخیص تداخل اسکیما و بنر یک‌کلیکه</summary>
+            <div class="detail-body">
+              <p>اگر Product JSON-LD موازی روی صفحه باشد، مدیر روی فرانت بنر می‌بیند و می‌تواند اسکیمای پیش‌فرض ووکامرس را با یک کلیک خاموش کند — بدون دست زدن به Yoast یا Rank Math.</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3) Mockup image -->
+    <section id="mockup">
+      <div class="wrap">
+        <div class="sec-head">
+          <span class="eyebrow">۰۳ — پیش‌نمایش UI</span>
+          <h3>صفحه اثر و آمار حدوداً این‌شکلی است</h3>
+          <p>موکاپ تقریبی تب آمار: سلامت عملیات، کارت‌های ۳۰۱/۳۰۲/۴۱۰ و نمودارها. ظاهر نهایی در وردپرس ممکن است کمی ساده‌تر یا فشرده‌تر باشد.</p>
+        </div>
+
+        <div class="mock-frame">
+          <div class="mock-chrome" aria-hidden="true"><span></span><span></span><span></span></div>
+          <div class="mock-img">
+            <img
+              src="shojaei-seo-impact-mockup.png"
+              alt="پیش‌نمایش تقریبی تب اثر و آمار Shojaei SEO — سلامت عملیات، کارت‌های آماری و نمودار ریدایرکت"
+              width="1600"
+              height="900"
+              loading="lazy"
+            />
+          </div>
+        </div>
+        <p class="mock-caption">
+          نمونه بصری برای ارائه به مشتری / تیم فروش — اعداد نمونه هستند.
+        </p>
+        <div class="legend">
+          <span><i style="background:#1565c0"></i>۳۰۱</span>
+          <span><i style="background:#43a047"></i>۳۰۲</span>
+          <span><i style="background:#ef6c00"></i>۴۱۰</span>
+          <span><i style="background:#00897b"></i>سلامت عملیات</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div>Shojaei SEO for Woo — SEO Operations برای فروشگاه‌های ایرانی</div>
+      <div class="ver">نسخه ۱.۴۹.۱</div>
+    </div>
+  </footer>
+
+  <script>
+    // Soft open-first detail only; others stay collapsed for scannability.
+    document.querySelectorAll("details.block").forEach((d) => {
+      d.addEventListener("toggle", () => {
+        if (!d.open) return;
+        document.querySelectorAll("details.block").forEach((other) => {
+          if (other !== d) other.open = false;
+        });
+      });
+    });
+  </script>
+</body>
+</html>

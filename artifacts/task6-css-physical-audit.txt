@@ -1,0 +1,32 @@
+BEFORE:
+5: text-align: right;
+301: left: 6px;
+621: left: 50%;
+657: text-align: right;
+888: margin-right: 0.5rem;
+895: padding-right: 20px;
+931: border-right: 4px solid #1e88e5;
+1317: top: 0; left: 0; right: 0; bottom: 0;
+1328: right: 3px;
+1398: text-align: right;
+1454: padding-right: 20px;
+1474: text-align: right;
+1496: text-align: right;
+1501: border-right: 4px solid #1e88e5;
+1618: text-align: right;
+1706: border-right: 4px solid #1e88e5;
+1717: padding-right: 18px;
+1787: padding-right: 18px;
+1902: padding-right: 20px;
+2102: .shojaei-impact-score-big small { font-size: 22px; margin-right: 4px; }
+2178: margin-left: 6px;
+2242: margin-left: 4px;
+2348: margin-right: 2px;
+2366: padding-right: 1.2em;
+2379: .shojaei-slug-log-toggle { margin-right: 8px; }
+2466: border-right: 4px solid #d4a017;
+2517: margin-left: 14px;
+2875: text-align: right;
+
+AFTER remaining:
+621: left: 50%;

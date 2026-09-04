@@ -1,0 +1,15 @@
+/**
+ * Damavand admin — self-hosted Vazirmatn (no external CDN).
+ *
+ * Variable font v33.003 from rastikerdar/vazirmatn (SIL OFL 1.1).
+ * Paths are relative to this CSS file (admin/css/).
+ */
+
+@font-face {
+	font-family: 'Vazirmatn';
+	src: url('../../assets/fonts/vazirmatn/Vazirmatn-Variable.woff2') format('woff2-variations'),
+		url('../../assets/fonts/vazirmatn/Vazirmatn-Variable.woff2') format('woff2');
+	font-weight: 100 900;
+	font-style: normal;
+	font-display: swap;
+}

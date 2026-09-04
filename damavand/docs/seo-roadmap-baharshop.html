@@ -1,0 +1,79 @@
+<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>نقشه راه SEO بهار شاپ — Damavand 1.58.0</title><style>
+:root{--bg:#0b1020;--card:#11182b;--card2:#151e35;--text:#eef2ff;--muted:#aab4cc;--line:#273451;--accent:#ff9f9f;--green:#5ee7a3;--yellow:#ffd166;--red:#ff7185}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#080c18,#11182b 55%,#181b31);color:var(--text);font-family:Tahoma,Arial,sans-serif;direction:rtl}
+.wrap{max-width:1450px;margin:auto;padding:38px 22px 60px}.hero{background:linear-gradient(135deg,rgba(255,159,159,.18),rgba(189,224,254,.10));border:1px solid var(--line);border-radius:24px;padding:30px;box-shadow:0 18px 50px #0005}
+h1{margin:0 0 10px;font-size:30px}p{color:var(--muted);line-height:1.9}.badge{display:inline-block;padding:7px 12px;border-radius:999px;background:#ffffff12;border:1px solid #ffffff16;color:#fff;margin:5px 0;font-size:13px}
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0}.search{flex:1;min-width:260px;background:#0c1324;color:#fff;border:1px solid var(--line);border-radius:14px;padding:13px 15px;font-size:14px;outline:none}
+button{background:#0e1629;color:#fff;border:1px solid var(--line);border-radius:12px;padding:11px 15px;cursor:pointer}button:hover{border-color:var(--accent)}
+.card{background:rgba(17,24,43,.88);border:1px solid var(--line);border-radius:20px;overflow:hidden}
+table{width:100%;border-collapse:collapse}th{background:#0d1527;color:#fff;position:sticky;top:0;z-index:2}th,td{padding:15px 14px;border-bottom:1px solid var(--line);vertical-align:top;text-align:right;line-height:1.75}tr:hover{background:#ffffff06}.status{font-weight:bold;white-space:nowrap}.g{color:var(--green)}.y{color:var(--yellow)}.r{color:var(--red)}
+.small{font-size:12px;color:var(--muted)}.footer{margin-top:20px;color:var(--muted);font-size:12px}.count{color:var(--accent);font-weight:bold}
+.note{margin-top:14px;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:#0c1324;color:var(--muted);font-size:13px;line-height:1.8}
+@media(max-width:800px){.wrap{padding:18px 10px}h1{font-size:23px}.card{overflow:auto}table{min-width:1050px}.hero{padding:22px}}
+</style></head><body><main class="wrap">
+<section class="hero"><span class="badge">SEO ENGINE • WooCommerce • Iran • Damavand 1.58.0</span><h1>نقشه راه تبدیل افزونه سئو به یک موتور SEO فراتر از Rank Math</h1>
+<p>این جدول معیار طراحی و اصلاح افزونه است؛ تمرکز روی SEO واقعی، داده ساختاریافته معتبر، فروشگاه ووکامرسی ایرانی، AI کنترل‌شده و عملکرد است — نه صرفاً سبز کردن امتیاز.</p>
+<p><b>تصمیم ثابت:</b> سیستم نامک <b>Finglish</b> فعلی حفظ می‌شود و افزونه حق تغییر خودکار Slug را ندارد.</p>
+<div class="note">به‌روزرسانی وضعیت بر اساس نسخه محلی ۱.۵۸.۰: ۱.۵۸: noindex سبد/تسویه/حساب/جستجو/فیلتر، اعمال _damavand_seo_robots، Schema روی noindex خاموش، WC schema پیش‌فرض خاموش، validator داخلی، اسکن عنوان تکراری، canonical pagination فروشگاه، OOS robots بدون Rule Engine روی فرانت.</div>
+</section>
+<div class="controls"><input id="q" class="search" oninput="filter()" placeholder="جستجو در قابلیت‌ها، مثلاً Schema یا WooCommerce..."><button onclick="status('green')">موجود</button><button onclick="status('yellow')">نیازمند اصلاح</button><button onclick="status('red')">باید اضافه/بازطراحی شود</button><button onclick="allr()">نمایش همه</button></div>
+<section class="card"><table><thead><tr><th>حوزه</th><th>هدف</th><th>وضعیت فعلی/اولویت</th><th>کاری که باید انجام شود</th></tr></thead><tbody>
+<tr data-s='green'><td><b>نامک / Slug</b></td><td>حفظ کامل سیستم Finglish فعلی</td><td class='status g'>🟢 دست‌نخورده</td><td>اصلاً تغییر خودکار نده؛ نه امتیاز سئو، نه AI، نه بازنویسی نامک. (۱.۵۷.۲: از سئو خودکار حذف شد؛ دکمه AI فقط پیشنهاد می‌دهد)</td></tr>
+<tr data-s='green'><td><b>Title / Meta Title</b></td><td>عنوان یکتا، طبیعی و قابل کنترل</td><td class='status g'>🟢</td><td>AI پیشنهاد بدهد، ولی تصمیم نهایی با کاربر؛ جلوگیری از تکرار و keyword stuffing.</td></tr>
+<tr data-s='green'><td><b>Meta Description</b></td><td>توصیفی، یکتا، جذاب و منطبق با صفحه</td><td class='status g'>🟢</td><td>تمرکز روی CTR و intent، نه صرفاً طول متن.</td></tr>
+<tr data-s='yellow'><td><b>Focus Keyword</b></td><td>تحلیل کلمه کلیدی</td><td class='status y'>🟡</td><td>فقط معیار کمکی؛ امتیاز سبز نباید با تکرار مصنوعی کلمه کلیدی ساخته شود. (پیش‌فرض=عنوان محصول فعال شد)</td></tr>
+<tr data-s='red'><td><b>Search Intent</b></td><td>تشخیص هدف جستجو</td><td class='status r'>🔴</td><td>افزوده شود: اطلاعاتی، تجاری، تراکنشی، ناوبری و ترکیبی.</td></tr>
+<tr data-s='red'><td><b>Semantic SEO / Entities</b></td><td>ارتباط مفهومی موضوعات</td><td class='status r'>🔴</td><td>تشخیص موجودیت‌ها، ویژگی‌ها، مترادف‌ها و موضوعات مکمل؛ بدون keyword stuffing.</td></tr>
+<tr data-s='green'><td><b>Product Schema</b></td><td>Product + Offer + SKU + Image و...</td><td class='status g'>🟢</td><td>از دیتای واقعی WooCommerce؛ Product.name=نام واقعی (نه SEO title)؛ AI قیمت/موجودی جعلی نمی‌سازد.</td></tr>
+<tr data-s='yellow'><td><b>Variation Schema</b></td><td>مدیریت محصولات متغیر</td><td class='status y'>🟡</td><td>hasVariant اضافه شد؛ هنوز نیاز به پوشش کامل‌تر سایز/رنگ و جلوگیری از تکرار بیش از حد.</td></tr>
+<tr data-s='green'><td><b>Review / Rating</b></td><td>AggregateRating و Review واقعی</td><td class='status g'>🟢</td><td>ratingCount و reviewCount جدا؛ نود Review از دیدگاه‌های تأییدشده.</td></tr>
+<tr data-s='yellow'><td><b>Brand / GTIN / MPN</b></td><td>شناسه‌های محصول</td><td class='status y'>🟡</td><td>خواندن از attribute/meta ووکامرس؛ فیلد UI اختصاصی اختیاری هنوز می‌تواند غنی‌تر شود.</td></tr>
+<tr data-s='green'><td><b>Breadcrumb Schema</b></td><td>BreadcrumbList</td><td class='status g'>🟢</td><td>داخل @graph با @id پایدار و مسیر واقعی محصول/دسته.</td></tr>
+<tr data-s='green'><td><b>ItemList</b></td><td>لیست محصولات آرشیو/دسته</td><td class='status g'>🟢</td><td>فقط دسته/آرشیو؛ روی محصول ذخیره/چاپ نمی‌شود؛ در فرانت آرشیو چاپ می‌شود.</td></tr>
+<tr data-s='green'><td><b>Category SEO</b></td><td>CollectionPage + ItemList</td><td class='status g'>🟢</td><td>CollectionPage+ItemList + canonical/pagination فروشگاه و دسته (is_shop).</td></tr>
+<tr data-s='yellow'><td><b>FAQ Schema</b></td><td>FAQ واقعی صفحه</td><td class='status y'>🟡</td><td>فقط وقتی FAQ ذخیره‌شده وجود دارد؛ داخل Graph محصول با @id.</td></tr>
+<tr data-s='green'><td><b>Organization / WebSite</b></td><td>Entity Graph سایت</td><td class='status g'>🟢</td><td>@id پایدار: Organization → WebSite → WebPage → Product.</td></tr>
+<tr data-s='green'><td><b>Canonical</b></td><td>URL اصلی هر صفحه</td><td class='status g'>🟢</td><td>دقیقاً یک canonical معتبر؛ مدیریت query و pagination بدون ایجاد canonical اشتباه.</td></tr>
+<tr data-s='green'><td><b>Robots Meta</b></td><td>index/noindex/follow</td><td class='status g'>🟢</td><td>قواعد هوشمند برای صفحات کم‌ارزش، فیلترها، جستجو و پارامترها.</td></tr>
+<tr data-s='yellow'><td><b>XML Sitemap</b></td><td>محصول/دسته/مقاله/تصویر</td><td class='status y'>🟡</td><td>Sitemap تفکیکی، lastmod واقعی، حذف صفحات noindex و مدیریت محصولات ناموجود.</td></tr>
+<tr data-s='yellow'><td><b>WooCommerce Out-of-Stock</b></td><td>محصول ناموجود</td><td class='status y'>🟡</td><td>تصمیم SEO بر اساس ارزش صفحه: نگهداری، جایگزینی، redirect یا noindex؛ نه یک قانون ثابت.</td></tr>
+<tr data-s='yellow'><td><b>Persian E-commerce SEO</b></td><td>RTL، فارسی، تومان/ریال</td><td class='status y'>🟡</td><td>امتیاز فارسی و Schema IRR وقتی واحد افزونه IRT است (فقط JSON-LD)؛ نمایش فرانت دست‌نخورده.</td></tr>
+<tr data-s='red'><td><b>Iranian Payment / Shipping</b></td><td>درگاه‌ها و ارسال ایرانی</td><td class='status r'>🔴</td><td>SEO نباید به خطاهای درگاه/ارسال وابسته شود؛ داده تجاری واقعی بماند.</td></tr>
+<tr data-s='yellow'><td><b>Toman / Rial</b></td><td>قیمت واقعی فروشگاه</td><td class='status y'>🟡</td><td>تبدیل IRT→IRR فقط در JSON-LD وقتی تنظیمات افزونه IRT است؛ دیتابیس و فرانت عوض نمی‌شود.</td></tr>
+<tr data-s='yellow'><td><b>Internal Linking</b></td><td>لینک‌سازی داخلی معنایی</td><td class='status y'>🟡</td><td>پیشنهاد لینک موجود است؛ هنوز باید معنایی‌تر و قابل تأییدتر شود.</td></tr>
+<tr data-s='yellow'><td><b>Image SEO</b></td><td>ALT / filename / dimensions</td><td class='status y'>🟡</td><td>ALT توصیفی و کاربردی؛ از تکرار کلمه کلیدی و ALT یکسان جلوگیری شود.</td></tr>
+<tr data-s='green'><td><b>Open Graph</b></td><td>اشتراک‌گذاری شبکه‌های اجتماعی</td><td class='status g'>🟢</td><td>og:title، description، image، url و type یکتا و قابل کنترل.</td></tr>
+<tr data-s='green'><td><b>Twitter/X Cards</b></td><td>Social metadata</td><td class='status g'>🟢</td><td>متادیتای صحیح و fallback مناسب.</td></tr>
+<tr data-s='yellow'><td><b>404 / Redirect</b></td><td>مدیریت تغییر URL</td><td class='status y'>🟡</td><td>Redirect 301، ثبت 404، جلوگیری از زنجیره redirect و loop.</td></tr>
+<tr data-s='green'><td><b>IndexNow</b></td><td>ارسال تغییرات</td><td class='status g'>🟢</td><td>فقط برای URLهای واقعاً تغییرکرده؛ صف و retry کنترل‌شده.</td></tr>
+<tr data-s='yellow'><td><b>Performance</b></td><td>SEO بدون افت سرعت</td><td class='status y'>🟡</td><td>OOS noindex دیگر Rule Engine را روی فرانت صدا نمی‌زند؛ هنوز جا برای بهینه‌سازی بیشتر.</td></tr>
+<tr data-s='yellow'><td><b>Caching</b></td><td>کش SEO و Schema</td><td class='status y'>🟡</td><td>کش Product Graph v6؛ invalidation روی تغییر قیمت/موجودی.</td></tr>
+<tr data-s='yellow'><td><b>AI Content</b></td><td>تولید/بهبود محتوا</td><td class='status y'>🟡</td><td>ضدتکرار و طرح متنوع اضافه شد؛ هنوز دستیار است نه تصمیم‌گیر مطلق.</td></tr>
+<tr data-s='yellow'><td><b>AI Alt Text</b></td><td>ALT با کمک AI</td><td class='status y'>🟡</td><td>توصیف تصویر واقعی؛ بررسی خروجی و جلوگیری از hallucination.</td></tr>
+<tr data-s='yellow'><td><b>AI Internal Links</b></td><td>پیشنهاد لینک</td><td class='status y'>🟡</td><td>پیشنهاد موجود؛ تقویت تأیید destination و anchor.</td></tr>
+<tr data-s='yellow'><td><b>AI FAQ</b></td><td>پیشنهاد سوالات</td><td class='status y'>🟡</td><td>سوالات مبتنی بر محصول؛ Schema فقط برای FAQ ذخیره‌شده.</td></tr>
+<tr data-s='yellow'><td><b>SEO Score</b></td><td>امتیازدهی</td><td class='status y'>🟡</td><td>امتیاز را از «سبز کردن» به checklist چندبعدی تبدیل کن.</td></tr>
+<tr data-s='red'><td><b>Content Quality</b></td><td>کیفیت واقعی محتوا</td><td class='status r'>🔴</td><td>مفیدبودن، پوشش موضوع، اعتماد، تجربه خرید و خوانایی در امتیاز مؤثر باشد.</td></tr>
+<tr data-s='red'><td><b>E-E-A-T Signals</b></td><td>اعتماد و اعتبار</td><td class='status r'>🔴</td><td>پیشنهاد/بررسی اطلاعات فروشگاه، تماس، درباره ما، سیاست مرجوعی، ضمانت و نویسنده/برند.</td></tr>
+<tr data-s='yellow'><td><b>Duplicate Content</b></td><td>محتوای تکراری</td><td class='status y'>🟡</td><td>اسکن عنوان/توضیح تکراری محصولات اضافه شد؛ تشابه بدنه هنوز نیست.</td></tr>
+<tr data-s='red'><td><b>Thin Content</b></td><td>صفحات کم‌محتوا</td><td class='status r'>🔴</td><td>تشخیص صفحات محصول/دسته کم‌ارزش و ارائه راهکار.</td></tr>
+<tr data-s='red'><td><b>Orphan Pages</b></td><td>صفحات بدون لینک داخلی</td><td class='status r'>🔴</td><td>شناسایی و پیشنهاد اتصال به دسته، محصول یا محتوای مرتبط.</td></tr>
+<tr data-s='green'><td><b>Pagination</b></td><td>صفحات دوم و بعدی</td><td class='status g'>🟢</td><td>preserve + self-canonical برای shop/taxonomy؛ /page/N حفظ می‌شود.</td></tr>
+<tr data-s='green'><td><b>Faceted Navigation</b></td><td>فیلترهای فروشگاه</td><td class='status g'>🟢</td><td>noindex برای orderby/price/filter_*؛ canonical هم query را می‌زند.</td></tr>
+<tr data-s='green'><td><b>Search Pages</b></td><td>نتایج جستجوی داخلی</td><td class='status g'>🟢</td><td>جستجو و ۴۰۴ همیشه noindex (وقتی Damavand primary است).</td></tr>
+<tr data-s='yellow'><td><b>Analytics / GSC</b></td><td>داده عملکرد واقعی</td><td class='status y'>🟡</td><td>اتصال Search Console و تحلیل query، CTR، position، impressions و افت‌ها.</td></tr>
+<tr data-s='red'><td><b>Keyword Cannibalization</b></td><td>هم‌رقابتی صفحات</td><td class='status r'>🔴</td><td>تشخیص چند صفحه برای یک intent و پیشنهاد ادغام/تفکیک/تغییر intent.</td></tr>
+<tr data-s='green'><td><b>SERP Preview</b></td><td>پیش‌نمایش نتیجه گوگل</td><td class='status g'>🟢</td><td>Desktop/Mobile و نمایش واقعی title/description.</td></tr>
+<tr data-s='green'><td><b>Schema Validation</b></td><td>اعتبارسنجی Schema</td><td class='status g'>🟢</td><td>ابزار سئو: اعتبارسنج محصول (IRT، Product.name، ItemList، Offer).</td></tr>
+<tr data-s='yellow'><td><b>Schema Conflict</b></td><td>تداخل با Rank Math/قالب</td><td class='status y'>🟡</td><td>Detector موجود است؛ جلوگیری سخت‌گیرانه‌تر از Product/Breadcrumb تکراری.</td></tr>
+<tr data-s='green'><td><b>Noindex Logic</b></td><td>قواعد هوشمند</td><td class='status g'>🟢</td><td>Damavand_Robots: WC system + facets + author/date + per-post robots + empty tax.</td></tr>
+<tr data-s='yellow'><td><b>Security</b></td><td>امنیت خروجی SEO</td><td class='status y'>🟡</td><td>Escape/validation JSON-LD (HEX_TAG)؛ تقویت بیشتر nonce/capability.</td></tr>
+<tr data-s='green'><td><b>Admin UX</b></td><td>پنل ساده</td><td class='status g'>🟢</td><td>متاباکس تب‌بندی‌شده (پایه/AI/پیشرفته)؛ فیلتر امتیاز در لیست محصولات.</td></tr>
+<tr data-s='yellow'><td><b>Rank Math Parity</b></td><td>پوشش قابلیت‌ها</td><td class='status y'>🟡</td><td>هسته crawl/meta/schema نزدیک شد؛ Intent/Semantic/E-E-A-T هنوز فاصله دارد.</td></tr></tbody></table></section>
+<div class="footer">راهنما: 🟢 قابلیت قابل اتکا/حفظ شود • 🟡 موجود ولی نیازمند بازبینی • 🔴 نیازمند پیاده‌سازی یا بازطراحی. تعداد موارد: <span class="count">52</span> — فعلی: 🟢 21 / 🟡 23 / 🔴 8</div>
+</main><script>
+const input=document.getElementById('q'); const rows=[...document.querySelectorAll('tbody tr')];
+function filter(){let q=input.value.trim().toLowerCase();rows.forEach(r=>r.style.display=r.innerText.toLowerCase().includes(q)?'':'none')}
+function status(s){rows.forEach(r=>r.style.display=(!s||r.dataset.s===s)?'':'none')}
+function allr(){input.value='';rows.forEach(r=>r.style.display='')}
+</script></body></html>
