@@ -4,11 +4,11 @@ Tags: seo, woocommerce, redirect, inventory, out-of-stock, internal-links
 Requires at least: 6.0
 Tested up to: 6.7
 Requires PHP: 8.0
-Stable tag: 1.50.1
+Stable tag: 1.58.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-لایه عملیاتی سئو برای ووکامرس — Inventory-aware SEO (نه جایگزین Yoast/Rank Math). توسعه: اسماعیل شجاعی.
+لایه عملیاتی سئو برای ووکامرس ایرانی — Inventory-aware SEO، Schema، متا و crawl budget. توسعه: اسماعیل شجاعی.
 
 == Description ==
 
@@ -62,6 +62,16 @@ Inventory-aware SEO — تصمیم‌گیری سئو بر اساس موجودی 
 با آپلود فایل JSON مربوط به Service Account — بدون OAuth و بدون Refresh Token.
 
 == Changelog ==
+
+= 1.58.0 =
+* همگام‌سازی Stable tag با Version هدر افزونه (جلوگیری از گیج شدن آپدیت)
+* Crawl budget: noindex برای سبد/تسویه/حساب/جستجو/۴۰۴/فیلتر و بایگانی نویسنده/تاریخ
+* اعمال متای `_damavand_seo_robots` روی فرانت + کنترل دستی در متاباکس پیشرفته
+* Schema روی صفحات noindex چاپ نمی‌شود؛ اسکیمای موازی ووکامرس وقتی Damavand مالک Product است سرکوب می‌شود
+* Canonical pagination فروشگاه (`is_shop`) حفظ می‌شود
+* ابزار ادمین: اعتبارسنج Schema محصول + اسکن عنوان/توضیح تکراری
+* OOS noindex دیگر Rule Engine را روی فرانت صدا نمی‌زند (بهبود TTFB)
+* Product Graph یکپارچه، Product.name واقعی، ItemList فقط روی آرشیو (از سری ۱.۵۷.x)
 
 = 1.50.1 =
 * رفع گیر کردن اسپینر ووکامرس هنگام bulk متغیر/ویژگی/قیمت — defer هوک موجودی + توقف AJAX امتیاز زنده

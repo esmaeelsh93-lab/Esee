@@ -8,7 +8,15 @@
     "phpunit/phpunit": "^10.5"
   },
   "scripts": {
-    "test": "phpunit -c tests/phpunit.xml",
-    "self-test": "@php -r \"echo 'Use: wp eval-file seo-core/bin/run-self-test.php' . PHP_EOL;\""
+    "check-version": "bash scripts/check-version-sync.sh",
+    "test": [
+      "@check-version",
+      "phpunit -c tests/phpunit.xml"
+    ],
+    "self-test": "@php -r \"echo 'Use: wp eval-file seo-core/bin/run-self-test.php' . PHP_EOL;\"",
+    "zip": [
+      "@check-version",
+      "bash scripts/build-zip.sh"
+    ]
   }
 }
