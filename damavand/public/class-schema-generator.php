@@ -101,7 +101,7 @@ class Shojaei_SEO_Schema_Generator {
 		if ( $product_id < 1 ) {
 			return;
 		}
-		foreach ( array( 'v2', 'v3', 'v4', 'v5', 'v6' ) as $ver ) {
+		foreach ( array( 'v2', 'v3', 'v4', 'v5', 'v6', 'v7' ) as $ver ) {
 			delete_transient( 'shojaei_seo_schema_product_' . $ver . '_' . $product_id );
 		}
 	}
@@ -151,7 +151,7 @@ class Shojaei_SEO_Schema_Generator {
 			return;
 		}
 
-		$cache_key = 'shojaei_seo_schema_product_v6_' . $product->get_id();
+		$cache_key = 'shojaei_seo_schema_product_v7_' . $product->get_id();
 		$cached    = get_transient( $cache_key );
 		if ( false !== $cached ) {
 			echo $cached; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -283,51 +283,48 @@ class Shojaei_SEO_Schema_Generator {
 		$post_id = $product->get_id();
 		// Real catalog name — do NOT replace with SEO title ("خرید … | فروشگاه").
 		$name = $product->get_name();
-		$desc = wp_strip_all_tags( $product->get_short_description() ?: $product->get_description() );
-
-		if ( class_exists( 'Damavand_SEO_Meta' ) ) {
-			$seo_desc = Damavand_SEO_Meta::get_description( $post_id, false );
-			if ( '' !== $seo_desc ) {
-				$desc = $seo_desc;
-			}
-		}
+		$desc = self::product_description( $product );
 
 		$images = self::product_image_urls( $product );
+		$brand  = self::resolve_brand_name( $product );
+		$sku    = $product->get_sku() ?: (string) $product->get_id();
+		$gtin   = self::resolve_gtin( $product );
+		if ( '' === $brand && '' === $gtin ) {
+			$brand = get_bloginfo( 'name' );
+		}
+
+		$variants = $product->is_type( 'variable' ) ? self::product_variant_nodes( $product, $desc, $brand ) : array();
+		$is_group = ! empty( $variants );
+
 		$schema = array(
-			'@type'       => 'Product',
+			'@type'       => $is_group ? 'ProductGroup' : 'Product',
 			'name'        => $name,
 			'description' => $desc,
-			'sku'         => $product->get_sku() ?: (string) $product->get_id(),
+			'sku'         => $sku,
 			'url'         => get_permalink( $post_id ),
-			'offers'      => self::product_offers( $product ),
 		);
+
+		if ( $is_group ) {
+			$schema['productGroupID'] = $sku;
+			$varies_by                = self::product_varies_by( $product );
+			if ( ! empty( $varies_by ) ) {
+				$schema['variesBy'] = $varies_by;
+			}
+			$schema['hasVariant'] = $variants;
+		} else {
+			$schema['offers'] = self::product_offers( $product );
+		}
 
 		if ( ! empty( $images ) ) {
 			$schema['image'] = 1 === count( $images ) ? $images[0] : $images;
 		}
 
-		$brand = self::resolve_brand_name( $product );
 		if ( '' !== $brand ) {
-			$schema['brand'] = array(
-				'@type' => 'Brand',
-				'name'  => $brand,
-			);
+			$schema['brand'] = self::brand_block( $brand );
 		}
 
-		$gtin = self::resolve_gtin( $product );
 		if ( '' !== $gtin ) {
-			$len = strlen( preg_replace( '/\D+/', '', $gtin ) );
-			$key = 'gtin';
-			if ( 8 === $len ) {
-				$key = 'gtin8';
-			} elseif ( 12 === $len ) {
-				$key = 'gtin12';
-			} elseif ( 13 === $len ) {
-				$key = 'gtin13';
-			} elseif ( 14 === $len ) {
-				$key = 'gtin14';
-			}
-			$schema[ $key ] = $gtin;
+			$schema[ self::gtin_key( $gtin ) ] = $gtin;
 		}
 
 		$mpn = self::resolve_mpn( $product );
@@ -364,14 +361,171 @@ class Shojaei_SEO_Schema_Generator {
 			$schema['review'] = 1 === count( $reviews ) ? $reviews[0] : $reviews;
 		}
 
-		if ( $product->is_type( 'variable' ) ) {
-			$variants = self::product_variant_nodes( $product );
-			if ( ! empty( $variants ) ) {
-				$schema['hasVariant'] = $variants;
+		return $schema;
+	}
+
+	/**
+	 * Product description with SEO meta + non-empty fallback (GSC merchant listings).
+	 */
+	private static function product_description( WC_Product $product ): string {
+		$post_id = $product->get_id();
+		$desc    = '';
+
+		if ( class_exists( 'Damavand_SEO_Meta' ) ) {
+			$seo_desc = Damavand_SEO_Meta::get_description( $post_id, false );
+			if ( '' !== trim( (string) $seo_desc ) ) {
+				$desc = trim( (string) $seo_desc );
 			}
 		}
 
-		return $schema;
+		if ( '' === $desc ) {
+			$short = wp_strip_all_tags( (string) $product->get_short_description() );
+			if ( '' !== trim( $short ) ) {
+				$desc = trim( $short );
+			}
+		}
+
+		if ( '' === $desc ) {
+			$long = wp_strip_all_tags( (string) $product->get_description() );
+			if ( '' !== trim( $long ) ) {
+				$desc = wp_trim_words( trim( $long ), 40, '…' );
+			}
+		}
+
+		if ( '' === $desc ) {
+			$desc = wp_strip_all_tags( $product->get_name() );
+		}
+
+		return $desc;
+	}
+
+	/**
+	 * Brand node for Product / variant JSON-LD.
+	 */
+	private static function brand_block( string $brand ): array {
+		return array(
+			'@type' => 'Brand',
+			'name'  => $brand,
+		);
+	}
+
+	/**
+	 * GTIN property key by digit length.
+	 */
+	private static function gtin_key( string $gtin ): string {
+		$len = strlen( preg_replace( '/\D+/', '', $gtin ) );
+		if ( 8 === $len ) {
+			return 'gtin8';
+		}
+		if ( 12 === $len ) {
+			return 'gtin12';
+		}
+		if ( 13 === $len ) {
+			return 'gtin13';
+		}
+		if ( 14 === $len ) {
+			return 'gtin14';
+		}
+		return 'gtin';
+	}
+
+	/**
+	 * schema.org property URLs for variation axes (ProductGroup.variesBy).
+	 *
+	 * @return string[]
+	 */
+	private static function product_varies_by( WC_Product $product ): array {
+		if ( ! $product->is_type( 'variable' ) || ! method_exists( $product, 'get_variation_attributes' ) ) {
+			return array();
+		}
+		$map = array(
+			'color'      => 'https://schema.org/color',
+			'colour'     => 'https://schema.org/color',
+			'size'       => 'https://schema.org/size',
+			'pattern'    => 'https://schema.org/pattern',
+			'material'   => 'https://schema.org/material',
+			'fit'        => 'https://schema.org/size',
+			'age-group'  => 'https://schema.org/suggestedAge',
+			'age_group'  => 'https://schema.org/suggestedAge',
+		);
+		$out = array();
+		foreach ( array_keys( $product->get_variation_attributes() ) as $attr_name ) {
+			$slug = strtolower( preg_replace( '/^pa_/', '', (string) $attr_name ) );
+			$out[] = $map[ $slug ] ?? 'https://schema.org/' . sanitize_title( $slug );
+		}
+		return array_values( array_unique( array_filter( $out ) ) );
+	}
+
+	/**
+	 * ISO currency + optional toman→rial factor for schema output only.
+	 *
+	 * @return array{currency:string,factor:float}
+	 */
+	private static function schema_currency_context(): array {
+		$currency = Shojaei_SEO_Helpers::get_currency_code();
+		if ( 'IRT' === $currency ) {
+			return array(
+				'currency' => 'IRR',
+				'factor'   => 10.0,
+			);
+		}
+		return array(
+			'currency' => $currency,
+			'factor'   => 1.0,
+		);
+	}
+
+	/**
+	 * Merchant listing extras for Offer nodes (shipping + returns).
+	 *
+	 * @return array<string,mixed>
+	 */
+	private static function offer_merchant_extras( string $schema_currency ): array {
+		$extras = array(
+			'shippingDetails' => array(
+				'@type'               => 'OfferShippingDetails',
+				'shippingRate'        => array(
+					'@type'    => 'MonetaryAmount',
+					'value'    => '0',
+					'currency' => $schema_currency,
+				),
+				'shippingDestination' => array(
+					'@type'          => 'DefinedRegion',
+					'addressCountry' => 'IR',
+				),
+				'deliveryTime'        => array(
+					'@type'        => 'ShippingDeliveryTime',
+					'handlingTime' => array(
+						'@type'    => 'QuantitativeValue',
+						'minValue' => 0,
+						'maxValue' => 2,
+						'unitCode' => 'DAY',
+					),
+					'transitTime'  => array(
+						'@type'    => 'QuantitativeValue',
+						'minValue' => 1,
+						'maxValue' => 7,
+						'unitCode' => 'DAY',
+					),
+				),
+			),
+		);
+
+		$returns_url = class_exists( 'Damavand_FAQ_Box' ) ? Damavand_FAQ_Box::get_returns_url() : '';
+		$policy      = array(
+			'@type'                => 'MerchantReturnPolicy',
+			'applicableCountry'    => 'IR',
+			'returnPolicyCategory' => 'https://schema.org/MerchantReturnFiniteReturnWindow',
+			'merchantReturnDays'   => 7,
+			'returnMethod'         => 'https://schema.org/ReturnByMail',
+			'returnFees'           => 'https://schema.org/ReturnShippingFees',
+		);
+		if ( '' !== $returns_url ) {
+			$policy['returnPolicyUrl'] = $returns_url;
+		}
+		$extras['hasMerchantReturnPolicy'] = $policy;
+
+		return $extras;
 	}
 
 	/**
@@ -486,9 +640,12 @@ class Shojaei_SEO_Schema_Generator {
 	/**
 	 * Compact ProductGroup variants for variable products (max 12).
 	 *
+	 * @param WC_Product $product       Parent variable product.
+	 * @param string     $parent_desc   Parent description (inherited by variants).
+	 * @param string     $parent_brand  Parent brand name (inherited by variants).
 	 * @return array<int,array<string,mixed>>
 	 */
-	private static function product_variant_nodes( WC_Product $product ): array {
+	private static function product_variant_nodes( WC_Product $product, string $parent_desc = '', string $parent_brand = '' ): array {
 		if ( ! $product->is_type( 'variable' ) ) {
 			return array();
 		}
@@ -499,15 +656,10 @@ class Shojaei_SEO_Schema_Generator {
 		if ( empty( $children ) || ! is_array( $children ) ) {
 			return array();
 		}
-		$currency = Shojaei_SEO_Helpers::get_currency_code();
-		$schema_currency = $currency;
-		$rial_factor      = 1.0;
-		if ( 'IRT' === $currency ) {
-			$schema_currency = 'IRR';
-			$rial_factor      = 10.0;
-		}
-		$out   = array();
-		$count = 0;
+		$currency_ctx = self::schema_currency_context();
+		$permalink    = get_permalink( $product->get_id() );
+		$out          = array();
+		$count        = 0;
 		foreach ( $children as $row ) {
 			if ( $count >= 12 ) {
 				break;
@@ -521,21 +673,50 @@ class Shojaei_SEO_Schema_Generator {
 				continue;
 			}
 			$vname = $variation->get_name();
-			$node  = array(
-				'@type' => 'Product',
-				'@id'   => trailingslashit( get_permalink( $product->get_id() ) ) . '#variation-' . $vid,
-				'name'  => $vname,
-				'sku'   => $variation->get_sku() ?: (string) $vid,
-				'offers'=> array(
-					'@type'         => 'Offer',
-					'price'         => self::schema_price_string( $variation->get_price(), $rial_factor ),
-					'priceCurrency' => $schema_currency,
-					'availability'  => $variation->is_in_stock() ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
-					'url'           => get_permalink( $product->get_id() ),
-					'itemCondition' => 'https://schema.org/NewCondition',
-					'seller'        => array( '@id' => self::entity_id( 'organization' ) ),
+			$vdesc = wp_strip_all_tags( (string) $variation->get_description() );
+			if ( '' === trim( $vdesc ) ) {
+				$vdesc = $parent_desc;
+			}
+			if ( '' === trim( $vdesc ) ) {
+				$vdesc = $vname;
+			}
+
+			$offer = array_merge(
+				array(
+					'@type'           => 'Offer',
+					'price'           => self::schema_price_string( $variation->get_price(), $currency_ctx['factor'] ),
+					'priceCurrency'   => $currency_ctx['currency'],
+					'availability'    => $variation->is_in_stock() ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+					'url'             => $permalink,
+					'itemCondition'   => 'https://schema.org/NewCondition',
+					'seller'          => array( '@id' => self::entity_id( 'organization' ) ),
+					'priceValidUntil' => gmdate( 'Y-m-d', strtotime( '+1 year' ) ),
 				),
+				self::offer_merchant_extras( $currency_ctx['currency'] )
 			);
+
+			$node = array(
+				'@type'       => 'Product',
+				'@id'         => trailingslashit( $permalink ) . '#variation-' . $vid,
+				'name'        => $vname,
+				'description' => $vdesc,
+				'sku'         => $variation->get_sku() ?: (string) $vid,
+				'offers'      => $offer,
+			);
+
+			$brand = '' !== $parent_brand ? $parent_brand : self::resolve_brand_name( $variation );
+			if ( '' === $brand && '' === self::resolve_gtin( $variation ) ) {
+				$brand = get_bloginfo( 'name' );
+			}
+			if ( '' !== $brand ) {
+				$node['brand'] = self::brand_block( $brand );
+			}
+
+			$gtin = self::resolve_gtin( $variation );
+			if ( '' !== $gtin ) {
+				$node[ self::gtin_key( $gtin ) ] = $gtin;
+			}
+
 			$img = wp_get_attachment_url( (int) $variation->get_image_id() );
 			if ( $img ) {
 				$node['image'] = $img;
@@ -623,19 +804,12 @@ class Shojaei_SEO_Schema_Generator {
 	 * @return array<string,mixed>
 	 */
 	private static function product_offers( WC_Product $product ): array {
-		$currency     = Shojaei_SEO_Helpers::get_currency_code();
 		$url          = get_permalink( $product->get_id() );
 		$availability = $product->is_in_stock()
 			? 'https://schema.org/InStock'
 			: 'https://schema.org/OutOfStock';
 
-		// Schema-only mapping: IRT → IRR (+ ×10). Other codes pass through.
-		$schema_currency = $currency;
-		$rial_factor      = 1.0;
-		if ( 'IRT' === $currency ) {
-			$schema_currency = 'IRR';
-			$rial_factor      = 10.0;
-		}
+		$currency_ctx = self::schema_currency_context();
 
 		if ( $product->is_type( 'variable' ) ) {
 			$prices = $product->get_variation_prices( true );
@@ -647,31 +821,37 @@ class Shojaei_SEO_Schema_Generator {
 					}
 				);
 				if ( ! empty( $active ) ) {
-					return array(
-						'@type'           => 'AggregateOffer',
-						'lowPrice'        => self::schema_price_string( min( $active ), $rial_factor ),
-						'highPrice'       => self::schema_price_string( max( $active ), $rial_factor ),
-						'offerCount'      => count( $active ),
-						'priceCurrency'   => $schema_currency,
-						'availability'    => $availability,
-						'url'             => $url,
-						'itemCondition'   => 'https://schema.org/NewCondition',
-						'seller'          => array( '@id' => self::entity_id( 'organization' ) ),
-						'priceValidUntil' => gmdate( 'Y-m-d', strtotime( '+1 year' ) ),
+					return array_merge(
+						array(
+							'@type'           => 'AggregateOffer',
+							'lowPrice'        => self::schema_price_string( min( $active ), $currency_ctx['factor'] ),
+							'highPrice'       => self::schema_price_string( max( $active ), $currency_ctx['factor'] ),
+							'offerCount'      => count( $active ),
+							'priceCurrency'   => $currency_ctx['currency'],
+							'availability'    => $availability,
+							'url'             => $url,
+							'itemCondition'   => 'https://schema.org/NewCondition',
+							'seller'          => array( '@id' => self::entity_id( 'organization' ) ),
+							'priceValidUntil' => gmdate( 'Y-m-d', strtotime( '+1 year' ) ),
+						),
+						self::offer_merchant_extras( $currency_ctx['currency'] )
 					);
 				}
 			}
 		}
 
-		$offer = array(
-			'@type'           => 'Offer',
-			'price'           => self::schema_price_string( $product->get_price(), $rial_factor ),
-			'priceCurrency'   => $schema_currency,
-			'availability'    => $availability,
-			'url'             => $url,
-			'itemCondition'   => 'https://schema.org/NewCondition',
-			'seller'          => array( '@id' => self::entity_id( 'organization' ) ),
-			'priceValidUntil' => gmdate( 'Y-m-d', strtotime( '+1 year' ) ),
+		$offer = array_merge(
+			array(
+				'@type'           => 'Offer',
+				'price'           => self::schema_price_string( $product->get_price(), $currency_ctx['factor'] ),
+				'priceCurrency'   => $currency_ctx['currency'],
+				'availability'    => $availability,
+				'url'             => $url,
+				'itemCondition'   => 'https://schema.org/NewCondition',
+				'seller'          => array( '@id' => self::entity_id( 'organization' ) ),
+				'priceValidUntil' => gmdate( 'Y-m-d', strtotime( '+1 year' ) ),
+			),
+			self::offer_merchant_extras( $currency_ctx['currency'] )
 		);
 		if ( '' !== (string) $product->get_sku() ) {
 			$offer['sku'] = (string) $product->get_sku();
