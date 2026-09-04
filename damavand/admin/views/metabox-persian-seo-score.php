@@ -1,6 +1,6 @@
 <?php
 /**
- * Metabox: سئوی فارسی Damavand — تب‌بندی تمیز (پایه / AI / پیشرفته).
+ * Metabox: سئوی فارسی Damavand — تب‌بندی (پایه / پیشرفته).
  *
  * @var WP_Post $post
  * @var array   $analysis
@@ -26,9 +26,6 @@ $focus_display = $focus !== '' ? $focus : (string) $post->post_title;
 <div class="dm-score" id="damavand-seo-score-box" dir="rtl" data-post-id="<?php echo esc_attr( (string) (int) $post->ID ); ?>" data-focus-auto="<?php echo esc_attr( '' === $focus ? '1' : '0' ); ?>">
 	<nav class="dm-score__tabs" role="tablist" aria-label="<?php esc_attr_e( 'بخش‌های سئو Damavand', 'shojaei-seo-for-woo' ); ?>">
 		<button type="button" class="dm-score__tab is-active" role="tab" aria-selected="true" data-dm-tab="basic"><?php esc_html_e( 'سئو پایه', 'shojaei-seo-for-woo' ); ?></button>
-		<?php if ( 'product' === $post->post_type && class_exists( 'Shojaei_SEO_AI_Client' ) && Shojaei_SEO_AI_Client::is_enabled() ) : ?>
-		<button type="button" class="dm-score__tab" role="tab" aria-selected="false" data-dm-tab="ai"><?php esc_html_e( 'هوش مصنوعی', 'shojaei-seo-for-woo' ); ?></button>
-		<?php endif; ?>
 		<button type="button" class="dm-score__tab" role="tab" aria-selected="false" data-dm-tab="advanced"><?php esc_html_e( 'پیشرفته', 'shojaei-seo-for-woo' ); ?></button>
 	</nav>
 
@@ -68,27 +65,10 @@ $focus_display = $focus !== '' ? $focus : (string) $post->post_title;
 
 				<p class="dm-score__tpl-row">
 					<button type="button" class="button" id="dm-score-apply-tpl"><?php esc_html_e( 'پیشنهاد متا از توضیحات', 'shojaei-seo-for-woo' ); ?></button>
-					<em class="dm-score__meta"><?php esc_html_e( 'بدون هوش مصنوعی — از توضیح کوتاه/کامل محصول', 'shojaei-seo-for-woo' ); ?></em>
+					<em class="dm-score__meta"><?php esc_html_e( 'از توضیح کوتاه/کامل محصول', 'shojaei-seo-for-woo' ); ?></em>
 				</p>
 				<p class="dm-score__status" id="dm-score-status" aria-live="polite"></p>
 			</div>
-
-			<?php if ( 'product' === $post->post_type && class_exists( 'Shojaei_SEO_AI_Client' ) && Shojaei_SEO_AI_Client::is_enabled() ) : ?>
-			<div class="dm-score__panel" data-dm-panel="ai" hidden>
-				<div class="dm-score__ollama" id="dm-ollama-panel">
-					<p class="description"><?php esc_html_e( 'هوش مصنوعی فقط برای Alt تصاویر و کلمات مرتبط — OpenRouter با مدل‌های رایگان.', 'shojaei-seo-for-woo' ); ?></p>
-					<label class="dm-score__field">
-						<span><?php esc_html_e( 'اطلاعات تکمیلی محصول (اختیاری)', 'shojaei-seo-for-woo' ); ?></span>
-						<textarea id="dm-ollama-extra" rows="3" placeholder="<?php esc_attr_e( 'جنس، برند، کاربرد، رنگ، سایز…', 'shojaei-seo-for-woo' ); ?>"></textarea>
-					</label>
-					<p class="dm-score__ollama-actions">
-						<button type="button" class="button button-primary" data-ai="related_keywords"><?php esc_html_e( 'کلمات مرتبط', 'shojaei-seo-for-woo' ); ?></button>
-						<button type="button" class="button" data-ai="alt_texts"><?php esc_html_e( 'Alt تصاویر', 'shojaei-seo-for-woo' ); ?></button>
-					</p>
-					<p class="description" id="dm-ollama-status" aria-live="polite"></p>
-				</div>
-			</div>
-			<?php endif; ?>
 
 			<div class="dm-score__panel" data-dm-panel="advanced" hidden>
 				<div class="dm-score__field" style="margin-bottom:14px;">

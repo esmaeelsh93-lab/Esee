@@ -2,8 +2,8 @@
 /**
  * Plugin Name:       افزونه سئو حرفه‌ای دماوند (Damavand)
  * Plugin URI:        https://shojaei.com
- * Description:       جایگزین ساده‌تر و بهتر Rank Math برای فروشگاه‌های ووکامرس ایرانی — Schema، متا، crawl budget، OOS و AI کنترل‌شده
- * Version:           1.60.2
+ * Description:       جایگزین ساده‌تر و بهتر Rank Math برای فروشگاه‌های ووکامرس ایرانی — Schema، متا، crawl budget و OOS
+ * Version:           1.61.0
  * Author:            اسماعیل شجاعی
  * Author URI:        https://shojaei.com
  * Text Domain:       shojaei-seo-for-woo
@@ -23,7 +23,7 @@ defined( 'ABSPATH' ) || exit;
  * اگر افزونه دیگری قبلاً SHOJAEI_SEO_PLUGIN_* را گرفته باشد، از DAMAVAND_SEO_* استفاده می‌کنیم.
  */
 if ( ! defined( 'DAMAVAND_SEO_VERSION' ) ) {
-	define( 'DAMAVAND_SEO_VERSION', '1.60.2' );
+	define( 'DAMAVAND_SEO_VERSION', '1.61.0' );
 }
 if ( ! defined( 'DAMAVAND_SEO_DB_VERSION' ) ) {
 	define( 'DAMAVAND_SEO_DB_VERSION', '1.33.0' );
@@ -174,9 +174,6 @@ if ( ! class_exists( 'Shojaei_SEO_For_Woo', false ) ) {
 				'includes/class-damavand-link-suggestions.php',
 				'includes/class-damavand-link-watchdog.php',
 				'includes/class-damavand-faq-box.php',
-				'includes/class-shojaei-seo-ai-client.php',
-				'includes/class-shojaei-seo-store-profile.php',
-				'includes/class-shojaei-seo-ai-engine.php',
 				'includes/class-damavand-delete-redirect.php',
 				'includes/admin/class-damavand-similar-products-settings.php',
 				'includes/core/class-damavand-similar-products-engine.php',
@@ -340,9 +337,6 @@ if ( ! class_exists( 'Shojaei_SEO_For_Woo', false ) ) {
 				}
 				if ( class_exists( 'Damavand_FAQ_Box' ) ) {
 					Damavand_FAQ_Box::register_hooks();
-				}
-				if ( class_exists( 'Shojaei_SEO_AI_Engine' ) ) {
-					Shojaei_SEO_AI_Engine::init();
 				}
 				if ( class_exists( 'Damavand_Delete_Redirect' ) ) {
 					Damavand_Delete_Redirect::register_hooks();

@@ -42,8 +42,8 @@
     });
 
     /**
-     * Settings deep-links (#shojaei-performance, #shojaei-content-server, …):
-     * open the matching <details> and scroll — do NOT leave content-server stealing focus.
+     * Settings deep-links (#shojaei-performance, …):
+     * open the matching <details> and scroll.
      */
     function shojaeiOpenSettingsHash() {
         var hash = window.location.hash || '';
@@ -75,7 +75,7 @@
             }
         }
 
-        // Accordion jump targets (e.g. #shojaei-acc-content-server).
+        // Accordion jump targets (e.g. #shojaei-acc-oos-lifecycle).
         if ($target.hasClass('shojaei-accordion-item')) {
             var $root = $target.closest('.shojaei-accordion');
             $root.find('> .shojaei-accordion-item').removeClass('is-open');

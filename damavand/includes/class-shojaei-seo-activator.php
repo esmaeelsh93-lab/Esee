@@ -19,8 +19,6 @@ class Shojaei_SEO_Activator {
 		try {
 			self::create_tables();
 			self::set_default_options();
-			self::migrate_ollama_to_ai();
-			self::migrate_openrouter_ai();
 			self::schedule_cron_events();
 			update_option( 'shojaei_seo_db_version', DAMAVAND_SEO_DB_VERSION );
 
@@ -436,11 +434,6 @@ class Shojaei_SEO_Activator {
 		}
 
 		update_option( 'damavand_seo_plugin_version', DAMAVAND_SEO_VERSION, false );
-		self::migrate_ollama_to_ai();
-		self::migrate_gemini_model_ids();
-		if ( class_exists( 'Shojaei_SEO_AI_Client' ) ) {
-			Shojaei_SEO_AI_Client::model();
-		}
 		if ( class_exists( 'Shojaei_SEO_Helpers' ) ) {
 			Shojaei_SEO_Helpers::ensure_admin_capabilities();
 		}
@@ -471,77 +464,6 @@ class Shojaei_SEO_Activator {
 				add_option( $opt, $val, '', false );
 			}
 		}
-	}
-
-	/**
-	 * One-time: copy Ollama toggle to new AI options (1.53+).
-	 */
-	public static function migrate_ollama_to_ai(): void {
-		if ( 'yes' === (string) get_option( 'shojaei_seo_ai_migrated', '' ) ) {
-			return;
-		}
-
-		$ollama_on = (string) get_option( 'shojaei_seo_ollama_enabled', '' );
-		if ( '' !== $ollama_on && false === get_option( 'shojaei_seo_ai_enabled', false ) ) {
-			update_option( 'shojaei_seo_ai_enabled', $ollama_on, false );
-		}
-
-		foreach ( array(
-			'shojaei_seo_ai_provider' => 'openrouter',
-			'shojaei_seo_ai_model'    => 'meta-llama/llama-3.3-70b-instruct:free',
-			'shojaei_seo_ai_timeout'  => 30,
-		) as $opt => $default ) {
-			if ( false === get_option( $opt, false ) ) {
-				add_option( $opt, $default, '', false );
-			}
-		}
-
-		update_option( 'shojaei_seo_ai_migrated', 'yes', false );
-
-		if ( class_exists( 'Shojaei_SEO_AI_Client' ) ) {
-			$stored = sanitize_key( (string) get_option( 'shojaei_seo_ai_provider', '' ) );
-			if ( 'groq' === $stored ) {
-				update_option( 'shojaei_seo_ai_provider', 'openrouter', false );
-				$model = trim( (string) get_option( 'shojaei_seo_ai_model', '' ) );
-				if ( '' !== $model ) {
-					update_option(
-						'shojaei_seo_ai_model',
-						Shojaei_SEO_AI_Client::map_model_to_provider( $model, 'openrouter' ),
-						false
-					);
-				}
-			}
-		}
-	}
-
-	/**
-	 * Migrate legacy providers/models to OpenRouter free models (1.60+).
-	 */
-	public static function migrate_openrouter_ai(): void {
-		if ( ! class_exists( 'Shojaei_SEO_AI_Client' ) ) {
-			return;
-		}
-		$provider = sanitize_key( (string) get_option( 'shojaei_seo_ai_provider', '' ) );
-		if ( in_array( $provider, array( 'groq', 'gemini' ), true ) ) {
-			update_option( 'shojaei_seo_ai_provider', 'openrouter', false );
-		}
-		$model = trim( (string) get_option( 'shojaei_seo_ai_model', '' ) );
-		if ( '' === $model ) {
-			return;
-		}
-		$mapped = Shojaei_SEO_AI_Client::map_model_to_provider( $model, 'openrouter' );
-		if ( $mapped !== $model ) {
-			update_option( 'shojaei_seo_ai_model', $mapped, false );
-		}
-	}
-
-	/**
-	 * Map retired Gemini model ids saved in options (1.59.1+).
-	 *
-	 * @deprecated 1.60.0 Use migrate_openrouter_ai().
-	 */
-	public static function migrate_gemini_model_ids(): void {
-		self::migrate_openrouter_ai();
 	}
 
 	/**
@@ -636,11 +558,6 @@ class Shojaei_SEO_Activator {
 			'shojaei_seo_gsc_enabled'           => 'no',
 			'shojaei_seo_gsc_auto_index'        => 'yes',
 			'shojaei_seo_indexnow_enabled'      => 'yes',
-			'shojaei_seo_ai_enabled'            => 'yes',
-			'shojaei_seo_ai_provider'           => 'openrouter',
-			'shojaei_seo_ai_api_key'            => '',
-			'shojaei_seo_ai_model'              => 'meta-llama/llama-3.3-70b-instruct',
-			'shojaei_seo_ai_timeout'            => 30,
 			'shojaei_seo_schema_itemlist_enabled' => 'yes',
 			'shojaei_seo_oos_notify_enabled'    => 'yes',
 			'shojaei_seo_oos_phase1_days'       => 15,

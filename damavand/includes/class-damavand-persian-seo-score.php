@@ -1243,50 +1243,17 @@ $serp_url  = (string) get_permalink( $post );
 			$title = (string) $post->post_title;
 		}
 
-		$ctx = array(
-			'post_id'    => $post_id,
-			'title'      => $title,
-			'keyword'    => (string) get_post_meta( $post_id, '_damavand_seo_focus_keyword', true ),
-			'categories' => '',
-			'attributes' => '',
-		);
-		if ( class_exists( 'Shojaei_SEO_AI_Engine' ) ) {
-			$enriched = Shojaei_SEO_AI_Engine::product_seo_context( $post_id );
-			$ctx['categories'] = $enriched['categories'] ?? '';
-			$ctx['attributes'] = $enriched['attributes'] ?? '';
-		}
-
-		$latin    = '';
-		$via_ai   = false;
-		$fallback = false;
-
-		if ( class_exists( 'Shojaei_SEO_AI_Client' ) && Shojaei_SEO_AI_Client::is_configured() && class_exists( 'Shojaei_SEO_AI_Engine' ) ) {
-			$ai_slug = Shojaei_SEO_AI_Engine::generate_slug( $ctx );
-			if ( ! is_wp_error( $ai_slug ) && '' !== $ai_slug ) {
-				$latin  = $ai_slug;
-				$via_ai = true;
-			}
-		}
-
-		if ( '' === $latin ) {
-			$latin    = Shojaei_SEO_Slug::transliterate( $title );
-			$fallback = true;
-		}
-
+		$latin = Shojaei_SEO_Slug::transliterate( $title );
 		$latin = Shojaei_SEO_Slug::uniquify_slug( $latin, $post_id, (string) $post->post_type, (string) $post->post_status, (int) $post->post_parent );
 		if ( '' === $latin ) {
 			wp_send_json_error( array( 'message' => __( 'فینگلیش ساخته نشد.', 'shojaei-seo-for-woo' ) ) );
 		}
 
-		$message = $via_ai
-			? __( 'نامک فینگلیش تولید شد — در ویرایشگر اعمال شد.', 'shojaei-seo-for-woo' )
-			: __( 'پیشنهاد فینگلیش آفلاین — در ویرایشگر اعمال شد.', 'shojaei-seo-for-woo' );
-
 		wp_send_json_success(
 			array(
 				'slug'    => $latin,
-				'message' => $message,
-				'source'  => $via_ai ? 'ai' : 'offline',
+				'message' => __( 'پیشنهاد فینگلیش — در ویرایشگر اعمال شد.', 'shojaei-seo-for-woo' ),
+				'source'  => 'offline',
 			)
 		);
 	}

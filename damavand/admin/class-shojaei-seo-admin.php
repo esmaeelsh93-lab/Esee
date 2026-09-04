@@ -590,7 +590,6 @@ JS;
 			'shojaei_seo_slug_tools_enabled',
 			'shojaei_seo_slug_auto_finglish',
 			'shojaei_seo_slug_auto_301',
-			'shojaei_seo_ai_enabled',
 			'shojaei_seo_schema_itemlist_enabled',
 		);
 
@@ -633,8 +632,6 @@ JS;
 			'shojaei_seo_gsc_property_prefer',
 			'shojaei_seo_oos_related_limit',
 			'shojaei_seo_faq_returns_page_id',
-			'shojaei_seo_ai_provider',
-			'shojaei_seo_ai_timeout',
 		);
 
 		foreach ( $fields as $key ) {
@@ -668,52 +665,12 @@ JS;
 				if ( 'shojaei_seo_faq_returns_page_id' === $key ) {
 					$value = (string) max( 0, absint( $value ) );
 				}
-				if ( 'shojaei_seo_ai_provider' === $key ) {
-					$value = sanitize_key( $value );
-					$value = Shojaei_SEO_AI_Client::normalize_provider( $value );
-					update_option( $key, $value, false );
-					continue;
-				}
-				if ( 'shojaei_seo_ai_timeout' === $key ) {
-					$value = (string) max( 15, min( 90, absint( $value ) ?: 30 ) );
-				}
 				if ( 'shojaei_seo_indexnow_key' === $key && class_exists( 'SEO_Core_Installer' ) ) {
 					SEO_Core_Installer::set_indexnow_key( $value );
 				} else {
 					update_option( $key, $value );
 				}
 			}
-		}
-
-		if ( isset( $_POST['shojaei_seo_ai_model'] ) ) { // phpcs:ignore
-			$model = sanitize_text_field( wp_unslash( $_POST['shojaei_seo_ai_model'] ) ); // phpcs:ignore
-			if ( '__custom__' === $model && isset( $_POST['shojaei_seo_ai_model_custom'] ) ) { // phpcs:ignore
-				$model = sanitize_text_field( wp_unslash( $_POST['shojaei_seo_ai_model_custom'] ) ); // phpcs:ignore
-			}
-			if ( '' !== trim( $model ) && '__custom__' !== $model ) {
-				$provider = isset( $_POST['shojaei_seo_ai_provider'] ) // phpcs:ignore
-					? sanitize_key( wp_unslash( $_POST['shojaei_seo_ai_provider'] ) ) // phpcs:ignore
-					: Shojaei_SEO_AI_Client::provider();
-				$model = Shojaei_SEO_AI_Client::map_model_to_provider( trim( $model ), $provider );
-				update_option( 'shojaei_seo_ai_model', $model, false );
-			}
-		}
-
-		if ( isset( $_POST['shojaei_seo_ai_api_key'] ) ) { // phpcs:ignore
-			$api_key = trim( (string) wp_unslash( $_POST['shojaei_seo_ai_api_key'] ) ); // phpcs:ignore
-			if ( '' !== $api_key && 0 !== strpos( $api_key, '••••' ) ) {
-				Shojaei_SEO_AI_Client::store_api_key( $api_key );
-			}
-		}
-
-		if ( isset( $_POST['shojaei_seo_ai_relay_https_url'] ) ) { // phpcs:ignore
-			$relay = Shojaei_SEO_AI_Client::sanitize_url( (string) wp_unslash( $_POST['shojaei_seo_ai_relay_https_url'] ) ); // phpcs:ignore
-			update_option( Shojaei_SEO_AI_Client::OPT_RELAY_HTTPS, $relay, false );
-		}
-
-		if ( isset( $_POST['shojaei_seo_ai_relay_backup_urls'] ) ) { // phpcs:ignore
-			$lines = sanitize_textarea_field( (string) wp_unslash( $_POST['shojaei_seo_ai_relay_backup_urls'] ) ); // phpcs:ignore
-			update_option( Shojaei_SEO_AI_Client::OPT_RELAY_BACKUP, $lines, false );
 		}
 
 		$textareas = array(

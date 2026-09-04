@@ -165,24 +165,6 @@ class Shojaei_SEO_Batch {
 				return self::run_damavand_link_calc_chunk( $job, $size );
 			case 'oos_days_backfill':
 				return self::run_oos_days_backfill_chunk( $job, 100 );
-			case 'ai_alt_batch':
-				return class_exists( 'Shojaei_SEO_AI_Engine' )
-					? Shojaei_SEO_AI_Engine::execute_alt_chunk( $job, $size )
-					: array(
-						'processed'     => 0,
-						'failed'        => 1,
-						'done'          => true,
-						'status_failed' => true,
-						'message'       => __( 'موتور تولید محتوا در دسترس نیست.', 'shojaei-seo-for-woo' ),
-					);
-			case 'ollama_generate':
-				return array(
-					'processed'     => 0,
-					'failed'        => 0,
-					'done'          => true,
-					'status_failed' => true,
-					'message'       => __( 'موتور Ollama حذف شده. افزونه را به‌روز کنید و از Groq/OpenRouter استفاده کنید.', 'shojaei-seo-for-woo' ),
-				);
 			default:
 				return array(
 					'processed'     => 0,
@@ -213,7 +195,6 @@ class Shojaei_SEO_Batch {
 			'seo_pulse_scan'       => __( 'اسکن نبض سئو', 'shojaei-seo-for-woo' ),
 			'damavand_link_calc'   => __( 'محاسبه لینک هوشمند دماوند', 'shojaei-seo-for-woo' ),
 			'oos_days_backfill'    => __( 'اسکن روز ناموجودی', 'shojaei-seo-for-woo' ),
-			'ai_alt_batch'         => __( 'تولید Alt تصاویر', 'shojaei-seo-for-woo' ),
 		);
 		if ( ! isset( $labels[ $type ] ) ) {
 			return;

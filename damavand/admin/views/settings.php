@@ -14,10 +14,6 @@ defined( 'ABSPATH' ) || exit;
 	<div class="shojaei-card shojaei-settings-intro">
 		<h3><?php esc_html_e( 'تنظیمات', 'shojaei-seo-for-woo' ); ?></h3>
 		<p class="shojaei-desc"><?php esc_html_e( 'هر بخش را باز کنید، سوئیچ‌ها را تنظیم کنید، پایین صفحه ذخیره کنید.', 'shojaei-seo-for-woo' ); ?></p>
-		<p class="shojaei-settings-jump" style="margin-top:8px;">
-			<a href="#shojaei-content-server"><strong><?php esc_html_e( 'هوش مصنوعی (OpenRouter)', 'shojaei-seo-for-woo' ); ?></strong></a>
-			<?php esc_html_e( ' — OpenRouter (Alt + کلمات مرتبط)', 'shojaei-seo-for-woo' ); ?>
-		</p>
 	</div>
 
 	<div class="shojaei-accordion shojaei-settings-accordion">
@@ -186,23 +182,6 @@ defined( 'ABSPATH' ) || exit;
 							<span><?php esc_html_e( 'اسکیمای JSON-LD مکمل (کنار Yoast / Rank Math)', 'shojaei-seo-for-woo' ); ?></span>
 						</label>
 					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="shojaei-accordion-item" data-accordion="set-content" id="shojaei-acc-content-server">
-			<button class="shojaei-accordion-header" type="button" aria-expanded="false">
-				<span class="shojaei-accordion-icon shojaei-icon-orange"><span class="dashicons dashicons-edit"></span></span>
-				<span class="shojaei-accordion-title"><?php esc_html_e( '۶ · هوش مصنوعی (Alt + کلمات مرتبط)', 'shojaei-seo-for-woo' ); ?></span>
-				<span class="shojaei-accordion-meta"><?php esc_html_e( 'دماوند', 'shojaei-seo-for-woo' ); ?></span>
-				<span class="shojaei-accordion-chevron dashicons dashicons-arrow-down-alt2"></span>
-			</button>
-			<div class="shojaei-accordion-body">
-				<div class="shojaei-accordion-content">
-					<p class="shojaei-module-note"><?php esc_html_e( 'Alt تصاویر و کلمات مرتبط با OpenRouter (مدل‌های رایگان).', 'shojaei-seo-for-woo' ); ?></p>
-					<p class="shojaei-settings-jump">
-						<a href="#shojaei-content-server"><?php esc_html_e( 'تنظیم OpenRouter، کلید API و تست اتصال ↓', 'shojaei-seo-for-woo' ); ?></a>
-					</p>
 				</div>
 			</div>
 		</div>
@@ -893,18 +872,6 @@ defined( 'ABSPATH' ) || exit;
 		</details>
 	</div>
 
-	<div class="shojaei-card shojaei-settings-panel" id="shojaei-content-server">
-		<details class="shojaei-details" id="shojaei-content-server-details">
-			<summary class="shojaei-details-summary">
-				<span class="dashicons dashicons-edit"></span>
-				<?php esc_html_e( 'هوش مصنوعی (OpenRouter)', 'shojaei-seo-for-woo' ); ?>
-			</summary>
-			<div class="shojaei-details-body">
-				<?php require DAMAVAND_SEO_DIR . 'admin/views/partials/settings-content-server.php'; ?>
-			</div>
-		</details>
-	</div>
-
 	<div class="shojaei-card shojaei-settings-panel">
 		<details class="shojaei-details">
 			<summary class="shojaei-details-summary">
@@ -935,10 +902,6 @@ defined( 'ABSPATH' ) || exit;
 				<input type="text" name="shojaei_seo_indexnow_key" value="<?php echo esc_attr( Shojaei_SEO_Helpers::get_option( 'shojaei_seo_indexnow_key', '' ) ); ?>" class="regular-text" dir="ltr" />
 			</div>
 		</div>
-
-		<p class="shojaei-settings-jump" style="margin-top:12px;">
-			<a href="#shojaei-content-server"><?php esc_html_e( 'هوش مصنوعی (OpenRouter) ↓', 'shojaei-seo-for-woo' ); ?></a>
-		</p>
 
 		<div id="shojaei-uninstall-policy" class="shojaei-uninstall-policy" style="margin-top:18px;padding:14px;border:1px solid #dcdcde;border-radius:8px;background:#fff;">
 			<h4 style="margin:0 0 8px;"><?php esc_html_e( 'غیرفعال‌سازی و حذف افزونه', 'shojaei-seo-for-woo' ); ?></h4>
