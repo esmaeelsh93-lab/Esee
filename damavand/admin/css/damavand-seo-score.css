@@ -553,9 +553,3 @@
 .dm-score__panel[hidden] {
 	display: none !important;
 }
-
-.dm-score__ollama-actions {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 6px;
-}
