@@ -184,6 +184,10 @@ if ( ! class_exists( 'Shojaei_SEO_For_Woo', false ) ) {
 				'public/class-shojaei-seo-public.php',
 				'public/class-schema-generator.php',
 				'public/class-link-builder.php',
+				'public/class-damavand-oos-order-lookup.php',
+				'public/class-damavand-oos-notifier.php',
+				'public/class-damavand-oos-detector.php',
+				'public/class-damavand-oos-admin.php',
 				'public/class-oos-manager.php',
 				'public/class-indexnow.php',
 			);
