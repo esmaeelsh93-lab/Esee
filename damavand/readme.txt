@@ -70,7 +70,7 @@ Inventory-aware SEO — تصمیم‌گیری سئو بر اساس موجودی 
 * شکستن OOS Manager به Damavand_OOS_{Order_Lookup,Notifier,Detector,Admin} + facade
 * شکستن Slug به Damavand_Slug_{Finglish,Redirects,Health,Editor} + facade
 * admin-style.css: تبدیل left/right فیزیکی به logical properties (۱ مورد left:50% برای gauge باقی)
-* مستند قوانین فینگلیش: docs/finglish-rules.md + لینک از finglish-builtin-words.php
+* مستند قوانین فینگلیش: docs/finglish-rules.md (منبع واحد؛ includes/data فقط رفرنس) + لینک از finglish-builtin-words.php
 * Snapshot واقعی baharshop.ir (canonical/robots/schema) در docs/task-4-snapshot-baharshop.md
 * یکپارچه‌سازی Canonical: Resolver واحد در seo-core (حذف Damavand_Canonical + Shojaei_SEO_Canonical موازی)
 * Robots/Schema: مالکیت موازی مستند شد (robots.txt ≠ meta robots؛ Schema Generator ≠ seo-core gate)

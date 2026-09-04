@@ -41,5 +41,6 @@
 
 ## لینک کد
 
+- **این فایل منبع واحد قوانین است** (کپی کامل در `includes/data/` نگه نداشته می‌شود؛ آنجا فقط رفرنس است).
 - Map داخلی: `includes/data/finglish-builtin-words.php`
 - منطق: `Damavand_Slug_Finglish` (facade: `Shojaei_SEO_Slug::transliterate()`)

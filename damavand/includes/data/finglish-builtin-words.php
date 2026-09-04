@@ -3,7 +3,8 @@
  * Built-in Persian → Finglish word map (offline, additive on upgrade).
  * Custom entries in Settings override these keys only — existing slugs/redirects untouched.
  *
- * Decision rules (English loanword vs raw Finglish): see includes/data/finglish-rules.md (also docs/finglish-rules.md)
+ * Decision rules (English loanword vs raw Finglish): see docs/finglish-rules.md
+ * (stub pointer only: includes/data/finglish-rules.md → docs/)
  *
  * @package Shojaei_SEO_For_Woo
  */
