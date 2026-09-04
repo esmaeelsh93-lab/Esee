@@ -101,7 +101,7 @@ $accordion_items = array(
 			</div>
 			<p class="shojaei-edu-tip">' . esc_html__( 'متن آماده برای هاست: «لطفاً دسترسی خروجی سرور وردپرس به indexing.googleapis.com و oauth2.googleapis.com را بررسی کنید؛ افزونه از PHP به این آدرس‌ها درخواست می‌زند.»', 'shojaei-seo-for-woo' ) . '</p>
 			<p><strong>' . esc_html__( 'از نسخه ۱.۱۱:', 'shojaei-seo-for-woo' ) . '</strong> ' . esc_html__( 'Canonical محصولات متغیر به‌صورت پیش‌فرض فعال است — گوگل حالت‌های رنگ/سایز را جدا ایندکس نمی‌کند و به صفحه والد ارجاع می‌دهد.', 'shojaei-seo-for-woo' ) . '</p>
-			<p><strong>' . esc_html__( 'از نسخه ۱.۱۲:', 'shojaei-seo-for-woo' ) . '</strong> ' . esc_html__( 'نامک فینگلیش برای محصولات جدید، هشدار تغییر نامک، ریدایرکت ۳۰۱ خودکار، و بلوک محصولات مکمل برای عمق خزش.', 'shojaei-seo-for-woo' ) . '</p>
+			<p><strong>' . esc_html__( 'از نسخه ۱.۱۲:', 'shojaei-seo-for-woo' ) . '</strong> ' . esc_html__( 'نامک فینگلیش برای محصولات جدید، هشدار تغییر نامک، و ریدایرکت ۳۰۱ خودکار هنگام تغییر نامک.', 'shojaei-seo-for-woo' ) . '</p>
 		',
 	),
 	array(

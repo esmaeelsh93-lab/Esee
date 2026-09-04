@@ -562,7 +562,6 @@ JS;
 			'shojaei_seo_oos_enabled',
 			'shojaei_seo_event_driven',
 			'shojaei_seo_link_builder_enabled',
-			'shojaei_seo_checkout_box_enabled',
 			'shojaei_seo_schema_enabled',
 			'shojaei_seo_indexnow_enabled',
 			'shojaei_seo_oos_auto_redirect',
@@ -583,7 +582,6 @@ JS;
 			'shojaei_seo_slug_tools_enabled',
 			'shojaei_seo_slug_auto_finglish',
 			'shojaei_seo_slug_auto_301',
-			'shojaei_seo_complementary_enabled',
 			'shojaei_seo_ai_enabled',
 			'shojaei_seo_schema_itemlist_enabled',
 		);
@@ -617,7 +615,6 @@ JS;
 			'shojaei_seo_link_max_per_1000',
 			'shojaei_seo_link_max_per_page',
 			'shojaei_seo_link_min_word_gap',
-			'shojaei_seo_checkout_max_products',
 			'shojaei_seo_currency',
 			'shojaei_seo_currency_label',
 			'shojaei_seo_indexnow_key',
@@ -626,8 +623,6 @@ JS;
 			'shojaei_seo_job_max_attempts',
 			'shojaei_seo_gsc_site_url',
 			'shojaei_seo_gsc_property_prefer',
-			'shojaei_seo_complementary_mode',
-			'shojaei_seo_complementary_limit',
 			'shojaei_seo_oos_related_limit',
 			'shojaei_seo_faq_returns_page_id',
 			'shojaei_seo_ai_provider',
@@ -649,14 +644,8 @@ JS;
 				if ( 'shojaei_seo_link_max_per_1000' === $key ) {
 					$value = (string) max( 1, min( 10, absint( $value ) ?: 3 ) );
 				}
-				if ( 'shojaei_seo_complementary_limit' === $key ) {
-					$value = (string) max( 2, min( 8, absint( $value ) ?: 4 ) );
-				}
 				if ( 'shojaei_seo_oos_related_limit' === $key ) {
 					$value = (string) max( 2, min( 8, absint( $value ) ?: 4 ) );
-				}
-				if ( 'shojaei_seo_complementary_mode' === $key ) {
-					$value = in_array( $value, array( 'always', 'oos_only' ), true ) ? $value : 'always';
 				}
 				if ( 'shojaei_seo_currency' === $key ) {
 					$value = strtoupper( $value );

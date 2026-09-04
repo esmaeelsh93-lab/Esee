@@ -293,14 +293,11 @@ class Shojaei_SEO_Activator {
 			add_option( 'shojaei_seo_variation_canonical', 'yes', '', false );
 		}
 
-		// 1.12: slug tools + complementary defaults.
+		// 1.12: slug tools defaults (complementary removed in 1.32 / task 2).
 		foreach ( array(
 			'shojaei_seo_slug_tools_enabled'    => 'yes',
 			'shojaei_seo_slug_auto_finglish'    => 'yes',
 			'shojaei_seo_slug_auto_301'         => 'yes',
-			'shojaei_seo_complementary_enabled' => 'yes',
-			'shojaei_seo_complementary_mode'    => 'always',
-			'shojaei_seo_complementary_limit'   => 4,
 			'shojaei_seo_oos_related_limit'     => 4,
 		) as $opt => $val ) {
 			if ( false === get_option( $opt, false ) ) {
@@ -340,6 +337,11 @@ class Shojaei_SEO_Activator {
 			}
 		}
 
+		// 1.32: remove checkout cross-sell + complementary product options (features deleted).
+		if ( version_compare( $installed, '1.32.0', '<' ) ) {
+			self::cleanup_removed_merchandising_options();
+		}
+
 		if ( class_exists( 'Shojaei_SEO_Jobs' ) ) {
 			Shojaei_SEO_Jobs::migrate_from_options();
 		}
@@ -362,6 +364,23 @@ class Shojaei_SEO_Activator {
 		}
 
 		// Rewrite flush is handled by maybe_sync_plugin_version() on every plugin version bump.
+	}
+
+	/**
+	 * حذف آپشن‌های یتیم فیچرهای حذف‌شدهٔ Cross-Sell چک‌اوت و محصولات مکمل.
+	 * دادهٔ سئو/OOS/ریدایرکت دست‌نخورده می‌ماند.
+	 */
+	public static function cleanup_removed_merchandising_options(): void {
+		$orphans = array(
+			'shojaei_seo_checkout_box_enabled',
+			'shojaei_seo_checkout_max_products',
+			'shojaei_seo_complementary_enabled',
+			'shojaei_seo_complementary_mode',
+			'shojaei_seo_complementary_limit',
+		);
+		foreach ( $orphans as $opt ) {
+			delete_option( $opt );
+		}
 	}
 
 	/**
@@ -500,7 +519,6 @@ class Shojaei_SEO_Activator {
 		$defaults = array(
 			'shojaei_seo_oos_enabled'           => 'yes',
 			'shojaei_seo_link_builder_enabled'  => 'yes',
-			'shojaei_seo_checkout_box_enabled'  => 'yes',
 			'shojaei_seo_schema_enabled'        => 'yes',
 			'shojaei_seo_schema_detect_enabled' => 'yes',
 			'shojaei_seo_disable_wc_schema'     => 'yes',
@@ -543,9 +561,6 @@ class Shojaei_SEO_Activator {
 			'shojaei_seo_slug_tools_enabled'    => 'yes',
 			'shojaei_seo_slug_auto_finglish'    => 'yes',
 			'shojaei_seo_slug_auto_301'         => 'yes',
-			'shojaei_seo_complementary_enabled' => 'yes',
-			'shojaei_seo_complementary_mode'    => 'always',
-			'shojaei_seo_complementary_limit'   => 4,
 			'shojaei_seo_oos_related_limit'     => 4,
 			'shojaei_seo_finglish_dictionary'   => array(),
 			'shojaei_seo_remove_data_on_uninstall' => 'no',
@@ -580,7 +595,6 @@ class Shojaei_SEO_Activator {
 			'shojaei_seo_link_keyword_whitelist'=> '',
 			'shojaei_seo_link_url_blacklist'    => '',
 			'shojaei_seo_link_url_whitelist'    => '',
-			'shojaei_seo_checkout_max_products' => 6,
 			'shojaei_seo_oos_noindex_from_phase' => 2,
 			'shojaei_seo_oos_noindex_enabled'    => 'yes',
 			'shojaei_seo_oos_dry_run'            => 'yes',

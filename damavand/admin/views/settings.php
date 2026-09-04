@@ -76,28 +76,12 @@ defined( 'ABSPATH' ) || exit;
 							<input type="checkbox" name="shojaei_seo_variation_canonical" value="yes" <?php checked( Shojaei_SEO_Helpers::get_option( 'shojaei_seo_variation_canonical', 'yes' ), 'yes' ); ?> />
 							<span><?php esc_html_e( 'Canonical متغیر → آدرس والد', 'shojaei-seo-for-woo' ); ?></span>
 						</label>
-						<label class="shojaei-setting-item">
-							<input type="checkbox" name="shojaei_seo_complementary_enabled" value="yes" <?php checked( Shojaei_SEO_Helpers::get_option( 'shojaei_seo_complementary_enabled', 'yes' ), 'yes' ); ?> />
-							<span><?php esc_html_e( 'بلوک محصولات مکمل در صفحه محصول', 'shojaei-seo-for-woo' ); ?></span>
-						</label>
 					</div>
 					<div class="shojaei-form-grid" style="margin-top:12px;">
 						<div class="shojaei-form-group">
-							<label><?php esc_html_e( 'نمایش محصولات مکمل', 'shojaei-seo-for-woo' ); ?></label>
-							<select name="shojaei_seo_complementary_mode">
-								<option value="always" <?php selected( Shojaei_SEO_Helpers::get_option( 'shojaei_seo_complementary_mode', 'always' ), 'always' ); ?>><?php esc_html_e( 'همیشه', 'shojaei-seo-for-woo' ); ?></option>
-								<option value="oos_only" <?php selected( Shojaei_SEO_Helpers::get_option( 'shojaei_seo_complementary_mode', 'always' ), 'oos_only' ); ?>><?php esc_html_e( 'فقط ناموجود', 'shojaei-seo-for-woo' ); ?></option>
-							</select>
-						</div>
-						<div class="shojaei-form-group">
-							<label><?php esc_html_e( 'تعداد محصولات مکمل', 'shojaei-seo-for-woo' ); ?></label>
-							<input type="number" name="shojaei_seo_complementary_limit" value="<?php echo esc_attr( (string) Shojaei_SEO_Helpers::get_option( 'shojaei_seo_complementary_limit', 4 ) ); ?>" min="2" max="8" />
-							<small><?php esc_html_e( 'این بلوک برای محصولات موجود است؛ روی ناموجودی، پیشنهاد جایگزین OOS جداگانه نمایش داده می‌شود.', 'shojaei-seo-for-woo' ); ?></small>
-						</div>
-						<div class="shojaei-form-group">
 							<label><?php esc_html_e( 'تعداد پیشنهاد جایگزین ناموجود', 'shojaei-seo-for-woo' ); ?></label>
 							<input type="number" name="shojaei_seo_oos_related_limit" value="<?php echo esc_attr( (string) Shojaei_SEO_Helpers::get_option( 'shojaei_seo_oos_related_limit', 4 ) ); ?>" min="2" max="8" />
-							<small><?php esc_html_e( 'روی صفحه محصول ناموجود — جدا از «محصولات مکمل».', 'shojaei-seo-for-woo' ); ?></small>
+							<small><?php esc_html_e( 'روی صفحه محصول ناموجود — پیشنهاد جایگزین مبتنی بر شباهت OOS.', 'shojaei-seo-for-woo' ); ?></small>
 						</div>
 					</div>
 
@@ -197,10 +181,6 @@ defined( 'ABSPATH' ) || exit;
 				<div class="shojaei-accordion-content">
 					<p class="shojaei-module-note"><?php esc_html_e( 'جایگزین هسته نیستند؛ کمکی برای تبدیل یا مارک‌آپ.', 'shojaei-seo-for-woo' ); ?></p>
 					<div class="shojaei-settings-grid">
-						<label class="shojaei-setting-item">
-							<input type="checkbox" name="shojaei_seo_checkout_box_enabled" value="yes" <?php checked( Shojaei_SEO_Helpers::get_option( 'shojaei_seo_checkout_box_enabled' ), 'yes' ); ?> />
-							<span><?php esc_html_e( 'باکس پیشنهادی در تسویه‌حساب', 'shojaei-seo-for-woo' ); ?></span>
-						</label>
 						<label class="shojaei-setting-item">
 							<input type="checkbox" name="shojaei_seo_schema_enabled" value="yes" <?php checked( Shojaei_SEO_Helpers::get_option( 'shojaei_seo_schema_enabled' ), 'yes' ); ?> />
 							<span><?php esc_html_e( 'اسکیمای JSON-LD مکمل (کنار Yoast / Rank Math)', 'shojaei-seo-for-woo' ); ?></span>
@@ -882,10 +862,6 @@ defined( 'ABSPATH' ) || exit;
 			</summary>
 			<div class="shojaei-details-body">
 		<div class="shojaei-form-grid">
-			<div class="shojaei-form-group">
-				<label><?php esc_html_e( 'حداکثر محصول در باکس تسویه', 'shojaei-seo-for-woo' ); ?></label>
-				<input type="number" name="shojaei_seo_checkout_max_products" value="<?php echo esc_attr( Shojaei_SEO_Helpers::get_option( 'shojaei_seo_checkout_max_products', 6 ) ); ?>" min="1" max="12" />
-			</div>
 			<div class="shojaei-form-group">
 				<label><?php esc_html_e( 'واحد پولی (اسکیما / نمایش)', 'shojaei-seo-for-woo' ); ?></label>
 				<?php $cur = Shojaei_SEO_Helpers::get_currency_code(); ?>

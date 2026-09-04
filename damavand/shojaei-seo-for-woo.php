@@ -26,7 +26,7 @@ if ( ! defined( 'DAMAVAND_SEO_VERSION' ) ) {
 	define( 'DAMAVAND_SEO_VERSION', '1.58.0' );
 }
 if ( ! defined( 'DAMAVAND_SEO_DB_VERSION' ) ) {
-	define( 'DAMAVAND_SEO_DB_VERSION', '1.31.0' );
+	define( 'DAMAVAND_SEO_DB_VERSION', '1.32.0' );
 }
 if ( ! defined( 'DAMAVAND_SEO_FILE' ) ) {
 	define( 'DAMAVAND_SEO_FILE', __FILE__ );
@@ -182,8 +182,6 @@ if ( ! class_exists( 'Shojaei_SEO_For_Woo', false ) ) {
 				'public/class-shojaei-seo-public.php',
 				'public/class-schema-generator.php',
 				'public/class-link-builder.php',
-				'public/class-checkout-cross-sell.php',
-				'public/class-complementary-products.php',
 				'public/class-oos-manager.php',
 				'public/class-indexnow.php',
 			);
@@ -371,8 +369,6 @@ if ( ! class_exists( 'Shojaei_SEO_For_Woo', false ) ) {
 
 				new Shojaei_SEO_Public();
 				new Shojaei_SEO_Link_Builder();
-				new Shojaei_SEO_Checkout_Cross_Sell();
-				new Shojaei_SEO_Complementary();
 				new Shojaei_SEO_OOS_Manager();
 				new Shojaei_SEO_IndexNow();
 

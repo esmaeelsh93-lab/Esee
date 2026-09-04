@@ -138,103 +138,6 @@ a.shojaei-internal-link:hover {
     color: #1565c0;
 }
 
-/* Checkout Cross-sell Box */
-.shojaei-checkout-box {
-    background: #fff;
-    border: 1px solid #e8f0fe;
-    border-radius: 12px;
-    padding: 24px;
-    margin: 20px 0;
-    box-shadow: 0 2px 12px rgba(30, 136, 229, 0.08);
-    animation: shojaeiGlow 3s ease-in-out infinite alternate;
-}
-
-@keyframes shojaeiGlow {
-    from { box-shadow: 0 2px 12px rgba(30, 136, 229, 0.08); }
-    to   { box-shadow: 0 4px 20px rgba(30, 136, 229, 0.15); }
-}
-
-.shojaei-checkout-box-title {
-    font-size: 18px;
-    font-weight: 600;
-    color: #1a1a2e;
-    margin: 0 0 16px;
-    text-align: center;
-}
-
-.shojaei-checkout-slider {
-    display: flex;
-    gap: 16px;
-    overflow-x: auto;
-    padding-bottom: 8px;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-}
-
-.shojaei-checkout-item {
-    flex: 0 0 160px;
-    text-align: center;
-    scroll-snap-align: start;
-    background: #f8fbff;
-    border-radius: 8px;
-    padding: 12px;
-    transition: transform 0.2s;
-}
-
-.shojaei-checkout-item:hover {
-    transform: translateY(-2px);
-}
-
-.shojaei-checkout-item img {
-    width: 100%;
-    height: auto;
-    border-radius: 6px;
-    margin-bottom: 8px;
-}
-
-.shojaei-checkout-item h4 {
-    font-size: 13px;
-    margin: 0 0 6px;
-    color: #333;
-    line-height: 1.4;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-.shojaei-checkout-item .price {
-    display: block;
-    font-size: 14px;
-    font-weight: 600;
-    color: #1e88e5;
-    margin-bottom: 8px;
-}
-
-.shojaei-quick-add {
-    width: 100%;
-    background: #1e88e5 !important;
-    color: #fff !important;
-    border: none !important;
-    padding: 6px 12px !important;
-    border-radius: 4px !important;
-    font-size: 13px !important;
-    cursor: pointer;
-}
-
-.shojaei-quick-add:hover {
-    background: #1565c0 !important;
-}
-
-.shojaei-quick-add.added {
-    background: #43a047 !important;
-}
-
-@keyframes shojaeiFadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
 /* Schema conflict banner (managers only) */
 .shojaei-schema-conflict-banner {
     position: fixed;
@@ -281,21 +184,6 @@ a.shojaei-internal-link:hover {
     color: #8d6e63;
 }
 
-/* Complementary products */
-.shojaei-complementary {
-    margin: 2em 0 1em;
-    clear: both;
-}
-.shojaei-complementary h2 {
-    margin: 0 0 0.35em;
-    font-size: 1.25em;
-}
-.shojaei-complementary-desc {
-    margin: 0 0 1em;
-    opacity: 0.85;
-    font-size: 0.95em;
-}
-
 /* FAQ block — returns policy button */
 .damavand-faq {
     margin: 1.5em 0;
@@ -337,9 +225,6 @@ a.shojaei-internal-link:hover {
 
 /* Responsive */
 @media (max-width: 600px) {
-    .shojaei-checkout-item {
-        flex: 0 0 140px;
-    }
     .shojaei-oos-notice {
         padding: 16px;
     }

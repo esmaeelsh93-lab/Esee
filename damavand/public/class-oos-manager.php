@@ -1251,7 +1251,7 @@ class Shojaei_SEO_OOS_Manager {
 	}
 
 	/**
-	 * تعداد پیشنهاد ناموجود (جدا از «محصولات مکمل»).
+	 * تعداد پیشنهاد جایگزین روی صفحه محصول ناموجود.
 	 */
 	public static function related_limit(): int {
 		$limit = (int) Shojaei_SEO_Helpers::get_option( 'shojaei_seo_oos_related_limit', 4 );
