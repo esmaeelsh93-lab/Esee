@@ -457,7 +457,13 @@ class Damavand_Slug_Editor {
 JS;
 		wp_add_inline_script( 'shojaei-seo-slug-live', $slug_js );
 
-		wp_register_style( 'shojaei-seo-slug-admin', false, array(), DAMAVAND_SEO_VERSION );
+		wp_enqueue_style(
+			'damavand-fonts',
+			DAMAVAND_SEO_URL . 'admin/css/damavand-fonts.css',
+			array(),
+			DAMAVAND_SEO_VERSION
+		);
+		wp_register_style( 'shojaei-seo-slug-admin', false, array( 'damavand-fonts' ), DAMAVAND_SEO_VERSION );
 		wp_enqueue_style( 'shojaei-seo-slug-admin' );
 		wp_add_inline_style(
 			'shojaei-seo-slug-admin',

@@ -86,9 +86,16 @@ final class Damavand_Gutenberg_Sidebar {
 		}
 
 		wp_enqueue_style(
+			'damavand-fonts',
+			DAMAVAND_SEO_URL . 'admin/css/damavand-fonts.css',
+			array(),
+			DAMAVAND_SEO_VERSION
+		);
+
+		wp_enqueue_style(
 			'damavand-seo-score',
 			DAMAVAND_SEO_URL . 'admin/css/damavand-seo-score.css',
-			array(),
+			array( 'damavand-fonts' ),
 			DAMAVAND_SEO_VERSION
 		);
 

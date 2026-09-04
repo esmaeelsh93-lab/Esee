@@ -2,9 +2,14 @@
  * Damavand Persian SEO score metabox — RTL, SERP preview, mobile-friendly.
  */
 
+#shojaei-slug-box {
+	font-family: 'Vazirmatn', Tahoma, 'Segoe UI', Arial, sans-serif;
+}
+
 .dm-score {
 	--dm-blue: #1d6fd8;
 	--dm-blue-soft: #e8f1fb;
+	font-family: 'Vazirmatn', Tahoma, 'Segoe UI', Arial, sans-serif;
 	font-size: 13px;
 	line-height: 1.55;
 }

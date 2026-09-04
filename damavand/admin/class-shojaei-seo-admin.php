@@ -142,16 +142,23 @@ class Shojaei_SEO_Admin {
 		}
 
 		wp_enqueue_style(
+			'damavand-fonts',
+			DAMAVAND_SEO_URL . 'admin/css/damavand-fonts.css',
+			array(),
+			DAMAVAND_SEO_VERSION
+		);
+
+		wp_enqueue_style(
 			'shojaei-seo-admin',
 			DAMAVAND_SEO_URL . 'admin/css/admin-style.css',
-			array(),
+			array( 'damavand-fonts' ),
 			DAMAVAND_SEO_VERSION
 		);
 
 		wp_enqueue_style(
 			'damavand-saas',
 			DAMAVAND_SEO_URL . 'admin/css/damavand-saas.css',
-			array( 'shojaei-seo-admin' ),
+			array( 'shojaei-seo-admin', 'damavand-fonts' ),
 			DAMAVAND_SEO_VERSION
 		);
 

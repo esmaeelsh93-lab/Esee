@@ -913,9 +913,15 @@ $serp_url  = (string) get_permalink( $post );
 			$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
 			if ( $screen && 'product' === $screen->post_type ) {
 				wp_enqueue_style(
+					'damavand-fonts',
+					DAMAVAND_SEO_URL . 'admin/css/damavand-fonts.css',
+					array(),
+					DAMAVAND_SEO_VERSION
+				);
+				wp_enqueue_style(
 					'damavand-seo-score',
 					DAMAVAND_SEO_URL . 'admin/css/damavand-seo-score.css',
-					array(),
+					array( 'damavand-fonts' ),
 					DAMAVAND_SEO_VERSION
 				);
 			}
@@ -929,9 +935,15 @@ $serp_url  = (string) get_permalink( $post );
 			return;
 		}
 		wp_enqueue_style(
+			'damavand-fonts',
+			DAMAVAND_SEO_URL . 'admin/css/damavand-fonts.css',
+			array(),
+			DAMAVAND_SEO_VERSION
+		);
+		wp_enqueue_style(
 			'damavand-seo-score',
 			DAMAVAND_SEO_URL . 'admin/css/damavand-seo-score.css',
-			array(),
+			array( 'damavand-fonts' ),
 			DAMAVAND_SEO_VERSION
 		);
 		wp_enqueue_script(

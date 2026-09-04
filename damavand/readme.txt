@@ -8,6 +8,9 @@ Stable tag: 1.58.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
+Third-party fonts: Vazirmatn (SIL Open Font License 1.1) by Saber Rastikerdar —
+bundled self-hosted under assets/fonts/vazirmatn/ (see OFL.txt). https://github.com/rastikerdar/vazirmatn
+
 لایه عملیاتی سئو برای ووکامرس ایرانی — Inventory-aware SEO، Schema، متا و crawl budget. توسعه: اسماعیل شجاعی.
 
 == Description ==
@@ -64,6 +67,7 @@ Inventory-aware SEO — تصمیم‌گیری سئو بر اساس موجودی 
 == Changelog ==
 
 = 1.58.0 =
+* فونت ادمین: Vazirmatn variable خودمیزبان (بدون CDN) جایگزین Tahoma + لایسنس OFL
 * همگام‌سازی Stable tag با Version هدر افزونه (جلوگیری از گیج شدن آپدیت)
 * حذف کامل Cross-Sell تسویه‌حساب و بلوک محصولات مکمل (خارج از حوزه SEO) + پاکسازی آپشن‌های یتیم
 * حذف کامل جدول سایزبندی Damavand (فرانت/متاباکس/AI persist) + پاکسازی postmeta یتیم

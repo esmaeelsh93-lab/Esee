@@ -49,9 +49,16 @@ class Damavand_Delete_Redirect {
 		}
 
 		wp_enqueue_style(
+			'damavand-fonts',
+			DAMAVAND_SEO_URL . 'admin/css/damavand-fonts.css',
+			array(),
+			DAMAVAND_SEO_VERSION
+		);
+
+		wp_enqueue_style(
 			'shojaei-seo-admin',
 			DAMAVAND_SEO_URL . 'admin/css/admin-style.css',
-			array(),
+			array( 'damavand-fonts' ),
 			DAMAVAND_SEO_VERSION
 		);
 
