@@ -437,6 +437,7 @@ class Shojaei_SEO_AI_Client {
 
 		$system = isset( $opts['system'] ) ? (string) $opts['system'] : self::default_system_prompt();
 		$model  = isset( $opts['model'] ) && '' !== trim( (string) $opts['model'] ) ? trim( (string) $opts['model'] ) : self::model();
+		$opts   = self::adjust_opts_for_provider( $opts, $model );
 		$body   = array(
 			'model'       => $model,
 			'messages'    => array(
@@ -455,6 +456,9 @@ class Shojaei_SEO_AI_Client {
 		if ( ! empty( $opts['max_tokens'] ) ) {
 			$body['max_tokens'] = max( 32, min( 8192, (int) $opts['max_tokens'] ) );
 		}
+		if ( ! empty( $opts['response_mime'] ) ) {
+			$body['response_mime'] = sanitize_text_field( (string) $opts['response_mime'] );
+		}
 
 		$timeout  = self::timeout( (int) ( $opts['timeout'] ?? 0 ) );
 		$response = self::post_chat( $body, $key, $timeout );
@@ -467,6 +471,41 @@ class Shojaei_SEO_AI_Client {
 			return new WP_Error( 'ai_empty', __( 'پاسخ سرور خالی بود. مدل یا کلید را بررسی کنید.', 'shojaei-seo-for-woo' ) );
 		}
 		return $text;
+	}
+
+	/**
+	 * Gemini 3.x uses internal thinking that shares maxOutputTokens — tune for SEO tasks.
+	 *
+	 * @param array<string,mixed> $opts  Request opts.
+	 * @param string              $model Model id.
+	 * @return array<string,mixed>
+	 */
+	public static function adjust_opts_for_provider( array $opts, string $model = '' ): array {
+		if ( self::PROVIDER_GEMINI !== self::provider() ) {
+			return $opts;
+		}
+		$model = '' !== $model ? $model : self::model();
+		if ( ! empty( $opts['timeout'] ) ) {
+			$opts['timeout'] = min( 180, (int) $opts['timeout'] + 25 );
+		}
+		if ( self::is_gemini_thinking_model( $model ) && ! empty( $opts['max_tokens'] ) ) {
+			$floor = 768;
+			if ( (int) $opts['max_tokens'] >= 2000 ) {
+				$floor = 4096;
+			} elseif ( (int) $opts['max_tokens'] >= 800 ) {
+				$floor = 1536;
+			}
+			$opts['max_tokens'] = max( (int) $opts['max_tokens'], $floor );
+		}
+		return $opts;
+	}
+
+	/**
+	 * Whether model belongs to Gemini 3.x family (thinking enabled by default).
+	 */
+	public static function is_gemini_thinking_model( string $model ): bool {
+		$model = preg_replace( '#^models/#', '', trim( $model ) );
+		return (bool) preg_match( '#^gemini-3(?:\.|\-|/|$)#i', $model );
 	}
 
 	/**
@@ -780,11 +819,20 @@ class Shojaei_SEO_AI_Client {
 		}
 
 		$gen = array();
-		if ( isset( $body['temperature'] ) ) {
+		$model = isset( $body['model'] ) ? (string) $body['model'] : self::GEMINI_DEFAULT_MODEL;
+		if ( self::is_gemini_thinking_model( $model ) ) {
+			$gen['thinkingConfig'] = array(
+				'thinkingLevel' => 'MINIMAL',
+			);
+		}
+		if ( isset( $body['temperature'] ) && ! self::is_gemini_thinking_model( $model ) ) {
 			$gen['temperature'] = max( 0.0, min( 2.0, (float) $body['temperature'] ) );
 		}
 		if ( ! empty( $body['max_tokens'] ) ) {
-			$gen['maxOutputTokens'] = max( 16, min( 8192, (int) $body['max_tokens'] ) );
+			$gen['maxOutputTokens'] = max( 64, min( 8192, (int) $body['max_tokens'] ) );
+		}
+		if ( ! empty( $body['response_mime'] ) ) {
+			$gen['responseMimeType'] = (string) $body['response_mime'];
 		}
 		if ( $gen ) {
 			$out['generationConfig'] = $gen;
@@ -823,7 +871,13 @@ class Shojaei_SEO_AI_Client {
 			}
 			$parts = array();
 			foreach ( $candidate['content']['parts'] as $part ) {
-				if ( is_array( $part ) && isset( $part['text'] ) && is_string( $part['text'] ) && '' !== trim( $part['text'] ) ) {
+				if ( ! is_array( $part ) ) {
+					continue;
+				}
+				if ( ! empty( $part['thought'] ) ) {
+					continue;
+				}
+				if ( isset( $part['text'] ) && is_string( $part['text'] ) && '' !== trim( $part['text'] ) ) {
 					$parts[] = trim( $part['text'] );
 				}
 			}

@@ -114,6 +114,12 @@ assert_eq(
 	'gemini',
 	Shojaei_SEO_AI_Client::route_from_api_key( 'any-auth-key-without-prefix' )
 );
+assert_eq( 'gemini 3.x thinking detect', true, Shojaei_SEO_AI_Client::is_gemini_thinking_model( 'gemini-3.6-flash' ) );
+assert_eq(
+	'gemini opts floor tokens',
+	768,
+	Shojaei_SEO_AI_Client::adjust_opts_for_provider( array( 'max_tokens' => 350 ), 'gemini-3.6-flash' )['max_tokens']
+);
 
 $smoke_options['shojaei_seo_ai_provider'] = 'openrouter';
 assert_eq(

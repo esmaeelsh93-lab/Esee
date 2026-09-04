@@ -4,7 +4,7 @@ Tags: seo, woocommerce, redirect, inventory, out-of-stock, internal-links
 Requires at least: 6.0
 Tested up to: 6.7
 Requires PHP: 8.0
-Stable tag: 1.59.1
+Stable tag: 1.59.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -65,6 +65,11 @@ Inventory-aware SEO — تصمیم‌گیری سئو بر اساس موجودی 
 با آپلود فایل JSON مربوط به Service Account — بدون OAuth و بدون Refresh Token.
 
 == Changelog ==
+
+= 1.59.2 =
+* Gemini 3.x: thinkingLevel=MINIMAL برای سرعت و جلوگیری از خروجی کوتاه (بودجه توکن قبلاً صرف reasoning می‌شد)
+* افزایش timeout و maxOutputTokens برای تولید محتوا؛ JSON tasks با responseMimeType
+* OpenRouter: همان opts قبلی (تنها Gemini adjust می‌شود)
 
 = 1.59.1 =
 * Gemini: پیش‌فرض و لیست مدل‌ها به نسل 3.x (gemini-3.6-flash) — رفع 404 مدل‌های منسوخ 2.0/1.5

@@ -727,19 +727,20 @@ class Shojaei_SEO_AI_Engine {
 	 */
 	public static function opts_for_kind( string $kind ): array {
 		$map = array(
-			'keywords'           => array( 'max_tokens' => 350, 'timeout' => 25, 'temperature' => 0.2 ),
-			'meta_titles'        => array( 'max_tokens' => 350, 'timeout' => 25, 'temperature' => 0.3 ),
-			'meta_desc'          => array( 'max_tokens' => 220, 'timeout' => 25, 'temperature' => 0.3 ),
-			'slug'               => array( 'max_tokens' => 80, 'timeout' => 20, 'temperature' => 0.1 ),
-			'short_desc'         => array( 'max_tokens' => 500, 'timeout' => 30, 'temperature' => 0.4 ),
-			'long_desc_outline'  => array( 'max_tokens' => 900, 'timeout' => 35, 'temperature' => 0.45 ),
-			'long_desc'          => array( 'max_tokens' => 4096, 'timeout' => 120, 'temperature' => 0.55 ),
-			'faq'                => array( 'max_tokens' => 900, 'timeout' => 35, 'temperature' => 0.4 ),
-			'full_pack_meta'     => array( 'max_tokens' => 1200, 'timeout' => 45, 'temperature' => 0.4 ),
-			'llms_txt'           => array( 'max_tokens' => 900, 'timeout' => 35, 'temperature' => 0.3 ),
+			'keywords'           => array( 'max_tokens' => 512, 'timeout' => 45, 'temperature' => 0.2, 'response_mime' => 'application/json' ),
+			'meta_titles'        => array( 'max_tokens' => 512, 'timeout' => 45, 'temperature' => 0.3, 'response_mime' => 'application/json' ),
+			'meta_desc'          => array( 'max_tokens' => 320, 'timeout' => 45, 'temperature' => 0.3 ),
+			'slug'               => array( 'max_tokens' => 120, 'timeout' => 35, 'temperature' => 0.1 ),
+			'short_desc'         => array( 'max_tokens' => 768, 'timeout' => 55, 'temperature' => 0.4 ),
+			'long_desc_outline'  => array( 'max_tokens' => 1200, 'timeout' => 60, 'temperature' => 0.45, 'response_mime' => 'application/json' ),
+			'long_desc'          => array( 'max_tokens' => 4096, 'timeout' => 150, 'temperature' => 0.55 ),
+			'faq'                => array( 'max_tokens' => 1200, 'timeout' => 60, 'temperature' => 0.4, 'response_mime' => 'application/json' ),
+			'full_pack_meta'     => array( 'max_tokens' => 1536, 'timeout' => 75, 'temperature' => 0.4, 'response_mime' => 'application/json' ),
+			'llms_txt'           => array( 'max_tokens' => 1200, 'timeout' => 60, 'temperature' => 0.3 ),
 			'alt_texts'          => array( 'max_tokens' => 120, 'timeout'  => 45, 'temperature' => 0.2, 'vision_model' => Shojaei_SEO_AI_Client::VISION_MODEL ),
 		);
-		return $map[ $kind ] ?? array( 'max_tokens' => 600, 'timeout' => 30 );
+		$opts = $map[ $kind ] ?? array( 'max_tokens' => 768, 'timeout' => 45 );
+		return Shojaei_SEO_AI_Client::adjust_opts_for_provider( $opts );
 	}
 
 	/**
