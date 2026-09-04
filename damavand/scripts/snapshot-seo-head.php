@@ -54,25 +54,56 @@ if ( empty( $urls ) ) {
 
 $results = array();
 foreach ( $urls as $url ) {
-	$ctx  = stream_context_create(
-		array(
-			'http' => array(
-				'timeout'         => 20,
-				'follow_location' => 1,
-				'user_agent'      => 'DamavandSEO-Snapshot/1.58',
-			),
-		)
-	);
-	$html = @file_get_contents( $url, false, $ctx ); // phpcs:ignore
+	$html = '';
+	$code = 0;
+	// Prefer curl so 404/5xx bodies are still captured for robots/canonical.
+	if ( function_exists( 'curl_init' ) ) {
+		$ch = curl_init( $url );
+		curl_setopt_array(
+			$ch,
+			array(
+				CURLOPT_RETURNTRANSFER => true,
+				CURLOPT_FOLLOWLOCATION => true,
+				CURLOPT_TIMEOUT       => 20,
+				CURLOPT_USERAGENT     => 'DamavandSEO-Snapshot/1.58',
+				CURLOPT_SSL_VERIFYPEER => true,
+			)
+		);
+		$body = curl_exec( $ch );
+		$code = (int) curl_getinfo( $ch, CURLINFO_HTTP_CODE );
+		curl_close( $ch );
+		if ( is_string( $body ) ) {
+			$html = $body;
+		}
+	} else {
+		$ctx  = stream_context_create(
+			array(
+				'http' => array(
+					'timeout'         => 20,
+					'follow_location' => 1,
+					'ignore_errors'   => true,
+					'user_agent'      => 'DamavandSEO-Snapshot/1.58',
+				),
+			)
+		);
+		$body = @file_get_contents( $url, false, $ctx ); // phpcs:ignore
+		if ( is_string( $body ) ) {
+			$html = $body;
+		}
+		if ( isset( $http_response_header[0] ) && preg_match( '/\s(\d{3})\s/', (string) $http_response_header[0], $hm ) ) {
+			$code = (int) $hm[1];
+		}
+	}
 	$row  = array(
-		'url'       => $url,
-		'ok'        => is_string( $html ),
-		'canonical' => null,
-		'robots'    => null,
-		'ld_types'  => array(),
-		'ld_count'  => 0,
+		'url'        => $url,
+		'ok'         => '' !== $html,
+		'http_code'  => $code,
+		'canonical'  => null,
+		'robots'     => null,
+		'ld_types'   => array(),
+		'ld_count'   => 0,
 	);
-	if ( ! is_string( $html ) || '' === $html ) {
+	if ( '' === $html ) {
 		$results[] = $row;
 		continue;
 	}

@@ -1,6 +1,12 @@
 /**
- * Damavand Phase 4 — RTL logical properties + mobile (≤782px) polish.
- * Loaded after damavand-saas / admin-style. Does not wipe legacy rules.
+ * Damavand Phase 4 — RTL polish + mobile (≤782px).
+ *
+ * Task 6 (1.58): physical left/right in admin-style.css were converted to
+ * logical properties (margin/padding/border-inline-*, text-align start/end).
+ * This file keeps mobile cardify, touch targets, icon flip, and product-editor
+ * direction — not a duplicate L/R override layer anymore.
+ *
+ * Loaded after damavand-saas / admin-style.
  */
 
 /* ——— Logical spacing overrides (admin Damavand shell) ——— */

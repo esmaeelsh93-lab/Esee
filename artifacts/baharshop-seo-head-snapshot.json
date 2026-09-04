@@ -1,0 +1,142 @@
+{
+    "generated_at": "2026-09-04T06:59:57+00:00",
+    "count": 13,
+    "rows": [
+        {
+            "url": "https://baharshop.ir/",
+            "ok": true,
+            "http_code": 200,
+            "canonical": null,
+            "robots": "max-image-preview:large",
+            "ld_types": [],
+            "ld_count": 0
+        },
+        {
+            "url": "https://baharshop.ir/products/",
+            "ok": true,
+            "http_code": 200,
+            "canonical": null,
+            "robots": "max-image-preview:large",
+            "ld_types": [
+                "BreadcrumbList"
+            ],
+            "ld_count": 1
+        },
+        {
+            "url": "https://baharshop.ir/products/page/2/",
+            "ok": true,
+            "http_code": 200,
+            "canonical": null,
+            "robots": "max-image-preview:large",
+            "ld_types": [
+                "BreadcrumbList"
+            ],
+            "ld_count": 1
+        },
+        {
+            "url": "https://baharshop.ir/cosmetic-category/%d8%a2%d8%b1%d8%a7%db%8c%d8%b4%db%8c/",
+            "ok": true,
+            "http_code": 200,
+            "canonical": null,
+            "robots": "max-image-preview:large",
+            "ld_types": [
+                "BreadcrumbList"
+            ],
+            "ld_count": 1
+        },
+        {
+            "url": "https://baharshop.ir/cosmetics/%d8%aa%d8%a7%d9%81%d8%aa-%d9%85%d9%88%db%8c-%d9%84%d9%88%db%8c%d8%b2-%d8%b4%db%8c%d9%86%db%8c%d9%88%d9%86-shinion-extra-shine-strong/",
+            "ok": true,
+            "http_code": 200,
+            "canonical": "https://baharshop.ir/cosmetics/%d8%aa%d8%a7%d9%81%d8%aa-%d9%85%d9%88%db%8c-%d9%84%d9%88%db%8c%d8%b2-%d8%b4%db%8c%d9%86%db%8c%d9%88%d9%86-shinion-extra-shine-strong/",
+            "robots": "max-image-preview:large",
+            "ld_types": [
+                "BreadcrumbList",
+                "Product"
+            ],
+            "ld_count": 1
+        },
+        {
+            "url": "https://baharshop.ir/cosmetics/%d8%a7%d8%b3%d9%be%d8%b1%db%8c-%d8%ad%d8%a7%d9%84%d8%aa-%d8%af%d9%87%d9%86%d8%af%d9%87-%d9%85%d9%88-%da%a9%d9%84%db%8c%d9%86%d9%88%d8%b3-hair-spray-kolinos/",
+            "ok": true,
+            "http_code": 200,
+            "canonical": "https://baharshop.ir/cosmetics/%d8%a7%d8%b3%d9%be%d8%b1%db%8c-%d8%ad%d8%a7%d9%84%d8%aa-%d8%af%d9%87%d9%86%d8%af%d9%87-%d9%85%d9%88-%da%a9%d9%84%db%8c%d9%86%d9%88%d8%b3-hair-spray-kolinos/",
+            "robots": "max-image-preview:large",
+            "ld_types": [
+                "BreadcrumbList",
+                "Product"
+            ],
+            "ld_count": 1
+        },
+        {
+            "url": "https://baharshop.ir/cosmetic-category/%d8%a2%d8%b1%d8%a7%db%8c%d8%b4%db%8c/?orderby=price",
+            "ok": true,
+            "http_code": 200,
+            "canonical": null,
+            "robots": "max-image-preview:large",
+            "ld_types": [
+                "BreadcrumbList"
+            ],
+            "ld_count": 1
+        },
+        {
+            "url": "https://baharshop.ir/cart/",
+            "ok": false,
+            "http_code": 500,
+            "canonical": null,
+            "robots": null,
+            "ld_types": [],
+            "ld_count": 0
+        },
+        {
+            "url": "https://baharshop.ir/checkout/",
+            "ok": false,
+            "http_code": 500,
+            "canonical": null,
+            "robots": null,
+            "ld_types": [],
+            "ld_count": 0
+        },
+        {
+            "url": "https://baharshop.ir/?s=%D9%86%DB%8C%DA%A9",
+            "ok": true,
+            "http_code": 200,
+            "canonical": null,
+            "robots": "noindex, follow, max-image-preview:large",
+            "ld_types": [
+                "BreadcrumbList"
+            ],
+            "ld_count": 1
+        },
+        {
+            "url": "https://baharshop.ir/this-page-does-not-exist-damavand-404-test/",
+            "ok": true,
+            "http_code": 404,
+            "canonical": null,
+            "robots": "max-image-preview:large",
+            "ld_types": [],
+            "ld_count": 0
+        },
+        {
+            "url": "https://baharshop.ir/author/admin/",
+            "ok": true,
+            "http_code": 404,
+            "canonical": null,
+            "robots": "max-image-preview:large",
+            "ld_types": [],
+            "ld_count": 0
+        },
+        {
+            "url": "https://baharshop.ir/cosmetics/%d8%ae%d9%88%d8%af%d8%aa%d8%b1%d8%a7%d8%b4-%d9%85%d8%b1%d8%af%d8%a7%d9%86%d9%87-%d8%af%d9%88%d8%b1%da%a9%d9%88-6-%d8%aa%db%8c%d8%ba-dorco/?attribute_pa_color=red",
+            "ok": true,
+            "http_code": 200,
+            "canonical": "https://baharshop.ir/cosmetics/%d8%ae%d9%88%d8%af%d8%aa%d8%b1%d8%a7%d8%b4-%d9%85%d8%b1%d8%af%d8%a7%d9%86%d9%87-%d8%af%d9%88%d8%b1%da%a9%d9%88-6-%d8%aa%db%8c%d8%ba-dorco/",
+            "robots": "max-image-preview:large",
+            "ld_types": [
+                "BreadcrumbList",
+                "Product"
+            ],
+            "ld_count": 1
+        }
+    ]
+}
