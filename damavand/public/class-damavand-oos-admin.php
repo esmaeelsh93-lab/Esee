@@ -446,89 +446,96 @@ class Damavand_OOS_Admin {
 			Shojaei_SEO_Page_Value::set_protected( $product_id, false );
 		}
 
-		if ( '410' === $redirect_type ) {
-			Damavand_OOS_Detector::hide_410_from_catalog( $product_id );
-			$key   = 'shojaei_seo_stats_redirects';
-			$count = (int) Shojaei_SEO_Helpers::get_option( $key, 0 );
-			update_option( $key, $count + 1 );
-			if ( class_exists( 'Shojaei_SEO_Analytics' ) ) {
-				Shojaei_SEO_Analytics::bump( 'gone_410' );
+		try {
+			if ( '410' === $redirect_type ) {
+				Damavand_OOS_Detector::hide_410_from_catalog( $product_id );
+				$key   = 'shojaei_seo_stats_redirects';
+				$count = (int) Shojaei_SEO_Helpers::get_option( $key, 0 );
+				update_option( $key, $count + 1 );
+				if ( class_exists( 'Shojaei_SEO_Analytics' ) ) {
+					Shojaei_SEO_Analytics::bump( 'gone_410' );
+				}
+
+				if ( class_exists( 'Shojaei_SEO_Pulse' ) ) {
+					Shojaei_SEO_Pulse::forget_post( $product_id );
+				}
+				if ( class_exists( 'Damavand_Link_Manager' ) ) {
+					Damavand_Link_Manager::purge_post( $product_id );
+				}
+
+				$title = get_the_title( $product_id );
+				Shojaei_SEO_Notifications::add(
+					'gone_410',
+					sprintf(
+						/* translators: %s: product title */
+						__( 'وضعیت 410 Gone برای «%s» اعمال شد.', 'shojaei-seo-for-woo' ),
+						$title
+					),
+					$product_id
+				);
+			} else {
+				Shojaei_SEO_Helpers::increment_stat( 'redirects' );
 			}
 
-			if ( class_exists( 'Shojaei_SEO_Pulse' ) ) {
-				Shojaei_SEO_Pulse::forget_post( $product_id );
+			$title  = get_the_title( $product_id );
+			$action = '410' === $redirect_type ? 'redirect_410' : ( '302' === $redirect_type ? 'redirect_302' : 'redirect_301' );
+
+			if ( class_exists( 'Shojaei_SEO_Revert_Log' ) ) {
+				$after = Shojaei_SEO_Revert_Log::snapshot_full( $product_id );
+				Shojaei_SEO_Revert_Log::record_applied_oos(
+					$batch_id ?: Shojaei_SEO_Revert_Log::new_batch_id(),
+					$action,
+					$product_id,
+					$before,
+					$after,
+					sprintf(
+						/* translators: 1: type, 2: title, 3: url */
+						__( 'اعمال %1$s برای «%2$s» → %3$s', 'shojaei-seo-for-woo' ),
+						$redirect_type,
+						$title,
+						$target_url ?: '—'
+					)
+				);
 			}
-			if ( class_exists( 'Damavand_Link_Manager' ) ) {
-				Damavand_Link_Manager::purge_post( $product_id );
+
+			if ( class_exists( 'Shojaei_SEO_Activity_Log' ) ) {
+				Shojaei_SEO_Activity_Log::add(
+					$action,
+					sprintf(
+						/* translators: 1: type, 2: title, 3: url */
+						__( 'اعمال دستی %1$s برای «%2$s» → %3$s', 'shojaei-seo-for-woo' ),
+						$redirect_type,
+						$title,
+						$target_url ?: '—'
+					),
+					$product_id,
+					array( 'redirect_type' => $redirect_type, 'target_url' => $target_url, 'forced' => $force_confirm )
+				);
 			}
 
-			$title = get_the_title( $product_id );
-			Shojaei_SEO_Notifications::add(
-				'gone_410',
-				sprintf(
-					/* translators: %s: product title */
-					__( 'وضعیت 410 Gone برای «%s» اعمال شد.', 'shojaei-seo-for-woo' ),
-					$title
-				),
-				$product_id
-			);
-		} else {
-			Shojaei_SEO_Helpers::increment_stat( 'redirects' );
+			if ( class_exists( 'Shojaei_SEO_Cache' ) ) {
+				Shojaei_SEO_Cache::on_seo_state_change( $product_id );
+			}
+
+			if ( class_exists( 'Shojaei_SEO_GSC' ) ) {
+				$event = ( '410' === $redirect_type ) ? 'gone' : 'redirect';
+				Shojaei_SEO_GSC::notify_product_change( $product_id, $event );
+			}
+
+			/**
+			 * Fires after OOS manual redirect/410 is saved.
+			 *
+			 * @param int    $product_id     Product ID.
+			 * @param string $redirect_type  301|302|410.
+			 * @param string $target_url     Target URL (empty for 410).
+			 */
+			do_action( 'damavand_seo_redirect_applied', $product_id, $redirect_type, $target_url );
+		} catch ( Throwable $e ) {
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+				error_log( 'Damavand OOS redirect side-effect: ' . $e->getMessage() );
+			}
 		}
-
-		$title  = get_the_title( $product_id );
-		$action = '410' === $redirect_type ? 'redirect_410' : ( '302' === $redirect_type ? 'redirect_302' : 'redirect_301' );
-
-		if ( class_exists( 'Shojaei_SEO_Revert_Log' ) ) {
-			$after = Shojaei_SEO_Revert_Log::snapshot_full( $product_id );
-			Shojaei_SEO_Revert_Log::record_applied_oos(
-				$batch_id ?: Shojaei_SEO_Revert_Log::new_batch_id(),
-				$action,
-				$product_id,
-				$before,
-				$after,
-				sprintf(
-					/* translators: 1: type, 2: title, 3: url */
-					__( 'اعمال %1$s برای «%2$s» → %3$s', 'shojaei-seo-for-woo' ),
-					$redirect_type,
-					$title,
-					$target_url ?: '—'
-				)
-			);
-		}
-
-		if ( class_exists( 'Shojaei_SEO_Activity_Log' ) ) {
-			Shojaei_SEO_Activity_Log::add(
-				$action,
-				sprintf(
-					/* translators: 1: type, 2: title, 3: url */
-					__( 'اعمال دستی %1$s برای «%2$s» → %3$s', 'shojaei-seo-for-woo' ),
-					$redirect_type,
-					$title,
-					$target_url ?: '—'
-				),
-				$product_id,
-				array( 'redirect_type' => $redirect_type, 'target_url' => $target_url, 'forced' => $force_confirm )
-			);
-		}
-
-		if ( class_exists( 'Shojaei_SEO_Cache' ) ) {
-			Shojaei_SEO_Cache::on_seo_state_change( $product_id );
-		}
-
-		if ( class_exists( 'Shojaei_SEO_GSC' ) ) {
-			$event = ( '410' === $redirect_type ) ? 'gone' : 'redirect';
-			Shojaei_SEO_GSC::notify_product_change( $product_id, $event );
-		}
-
-		/**
-		 * Fires after OOS manual redirect/410 is saved.
-		 *
-		 * @param int    $product_id     Product ID.
-		 * @param string $redirect_type  301|302|410.
-		 * @param string $target_url     Target URL (empty for 410).
-		 */
-		do_action( 'damavand_seo_redirect_applied', $product_id, $redirect_type, $target_url );
 
 		return true;
 	}

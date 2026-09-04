@@ -1900,7 +1900,23 @@
 
 .shojaei-next-steps ol {
     margin: 0;
-    padding-inline-end: 20px;
+    padding: 0;
+    list-style: none;
+    counter-reset: shojaei-next-step;
+}
+
+.shojaei-next-steps li {
+    counter-increment: shojaei-next-step;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.shojaei-next-steps li::before {
+    content: counter(shojaei-next-step) ".";
+    font-weight: 600;
+    flex-shrink: 0;
 }
 
 .shojaei-next-steps a {

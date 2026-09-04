@@ -154,15 +154,41 @@
 
     $(document).on('change', '.shojaei-product-check', updateBulkCount);
 
+    function shojaeiParseAdminJson(xhr) {
+        var data = xhr && xhr.responseJSON;
+        if (data && typeof data === 'object') {
+            return data;
+        }
+        var text = (xhr && xhr.responseText) || '';
+        if (!text) {
+            return null;
+        }
+        try {
+            var start = text.indexOf('{');
+            var end = text.lastIndexOf('}');
+            if (start >= 0 && end > start) {
+                return JSON.parse(text.slice(start, end + 1));
+            }
+        } catch (e) {
+            return null;
+        }
+        return null;
+    }
+
     function postRedirectAction(payload, $btn, $row) {
         $btn.prop('disabled', true);
-        $.post(shojaeiSeoAdmin.ajaxUrl, payload, function (response) {
-            if (response.success) {
+        $.ajax({
+            url: shojaeiSeoAdmin.ajaxUrl,
+            type: 'POST',
+            dataType: 'json',
+            data: payload
+        }).done(function (response) {
+            if (response && response.success) {
                 $row.fadeOut(400, function () { $(this).remove(); });
                 return;
             }
 
-            if (response.data && response.data.requires_manual) {
+            if (response && response.data && response.data.requires_manual) {
                 if (confirm((response.data.message || shojaeiSeoAdmin.i18n.high_value_confirm))) {
                     payload.force_confirm = 1;
                     postRedirectAction(payload, $btn, $row);
@@ -170,10 +196,24 @@
                 }
             }
 
-            alert((response.data && response.data.message) || shojaeiSeoAdmin.i18n.error);
+            alert((response && response.data && response.data.message) || shojaeiSeoAdmin.i18n.error);
             $btn.prop('disabled', false);
-        }).fail(function () {
-            alert(shojaeiSeoAdmin.i18n.error);
+        }).fail(function (xhr) {
+            var parsed = shojaeiParseAdminJson(xhr);
+            if (parsed && parsed.success) {
+                $row.fadeOut(400, function () { $(this).remove(); });
+                return;
+            }
+
+            if (parsed && parsed.data && parsed.data.requires_manual) {
+                if (confirm((parsed.data.message || shojaeiSeoAdmin.i18n.high_value_confirm))) {
+                    payload.force_confirm = 1;
+                    postRedirectAction(payload, $btn, $row);
+                    return;
+                }
+            }
+
+            alert((parsed && parsed.data && parsed.data.message) || shojaeiSeoAdmin.i18n.error);
             $btn.prop('disabled', false);
         });
     }

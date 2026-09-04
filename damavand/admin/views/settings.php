@@ -22,14 +22,14 @@ defined( 'ABSPATH' ) || exit;
 
 	<div class="shojaei-accordion shojaei-settings-accordion">
 
-		<div class="shojaei-accordion-item is-open" data-accordion="set-inventory">
-			<button class="shojaei-accordion-header" type="button" aria-expanded="true">
+		<div class="shojaei-accordion-item" data-accordion="set-inventory">
+			<button class="shojaei-accordion-header" type="button" aria-expanded="false">
 				<span class="shojaei-accordion-icon shojaei-icon-blue"><span class="dashicons dashicons-archive"></span></span>
 				<span class="shojaei-accordion-title"><?php esc_html_e( '۱ · موجودی و چرخه عمر', 'shojaei-seo-for-woo' ); ?></span>
 				<span class="shojaei-accordion-meta"><?php esc_html_e( 'هسته', 'shojaei-seo-for-woo' ); ?></span>
 				<span class="shojaei-accordion-chevron dashicons dashicons-arrow-down-alt2"></span>
 			</button>
-			<div class="shojaei-accordion-body" style="display:block">
+			<div class="shojaei-accordion-body">
 				<div class="shojaei-accordion-content">
 					<p class="shojaei-module-note"><?php esc_html_e( 'تصمیم بر اساس موجودی و رفتار صفحه — نه اسکن کور کل فروشگاه.', 'shojaei-seo-for-woo' ); ?></p>
 					<div class="shojaei-settings-grid">
@@ -454,7 +454,7 @@ defined( 'ABSPATH' ) || exit;
 	?>
 
 	<div class="shojaei-card shojaei-settings-panel" id="shojaei-integration">
-		<details class="shojaei-details" open>
+		<details class="shojaei-details">
 			<summary class="shojaei-details-summary">
 				<span class="dashicons dashicons-plugins-checked"></span>
 				<?php esc_html_e( 'یکپارچگی با Yoast / Rank Math', 'shojaei-seo-for-woo' ); ?>

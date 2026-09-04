@@ -4,7 +4,7 @@ Tags: seo, woocommerce, redirect, inventory, out-of-stock, internal-links
 Requires at least: 6.0
 Tested up to: 6.7
 Requires PHP: 8.0
-Stable tag: 1.60.1
+Stable tag: 1.60.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -65,6 +65,11 @@ Inventory-aware SEO — تصمیم‌گیری سئو بر اساس موجودی 
 با آپلود فایل JSON مربوط به Service Account — بدون OAuth و بدون Refresh Token.
 
 == Changelog ==
+
+= 1.60.2 =
+* رفع خطای کاذب «خطا در انجام عملیات» هنگام ریدایرکت OOS (پاسخ AJAX تمیز + side-effect ایمن)
+* اصلاح فاصله شماره و متن در بخش «الان چه کار کنید» داشبورد
+* بستن پیش‌فرض همه آکاردئون‌ها در تنظیمات و راهنما
 
 = 1.60.1 =
 * حذف کامل «پروفایل فروشگاه» از تنظیمات (لحن، نمونه متن، قوانین برند — دیگر برای AI استفاده نمی‌شود)

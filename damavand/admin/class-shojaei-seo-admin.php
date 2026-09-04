@@ -1251,47 +1251,65 @@ JS;
 	 * AJAX handler for redirect actions.
 	 */
 	public function ajax_redirect_action(): void {
-		check_ajax_referer( 'shojaei_seo_admin_nonce', 'nonce' );
-
-		if ( ! Shojaei_SEO_Helpers::user_can_admin() ) {
-			wp_send_json_error();
+		while ( ob_get_level() > 0 ) {
+			ob_end_clean();
 		}
+		ob_start();
 
-		$action     = sanitize_text_field( wp_unslash( $_POST['redirect_action'] ?? '' ) );
-		$product_id = absint( $_POST['product_id'] ?? 0 );
-		$force      = ! empty( $_POST['force_confirm'] );
-		$manager    = new Shojaei_SEO_OOS_Manager( false );
+		try {
+			check_ajax_referer( 'shojaei_seo_admin_nonce', 'nonce' );
 
-		switch ( $action ) {
-			case 'redirect_301':
-				$target = esc_url_raw( wp_unslash( $_POST['target_url'] ?? '' ) );
-				$result = $manager->apply_manual_redirect( $product_id, '301', $target, $force );
-				break;
-			case 'redirect_302':
-				$target = esc_url_raw( wp_unslash( $_POST['target_url'] ?? '' ) );
-				$result = $manager->apply_manual_redirect( $product_id, '302', $target, $force );
-				break;
-			case 'redirect_410':
-				$result = $manager->apply_manual_redirect( $product_id, '410', '', $force );
-				break;
-			case 'keep':
-				$manager->keep_page( $product_id );
-				$result = true;
-				break;
-			default:
-				wp_send_json_error();
-		}
+			if ( ! Shojaei_SEO_Helpers::user_can_admin() ) {
+				ob_end_clean();
+				wp_send_json_error( array( 'message' => __( 'دسترسی غیرمجاز.', 'shojaei-seo-for-woo' ) ) );
+			}
 
-		if ( is_wp_error( $result ) ) {
+			$action     = sanitize_text_field( wp_unslash( $_POST['redirect_action'] ?? '' ) );
+			$product_id = absint( $_POST['product_id'] ?? 0 );
+			$force      = ! empty( $_POST['force_confirm'] );
+			$manager    = new Shojaei_SEO_OOS_Manager( false );
+
+			switch ( $action ) {
+				case 'redirect_301':
+					$target = esc_url_raw( wp_unslash( $_POST['target_url'] ?? '' ) );
+					$result = $manager->apply_manual_redirect( $product_id, '301', $target, $force );
+					break;
+				case 'redirect_302':
+					$target = esc_url_raw( wp_unslash( $_POST['target_url'] ?? '' ) );
+					$result = $manager->apply_manual_redirect( $product_id, '302', $target, $force );
+					break;
+				case 'redirect_410':
+					$result = $manager->apply_manual_redirect( $product_id, '410', '', $force );
+					break;
+				case 'keep':
+					$manager->keep_page( $product_id );
+					$result = true;
+					break;
+				default:
+					ob_end_clean();
+					wp_send_json_error( array( 'message' => __( 'عملیات نامعتبر.', 'shojaei-seo-for-woo' ) ) );
+			}
+
+			if ( is_wp_error( $result ) ) {
+				ob_end_clean();
+				wp_send_json_error( array(
+					'message'         => $result->get_error_message(),
+					'code'            => $result->get_error_code(),
+					'requires_manual' => 'high_page_value' === $result->get_error_code(),
+					'page_value'      => $result->get_error_data(),
+				) );
+			}
+
+			ob_end_clean();
+			wp_send_json_success( array(
+				'message' => __( 'عملیات با موفقیت انجام شد.', 'shojaei-seo-for-woo' ),
+			) );
+		} catch ( Throwable $e ) {
+			ob_end_clean();
 			wp_send_json_error( array(
-				'message'         => $result->get_error_message(),
-				'code'            => $result->get_error_code(),
-				'requires_manual' => 'high_page_value' === $result->get_error_code(),
-				'page_value'      => $result->get_error_data(),
+				'message' => $e->getMessage() ?: __( 'خطا در انجام عملیات.', 'shojaei-seo-for-woo' ),
 			) );
 		}
-
-		wp_send_json_success();
 	}
 
 	/**

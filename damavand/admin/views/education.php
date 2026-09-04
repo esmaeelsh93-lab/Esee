@@ -13,7 +13,7 @@ $accordion_items = array(
 		'icon'  => 'arrow-left-right',
 		'color' => 'blue',
 		'title' => __( 'مهاجرت از Rank Math / Yoast / AIOSEO', 'shojaei-seo-for-woo' ),
-		'open'  => true,
+		'open'  => false,
 		'content' => '
 			<p>' . esc_html__( 'از تب «مهاجرت» می‌توانید متای عنوان، توضیح، کنونیکال، کلمه کلیدی و ریدایرکت‌ها را دسته‌ای به Damavand منتقل کنید.', 'shojaei-seo-for-woo' ) . '</p>
 			<ul>
@@ -84,7 +84,7 @@ $accordion_items = array(
 		'icon'  => 'bar-chart-3',
 		'color' => 'blue',
 		'title' => __( 'آموزش اتصال به سرچ‌کنسول', 'shojaei-seo-for-woo' ),
-		'open'  => true,
+		'open'  => false,
 		'content' => '
 			<p>' . esc_html__( 'اگر فروشگاه ایرانی دارید و می‌خواهید درخواست ایندکس از افزونه برود، این مسیر را یک‌بار از اول تا آخر طی کنید. عجله نکنید؛ بیشتر خطاها از جا‌به‌جا نوشتن آدرس سایت یا بسته بودن خروجی سرور است.', 'shojaei-seo-for-woo' ) . '</p>
 			<ol>
@@ -451,7 +451,7 @@ $accordion_items = array(
 		'icon'  => 'eye',
 		'color' => 'blue',
 		'title' => __( 'Dry-Run اعتمادساز چیست؟', 'shojaei-seo-for-woo' ),
-		'open'  => true,
+		'open'  => false,
 		'content' => '
 			<p>' . esc_html__( 'Dry-Run فقط یک چک‌باکس نیست — پایه اعتماد برای تغییرات انبوه روی فروشگاه ایرانی است.', 'shojaei-seo-for-woo' ) . '</p>
 			<ul>

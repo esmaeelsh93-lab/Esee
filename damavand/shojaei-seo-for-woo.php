@@ -3,7 +3,7 @@
  * Plugin Name:       افزونه سئو حرفه‌ای دماوند (Damavand)
  * Plugin URI:        https://shojaei.com
  * Description:       جایگزین ساده‌تر و بهتر Rank Math برای فروشگاه‌های ووکامرس ایرانی — Schema، متا، crawl budget، OOS و AI کنترل‌شده
- * Version:           1.60.1
+ * Version:           1.60.2
  * Author:            اسماعیل شجاعی
  * Author URI:        https://shojaei.com
  * Text Domain:       shojaei-seo-for-woo
@@ -23,7 +23,7 @@ defined( 'ABSPATH' ) || exit;
  * اگر افزونه دیگری قبلاً SHOJAEI_SEO_PLUGIN_* را گرفته باشد، از DAMAVAND_SEO_* استفاده می‌کنیم.
  */
 if ( ! defined( 'DAMAVAND_SEO_VERSION' ) ) {
-	define( 'DAMAVAND_SEO_VERSION', '1.60.1' );
+	define( 'DAMAVAND_SEO_VERSION', '1.60.2' );
 }
 if ( ! defined( 'DAMAVAND_SEO_DB_VERSION' ) ) {
 	define( 'DAMAVAND_SEO_DB_VERSION', '1.33.0' );
