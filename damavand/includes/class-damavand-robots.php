@@ -2,6 +2,11 @@
 /**
  * Crawl-budget robots — structural noindex + per-post flags (Damavand).
  *
+ * OWNER: HTML meta robots (`wp_robots`) + crawl-budget noindex rules.
+ *   Wired via Shojaei_SEO_General_Meta::filter_robots() → apply_to_robots().
+ * NOT owner of robots.txt — that is SEO_Core_Robots_Module only.
+ * OOS product noindex: Shojaei_SEO_OOS_Manager (separate, higher priority).
+ *
  * Rank Math parity for Iranian WooCommerce: never burn crawl on cart,
  * checkout, account, search, faceted filters, or thin system archives.
  *
@@ -304,6 +309,14 @@ final class Damavand_Robots {
 				continue;
 			}
 			$robots[ $flag ] = true;
+		}
+
+		// 5) Legacy OOS / explicit noindex flag — honor even when General Meta defaults say index.
+		if ( is_singular( 'product' ) ) {
+			$pid = (int) get_queried_object_id();
+			if ( $pid > 0 && 'yes' === (string) get_post_meta( $pid, '_shojaei_seo_noindex', true ) ) {
+				$robots = self::force_noindex( $robots, ! empty( $robots['nofollow'] ) );
+			}
 		}
 
 		return $robots;

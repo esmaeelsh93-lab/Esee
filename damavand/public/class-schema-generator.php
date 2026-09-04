@@ -2,6 +2,10 @@
 /**
  * Schema / JSON-LD generator with SEO-plugin coexistence policy.
  *
+ * OWNER: Sole runtime emitter of Damavand Product/Breadcrumb/FAQ/… JSON-LD (`wp_head`).
+ * SEO_Core_Schema_Module = settings/gate adapter only — do not duplicate emission there.
+ * Detector: Shojaei_SEO_Schema_Detector (conflict scan, not emission).
+ *
  * @package Shojaei_SEO_For_Woo
  */
 

@@ -2,6 +2,10 @@
 /**
  * ماژول Schema / JSON-LD — هسته سئو.
  *
+ * OWNER: settings / Passive-Override gate / health adapter only.
+ * OWNER of JSON-LD emission: Shojaei_SEO_Schema_Generator (+ Schema_Detector for conflicts).
+ * Keep parallel — this module must not print Product schema itself.
+ *
  * آداپتر روی Schema Generator + Detector.
  * Passive = واگذاری Product/Breadcrumb به Rank Math/Yoast؛ Override = صدور کامل دماوند.
  *

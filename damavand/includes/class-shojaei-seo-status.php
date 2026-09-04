@@ -466,7 +466,7 @@ class Shojaei_SEO_Status {
 			);
 		}
 
-		if ( class_exists( 'Shojaei_SEO_Canonical' ) && Shojaei_SEO_Canonical::is_enabled() ) {
+		if ( class_exists( 'SEO_Core_Canonical_Module' ) && SEO_Core_Canonical_Module::is_runtime_allowed() ) {
 			$cards[] = array(
 				'id'          => 'variation_canonical',
 				'tone'        => 'safe',

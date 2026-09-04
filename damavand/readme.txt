@@ -67,6 +67,10 @@ Inventory-aware SEO — تصمیم‌گیری سئو بر اساس موجودی 
 * همگام‌سازی Stable tag با Version هدر افزونه (جلوگیری از گیج شدن آپدیت)
 * حذف کامل Cross-Sell تسویه‌حساب و بلوک محصولات مکمل (خارج از حوزه SEO) + پاکسازی آپشن‌های یتیم
 * حذف کامل جدول سایزبندی Damavand (فرانت/متاباکس/AI persist) + پاکسازی postmeta یتیم
+* یکپارچه‌سازی Canonical: Resolver واحد در seo-core (حذف Damavand_Canonical + Shojaei_SEO_Canonical موازی)
+* Robots/Schema: مالکیت موازی مستند شد (robots.txt ≠ meta robots؛ Schema Generator ≠ seo-core gate)
+* احترام به `_shojaei_seo_noindex` داخل Damavand_Robots::apply_to_robots
+* اسکریپت snapshot هد SEO برای baseline/diff روی استیجینگ (`scripts/snapshot-seo-head.php`)
 * Crawl budget: noindex برای سبد/تسویه/حساب/جستجو/۴۰۴/فیلتر و بایگانی نویسنده/تاریخ
 * اعمال متای `_damavand_seo_robots` روی فرانت + کنترل دستی در متاباکس پیشرفته
 * Schema روی صفحات noindex چاپ نمی‌شود؛ اسکیمای موازی ووکامرس وقتی Damavand مالک Product است سرکوب می‌شود

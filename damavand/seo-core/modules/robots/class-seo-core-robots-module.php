@@ -2,6 +2,10 @@
 /**
  * ماژول Robots.txt — هسته سئو.
  *
+ * OWNER: robots.txt virtual file only (`robots_txt` filter).
+ * HTML meta robots / crawl-budget noindex: Damavand_Robots + Shojaei_SEO_General_Meta.
+ * Keep these stacks parallel — do not merge into this module.
+ *
  * ویرایش/افزودن به robots.txt مجازی وردپرس. در Passive با Rank Math/Yoast تداخل نمی‌کند.
  * متای robots صفحه در «متای عمومی» باقی می‌ماند.
  *

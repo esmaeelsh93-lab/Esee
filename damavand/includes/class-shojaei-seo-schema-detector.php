@@ -2,6 +2,9 @@
 /**
  * Schema conflict detector — finds parallel application/ld+json blocks.
  *
+ * OWNER: conflict / health detection only (admin tools + reports).
+ * Does NOT emit schema — emission owner is Shojaei_SEO_Schema_Generator.
+ *
  * @package Shojaei_SEO_For_Woo
  */
 

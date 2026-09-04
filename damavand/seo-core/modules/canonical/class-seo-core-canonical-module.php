@@ -2,7 +2,12 @@
 /**
  * ماژول Canonical — هسته سئو.
  *
- * پوشش: canonical ورییشن → والد (مکمل Rank Math) + سیاست‌های سبک سایت‌واید.
+ * OWNER (settings / policies / boot): این کلاس.
+ * OWNER (runtime HTML canonical URL): SEO_Core_Canonical_Resolver
+ *   — sole filter owner for get_canonical_url / wpseo_canonical / rank_math.
+ *   Former Damavand_Canonical + Shojaei_SEO_Canonical stacks were merged here (1.58).
+ *
+ * پوشش: variation→parent، facet strip، pagination self، سیاست‌های سایت‌واید.
  *
  * @package Shojaei_SEO_For_Woo
  */
@@ -39,7 +44,7 @@ class SEO_Core_Canonical_Module extends SEO_Core_Module {
 	}
 
 	/**
-	 * ورییشن→والد مکمل است؛ چاپ تگ مستقل در Passive خاموش می‌ماند (منطق کلاس موجود).
+	 * ورییشن→والد مکمل است؛ چاپ تگ مستقل در Passive خاموش می‌ماند (منطق Resolver).
 	 * ماژول خودش Passive اجباری ندارد تا فیلتر خارجی کار کند.
 	 */
 	public function is_passive(): bool {
@@ -80,10 +85,11 @@ class SEO_Core_Canonical_Module extends SEO_Core_Module {
 	 * {@inheritdoc}
 	 */
 	public function boot(): void {
-		// نرمال‌سازی سبک روی تگ وردپرس / فیلترهای خارجی.
-		add_filter( 'get_canonical_url', array( $this, 'normalize_url' ), 30, 2 );
-		add_filter( 'wpseo_canonical', array( $this, 'normalize_url_simple' ), 30 );
-		add_filter( 'rank_math/frontend/canonical', array( $this, 'normalize_url_simple' ), 30 );
+		if ( ! class_exists( 'SEO_Core_Canonical_Resolver' ) ) {
+			require_once dirname( __FILE__ ) . '/class-seo-core-canonical-resolver.php';
+		}
+		// Single pipeline — policies applied inside resolver finalize(); do not add @30 policy filters here.
+		SEO_Core_Canonical_Resolver::register_hooks();
 
 		if ( is_admin() ) {
 			add_action( 'wp_ajax_shojaei_seo_core_canonical', array( $this, 'ajax' ) );
@@ -103,28 +109,7 @@ class SEO_Core_Canonical_Module extends SEO_Core_Module {
 	}
 
 	/**
-	 * @param string       $canonical Canonical.
-	 * @param WP_Post|null $post      Post.
-	 */
-	public function normalize_url( $canonical, $post = null ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
-		if ( ! $this->is_enabled() || ! is_string( $canonical ) || '' === $canonical ) {
-			return $canonical;
-		}
-		return self::apply_policies( $canonical );
-	}
-
-	/**
-	 * @param string $canonical Canonical.
-	 */
-	public function normalize_url_simple( $canonical ) {
-		if ( ! $this->is_enabled() || ! is_string( $canonical ) || '' === $canonical ) {
-			return $canonical;
-		}
-		return self::apply_policies( $canonical );
-	}
-
-	/**
-	 * سیاست‌های سایت‌واید.
+	 * سیاست‌های سایت‌واید (HTTPS + strip UTM).
 	 *
 	 * @param string $url URL.
 	 */

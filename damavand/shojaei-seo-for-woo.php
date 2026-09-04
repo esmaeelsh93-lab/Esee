@@ -129,7 +129,7 @@ if ( ! class_exists( 'Shojaei_SEO_For_Woo', false ) ) {
 				'includes/class-shojaei-seo-gsc-error-mapper.php',
 				'includes/class-shojaei-seo-gsc.php',
 				'includes/class-shojaei-seo-ga4.php',
-				'includes/class-shojaei-seo-canonical.php',
+				'seo-core/modules/canonical/class-seo-core-canonical-resolver.php',
 				'includes/class-shojaei-seo-slug.php',
 				'includes/class-shojaei-seo-manual-redirect.php',
 				'includes/class-shojaei-seo-general-meta.php',
@@ -157,7 +157,6 @@ if ( ! class_exists( 'Shojaei_SEO_For_Woo', false ) ) {
 				'includes/class-damavand-seo-migrator.php',
 				'includes/class-damavand-persian-text.php',
 				'includes/class-damavand-content-analyzer.php',
-				'includes/class-damavand-canonical.php',
 				'includes/class-damavand-robots.php',
 				'includes/class-damavand-schema-validator.php',
 				'includes/class-damavand-duplicate-scan.php',
@@ -306,9 +305,7 @@ if ( ! class_exists( 'Shojaei_SEO_For_Woo', false ) ) {
 				if ( class_exists( 'Damavand_SEO_Migrator' ) ) {
 					Damavand_SEO_Migrator::register_hooks();
 				}
-				if ( class_exists( 'Damavand_Canonical' ) ) {
-					Damavand_Canonical::register_hooks();
-				}
+				// Canonical runtime hooks: SEO_Core_Canonical_Module::boot() → Resolver (seo-core).
 				if ( class_exists( 'Damavand_Persian_SEO_Score' ) ) {
 					Damavand_Persian_SEO_Score::register_hooks();
 				}
@@ -355,7 +352,6 @@ if ( ! class_exists( 'Shojaei_SEO_For_Woo', false ) ) {
 					Shojaei_SEO_Activator::maybe_sync_plugin_version();
 				}
 
-				new Shojaei_SEO_Canonical();
 				new Shojaei_SEO_Schema_Generator();
 				new Shojaei_SEO_Schema_Detector();
 

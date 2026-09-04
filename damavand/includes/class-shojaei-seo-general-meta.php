@@ -2,6 +2,9 @@
 /**
  * General Meta — robots, title separator, OG fallback (Damavand).
  *
+ * OWNER (meta robots bridge): delegates `wp_robots` to Damavand_Robots::apply_to_robots().
+ * Does NOT own robots.txt (SEO_Core_Robots_Module) or Product JSON-LD (Schema Generator).
+ *
  * @package Shojaei_SEO_For_Woo
  */
 
