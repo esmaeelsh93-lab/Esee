@@ -2,8 +2,8 @@
 /**
  * Plugin Name:       افزونه سئو حرفه‌ای دماوند (Damavand)
  * Plugin URI:        https://shojaei.com
- * Description:       لایه عملیاتی سئو برای ووکامرس — Inventory-aware SEO: چرخه عمر محصول، موجودی، ریدایرکت، لینک‌سازی و بازیابی (نه جایگزین Yoast/Rank Math)
- * Version:           1.57.0
+ * Description:       جایگزین ساده‌تر و بهتر Rank Math برای فروشگاه‌های ووکامرس ایرانی — Schema، متا، crawl budget، OOS و AI کنترل‌شده
+ * Version:           1.58.0
  * Author:            اسماعیل شجاعی
  * Author URI:        https://shojaei.com
  * Text Domain:       shojaei-seo-for-woo
@@ -23,10 +23,10 @@ defined( 'ABSPATH' ) || exit;
  * اگر افزونه دیگری قبلاً SHOJAEI_SEO_PLUGIN_* را گرفته باشد، از DAMAVAND_SEO_* استفاده می‌کنیم.
  */
 if ( ! defined( 'DAMAVAND_SEO_VERSION' ) ) {
-	define( 'DAMAVAND_SEO_VERSION', '1.57.0' );
+	define( 'DAMAVAND_SEO_VERSION', '1.58.0' );
 }
 if ( ! defined( 'DAMAVAND_SEO_DB_VERSION' ) ) {
-	define( 'DAMAVAND_SEO_DB_VERSION', '1.30.0' );
+	define( 'DAMAVAND_SEO_DB_VERSION', '1.31.0' );
 }
 if ( ! defined( 'DAMAVAND_SEO_FILE' ) ) {
 	define( 'DAMAVAND_SEO_FILE', __FILE__ );
@@ -158,9 +158,13 @@ if ( ! class_exists( 'Shojaei_SEO_For_Woo', false ) ) {
 				'includes/class-damavand-persian-text.php',
 				'includes/class-damavand-content-analyzer.php',
 				'includes/class-damavand-canonical.php',
+				'includes/class-damavand-robots.php',
+				'includes/class-damavand-schema-validator.php',
+				'includes/class-damavand-duplicate-scan.php',
 				'includes/class-damavand-persian-seo-score.php',
 				'includes/class-damavand-gutenberg-sidebar.php',
 				'includes/class-damavand-taxonomy-seo.php',
+				'includes/class-damavand-size-chart.php',
 				'includes/class-damavand-seo-icons.php',
 				'includes/class-damavand-link-manager.php',
 				'includes/class-damavand-link-calculator.php',
@@ -316,6 +320,9 @@ if ( ! class_exists( 'Shojaei_SEO_For_Woo', false ) ) {
 				}
 				if ( class_exists( 'Damavand_Taxonomy_SEO' ) ) {
 					Damavand_Taxonomy_SEO::register_hooks();
+				}
+				if ( class_exists( 'Damavand_Size_Chart' ) ) {
+					Damavand_Size_Chart::register_hooks();
 				}
 
 				if ( class_exists( 'Damavand_Link_Manager' ) ) {

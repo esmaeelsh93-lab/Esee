@@ -26,9 +26,13 @@ final class Damavand_Taxonomy_SEO {
 			add_action( "{$tax}_add_form_fields", array( __CLASS__, 'render_add_fields' ), 20 );
 			add_action( "edited_{$tax}", array( __CLASS__, 'save_term' ), 10, 2 );
 			add_action( "created_{$tax}", array( __CLASS__, 'save_term' ), 10, 2 );
+			add_filter( "manage_edit-{$tax}_columns", array( __CLASS__, 'add_list_column' ) );
+			add_filter( "manage_{$tax}_custom_column", array( __CLASS__, 'render_list_column' ), 10, 3 );
+			add_filter( "manage_edit-{$tax}_sortable_columns", array( __CLASS__, 'sortable_column' ) );
 		}
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue' ) );
 		add_action( 'wp_ajax_damavand_term_seo_live', array( __CLASS__, 'ajax_live' ) );
+		add_action( 'parse_term_query', array( __CLASS__, 'orderby_score' ) );
 	}
 
 	/**
@@ -156,5 +160,67 @@ final class Damavand_Taxonomy_SEO {
 				? Damavand_Content_Analyzer::score_term( $term_id, $taxonomy, $override )
 				: array( 'score' => 0 )
 		);
+	}
+
+	/**
+	 * @param array<string,string> $columns Columns.
+	 * @return array<string,string>
+	 */
+	public static function add_list_column( array $columns ): array {
+		$columns['damavand_term_seo'] = __( 'سئو', 'shojaei-seo-for-woo' );
+		return $columns;
+	}
+
+	/**
+	 * @param string $content     Cell.
+	 * @param string $column_name Column.
+	 * @param int    $term_id     Term ID.
+	 */
+	public static function render_list_column( $content, string $column_name, $term_id ) {
+		if ( 'damavand_term_seo' !== $column_name ) {
+			return $content;
+		}
+		$raw   = get_term_meta( (int) $term_id, self::META_SCORE, true );
+		$score = ( '' === (string) $raw || false === $raw ) ? null : max( 0, min( 100, (int) $raw ) );
+		if ( null === $score ) {
+			return '<span class="dm-list-score dm-list-score--na">—</span>';
+		}
+		$tone = 'bad';
+		if ( $score >= 80 ) {
+			$tone = 'good';
+		} elseif ( $score >= 60 ) {
+			$tone = 'ok';
+		}
+		return sprintf(
+			'<span class="dm-list-score dm-list-score--%1$s"><span>%2$d</span></span>',
+			esc_attr( $tone ),
+			(int) $score
+		);
+	}
+
+	/**
+	 * @param array<string,string> $columns Columns.
+	 * @return array<string,string>
+	 */
+	public static function sortable_column( array $columns ): array {
+		$columns['damavand_term_seo'] = 'damavand_term_seo';
+		return $columns;
+	}
+
+	/**
+	 * Sort terms by Damavand SEO score when requested.
+	 *
+	 * @param WP_Term_Query $query Query.
+	 */
+	public static function orderby_score( $query ): void {
+		if ( ! is_admin() || ! $query instanceof WP_Term_Query ) {
+			return;
+		}
+		$orderby = $query->query_vars['orderby'] ?? '';
+		if ( 'damavand_term_seo' !== $orderby ) {
+			return;
+		}
+		$query->query_vars['meta_key'] = self::META_SCORE;
+		$query->query_vars['orderby']  = 'meta_value_num';
 	}
 }

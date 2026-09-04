@@ -50,7 +50,7 @@ class SEO_Core_Schema_Module extends SEO_Core_Module {
 		$defaults = array(
 			'shojaei_seo_schema_enabled'               => 'yes',
 			'shojaei_seo_schema_detect_enabled'        => 'yes',
-			'shojaei_seo_disable_wc_schema'            => 'no',
+			'shojaei_seo_disable_wc_schema'            => 'yes',
 			'shojaei_seo_schema_product_enabled'       => 'yes',
 			'shojaei_seo_schema_breadcrumb_enabled'    => 'yes',
 			'shojaei_seo_schema_faq_enabled'           => 'yes',

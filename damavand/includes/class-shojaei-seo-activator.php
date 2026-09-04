@@ -318,6 +318,28 @@ class Shojaei_SEO_Activator {
 			add_option( 'shojaei_seo_remove_data_on_uninstall', 'no', '', false );
 		}
 
+		// 1.58 / DB 1.31: Rank Math–parity crawl budget + single Product schema owner.
+		if ( version_compare( $installed, '1.31.0', '<' ) ) {
+			foreach ( array(
+				'shojaei_seo_meta_noindex_facets'      => 'yes',
+				'shojaei_seo_meta_noindex_author_date' => 'yes',
+				'shojaei_seo_meta_noindex_wc_system'   => 'yes',
+			) as $opt => $val ) {
+				if ( false === get_option( $opt, false ) ) {
+					add_option( $opt, $val, '', false );
+				}
+			}
+			// If Damavand schema is on and WC schema not explicitly managed, prefer disable.
+			if ( 'yes' === (string) get_option( 'shojaei_seo_schema_product_enabled', 'yes' )
+				&& false === get_option( 'shojaei_seo_disable_wc_schema', false ) ) {
+				add_option( 'shojaei_seo_disable_wc_schema', 'yes', '', false );
+			}
+			// Enable general meta output when no competitor was intended (fresh Rank Math alternative).
+			if ( false === get_option( 'shojaei_seo_meta_enabled', false ) ) {
+				add_option( 'shojaei_seo_meta_enabled', 'yes', '', false );
+			}
+		}
+
 		if ( class_exists( 'Shojaei_SEO_Jobs' ) ) {
 			Shojaei_SEO_Jobs::migrate_from_options();
 		}
@@ -481,7 +503,7 @@ class Shojaei_SEO_Activator {
 			'shojaei_seo_checkout_box_enabled'  => 'yes',
 			'shojaei_seo_schema_enabled'        => 'yes',
 			'shojaei_seo_schema_detect_enabled' => 'yes',
-			'shojaei_seo_disable_wc_schema'     => 'no',
+			'shojaei_seo_disable_wc_schema'     => 'yes',
 			'shojaei_seo_schema_product_enabled'=> 'yes',
 			'shojaei_seo_schema_breadcrumb_enabled' => 'yes',
 			'shojaei_seo_schema_faq_enabled'    => 'yes',
@@ -491,7 +513,7 @@ class Shojaei_SEO_Activator {
 			'shojaei_seo_schema_site_enabled'   => 'yes',
 			'shojaei_seo_schema_collection_enabled' => 'yes',
 			'shojaei_seo_schema_respect_seo_plugins' => 'yes',
-			'shojaei_seo_meta_enabled'          => 'no',
+			'shojaei_seo_meta_enabled'          => 'yes',
 			'shojaei_seo_meta_force_with_competitors' => 'no',
 			'shojaei_seo_meta_robots_noindex'   => 'no',
 			'shojaei_seo_meta_robots_nofollow'  => 'no',
@@ -505,6 +527,9 @@ class Shojaei_SEO_Activator {
 			'shojaei_seo_meta_max_video_preview'=> -1,
 			'shojaei_seo_meta_max_image_preview'=> 'large',
 			'shojaei_seo_meta_noindex_empty_tax'=> 'yes',
+			'shojaei_seo_meta_noindex_facets'   => 'yes',
+			'shojaei_seo_meta_noindex_author_date' => 'yes',
+			'shojaei_seo_meta_noindex_wc_system'=> 'yes',
 			'shojaei_seo_meta_separator'        => '-',
 			'shojaei_seo_meta_separator_custom' => '',
 			'shojaei_seo_meta_og_image_id'      => 0,

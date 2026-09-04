@@ -137,7 +137,12 @@ class Shojaei_SEO_Canonical {
 		if ( ! $redirect_url || ! is_paged() ) {
 			return $redirect_url;
 		}
-		if ( ! ( is_tax( array( 'product_cat', 'product_tag', 'product_brand' ) ) || is_post_type_archive( 'product' ) || is_category() || is_tag() ) ) {
+		$is_shop_archive = ( function_exists( 'is_shop' ) && is_shop() )
+			|| is_post_type_archive( 'product' )
+			|| is_tax( array( 'product_cat', 'product_tag', 'product_brand' ) )
+			|| is_category()
+			|| is_tag();
+		if ( ! $is_shop_archive ) {
 			return $redirect_url;
 		}
 		$req_path = (string) wp_parse_url( $requested_url, PHP_URL_PATH );
@@ -162,7 +167,12 @@ class Shojaei_SEO_Canonical {
 		if ( $paged < 2 || ! is_string( $canonical ) || '' === $canonical ) {
 			return $canonical;
 		}
-		if ( ! ( is_tax( array( 'product_cat', 'product_tag', 'product_brand' ) ) || is_post_type_archive( 'product' ) || is_category() || is_tag() ) ) {
+		$is_shop_archive = ( function_exists( 'is_shop' ) && is_shop() )
+			|| is_post_type_archive( 'product' )
+			|| is_tax( array( 'product_cat', 'product_tag', 'product_brand' ) )
+			|| is_category()
+			|| is_tag();
+		if ( ! $is_shop_archive ) {
 			return $canonical;
 		}
 		if ( preg_match( '#/page/' . $paged . '/?$#', $canonical ) ) {

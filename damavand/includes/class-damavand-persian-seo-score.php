@@ -34,6 +34,8 @@ final class Damavand_Persian_SEO_Score {
 		add_action( 'manage_product_posts_custom_column', array( __CLASS__, 'render_product_list_column' ), 10, 2 );
 		add_filter( 'manage_edit-product_sortable_columns', array( __CLASS__, 'product_list_sortable_column' ) );
 		add_action( 'pre_get_posts', array( __CLASS__, 'product_list_orderby_score' ) );
+		add_action( 'pre_get_posts', array( __CLASS__, 'product_list_filter_by_score' ) );
+		add_action( 'restrict_manage_posts', array( __CLASS__, 'product_list_score_dropdown' ) );
 	}
 
 	/**
@@ -817,6 +819,9 @@ final class Damavand_Persian_SEO_Score {
 		$related   = class_exists( 'Damavand_Content_Analyzer' )
 			? (string) get_post_meta( (int) $post->ID, Damavand_Content_Analyzer::META_RELATED, true )
 			: '';
+		$robots_flags = class_exists( 'Damavand_SEO_Meta' ) ? Damavand_SEO_Meta::get_robots( (int) $post->ID ) : array();
+		$robots_noindex  = in_array( 'noindex', $robots_flags, true );
+		$robots_nofollow = in_array( 'nofollow', $robots_flags, true );
 		include DAMAVAND_SEO_DIR . 'admin/views/metabox-persian-seo-score.php';
 	}
 
@@ -861,6 +866,10 @@ final class Damavand_Persian_SEO_Score {
 			}
 		}
 		if ( null !== $focus ) {
+			$focus = trim( $focus );
+			if ( '' === $focus && 'product' === $post->post_type ) {
+				$focus = trim( wp_strip_all_tags( (string) $post->post_title ) );
+			}
 			if ( '' === $focus ) {
 				delete_post_meta( $post_id, Damavand_SEO_Meta::FOCUS );
 			} else {
@@ -872,6 +881,30 @@ final class Damavand_Persian_SEO_Score {
 				delete_post_meta( $post_id, Damavand_Content_Analyzer::META_RELATED );
 			} else {
 				update_post_meta( $post_id, Damavand_Content_Analyzer::META_RELATED, Damavand_Content_Analyzer::normalize_related_input( $related ) );
+			}
+		}
+
+		// Persist size chart from SEO metabox (synced with WooCommerce field).
+		if ( 'product' === $post->post_type && isset( $_POST['damavand_size_chart_raw'] ) && class_exists( 'Damavand_Size_Chart' ) ) {
+			Damavand_Size_Chart::save(
+				(int) $post_id,
+				sanitize_textarea_field( wp_unslash( $_POST['damavand_size_chart_raw'] ) )
+			);
+		}
+
+		// Per-post robots (Rank Math parity — explicit merchant control).
+		if ( isset( $_POST['damavand_seo_robots_present'] ) ) {
+			$flags = array();
+			if ( ! empty( $_POST['damavand_seo_robots_noindex'] ) ) {
+				$flags[] = 'noindex';
+			}
+			if ( ! empty( $_POST['damavand_seo_robots_nofollow'] ) ) {
+				$flags[] = 'nofollow';
+			}
+			if ( empty( $flags ) ) {
+				delete_post_meta( $post_id, Damavand_SEO_Meta::ROBOTS );
+			} else {
+				update_post_meta( $post_id, Damavand_SEO_Meta::ROBOTS, $flags );
 			}
 		}
 
@@ -1044,6 +1077,113 @@ final class Damavand_Persian_SEO_Score {
 		}
 		$query->set( 'meta_key', self::META_SCORE );
 		$query->set( 'orderby', 'meta_value_num' );
+	}
+
+	/**
+	 * Dropdown filter on All Products: under 70 / under 80 / unscored / good.
+	 *
+	 * @param string $post_type Post type.
+	 */
+	public static function product_list_score_dropdown( string $post_type ): void {
+		if ( 'product' !== $post_type ) {
+			return;
+		}
+		$current = isset( $_GET['damavand_seo_score_filter'] ) ? sanitize_key( wp_unslash( $_GET['damavand_seo_score_filter'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$opts    = array(
+			''           => __( 'همه امتیازهای سئو', 'shojaei-seo-for-woo' ),
+			'under_70'   => __( 'امتیاز زیر ۷۰', 'shojaei-seo-for-woo' ),
+			'under_80'   => __( 'امتیاز زیر ۸۰', 'shojaei-seo-for-woo' ),
+			'70_79'      => __( 'امتیاز ۷۰ تا ۷۹', 'shojaei-seo-for-woo' ),
+			'80_plus'    => __( 'امتیاز ۸۰ و بالاتر', 'shojaei-seo-for-woo' ),
+			'unscored'   => __( 'بدون امتیاز ذخیره‌شده', 'shojaei-seo-for-woo' ),
+		);
+		echo '<select name="damavand_seo_score_filter" id="damavand-seo-score-filter">';
+		foreach ( $opts as $value => $label ) {
+			printf(
+				'<option value="%1$s" %2$s>%3$s</option>',
+				esc_attr( $value ),
+				selected( $current, $value, false ),
+				esc_html( $label )
+			);
+		}
+		echo '</select>';
+	}
+
+	/**
+	 * Apply SEO score meta_query on product list.
+	 *
+	 * @param WP_Query $query Query.
+	 */
+	public static function product_list_filter_by_score( $query ): void {
+		if ( ! is_admin() || ! $query instanceof WP_Query || ! $query->is_main_query() ) {
+			return;
+		}
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		if ( ! $screen || 'edit-product' !== $screen->id ) {
+			return;
+		}
+		$filter = isset( $_GET['damavand_seo_score_filter'] ) ? sanitize_key( wp_unslash( $_GET['damavand_seo_score_filter'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( '' === $filter ) {
+			return;
+		}
+
+		$meta_query = (array) $query->get( 'meta_query' );
+		if ( ! is_array( $meta_query ) ) {
+			$meta_query = array();
+		}
+
+		switch ( $filter ) {
+			case 'under_70':
+				$meta_query[] = array(
+					'key'     => self::META_SCORE,
+					'value'   => 70,
+					'compare' => '<',
+					'type'    => 'NUMERIC',
+				);
+				break;
+			case 'under_80':
+				$meta_query[] = array(
+					'key'     => self::META_SCORE,
+					'value'   => 80,
+					'compare' => '<',
+					'type'    => 'NUMERIC',
+				);
+				break;
+			case '70_79':
+				$meta_query[] = array(
+					'key'     => self::META_SCORE,
+					'value'   => array( 70, 79 ),
+					'compare' => 'BETWEEN',
+					'type'    => 'NUMERIC',
+				);
+				break;
+			case '80_plus':
+				$meta_query[] = array(
+					'key'     => self::META_SCORE,
+					'value'   => 80,
+					'compare' => '>=',
+					'type'    => 'NUMERIC',
+				);
+				break;
+			case 'unscored':
+				$meta_query[] = array(
+					'relation' => 'OR',
+					array(
+						'key'     => self::META_SCORE,
+						'compare' => 'NOT EXISTS',
+					),
+					array(
+						'key'     => self::META_SCORE,
+						'value'   => '',
+						'compare' => '=',
+					),
+				);
+				break;
+			default:
+				return;
+		}
+
+		$query->set( 'meta_query', $meta_query );
 	}
 
 	/**

@@ -676,6 +676,35 @@ class Shojaei_SEO_AI_Engine {
 	}
 
 	/**
+	 * Anti-repetition hints for prompts (per product seed).
+	 *
+	 * @param array<string,mixed> $ctx Context.
+	 */
+	private static function anti_repetition_block( array $ctx ): string {
+		$seed = (int) ( $ctx['post_id'] ?? 0 );
+		$bans = array(
+			'بهترین انتخاب برای شما',
+			'کیفیت عالی و بی‌نظیر',
+			'تجربه‌ای متفاوت',
+			'با افتخار ارائه می‌دهیم',
+			'محصولی ایده‌آل برای همه',
+			'همین حالا سفارش دهید و لذت ببرید',
+		);
+		// Rotate emphasis so consecutive products get different writing angles.
+		$angles = array(
+			'روی کاربرد روزمره و سناریوی واقعی استفاده تمرکز کن.',
+			'روی جنس، دوخت یا جزئیات فنی ملموس تمرکز کن.',
+			'روی مخاطب هدف و اینکه برای چه کسی مناسب است تمرکز کن.',
+			'روی تفاوت با گزینه‌های رایج بازار تمرکز کن (بدون توهین به برند دیگر).',
+			'روی راهنمای انتخاب و نکات قبل از خرید تمرکز کن.',
+		);
+		$angle = $angles[ abs( $seed ) % count( $angles ) ];
+		return "قوانین ضدتکرار:\n- این عبارات را به‌کار نبر: " . implode( '؛ ', $bans )
+			. "\n- زاویه این محصول: " . $angle
+			. "\n- از کپی اسکلت مقاله محصولات دیگر خودداری کن.";
+	}
+
+	/**
 	 * Shared meta-title rules for prompts.
 	 *
 	 * @param array<string,mixed> $ctx Context.
@@ -702,10 +731,10 @@ class Shojaei_SEO_AI_Engine {
 			'meta_desc'          => array( 'max_tokens' => 220, 'timeout' => 25, 'temperature' => 0.3 ),
 			'slug'               => array( 'max_tokens' => 80, 'timeout' => 20, 'temperature' => 0.1 ),
 			'short_desc'         => array( 'max_tokens' => 500, 'timeout' => 30, 'temperature' => 0.4 ),
-			'long_desc_outline'  => array( 'max_tokens' => 900, 'timeout' => 35, 'temperature' => 0.25 ),
-			'long_desc'          => array( 'max_tokens' => 4096, 'timeout' => 120, 'temperature' => 0.42 ),
-			'faq'                => array( 'max_tokens' => 900, 'timeout' => 35, 'temperature' => 0.3 ),
-			'full_pack_meta'     => array( 'max_tokens' => 1200, 'timeout' => 45, 'temperature' => 0.32 ),
+			'long_desc_outline'  => array( 'max_tokens' => 900, 'timeout' => 35, 'temperature' => 0.45 ),
+			'long_desc'          => array( 'max_tokens' => 4096, 'timeout' => 120, 'temperature' => 0.55 ),
+			'faq'                => array( 'max_tokens' => 900, 'timeout' => 35, 'temperature' => 0.4 ),
+			'full_pack_meta'     => array( 'max_tokens' => 1200, 'timeout' => 45, 'temperature' => 0.4 ),
 			'llms_txt'           => array( 'max_tokens' => 900, 'timeout' => 35, 'temperature' => 0.3 ),
 			'alt_texts'          => array( 'max_tokens' => 120, 'timeout'  => 45, 'temperature' => 0.2, 'vision_model' => Shojaei_SEO_AI_Client::VISION_MODEL ),
 		);
@@ -860,30 +889,33 @@ class Shojaei_SEO_AI_Engine {
 				);
 			case 'short_desc':
 				return $store . sprintf(
-					"خلاصه بازاریابی فارسی برای بالای دکمه خرید ووکامرس (۲–۳ جمله).\nمحصول: %s\nکلمه کلیدی: %s\nویژگی‌ها: %s\nاطلاعات: %s\nفقط HTML ساده با p و ul/li. بدون markdown.",
+					"خلاصه بازاریابی فارسی برای بالای دکمه خرید (۲–۳ جمله خاص این محصول).\nمحصول: %s\nکلمه کلیدی: %s\nویژگی‌ها: %s\nاطلاعات: %s\n%s\nفقط HTML ساده با p و ul/li. بدون markdown. از جملات کلیشه‌ای تکراری پرهیز کن.",
 					$title,
 					$keyword,
 					$attrs,
-					$extra_t
+					$extra_t,
+					self::anti_repetition_block( $ctx )
 				);
 			case 'long_desc':
 				return $store . sprintf(
-					"مقاله سئو محصول فروشگاهی فارسی بنویس.\nعنوان: %s\nکلمه کلیدی: %s\nدسته: %s\nویژگی‌ها: %s\nاطلاعات تکمیلی: %s\nسبک: %s\n\nقوانین:\n- حداقل ۴۰۰ کلمه فارسی\n- HTML تمیز: h2, h3, p, ul, li (بدون markdown)\n- ۵ بخش: معرفی، ویژگی‌ها، جنس/کیفیت، راهنمای انتخاب، جمع‌بندی خرید\n- کلمه کلیدی در ۱۲۰ کلمه اول\n- لحن فروشگاهی واقعی",
+					"مقاله سئو محصول فروشگاهی فارسی — منحصر به این محصول.\nعنوان: %s\nکلمه کلیدی: %s\nدسته: %s\nویژگی‌ها: %s\nاطلاعات تکمیلی: %s\nسبک: %s\n%s\n\nقوانین:\n- حداقل ۴۰۰ کلمه فارسی\n- HTML تمیز: h2, h3, p, ul, li (بدون markdown)\n- ساختار را بر اساس ویژگی‌های واقعی محصول انتخاب کن (نه اسکلت ثابت همیشگی)\n- کلمه کلیدی در ۱۲۰ کلمه اول، طبیعی نه اسپم\n- لحن فروشگاهی واقعی؛ بدون ادعاهای ساختگی",
 					$title,
 					$keyword,
 					$cats,
 					$attrs,
 					$extra_t,
-					$style
+					$style,
+					self::anti_repetition_block( $ctx )
 				);
 			case 'long_desc_outline':
 				return $store . sprintf(
-					"طرح مقاله سئو محصول را بساز (فاز ۱ از ۲).\nعنوان: %s\nکلمه کلیدی: %s\nدسته: %s\nویژگی‌ها: %s\nاطلاعات: %s\n\n۵ بخش h2 با ۳–۵ bullet برای هر بخش.\nبخش‌ها: معرفی محصول، ویژگی‌ها و مزایا، جنس و کیفیت، راهنمای انتخاب/سایز، جمع‌بندی خرید.\nفقط JSON:\n{\"sections\":[{\"h2\":\"...\",\"bullets\":[\"...\",\"...\"]}]}",
+					"طرح مقاله سئو محصول را بساز (فاز ۱ از ۲) — برای همین محصول منحصر به فرد باشد.\nعنوان: %s\nکلمه کلیدی: %s\nدسته: %s\nویژگی‌ها: %s\nاطلاعات: %s\n%s\n\n۴ تا ۶ بخش h2 با ۳–۵ bullet.\nاز بین این الگوها یکی را که به محصول می‌خورد انتخاب کن (همه محصولات یکسان نباشند):\nالف) معرفی کاربردی → مشخصات → مقایسه با گزینه‌های مشابه → راهنمای خرید → جمع‌بندی\nب) مشکل مشتری → راه‌حل محصول → جزئیات جنس/ساخت → نگهداری → دعوت به خرید\nج) معرفی کوتاه → ویژگی‌های متمایز → مخاطب هدف → سوالات رایج کوتاه → جمع‌بندی\nفقط JSON:\n{\"angle\":\"الف|ب|ج\",\"sections\":[{\"h2\":\"...\",\"bullets\":[\"...\",\"...\"]}]}",
 					$title,
 					$keyword,
 					$cats,
 					$attrs,
-					$extra_t
+					$extra_t,
+					self::anti_repetition_block( $ctx )
 				);
 			case 'long_desc_expand':
 				$outline = $extra['outline'] ?? array();
@@ -891,22 +923,24 @@ class Shojaei_SEO_AI_Engine {
 				$link_block   = self::link_prompt_block( (int) ( $ctx['post_id'] ?? 0 ), $ctx );
 				$link_section = '' !== $link_block ? "\n\n" . $link_block : '';
 				return $store . sprintf(
-					"بر اساس طرح زیر، مقاله HTML کامل فاز ۲ را بنویس.\nعنوان: %s\nکلمه کلیدی: %s\nدسته: %s\nویژگی‌ها: %s\nاطلاعات: %s\nسبک: %s\n\nطرح:\n%s%s\n\nقوانین:\n- حداقل ۴۰۰ کلمه\n- HTML: h2, h3, p, ul, li — بدون markdown\n- هر h2 طرح را گسترش بده\n- کلمه کلیدی در پاراگراف اول\n- بخش جمع‌بندی با دعوت به خرید\n- فقط HTML",
+					"بر اساس طرح زیر، مقاله HTML کامل فاز ۲ را بنویس — متن انسانی و غیرتکراری.\nعنوان: %s\nکلمه کلیدی: %s\nدسته: %s\nویژگی‌ها: %s\nاطلاعات: %s\nسبک: %s\n%s\n\nطرح:\n%s%s\n\nقوانین:\n- حداقل ۴۰۰ کلمه\n- HTML: h2, h3, p, ul, li — بدون markdown\n- هر h2 را با جزئیات واقعی محصول گسترش بده؛ پاراگراف‌های کپی‌شده از محصولات دیگر ممنوع\n- کلمه کلیدی در پاراگراف اول طبیعی باشد\n- فقط HTML",
 					$title,
 					$keyword,
 					$cats,
 					$attrs,
 					$extra_t,
 					$style,
+					self::anti_repetition_block( $ctx ),
 					$outline_json ?: '{}',
 					$link_section
 				);
 			case 'faq':
 				$article = (string) ( $extra['article'] ?? '' );
 				return $store . sprintf(
-					"۴ یا ۵ سوال متداول فارسی درباره محصول با پاسخ کوتاه.\nمحصول: %s\nکلمه کلیدی: %s\nمتن:\n%s\n\nفقط JSON:\n{\"faqs\":[{\"question\":\"...\",\"answer\":\"...\"}]}",
+					"۴ یا ۵ سوال متداول فارسی خاص همین محصول (نه سوالات کلیشه‌ای عمومی).\nمحصول: %s\nکلمه کلیدی: %s\n%s\nمتن:\n%s\n\nفقط JSON:\n{\"faqs\":[{\"question\":\"...\",\"answer\":\"...\"}]}",
 					$title,
 					$keyword,
+					self::anti_repetition_block( $ctx ),
 					wp_strip_all_tags( $article )
 				);
 			case 'full_pack_meta':
@@ -965,9 +999,7 @@ class Shojaei_SEO_AI_Engine {
 				return Shojaei_SEO_AI_Client::clean_html( $raw );
 			case 'long_desc':
 				$html = Shojaei_SEO_AI_Client::clean_html( $raw );
-				if ( ! empty( $ctx['sizes'] ) ) {
-					$html .= '<h2>جدول سایزبندی</h2>' . Shojaei_SEO_AI_Client::build_size_table_html( (string) $ctx['sizes'] );
-				}
+				self::persist_size_chart_from_ctx( $ctx );
 				return $html;
 			case 'faq':
 				$json = Shojaei_SEO_AI_Client::extract_json( $raw );
@@ -986,9 +1018,7 @@ class Shojaei_SEO_AI_Engine {
 					'short_desc' => isset( $json['short_desc'] ) ? Shojaei_SEO_AI_Client::clean_html( (string) $json['short_desc'] ) : '',
 					'long_desc'  => isset( $json['long_desc'] ) ? Shojaei_SEO_AI_Client::clean_html( (string) $json['long_desc'] ) : '',
 				);
-				if ( ! empty( $ctx['sizes'] ) ) {
-					$pack['long_desc'] .= '<h2>جدول سایزبندی</h2>' . Shojaei_SEO_AI_Client::build_size_table_html( (string) $ctx['sizes'] );
-				}
+				self::persist_size_chart_from_ctx( $ctx );
 				if ( ! empty( $ctx['post_id'] ) && $pack['meta_title'] && ! ( class_exists( 'Shojaei_SEO_Store_Profile' ) && Shojaei_SEO_Store_Profile::draft_mode() ) ) {
 					update_post_meta( (int) $ctx['post_id'], '_damavand_seo_title', $pack['meta_title'] );
 				}
@@ -1106,58 +1136,79 @@ class Shojaei_SEO_AI_Engine {
 	}
 
 	/**
+	 * ItemList preview for the product's primary category (archive schema — NOT stored on product).
+	 *
 	 * @param array<string,mixed> $ctx Context.
 	 * @return array<string,mixed>
 	 */
 	private static function build_itemlist( array $ctx ): array {
 		$post_id = (int) ( $ctx['post_id'] ?? 0 );
-		$items   = array();
-		$cat_ids = $post_id ? wp_get_post_terms( $post_id, 'product_cat', array( 'fields' => 'ids' ) ) : array();
-		$related_q = new WP_Query(
+		$term    = null;
+		if ( $post_id ) {
+			$terms = wp_get_post_terms( $post_id, 'product_cat' );
+			if ( is_array( $terms ) && ! empty( $terms ) && ! is_wp_error( $terms ) ) {
+				$term = $terms[0];
+			}
+		}
+
+		if ( ! $term instanceof WP_Term ) {
+			return array(
+				'@context' => 'https://schema.org',
+				'@type'    => 'ItemList',
+				'name'     => __( 'ItemList فقط برای صفحه دسته/آرشیو است', 'shojaei-seo-for-woo' ),
+				'itemListElement' => array(),
+				'_damavand_note'  => __( 'روی صفحه محصول چاپ نمی‌شود. در فرانتِ دسته/فروشگاه به‌صورت زنده ساخته می‌شود.', 'shojaei-seo-for-woo' ),
+			);
+		}
+
+		$link = get_term_link( $term );
+		$url  = is_wp_error( $link ) ? '' : (string) $link;
+		$q    = new WP_Query(
 			array(
 				'post_type'      => 'product',
-				'posts_per_page' => 8,
-				'post__not_in'   => $post_id ? array( $post_id ) : array(),
-				'tax_query'      => ! empty( $cat_ids ) && ! is_wp_error( $cat_ids ) ? array(
+				'posts_per_page' => 12,
+				'tax_query'      => array(
 					array(
 						'taxonomy' => 'product_cat',
 						'field'    => 'term_id',
-						'terms'    => $cat_ids,
+						'terms'    => (int) $term->term_id,
 					),
-				) : array(),
+				),
 			)
 		);
-		$pos = 1;
-		while ( $related_q->have_posts() ) {
-			$related_q->the_post();
+		$items = array();
+		$pos   = 1;
+		while ( $q->have_posts() ) {
+			$q->the_post();
+			$pid     = get_the_ID();
+			$product = function_exists( 'wc_get_product' ) ? wc_get_product( $pid ) : null;
 			$items[] = array(
 				'@type'    => 'ListItem',
 				'position' => $pos++,
-				'url'      => get_permalink(),
-				'name'     => get_the_title(),
+				'url'      => get_permalink( $pid ),
+				'name'     => $product ? $product->get_name() : get_the_title( $pid ),
 			);
 		}
 		wp_reset_postdata();
 
-		if ( empty( $items ) && $post_id ) {
-			$items[] = array(
-				'@type'    => 'ListItem',
-				'position' => 1,
-				'url'      => get_permalink( $post_id ),
-				'name'     => (string) ( $ctx['title'] ?? '' ),
-			);
+		// Do NOT save ItemList on the product — that belonged on archives only.
+		if ( $post_id ) {
+			delete_post_meta( $post_id, '_damavand_seo_itemlist_schema' );
 		}
 
-		$schema = array(
+		return array(
 			'@context'        => 'https://schema.org',
 			'@type'           => 'ItemList',
-			'name'            => sprintf( 'محصولات مرتبط با %s', (string) ( $ctx['title'] ?? '' ) ),
+			'name'            => sprintf(
+				/* translators: %s: category name */
+				__( 'محصولات %s', 'shojaei-seo-for-woo' ),
+				$term->name
+			),
+			'url'             => $url,
+			'numberOfItems'   => count( $items ),
 			'itemListElement' => $items,
+			'_damavand_note'  => __( 'پیش‌نمایش ItemList دسته — در صفحه محصول چاپ نمی‌شود؛ روی آرشیو دسته چاپ می‌شود.', 'shojaei-seo-for-woo' ),
 		);
-		if ( $post_id ) {
-			update_post_meta( $post_id, '_damavand_seo_itemlist_schema', $schema );
-		}
-		return $schema;
 	}
 
 	/**
@@ -1205,7 +1256,12 @@ class Shojaei_SEO_AI_Engine {
 	 */
 	public static function product_seo_context( int $post_id ): array {
 		$title   = get_the_title( $post_id );
-		$keyword = (string) get_post_meta( $post_id, '_damavand_seo_focus_keyword', true );
+		$keyword = class_exists( 'Damavand_SEO_Meta' )
+			? Damavand_SEO_Meta::get_focus_keyword( $post_id, true )
+			: (string) get_post_meta( $post_id, '_damavand_seo_focus_keyword', true );
+		if ( '' === trim( $keyword ) ) {
+			$keyword = trim( wp_strip_all_tags( (string) $title ) );
+		}
 		$cats    = array();
 		$terms   = get_the_terms( $post_id, 'product_cat' );
 		if ( is_array( $terms ) ) {
@@ -1252,6 +1308,8 @@ class Shojaei_SEO_AI_Engine {
 			}
 		}
 
+		$sizes = class_exists( 'Damavand_Size_Chart' ) ? Damavand_Size_Chart::get_raw( $post_id ) : '';
+
 		return array(
 			'post_id'    => $post_id,
 			'title'      => $title,
@@ -1260,8 +1318,25 @@ class Shojaei_SEO_AI_Engine {
 			'attributes' => implode( '؛ ', $attrs ),
 			'image_ids'  => $image_ids,
 			'extra'      => '',
-			'sizes'      => '',
+			'sizes'      => $sizes,
 		);
+	}
+
+	/**
+	 * Save size chart meta from AI context (not into long description HTML).
+	 *
+	 * @param array<string,mixed> $ctx Context.
+	 */
+	private static function persist_size_chart_from_ctx( array $ctx ): void {
+		$post_id = (int) ( $ctx['post_id'] ?? 0 );
+		$sizes   = trim( (string) ( $ctx['sizes'] ?? '' ) );
+		if ( $post_id < 1 || '' === $sizes || ! class_exists( 'Damavand_Size_Chart' ) ) {
+			return;
+		}
+		if ( class_exists( 'Shojaei_SEO_Store_Profile' ) && Shojaei_SEO_Store_Profile::draft_mode() ) {
+			return;
+		}
+		Damavand_Size_Chart::save( $post_id, $sizes );
 	}
 
 	/**

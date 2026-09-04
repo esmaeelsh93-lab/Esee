@@ -35,7 +35,19 @@ class Shojaei_SEO_Schema_Detector {
 	 * Disable competing schema sources based on settings.
 	 */
 	public function apply_disable_hooks(): void {
-		if ( 'yes' === Shojaei_SEO_Helpers::get_option( 'shojaei_seo_disable_wc_schema', 'no' ) ) {
+		$disable = 'yes' === Shojaei_SEO_Helpers::get_option( 'shojaei_seo_disable_wc_schema', 'yes' );
+
+		// When Damavand owns Product schema and no Rank Math/Yoast fights for it,
+		// always suppress WooCommerce's parallel JSON-LD (duplicate Offer/Product).
+		if ( ! $disable
+			&& class_exists( 'Shojaei_SEO_Integration' )
+			&& Shojaei_SEO_Integration::should_emit_product_schema()
+			&& ! Shojaei_SEO_Integration::has_primary_seo_plugin()
+		) {
+			$disable = true;
+		}
+
+		if ( $disable ) {
 			add_filter( 'woocommerce_structured_data_product', array( $this, 'empty_markup' ), 100 );
 			add_filter( 'woocommerce_structured_data_product_offer', array( $this, 'empty_markup' ), 100 );
 			add_filter( 'woocommerce_structured_data_breadcrumblist', array( $this, 'empty_markup' ), 100 );

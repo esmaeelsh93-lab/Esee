@@ -146,30 +146,24 @@ class Shojaei_SEO_General_Meta {
 	/**
 	 * Filter wp_robots.
 	 *
+	 * Structural noindex (cart/checkout/search/facets) runs whenever Damavand
+	 * is primary — even if the "general meta" toggle is off. Site-wide defaults
+	 * still require that toggle via Damavand_Robots::meta_defaults_enabled().
+	 *
 	 * @param array $robots Directives.
 	 * @return array
 	 */
 	public function filter_robots( array $robots ): array {
+		if ( class_exists( 'Damavand_Robots' ) ) {
+			return Damavand_Robots::apply_to_robots( $robots );
+		}
+
 		if ( ! self::should_output() ) {
 			return $robots;
 		}
 
 		foreach ( self::default_robots_directives() as $key => $val ) {
 			$robots[ $key ] = $val;
-		}
-
-		// Empty category / tag archives → noindex.
-		if ( 'yes' === Shojaei_SEO_Helpers::get_option( 'shojaei_seo_meta_noindex_empty_tax', 'yes' ) ) {
-			if ( ( is_category() || is_tag() || is_tax() ) && ! is_paged() ) {
-				global $wp_query;
-				if ( $wp_query instanceof WP_Query && 0 === (int) $wp_query->found_posts ) {
-					$robots['noindex'] = true;
-					unset( $robots['index'] );
-					if ( empty( $robots['follow'] ) && empty( $robots['nofollow'] ) ) {
-						$robots['follow'] = true;
-					}
-				}
-			}
 		}
 
 		return $robots;
@@ -291,6 +285,9 @@ JS;
 			'shojaei_seo_meta_adv_video',
 			'shojaei_seo_meta_adv_image',
 			'shojaei_seo_meta_noindex_empty_tax',
+			'shojaei_seo_meta_noindex_facets',
+			'shojaei_seo_meta_noindex_author_date',
+			'shojaei_seo_meta_noindex_wc_system',
 		);
 		foreach ( $checks as $key ) {
 			update_option( $key, isset( $_POST[ $key ] ) ? 'yes' : 'no' ); // phpcs:ignore WordPress.Security.NonceVerification.Missing

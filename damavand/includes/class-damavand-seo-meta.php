@@ -192,15 +192,48 @@ class Damavand_SEO_Meta {
 
 	/**
 	 * کلمه کلیدی تمرکزی (اولین مورد اگر چندتایی با کاما باشد).
+	 * اگر خالی باشد برای محصول از عنوان محصول استفاده می‌شود تا AI و امتیازدهی گیج نشوند.
+	 *
+	 * @param int  $post_id        Post ID.
+	 * @param bool $fallback_title Use post title when focus is empty (default true).
 	 */
-	public static function get_focus_keyword( int $post_id ): string {
+	public static function get_focus_keyword( int $post_id, bool $fallback_title = true ): string {
 		$raw = self::first_meta( $post_id, array_merge( array( self::FOCUS ), self::fallback_keys()['focus'] ) );
-		if ( '' === $raw ) {
+		if ( '' !== $raw ) {
+			$parts = preg_split( '/\s*,\s*/', $raw );
+			$first = is_array( $parts ) ? trim( (string) ( $parts[0] ?? '' ) ) : '';
+			if ( '' !== $first ) {
+				return $first;
+			}
+		}
+		if ( ! $fallback_title || $post_id < 1 ) {
 			return '';
 		}
-		$parts = preg_split( '/\s*,\s*/', $raw );
-		$first = is_array( $parts ) ? trim( (string) ( $parts[0] ?? '' ) ) : '';
-		return $first;
+		$post = get_post( $post_id );
+		if ( ! $post instanceof WP_Post ) {
+			return '';
+		}
+		return trim( wp_strip_all_tags( (string) $post->post_title ) );
+	}
+
+	/**
+	 * Robots flags for a post (Damavand meta only).
+	 *
+	 * @param int $post_id Post ID.
+	 * @return string[]
+	 */
+	public static function get_robots( int $post_id ): array {
+		if ( $post_id < 1 ) {
+			return array();
+		}
+		$raw = get_post_meta( $post_id, self::ROBOTS, true );
+		if ( class_exists( 'Damavand_Robots' ) ) {
+			return Damavand_Robots::normalize_robots_meta( $raw );
+		}
+		if ( ! is_array( $raw ) ) {
+			return array();
+		}
+		return array_values( array_filter( array_map( 'strval', $raw ) ) );
 	}
 
 	/**

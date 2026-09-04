@@ -947,5 +947,40 @@
 		} else {
 			schedule();
 		}
+
+		/* Tabs */
+		box().on('click', '.dm-score__tab', function () {
+			var tab = $(this).data('dm-tab');
+			box().find('.dm-score__tab').removeClass('is-active').attr('aria-selected', 'false');
+			$(this).addClass('is-active').attr('aria-selected', 'true');
+			box().find('.dm-score__panel').prop('hidden', true).removeClass('is-active');
+			box().find('.dm-score__panel[data-dm-panel="' + tab + '"]').prop('hidden', false).addClass('is-active');
+		});
+
+		/* Focus keyword follows product title until user edits it */
+		var $focus = $('#dm-score-focus');
+		var focusAuto = $focus.data('auto-from-title') === 1 || $focus.data('auto-from-title') === '1';
+		$focus.on('input', function () {
+			focusAuto = false;
+			$focus.attr('data-auto-from-title', '0');
+		});
+		$('#title').on('input change', function () {
+			if (!focusAuto) {
+				return;
+			}
+			var t = ($(this).val() || '').toString().trim();
+			if (t) {
+				$focus.val(t);
+				schedule();
+			}
+		});
+
+		/* Keep AI sizes field in sync with persistent size chart */
+		$('#dm-size-chart-raw').on('input', function () {
+			$('#dm-ollama-sizes').val($(this).val());
+		});
+		$('#dm-ollama-sizes').on('input', function () {
+			$('#dm-size-chart-raw').val($(this).val());
+		});
 	});
 })(jQuery);

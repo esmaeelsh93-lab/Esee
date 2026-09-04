@@ -556,7 +556,7 @@ defined( 'ABSPATH' ) || exit;
 			</div>
 			<div class="shojaei-form-group">
 				<label class="shojaei-setting-item">
-					<input type="checkbox" name="shojaei_seo_disable_wc_schema" value="yes" <?php checked( Shojaei_SEO_Helpers::get_option( 'shojaei_seo_disable_wc_schema', 'no' ), 'yes' ); ?> />
+					<input type="checkbox" name="shojaei_seo_disable_wc_schema" value="yes" <?php checked( Shojaei_SEO_Helpers::get_option( 'shojaei_seo_disable_wc_schema', 'yes' ), 'yes' ); ?> />
 					<span><?php esc_html_e( 'غیرفعال‌سازی اسکیمای پیش‌فرض ووکامرس', 'shojaei-seo-for-woo' ); ?></span>
 				</label>
 				<small><?php esc_html_e( 'برای جلوگیری از Product موازی وقتی Yoast، Rank Math یا اسکیمای این افزونه فعال است.', 'shojaei-seo-for-woo' ); ?></small>

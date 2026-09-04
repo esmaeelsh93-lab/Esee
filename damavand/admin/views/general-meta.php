@@ -134,6 +134,35 @@ $index_on    = ( 'yes' !== $noindex );
 	</div>
 
 	<div class="shojaei-card shojaei-meta-section">
+		<h3><?php esc_html_e( 'بودجه خزش (Crawl Budget) — ووکامرس ایران', 'shojaei-seo-for-woo' ); ?></h3>
+		<p class="description"><?php esc_html_e( 'این قواعد حتی اگر «متای عمومی» خاموش باشد اعمال می‌شوند، مگر Rank Math/Yoast مالک متا باشد. پیشنهاد حرفه‌ای: همه روشن بمانند.', 'shojaei-seo-for-woo' ); ?></p>
+		<label class="shojaei-setting-item" style="display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;">
+			<input type="checkbox" name="shojaei_seo_meta_noindex_wc_system" value="yes" <?php checked( Shojaei_SEO_Helpers::get_option( 'shojaei_seo_meta_noindex_wc_system', 'yes' ), 'yes' ); ?> style="margin-top:3px;" />
+			<span>
+				<strong><?php esc_html_e( 'سبد خرید، تسویه، حساب کاربری و endpointهای ووکامرس', 'shojaei-seo-for-woo' ); ?></strong><br />
+				<span class="description"><?php esc_html_e( 'صفحات تراکنشی ارزش ایندکس ندارند؛ noindex,follow.', 'shojaei-seo-for-woo' ); ?></span>
+			</span>
+		</label>
+		<label class="shojaei-setting-item" style="display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;">
+			<input type="checkbox" name="shojaei_seo_meta_noindex_facets" value="yes" <?php checked( Shojaei_SEO_Helpers::get_option( 'shojaei_seo_meta_noindex_facets', 'yes' ), 'yes' ); ?> style="margin-top:3px;" />
+			<span>
+				<strong><?php esc_html_e( 'فیلتر/مرتب‌سازی/قیمت (Faceted URLs)', 'shojaei-seo-for-woo' ); ?></strong><br />
+				<span class="description"><?php esc_html_e( 'URLهای ?orderby، ?min_price، filter_* و مشابه — جلوگیری از ایندکس هزاران ترکیب فیلتر.', 'shojaei-seo-for-woo' ); ?></span>
+			</span>
+		</label>
+		<label class="shojaei-setting-item" style="display:flex;gap:10px;align-items:flex-start;">
+			<input type="checkbox" name="shojaei_seo_meta_noindex_author_date" value="yes" <?php checked( Shojaei_SEO_Helpers::get_option( 'shojaei_seo_meta_noindex_author_date', 'yes' ), 'yes' ); ?> style="margin-top:3px;" />
+			<span>
+				<strong><?php esc_html_e( 'بایگانی نویسنده و تاریخ', 'shojaei-seo-for-woo' ); ?></strong><br />
+				<span class="description"><?php esc_html_e( 'برای فروشگاه‌های ایرانی تقریباً همیشه thin content است.', 'shojaei-seo-for-woo' ); ?></span>
+			</span>
+		</label>
+		<p class="description" style="margin-top:12px;">
+			<?php esc_html_e( 'جستجوی داخلی و صفحات ۴۰۴ همیشه noindex می‌شوند (بدون سوئیچ).', 'shojaei-seo-for-woo' ); ?>
+		</p>
+	</div>
+
+	<div class="shojaei-card shojaei-meta-section">
 		<h3><?php esc_html_e( 'قالب عنوان و توضیح (SERP)', 'shojaei-seo-for-woo' ); ?></h3>
 		<p class="description">
 			<?php esc_html_e( 'اگر برای محصول/نوشته عنوان یا توضیح اختصاصی خالی باشد، این قالب‌ها استفاده می‌شوند. در فیلدهای اختصاصی هم می‌توانید از همین توکن‌ها استفاده کنید.', 'shojaei-seo-for-woo' ); ?>

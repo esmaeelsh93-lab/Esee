@@ -14,13 +14,19 @@
 	}
 
 	function ctx() {
+		var title = ($('#title').val() || '').toString().trim();
+		var keyword = ($('#dm-score-focus').val() || '').toString().trim();
+		if (!keyword) {
+			keyword = title;
+		}
+		var sizes = ($('#dm-ollama-sizes').val() || $('#dm-size-chart-raw').val() || '').toString();
 		return {
 			nonce: damavandAI.nonce,
 			post_id: postId(),
-			title: ($('#title').val() || '').toString().trim(),
-			keyword: ($('#dm-score-focus').val() || '').toString().trim(),
+			title: title,
+			keyword: keyword,
 			extra: ($('#dm-ollama-extra').val() || '').toString(),
-			sizes: ($('#dm-ollama-sizes').val() || '').toString()
+			sizes: sizes
 		};
 	}
 
@@ -156,11 +162,19 @@
 		setStatus(d.draft_message || damavandAI.i18n.draftReady || damavandAI.i18n.done);
 	}
 
+	function syncSizeChartUi() {
+		var sizes = ($('#dm-ollama-sizes').val() || '').toString();
+		if (sizes && $('#dm-size-chart-raw').length) {
+			$('#dm-size-chart-raw').val(sizes);
+		}
+	}
+
 	function afterContentGenerated() {
 		if (typeof window.damavandFetchLinks === 'function') {
 			window.damavandFetchLinks(true);
 		}
 		$('#dm-score-links').prop('hidden', false);
+		syncSizeChartUi();
 	}
 
 	function applyResult(kind, d) {
@@ -177,8 +191,10 @@
 			} else if (kind === 'llms_txt') {
 				$('#shojaei-ai-llms-preview').val(d);
 			} else if (kind === 'slug' && d) {
-				$('#post_name').val(d);
+				/* فقط پیشنهاد — هرگز post_name را خودکار عوض نکن */
 				$('#dm-score-finglish-preview').text(d);
+				setStatus('پیشنهاد نامک: ' + d + ' — برای اعمال دستی در فیلد نامک کپی کنید (تغییر خودکار ممنوع).');
+				return;
 			}
 			setStatus(damavandAI.i18n.done);
 			return;
@@ -367,7 +383,7 @@
 		if (readGalleryIds().length) {
 			steps.push({ kind: 'alt_texts', label: 'Alt تصاویر' });
 		}
-		steps.push({ kind: 'slug', label: 'نامک فینگلیش' });
+		/* نامک/Slug: طبق نقشه راه — هیچ تغییر خودکاری (حتی در سئو خودکار) مجاز نیست. */
 
 		var total = steps.length + 1;
 		var idx = 0;
@@ -403,12 +419,11 @@
 					setEditorHtml('excerpt', d);
 				} else if (step.kind === 'long_desc' && typeof d === 'string') {
 					setEditorHtml('content', d);
+					syncSizeChartUi();
 				} else if (step.kind === 'faq' && d && d.faqs) {
 					renderFaqFromAI(d.faqs);
-				} else if (step.kind === 'slug' && typeof d === 'string' && d) {
-					$('#post_name').val(d);
-					$('#dm-score-finglish-preview').text(d);
 				}
+				/* slug never in auto steps */
 				idx += 1;
 				next();
 			}).fail(function (msg) {

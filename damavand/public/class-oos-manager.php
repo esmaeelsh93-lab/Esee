@@ -1002,27 +1002,20 @@ class Shojaei_SEO_OOS_Manager {
 
 		$product_id = (int) $product->get_id();
 
-		// Prefer persisted undoable flag (set by Rule Engine sync).
+		// Prefer persisted undoable flag (set by Rule Engine sync / cron).
+		// Never call Rule Engine on the frontend — evaluate_product is too heavy for TTFB.
 		$flag = get_post_meta( $product_id, '_shojaei_seo_noindex', true );
 		if ( 'yes' === $flag ) {
 			$robots['noindex'] = true;
 			$robots['follow']  = true;
+			unset( $robots['index'] );
 			return $robots;
 		}
 		if ( 'no' === $flag ) {
 			return $robots;
 		}
 
-		if ( class_exists( 'Shojaei_SEO_Rule_Engine' ) ) {
-			$decision = Shojaei_SEO_Rule_Engine::evaluate_product( $product_id );
-			if ( $decision && $decision->apply_noindex ) {
-				$robots['noindex'] = true;
-				$robots['follow']  = true;
-			}
-			return $robots;
-		}
-
-		// Legacy fallback.
+		// Lightweight tracker fallback when flag not yet synced.
 		if ( 'yes' !== Shojaei_SEO_Helpers::get_option( 'shojaei_seo_oos_noindex_enabled', 'yes' ) ) {
 			return $robots;
 		}
@@ -1033,13 +1026,14 @@ class Shojaei_SEO_OOS_Manager {
 		global $wpdb;
 		$table  = Shojaei_SEO_Helpers::oos_table();
 		$record = $wpdb->get_row(
-			$wpdb->prepare( "SELECT days_oos FROM {$table} WHERE product_id = %d", $product_id )
+			$wpdb->prepare( "SELECT days_oos FROM {$table} WHERE product_id = %d", $product_id ) // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		);
 		$days  = $record ? (int) $record->days_oos : 0;
 		$phase = Shojaei_SEO_Helpers::get_oos_phase( $days );
 		if ( $phase >= Shojaei_SEO_Helpers::get_noindex_from_phase() ) {
 			$robots['noindex'] = true;
 			$robots['follow']  = true;
+			unset( $robots['index'] );
 		}
 
 		return $robots;

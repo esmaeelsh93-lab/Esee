@@ -60,6 +60,7 @@ class Shojaei_SEO_Admin {
 		add_action( 'wp_ajax_shojaei_seo_pulse', array( $this, 'ajax_seo_pulse' ) );
 		add_action( 'wp_ajax_shojaei_seo_core', array( $this, 'ajax_seo_core' ) );
 		add_action( 'wp_ajax_shojaei_seo_redirect_audit', array( $this, 'ajax_redirect_audit' ) );
+		add_action( 'wp_ajax_shojaei_seo_tools', array( $this, 'ajax_seo_tools' ) );
 	}
 
 	/**
@@ -1224,6 +1225,36 @@ JS;
 	}
 
 	/**
+	 * AJAX: schema validator + duplicate scan tools.
+	 */
+	public function ajax_seo_tools(): void {
+		check_ajax_referer( 'shojaei_seo_admin_nonce', 'nonce' );
+		if ( ! Shojaei_SEO_Helpers::user_can_admin() ) {
+			wp_send_json_error( array( 'message' => __( 'دسترسی ندارید.', 'shojaei-seo-for-woo' ) ) );
+		}
+
+		$action = isset( $_POST['tools_action'] ) ? sanitize_key( wp_unslash( $_POST['tools_action'] ) ) : '';
+
+		if ( 'validate_schema' === $action ) {
+			if ( ! class_exists( 'Damavand_Schema_Validator' ) ) {
+				wp_send_json_error( array( 'message' => __( 'اعتبارسنج Schema بارگذاری نشده.', 'shojaei-seo-for-woo' ) ) );
+			}
+			$product_id = isset( $_POST['product_id'] ) ? absint( $_POST['product_id'] ) : 0;
+			wp_send_json_success( Damavand_Schema_Validator::validate_product( $product_id ) );
+		}
+
+		if ( 'duplicate_scan' === $action ) {
+			if ( ! class_exists( 'Damavand_Duplicate_Scan' ) ) {
+				wp_send_json_error( array( 'message' => __( 'اسکنر تکراری بارگذاری نشده.', 'shojaei-seo-for-woo' ) ) );
+			}
+			$limit = isset( $_POST['limit'] ) ? absint( $_POST['limit'] ) : 500;
+			wp_send_json_success( Damavand_Duplicate_Scan::scan_products( $limit ) );
+		}
+
+		wp_send_json_error( array( 'message' => __( 'عملیات نامعتبر.', 'shojaei-seo-for-woo' ) ) );
+	}
+
+	/**
 	 * AJAX handler for redirect actions.
 	 */
 	public function ajax_redirect_action(): void {
@@ -2215,7 +2246,7 @@ JS;
 	 * @return array{primary:string,view:string,ops:bool,guide:bool}
 	 */
 	private function resolve_nav_context( string $tab ): array {
-		$ops_tabs   = array( 'oos', 'links', 'slugs', 'slug-train', 'redirects', 'manual-redirects', 'simulate', 'test' );
+		$ops_tabs   = array( 'oos', 'links', 'slugs', 'slug-train', 'redirects', 'manual-redirects', 'simulate', 'test', 'seo-tools' );
 		$guide_tabs = array( 'education', 'activity', 'notifications' );
 
 		if ( 'ops' === $tab ) {
@@ -2297,6 +2328,7 @@ JS;
 			'manual-redirects',
 			'test',
 			'simulate',
+			'seo-tools',
 			'activity',
 			'notifications',
 			'settings',
@@ -2473,6 +2505,11 @@ JS;
 							'label' => __( 'تست محصول', 'shojaei-seo-for-woo' ),
 							'icon'  => 'search',
 							'url'   => admin_url( 'admin.php?page=shojaei-seo&tab=test' ),
+						),
+						'seo-tools'        => array(
+							'label' => __( 'ابزار سئو', 'shojaei-seo-for-woo' ),
+							'icon'  => 'wrench',
+							'url'   => admin_url( 'admin.php?page=shojaei-seo&tab=seo-tools' ),
 						),
 					);
 					include DAMAVAND_SEO_DIR . 'admin/views/_subnav.php';

@@ -139,7 +139,7 @@ $relay_backup = (string) Shojaei_SEO_Helpers::get_option( Shojaei_SEO_AI_Client:
 		</label>
 		<label class="shojaei-setting-item">
 			<input type="checkbox" name="shojaei_seo_schema_itemlist_enabled" value="yes" <?php checked( $itemlist ); ?> />
-			<span><?php esc_html_e( 'چاپ ItemList Schema در فرانت (محصولات مرتبط)', 'shojaei-seo-for-woo' ); ?></span>
+			<span><?php esc_html_e( 'چاپ ItemList Schema در فرانت (فقط صفحه دسته / آرشیو فروشگاه — نه صفحه محصول)', 'shojaei-seo-for-woo' ); ?></span>
 		</label>
 	</div>
 

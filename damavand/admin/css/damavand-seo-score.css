@@ -510,3 +510,71 @@
 	list-style: none;
 	font-size: 12px;
 }
+
+/* Tabs — cleaner product SEO metabox */
+.dm-score__tabs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
+	margin: 0 0 14px;
+	padding: 0 0 10px;
+	border-bottom: 1px solid #d8e2ee;
+}
+
+.dm-score__tab {
+	appearance: none;
+	border: 1px solid transparent;
+	background: transparent;
+	color: #50575e;
+	font-size: 13px;
+	font-weight: 600;
+	padding: 7px 12px;
+	border-radius: 8px;
+	cursor: pointer;
+	line-height: 1.3;
+}
+
+.dm-score__tab:hover {
+	background: #f0f5fb;
+	color: #1d2327;
+}
+
+.dm-score__tab.is-active {
+	background: #e8f1fb;
+	border-color: #c5d6ea;
+	color: #1d6fd8;
+}
+
+.dm-score__panel[hidden] {
+	display: none !important;
+}
+
+.dm-score__ollama-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+}
+
+.damavand-size-chart {
+	margin: 0 0 1rem;
+}
+
+.damavand-size-chart__title {
+	margin: 0 0 0.5rem;
+	font-size: 1.05em;
+}
+
+.damavand-size-chart table,
+.damavand-size-table table {
+	width: 100%;
+	border-collapse: collapse;
+	text-align: center;
+}
+
+.damavand-size-chart th,
+.damavand-size-chart td,
+.damavand-size-table th,
+.damavand-size-table td {
+	border: 1px solid #ddd;
+	padding: 6px 8px;
+}
