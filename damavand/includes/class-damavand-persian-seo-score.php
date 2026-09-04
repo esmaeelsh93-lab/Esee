@@ -1196,6 +1196,9 @@ $serp_url  = (string) get_permalink( $post );
 	 */
 	public static function ajax_live(): void {
 		check_ajax_referer( 'damavand_seo_score_live', 'nonce' );
+		if ( class_exists( 'Shojaei_SEO_Helpers' ) && Shojaei_SEO_Helpers::is_wc_product_editor_ajax() ) {
+			wp_send_json_error( array( 'message' => __( 'در حال پردازش متغیرها — بعداً دوباره امتحان کنید.', 'shojaei-seo-for-woo' ) ), 409 );
+		}
 		$post_id = isset( $_POST['post_id'] ) ? absint( $_POST['post_id'] ) : 0;
 		if ( $post_id < 1 || ! current_user_can( 'edit_post', $post_id ) ) {
 			wp_send_json_error( array( 'message' => __( 'دسترسی ندارید.', 'shojaei-seo-for-woo' ) ), 403 );

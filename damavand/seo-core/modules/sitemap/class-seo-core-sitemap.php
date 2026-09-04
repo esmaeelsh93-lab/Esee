@@ -577,6 +577,9 @@ class SEO_Core_Sitemap extends SEO_Core_Module {
 	 * Invalidate all known sitemap caches.
 	 */
 	public function invalidate_cache(): void {
+		if ( class_exists( 'Shojaei_SEO_Helpers' ) && Shojaei_SEO_Helpers::should_skip_product_save_side_effects() ) {
+			return;
+		}
 		$stats = $this->get_stats();
 		$keys  = array( 'xml_index', 'xml_index_meta' );
 		foreach ( self::allowed_types() as $type ) {

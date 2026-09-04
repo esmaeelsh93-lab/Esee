@@ -113,37 +113,58 @@
 	}
 
 	var wcAjaxBusy = 0;
+	var wcAjaxBusySince = 0;
+	var WC_AJAX_BUSY_MAX_MS = 120000;
+
+	function wcProductDataAjaxPayload(payload) {
+		if (typeof payload !== 'string' || payload.indexOf('action=woocommerce_') === -1) {
+			return false;
+		}
+		return /woocommerce_(save_variations|load_variations|add_variation|remove_variation|remove_variations|link_all_variations|save_attributes|add_attribute|add_new_attribute|add_attributes_and_variations|add_attribute_and_term|bulk_edit_variations|get_variation|get_formatted_variation)/.test(
+			payload
+		);
+	}
+
+	function resetWcAjaxBusyIfStale() {
+		if (wcAjaxBusy < 1) {
+			wcAjaxBusySince = 0;
+			return;
+		}
+		if (!wcAjaxBusySince) {
+			wcAjaxBusySince = Date.now();
+			return;
+		}
+		if (Date.now() - wcAjaxBusySince > WC_AJAX_BUSY_MAX_MS) {
+			wcAjaxBusy = 0;
+			wcAjaxBusySince = 0;
+		}
+	}
 
 	function isWooCommerceBusy() {
+		resetWcAjaxBusyIfStale();
 		return wcAjaxBusy > 0 || isWooPanelBlocked();
 	}
 
 	function markWooAjaxBusy(data) {
 		var payload = typeof data === 'string' ? data : '';
-		if (payload.indexOf('action=woocommerce_') === -1) {
+		if (!wcProductDataAjaxPayload(payload)) {
 			return;
 		}
-		if (
-			/woocommerce_(save_variations|load_variations|add_variation|remove_variation|save_attributes|add_attribute|bulk_edit)/.test(
-				payload
-			)
-		) {
-			wcAjaxBusy += 1;
-			abortPending();
+		wcAjaxBusy += 1;
+		if (!wcAjaxBusySince) {
+			wcAjaxBusySince = Date.now();
 		}
+		abortPending();
 	}
 
 	function markWooAjaxIdle(data) {
 		var payload = typeof data === 'string' ? data : '';
-		if (payload.indexOf('action=woocommerce_') === -1) {
+		if (!wcProductDataAjaxPayload(payload)) {
 			return;
 		}
-		if (
-			/woocommerce_(save_variations|load_variations|add_variation|remove_variation|save_attributes|add_attribute|bulk_edit)/.test(
-				payload
-			)
-		) {
-			wcAjaxBusy = Math.max(0, wcAjaxBusy - 1);
+		wcAjaxBusy = Math.max(0, wcAjaxBusy - 1);
+		if (wcAjaxBusy < 1) {
+			wcAjaxBusySince = 0;
 		}
 	}
 
@@ -663,6 +684,12 @@
 		});
 		$(document).ajaxComplete(function (ev, xhr, settings) {
 			markWooAjaxIdle(settings && settings.data ? settings.data : '');
+			var payload = settings && settings.data ? settings.data : '';
+			if (wcProductDataAjaxPayload(payload) && wcAjaxBusy < 1 && isScoreBoxActive()) {
+				window.setTimeout(function () {
+					schedule(true);
+				}, 500);
+			}
 		});
 		$(document).ajaxError(function (ev, xhr, settings) {
 			markWooAjaxIdle(settings && settings.data ? settings.data : '');

@@ -4,7 +4,7 @@ Tags: seo, woocommerce, redirect, inventory, out-of-stock, internal-links
 Requires at least: 6.0
 Tested up to: 6.7
 Requires PHP: 8.0
-Stable tag: 1.61.1
+Stable tag: 1.61.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -65,6 +65,10 @@ Inventory-aware SEO — تصمیم‌گیری سئو بر اساس موجودی 
 با آپلود فایل JSON مربوط به Service Account — بدون OAuth و بدون Refresh Token.
 
 == Changelog ==
+
+= 1.61.2 =
+* رفع گیر کردن «ساخت همه متغیرها» در ویرایشگر محصول — شناسایی link_all_variations و defer هوک‌های سنگین OOS/IndexNow/Events
+* جلوگیری از درخواست‌های موازی امتیاز سئو هنگام AJAX متغیرهای ووکامرس
 
 = 1.61.1 =
 * رفع خطای GSC «Invalid object type for field parent_node» — محصولات متغیر با ProductGroup + hasVariant

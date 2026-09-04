@@ -709,6 +709,9 @@ class Shojaei_SEO_Helpers {
 
 	/**
 	 * WooCommerce product editor AJAX (variations/attributes bulk) — defer heavy hooks.
+	 *
+	 * Must include link_all_variations / add_attributes_and_variations or bulk
+	 * variation creation triggers O(n²) OOS sync + IndexNow HTTP per variation.
 	 */
 	public static function is_wc_product_editor_ajax(): bool {
 		if ( ! wp_doing_ajax() ) {
@@ -716,17 +719,42 @@ class Shojaei_SEO_Helpers {
 		}
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- WC action name only.
 		$action = isset( $_REQUEST['action'] ) ? sanitize_key( wp_unslash( $_REQUEST['action'] ) ) : '';
-		static $actions = array(
+		if ( '' === $action ) {
+			return false;
+		}
+		return in_array( $action, self::wc_product_editor_ajax_actions(), true );
+	}
+
+	/**
+	 * Known WooCommerce admin product-data AJAX actions (variations + attributes).
+	 *
+	 * @return string[]
+	 */
+	public static function wc_product_editor_ajax_actions(): array {
+		return array(
 			'woocommerce_save_variations',
 			'woocommerce_load_variations',
 			'woocommerce_add_variation',
 			'woocommerce_remove_variation',
+			'woocommerce_remove_variations',
+			'woocommerce_link_all_variations',
 			'woocommerce_save_attributes',
+			'woocommerce_add_attribute',
+			'woocommerce_add_new_attribute',
 			'woocommerce_add_attribute_and_term',
+			'woocommerce_add_attributes_and_variations',
 			'woocommerce_bulk_edit_variations',
 			'woocommerce_json_search_products_and_variations',
+			'woocommerce_get_variation',
+			'woocommerce_get_formatted_variation',
 		);
-		return in_array( $action, $actions, true );
+	}
+
+	/**
+	 * Skip heavy SEO side effects during WC variation/attribute bulk editor AJAX.
+	 */
+	public static function should_skip_product_save_side_effects(): bool {
+		return self::is_wc_product_editor_ajax();
 	}
 
 	/**

@@ -103,6 +103,9 @@ class Shojaei_SEO_Link_Builder {
 		if ( wp_is_post_revision( $post_id ) || wp_is_post_autosave( $post_id ) ) {
 			return;
 		}
+		if ( class_exists( 'Shojaei_SEO_Helpers' ) && Shojaei_SEO_Helpers::should_skip_product_save_side_effects() ) {
+			return;
+		}
 
 		if ( ! in_array( $post->post_type, array( 'post', 'product' ), true ) ) {
 			return;

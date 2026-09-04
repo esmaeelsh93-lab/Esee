@@ -67,6 +67,9 @@ class Shojaei_SEO_IndexNow {
 	 * @param WP_Post $post    Post object.
 	 */
 	public function on_product_save( int $post_id, $post ): void {
+		if ( class_exists( 'Shojaei_SEO_Helpers' ) && Shojaei_SEO_Helpers::should_skip_product_save_side_effects() ) {
+			return;
+		}
 		if ( 'publish' !== $post->post_status ) {
 			return;
 		}
@@ -81,6 +84,9 @@ class Shojaei_SEO_IndexNow {
 	 * @param object $product    Product object.
 	 */
 	public function on_stock_change( int $product_id, string $status, $product ): void {
+		if ( class_exists( 'Shojaei_SEO_Helpers' ) && Shojaei_SEO_Helpers::should_skip_product_save_side_effects() ) {
+			return;
+		}
 		$this->notify_url( get_permalink( $product_id ) );
 	}
 
@@ -90,6 +96,9 @@ class Shojaei_SEO_IndexNow {
 	 * @param int $product_id Product ID.
 	 */
 	public function on_product_update( int $product_id ): void {
+		if ( class_exists( 'Shojaei_SEO_Helpers' ) && Shojaei_SEO_Helpers::should_skip_product_save_side_effects() ) {
+			return;
+		}
 		$this->notify_url( get_permalink( $product_id ) );
 	}
 

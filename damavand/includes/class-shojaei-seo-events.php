@@ -249,6 +249,9 @@ class Shojaei_SEO_Events {
 	 * @param int $product_id Product ID.
 	 */
 	public function on_product_updated( int $product_id ): void {
+		if ( Shojaei_SEO_Helpers::should_skip_product_save_side_effects() ) {
+			return;
+		}
 		self::emit( 'product_updated', $product_id );
 	}
 
@@ -260,6 +263,9 @@ class Shojaei_SEO_Events {
 	 */
 	public function on_product_props( $product, $updated ): void {
 		if ( ! $product || ! is_a( $product, 'WC_Product' ) || ! is_array( $updated ) ) {
+			return;
+		}
+		if ( Shojaei_SEO_Helpers::should_skip_product_save_side_effects() ) {
 			return;
 		}
 
