@@ -4,7 +4,7 @@ Tags: seo, woocommerce, redirect, inventory, out-of-stock, internal-links
 Requires at least: 6.0
 Tested up to: 6.7
 Requires PHP: 8.0
-Stable tag: 1.58.0
+Stable tag: 1.59.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -66,7 +66,13 @@ Inventory-aware SEO — تصمیم‌گیری سئو بر اساس موجودی 
 
 == Changelog ==
 
+= 1.59.0 =
+* Provider Gemini: اتصال مستقیم به Gemini API (Google AI Studio) با Free Tier، مدل‌های قابل انتخاب، تست اتصال و پیام خطای فارسی
+* Groq از UI حذف شد (مهاجرت خودکار به OpenRouter) — OpenRouter بدون تغییر رفتار
+* کلید API فقط سمت سرور ذخیره می‌شود؛ لینک «دریافت API Key» برای Gemini
+
 = 1.58.0 =
+* صف Job: لینک «مشاهده صف Job» پنل عملکرد را باز می‌کند (نه سرور محتوا) + دکمه پاک‌سازی هشدار جاب ناموفق / تیک دستی / لغو گیرکرده
 * فونت ادمین: Vazirmatn variable خودمیزبان (بدون CDN) جایگزین Tahoma + لایسنس OFL
 * همگام‌سازی Stable tag با Version هدر افزونه (جلوگیری از گیج شدن آپدیت)
 * حذف کامل Cross-Sell تسویه‌حساب و بلوک محصولات مکمل (خارج از حوزه SEO) + پاکسازی آپشن‌های یتیم

@@ -1,6 +1,6 @@
 <?php
 /**
- * Settings partial: cloud AI (Groq / OpenRouter + relay).
+ * Settings partial: cloud AI (OpenRouter + Gemini).
  *
  * @package Shojaei_SEO_For_Woo
  */
@@ -148,25 +148,31 @@ $relay_backup = (string) Shojaei_SEO_Helpers::get_option( Shojaei_SEO_AI_Client:
 		<label for="shojaei_seo_ai_provider"><?php esc_html_e( 'سرویس هوش مصنوعی', 'shojaei-seo-for-woo' ); ?></label>
 		<select id="shojaei_seo_ai_provider" name="shojaei_seo_ai_provider">
 			<option value="openrouter" <?php selected( $provider, 'openrouter' ); ?>><?php esc_html_e( 'OpenRouter (پیشنهادی — روی Relay پایدار)', 'shojaei-seo-for-woo' ); ?></option>
-			<option value="groq" <?php selected( $provider, 'groq' ); ?>><?php esc_html_e( 'Groq مستقیم (ممکن است روی Relay محدود شود)', 'shojaei-seo-for-woo' ); ?></option>
+			<option value="gemini" <?php selected( $provider, 'gemini' ); ?>><?php esc_html_e( 'Gemini', 'shojaei-seo-for-woo' ); ?></option>
 		</select>
-		<p class="description" style="margin-top:6px;"><?php esc_html_e( 'کلید OpenRouter (sk-or-) برای همه مدل‌ها کافی است. Groq مستقیم (gsk_) از Relay مسدود است؛ افزونه خودکار از هاست شما امتحان می‌کند.', 'shojaei-seo-for-woo' ); ?></p>
+		<p class="description shojaei-ai-provider-hint" data-provider="openrouter" style="margin-top:6px;<?php echo 'openrouter' === $provider ? '' : ' display:none;'; ?>"><?php esc_html_e( 'کلید OpenRouter (sk-or-) برای همه مدل‌ها کافی است. درخواست از هاست فروشگاه از طریق Relay ارسال می‌شود.', 'shojaei-seo-for-woo' ); ?></p>
+		<p class="description shojaei-ai-provider-hint" data-provider="gemini" style="margin-top:6px;<?php echo 'gemini' === $provider ? '' : ' display:none;'; ?>"><?php esc_html_e( 'Gemini API سرویس هوش مصنوعی گوگل است و برای برخی مدل‌ها Free Tier دارد.', 'shojaei-seo-for-woo' ); ?></p>
 	</div>
 
-	<div class="shojaei-notice" style="margin:12px 0;padding:10px 12px;border:1px solid #c3c4c7;border-radius:6px;background:#fff;">
+	<div class="shojaei-notice shojaei-ai-provider-panel" data-provider="openrouter" style="margin:12px 0;padding:10px 12px;border:1px solid #c3c4c7;border-radius:6px;background:#fff;<?php echo 'openrouter' === $provider ? '' : ' display:none;'; ?>">
 		<p style="margin:0 0 6px;"><strong><?php esc_html_e( 'کلید رایگان از کجا بگیرم؟', 'shojaei-seo-for-woo' ); ?></strong></p>
 		<p class="description" style="margin:0;">
-			<?php esc_html_e( 'Groq:', 'shojaei-seo-for-woo' ); ?>
-			<a href="https://console.groq.com/keys" target="_blank" rel="noopener noreferrer" dir="ltr">console.groq.com/keys</a>
-			&nbsp;|&nbsp;
 			<?php esc_html_e( 'OpenRouter:', 'shojaei-seo-for-woo' ); ?>
 			<a href="https://openrouter.ai/keys" target="_blank" rel="noopener noreferrer" dir="ltr">openrouter.ai/keys</a>
 		</p>
 		<p class="description" style="margin:6px 0 0;"><?php esc_html_e( 'ثبت‌نام با ایمیل معمولاً یک دقیقه طول می‌کشد. کلید را فقط در همین صفحه ذخیره کنید.', 'shojaei-seo-for-woo' ); ?></p>
 	</div>
 
+	<div class="shojaei-notice shojaei-ai-provider-panel" data-provider="gemini" style="margin:12px 0;padding:10px 12px;border:1px solid #c3c4c7;border-radius:6px;background:#fff;<?php echo 'gemini' === $provider ? '' : ' display:none;'; ?>">
+		<p style="margin:0 0 6px;"><strong><?php esc_html_e( 'Gemini', 'shojaei-seo-for-woo' ); ?></strong></p>
+		<p class="description" style="margin:0;">
+			<a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'دریافت API Key', 'shojaei-seo-for-woo' ); ?></a>
+		</p>
+		<p class="description" style="margin:6px 0 0;"><?php esc_html_e( 'کلید Gemini را از Google AI Studio دریافت کنید. برای استفاده رایگان، از Free Tier استفاده کنید.', 'shojaei-seo-for-woo' ); ?></p>
+	</div>
+
 	<div class="shojaei-form-group">
-		<label for="shojaei_seo_ai_api_key"><?php esc_html_e( 'کلید API', 'shojaei-seo-for-woo' ); ?></label>
+		<label for="shojaei_seo_ai_api_key"><?php esc_html_e( 'API Key', 'shojaei-seo-for-woo' ); ?></label>
 		<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
 			<input type="password" id="shojaei_seo_ai_api_key" name="shojaei_seo_ai_api_key" value="" class="regular-text" dir="ltr" autocomplete="new-password" placeholder="<?php echo $has_key ? esc_attr( '••••••••••••  ' . __( '(ذخیره شده — برای تغییر، کلید جدید بنویسید)', 'shojaei-seo-for-woo' ) ) : ''; ?>" />
 			<button type="button" class="button" id="shojaei-ai-key-toggle"><?php esc_html_e( 'نمایش', 'shojaei-seo-for-woo' ); ?></button>
@@ -177,7 +183,7 @@ $relay_backup = (string) Shojaei_SEO_Helpers::get_option( Shojaei_SEO_AI_Client:
 	<div class="shojaei-form-group">
 		<label for="shojaei_seo_ai_model"><?php esc_html_e( 'مدل', 'shojaei-seo-for-woo' ); ?></label>
 		<select id="shojaei_seo_ai_model" name="shojaei_seo_ai_model">
-			<?php foreach ( $presets[ $provider ] ?? $presets['groq'] as $row ) : ?>
+			<?php foreach ( $presets[ $provider ] ?? $presets['openrouter'] as $row ) : ?>
 				<option value="<?php echo esc_attr( $row['id'] ); ?>" <?php selected( $model, $row['id'] ); ?>><?php echo esc_html( $row['label'] ); ?></option>
 			<?php endforeach; ?>
 			<option value="__custom__" <?php selected( $custom_model !== '' ); ?>><?php esc_html_e( 'مدل سفارشی…', 'shojaei-seo-for-woo' ); ?></option>
@@ -185,12 +191,12 @@ $relay_backup = (string) Shojaei_SEO_Helpers::get_option( Shojaei_SEO_AI_Client:
 		<input type="text" id="shojaei_seo_ai_model_custom" name="shojaei_seo_ai_model_custom" value="<?php echo esc_attr( $custom_model ); ?>" class="regular-text" dir="ltr" style="margin-top:8px;" placeholder="custom-model-id" />
 	</div>
 
-	<div class="shojaei-form-group">
+	<div class="shojaei-form-group shojaei-ai-relay-fields" style="<?php echo 'gemini' === $provider ? 'display:none;' : ''; ?>">
 		<label for="shojaei_seo_ai_relay_https_url"><?php esc_html_e( 'Relay اختصاصی (HTTPS — اختیاری)', 'shojaei-seo-for-woo' ); ?></label>
 		<input type="url" id="shojaei_seo_ai_relay_https_url" name="shojaei_seo_ai_relay_https_url" value="<?php echo esc_attr( $relay_https ); ?>" class="regular-text" dir="ltr" placeholder="https://ai.example.com" />
 		<p class="description"><?php esc_html_e( 'Relay اصلی با TLS. در غیر این صورت HTTPS/HTTP پیش‌فرض امتحان می‌شود.', 'shojaei-seo-for-woo' ); ?></p>
 	</div>
-	<div class="shojaei-form-group">
+	<div class="shojaei-form-group shojaei-ai-relay-fields" style="<?php echo 'gemini' === $provider ? 'display:none;' : ''; ?>">
 		<label for="shojaei_seo_ai_relay_backup_urls"><?php esc_html_e( 'Relay پشتیبان (هر خط یک URL)', 'shojaei-seo-for-woo' ); ?></label>
 		<textarea id="shojaei_seo_ai_relay_backup_urls" name="shojaei_seo_ai_relay_backup_urls" rows="3" class="large-text code" dir="ltr" placeholder="https://relay2.example.com&#10;http://194.60.231.229"><?php echo esc_textarea( $relay_backup ); ?></textarea>
 		<p class="description"><?php esc_html_e( 'Failover خودکار — اگر relay اول جواب نداد، بعدی امتحان می‌شود.', 'shojaei-seo-for-woo' ); ?></p>

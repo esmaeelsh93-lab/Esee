@@ -446,6 +446,50 @@
 		return payload;
 	}
 
+	function syncAiProviderUi() {
+		var provider = ($('#shojaei_seo_ai_provider').val() || 'openrouter').toString();
+		$('.shojaei-ai-provider-hint').hide();
+		$('.shojaei-ai-provider-hint[data-provider="' + provider + '"]').show();
+		$('.shojaei-ai-provider-panel').hide();
+		$('.shojaei-ai-provider-panel[data-provider="' + provider + '"]').show();
+		if ('gemini' === provider) {
+			$('.shojaei-ai-relay-fields').hide();
+		} else {
+			$('.shojaei-ai-relay-fields').show();
+		}
+	}
+
+	function rebuildModelSelect(provider, preferred) {
+		var $sel = $('#shojaei_seo_ai_model');
+		if (!$sel.length || !damavandAI.modelPresets) {
+			return;
+		}
+		var rows = damavandAI.modelPresets[provider] || damavandAI.modelPresets.openrouter || [];
+		var current = preferred || ($sel.val() || '').toString();
+		$sel.empty();
+		var matched = false;
+		rows.forEach(function (row) {
+			var selected = row.id === current;
+			if (selected) {
+				matched = true;
+			}
+			$sel.append(
+				$('<option>', { value: row.id, text: row.label, selected: selected })
+			);
+		});
+		$sel.append(
+			$('<option>', { value: '__custom__', text: 'مدل سفارشی…', selected: !matched && current !== '' })
+		);
+		var $custom = $('#shojaei_seo_ai_model_custom');
+		if (!matched && current && current !== '__custom__') {
+			$custom.val(current).show();
+		} else if ('__custom__' === current) {
+			$custom.show();
+		} else {
+			$custom.val('').hide();
+		}
+	}
+
 	$(function () {
 		$(document).on('click', '#dm-ai-draft-apply', function () {
 			if (pendingDraft) {
@@ -475,6 +519,21 @@
 			$inp.attr('type', t);
 			$(this).text(t === 'password' ? 'نمایش' : 'مخفی');
 		});
+
+		$(document).on('change', '#shojaei_seo_ai_provider', function () {
+			var provider = ($(this).val() || 'openrouter').toString();
+			rebuildModelSelect(provider);
+			syncAiProviderUi();
+		});
+
+		$(document).on('change', '#shojaei_seo_ai_model', function () {
+			var isCustom = '__custom__' === ($(this).val() || '').toString();
+			$('#shojaei_seo_ai_model_custom').toggle(isCustom);
+		});
+
+		if ($('#shojaei_seo_ai_provider').length) {
+			syncAiProviderUi();
+		}
 
 		$('#shojaei-ai-health').on('click', function () {
 			var $out = $('#shojaei-ai-health-result').show().text(damavandAI.i18n.testing);

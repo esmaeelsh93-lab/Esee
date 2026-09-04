@@ -1,6 +1,6 @@
 <?php
 /**
- * Cloud AI client — Groq / OpenRouter via Damavand relay.
+ * Cloud AI client — OpenRouter (relay) / Gemini (direct).
  *
  * @package Shojaei_SEO_For_Woo
  */
@@ -21,6 +21,7 @@ class Shojaei_SEO_AI_Client {
 
 	public const PROVIDER_GROQ       = 'groq';
 	public const PROVIDER_OPENROUTER = 'openrouter';
+	public const PROVIDER_GEMINI     = 'gemini';
 
 	/** Damavand relay — prefer HTTPS when certificate is ready. */
 	public const RELAY_BASE_URL     = 'https://194.60.231.229';
@@ -33,7 +34,10 @@ class Shojaei_SEO_AI_Client {
 
 	public const GROQ_DEFAULT_MODEL = 'llama-3.3-70b-versatile';
 	public const OR_DEFAULT_MODEL   = 'meta-llama/llama-3.3-70b-instruct';
+	public const GEMINI_DEFAULT_MODEL = 'gemini-2.0-flash';
 	public const VISION_MODEL       = 'google/gemini-2.5-flash';
+
+	public const GEMINI_API_BASE = 'https://generativelanguage.googleapis.com/v1beta';
 
 	/**
 	 * Module switch.
@@ -50,11 +54,40 @@ class Shojaei_SEO_AI_Client {
 	}
 
 	/**
-	 * @return string groq|openrouter
+	 * Active providers exposed in settings.
+	 *
+	 * @return array<int,string>
+	 */
+	public static function active_providers(): array {
+		return array(
+			self::PROVIDER_OPENROUTER,
+			self::PROVIDER_GEMINI,
+		);
+	}
+
+	/**
+	 * Normalize stored provider (Groq legacy → OpenRouter).
+	 *
+	 * @param string $provider Raw provider id.
+	 * @return string openrouter|gemini
+	 */
+	public static function normalize_provider( string $provider ): string {
+		$provider = sanitize_key( $provider );
+		if ( self::PROVIDER_GEMINI === $provider ) {
+			return self::PROVIDER_GEMINI;
+		}
+		if ( self::PROVIDER_GROQ === $provider ) {
+			return self::PROVIDER_OPENROUTER;
+		}
+		return self::PROVIDER_OPENROUTER;
+	}
+
+	/**
+	 * @return string openrouter|gemini
 	 */
 	public static function provider(): string {
 		$p = sanitize_key( (string) Shojaei_SEO_Helpers::get_option( self::OPT_PROVIDER, self::PROVIDER_OPENROUTER ) );
-		return self::PROVIDER_OPENROUTER === $p ? self::PROVIDER_OPENROUTER : self::PROVIDER_GROQ;
+		return self::normalize_provider( $p );
 	}
 
 	/**
@@ -205,6 +238,12 @@ class Shojaei_SEO_AI_Client {
 				array( 'id' => 'qwen/qwen-2.5-7b-instruct', 'label' => 'Qwen 2.5 7B' ),
 				array( 'id' => 'qwen/qwen-2.5-72b-instruct', 'label' => 'Qwen 2.5 72B' ),
 			),
+			self::PROVIDER_GEMINI     => array(
+				array( 'id' => 'gemini-2.0-flash', 'label' => 'Gemini 2.0 Flash (پیشنهادی — Free Tier)' ),
+				array( 'id' => 'gemini-2.0-flash-lite', 'label' => 'Gemini 2.0 Flash Lite' ),
+				array( 'id' => 'gemini-1.5-flash', 'label' => 'Gemini 1.5 Flash' ),
+				array( 'id' => 'gemini-1.5-pro', 'label' => 'Gemini 1.5 Pro' ),
+			),
 		);
 	}
 
@@ -214,9 +253,16 @@ class Shojaei_SEO_AI_Client {
 	 * @return array<int,string>
 	 */
 	public static function model_ids_for_provider( string $provider ): array {
-		$provider = self::PROVIDER_OPENROUTER === $provider ? self::PROVIDER_OPENROUTER : self::PROVIDER_GROQ;
-		$ids      = array();
-		foreach ( self::model_presets()[ $provider ] as $row ) {
+		$provider = self::normalize_provider( $provider );
+		if ( self::PROVIDER_GROQ === sanitize_key( $provider ) ) {
+			$provider = self::PROVIDER_OPENROUTER;
+		}
+		$presets = self::model_presets();
+		if ( ! isset( $presets[ $provider ] ) ) {
+			return array();
+		}
+		$ids = array();
+		foreach ( $presets[ $provider ] as $row ) {
 			$ids[] = $row['id'];
 		}
 		return $ids;
@@ -227,10 +273,24 @@ class Shojaei_SEO_AI_Client {
 	 */
 	public static function map_model_to_provider( string $model, string $provider ): string {
 		$model    = trim( $model );
-		$provider = self::PROVIDER_OPENROUTER === $provider ? self::PROVIDER_OPENROUTER : self::PROVIDER_GROQ;
+		$provider = self::normalize_provider( $provider );
 
 		if ( '' === $model || '__custom__' === $model ) {
+			if ( self::PROVIDER_GEMINI === $provider ) {
+				return self::GEMINI_DEFAULT_MODEL;
+			}
 			return self::PROVIDER_OPENROUTER === $provider ? self::OR_DEFAULT_MODEL : self::GROQ_DEFAULT_MODEL;
+		}
+
+		if ( self::PROVIDER_GEMINI === $provider ) {
+			$model = preg_replace( '#^models/#', '', $model );
+			if ( in_array( $model, self::model_ids_for_provider( self::PROVIDER_GEMINI ), true ) ) {
+				return $model;
+			}
+			if ( preg_match( '#^gemini-[a-z0-9.-]+$#i', $model ) ) {
+				return $model;
+			}
+			return self::GEMINI_DEFAULT_MODEL;
 		}
 
 		$cross = array(
@@ -290,20 +350,24 @@ class Shojaei_SEO_AI_Client {
 	/**
 	 * Persist provider + model from settings form values.
 	 *
-	 * @param string $provider groq|openrouter
+	 * @param string $provider openrouter|gemini
 	 * @param string $model    Model id.
 	 */
 	public static function save_connection_settings( string $provider, string $model ): void {
-		$provider = self::PROVIDER_OPENROUTER === sanitize_key( $provider ) ? self::PROVIDER_OPENROUTER : self::PROVIDER_GROQ;
+		$provider = self::normalize_provider( $provider );
 		$model    = self::map_model_to_provider( trim( $model ), $provider );
 		update_option( self::OPT_PROVIDER, $provider, false );
 		update_option( self::OPT_MODEL, $model, false );
 	}
 
 	/**
-	 * Route by API key prefix (sk-or- / gsk_).
+	 * Route by configured provider and optional API key prefix (sk-or- / gsk_).
 	 */
 	public static function route_from_api_key( string $api_key = '' ): string {
+		$configured = self::provider();
+		if ( self::PROVIDER_GEMINI === $configured ) {
+			return self::PROVIDER_GEMINI;
+		}
 		$key = '' !== $api_key ? trim( $api_key ) : self::api_key();
 		if ( str_starts_with( $key, 'sk-or-' ) ) {
 			return self::PROVIDER_OPENROUTER;
@@ -311,7 +375,7 @@ class Shojaei_SEO_AI_Client {
 		if ( str_starts_with( $key, 'gsk_' ) ) {
 			return self::PROVIDER_GROQ;
 		}
-		return self::provider();
+		return $configured;
 	}
 
 	/**
@@ -350,7 +414,7 @@ class Shojaei_SEO_AI_Client {
 		}
 		$key = self::api_key();
 		if ( '' === $key ) {
-			return new WP_Error( 'ai_no_key', __( 'کلید API وارد نشده. از تنظیمات سئو دماوند کلید Groq یا OpenRouter را ذخیره کنید.', 'shojaei-seo-for-woo' ) );
+			return new WP_Error( 'ai_no_key', __( 'کلید API وارد نشده. از تنظیمات سئو دماوند کلید OpenRouter یا Gemini را ذخیره کنید.', 'shojaei-seo-for-woo' ) );
 		}
 
 		$system = isset( $opts['system'] ) ? (string) $opts['system'] : self::default_system_prompt();
@@ -526,9 +590,31 @@ class Shojaei_SEO_AI_Client {
 			'latency'  => $ms,
 			'provider' => self::provider(),
 			'model'    => self::model(),
-			'endpoint' => self::relay_endpoint(),
+			'endpoint' => self::connection_endpoint(),
 			'sample'   => mb_substr( trim( $out ), 0, 80 ),
 		);
+	}
+
+	/**
+	 * Human-readable endpoint label for health checks (no secrets).
+	 */
+	public static function connection_endpoint(): string {
+		$route = self::provider();
+		if ( self::PROVIDER_GEMINI === $route ) {
+			return self::gemini_endpoint( self::model() );
+		}
+		return self::relay_endpoint( $route );
+	}
+
+	/**
+	 * Gemini generateContent URL for a model id.
+	 */
+	public static function gemini_endpoint( string $model ): string {
+		$model = preg_replace( '#^models/#', '', trim( $model ) );
+		if ( '' === $model ) {
+			$model = self::GEMINI_DEFAULT_MODEL;
+		}
+		return self::GEMINI_API_BASE . '/models/' . rawurlencode( $model ) . ':generateContent';
 	}
 
 	/**
@@ -543,6 +629,10 @@ class Shojaei_SEO_AI_Client {
 		$route = self::route_from_api_key( $api_key );
 		$model = isset( $body['model'] ) ? (string) $body['model'] : self::model();
 		$body['model'] = self::map_model_to_provider( $model, $route );
+
+		if ( self::PROVIDER_GEMINI === $route ) {
+			return self::post_gemini_chat( $body, $api_key, $timeout );
+		}
 
 		$json = wp_json_encode( $body );
 		if ( false === $json ) {
@@ -566,7 +656,7 @@ class Shojaei_SEO_AI_Client {
 				return $data;
 			}
 
-			$msg        = self::http_error_message( $code, is_array( $data ) ? $data : array(), (string) $raw['body'] );
+			$msg        = self::http_error_message( $code, is_array( $data ) ? $data : array(), (string) $raw['body'], $route );
 			$last_error = new WP_Error( 'ai_http', $msg );
 
 			if ( self::is_relay_url( $url ) ) {
@@ -581,6 +671,149 @@ class Shojaei_SEO_AI_Client {
 		return $last_error instanceof WP_Error
 			? $last_error
 			: new WP_Error( 'ai_http', __( 'اتصال برقرار نشد.', 'shojaei-seo-for-woo' ) );
+	}
+
+	/**
+	 * POST Gemini generateContent (direct — no relay).
+	 *
+	 * @param array<string,mixed> $body    OpenAI-style chat body.
+	 * @param string              $api_key Auth key from Google AI Studio.
+	 * @param int                 $timeout Seconds.
+	 * @return array<string,mixed>|WP_Error Normalized OpenAI-style JSON.
+	 */
+	private static function post_gemini_chat( array $body, string $api_key, int $timeout ) {
+		$model   = isset( $body['model'] ) ? (string) $body['model'] : self::GEMINI_DEFAULT_MODEL;
+		$payload = self::gemini_body_from_chat( $body );
+		$json    = wp_json_encode( $payload );
+		if ( false === $json ) {
+			return new WP_Error( 'ai_json', __( 'ساخت JSON درخواست ناموفق بود.', 'shojaei-seo-for-woo' ) );
+		}
+
+		$url  = self::gemini_endpoint( $model );
+		$raw  = self::http_post( $url, $json, self::gemini_headers( $api_key ), $timeout );
+		if ( is_wp_error( $raw ) ) {
+			return $raw;
+		}
+
+		$code = (int) $raw['code'];
+		$data = json_decode( (string) $raw['body'], true );
+		if ( $code >= 200 && $code < 300 && is_array( $data ) ) {
+			return self::normalize_gemini_response( $data );
+		}
+
+		return new WP_Error(
+			'ai_http',
+			self::http_error_message( $code, is_array( $data ) ? $data : array(), (string) $raw['body'], self::PROVIDER_GEMINI )
+		);
+	}
+
+	/**
+	 * @return array<string,string>
+	 */
+	private static function gemini_headers( string $api_key ): array {
+		return array(
+			'Content-Type'  => 'application/json; charset=utf-8',
+			'Accept'        => 'application/json',
+			'x-goog-api-key' => $api_key,
+		);
+	}
+
+	/**
+	 * Convert OpenAI chat body to Gemini generateContent payload.
+	 *
+	 * @param array<string,mixed> $body Chat body.
+	 * @return array<string,mixed>
+	 */
+	private static function gemini_body_from_chat( array $body ): array {
+		$system = '';
+		$user   = '';
+		foreach ( $body['messages'] ?? array() as $msg ) {
+			if ( ! is_array( $msg ) ) {
+				continue;
+			}
+			$role    = isset( $msg['role'] ) ? (string) $msg['role'] : '';
+			$content = $msg['content'] ?? '';
+			$text    = is_string( $content ) ? $content : '';
+			if ( 'system' === $role ) {
+				$system = $text;
+			} elseif ( 'user' === $role && '' !== $text ) {
+				$user = $text;
+			} elseif ( 'assistant' === $role && '' === $user && '' !== $text ) {
+				$user = $text;
+			}
+		}
+
+		$out = array(
+			'contents' => array(
+				array(
+					'role'  => 'user',
+					'parts' => array(
+						array( 'text' => $user ),
+					),
+				),
+			),
+		);
+		if ( '' !== $system ) {
+			$out['systemInstruction'] = array(
+				'parts' => array(
+					array( 'text' => $system ),
+				),
+			);
+		}
+
+		$gen = array();
+		if ( isset( $body['temperature'] ) ) {
+			$gen['temperature'] = max( 0.0, min( 2.0, (float) $body['temperature'] ) );
+		}
+		if ( ! empty( $body['max_tokens'] ) ) {
+			$gen['maxOutputTokens'] = max( 16, min( 8192, (int) $body['max_tokens'] ) );
+		}
+		if ( $gen ) {
+			$out['generationConfig'] = $gen;
+		}
+		return $out;
+	}
+
+	/**
+	 * Map Gemini JSON to OpenAI-style response for extract_message_text().
+	 *
+	 * @param array<string,mixed> $data Gemini API response.
+	 * @return array<string,mixed>
+	 */
+	private static function normalize_gemini_response( array $data ): array {
+		return array(
+			'choices' => array(
+				array(
+					'message' => array(
+						'content' => self::extract_gemini_text( $data ),
+					),
+				),
+			),
+		);
+	}
+
+	/**
+	 * @param array<string,mixed> $data Gemini API response.
+	 */
+	private static function extract_gemini_text( array $data ): string {
+		if ( empty( $data['candidates'] ) || ! is_array( $data['candidates'] ) ) {
+			return '';
+		}
+		foreach ( $data['candidates'] as $candidate ) {
+			if ( ! is_array( $candidate ) || empty( $candidate['content']['parts'] ) || ! is_array( $candidate['content']['parts'] ) ) {
+				continue;
+			}
+			$parts = array();
+			foreach ( $candidate['content']['parts'] as $part ) {
+				if ( is_array( $part ) && isset( $part['text'] ) && is_string( $part['text'] ) && '' !== trim( $part['text'] ) ) {
+					$parts[] = trim( $part['text'] );
+				}
+			}
+			if ( $parts ) {
+				return trim( implode( "\n", $parts ) );
+			}
+		}
+		return '';
 	}
 
 	/**
@@ -833,24 +1066,38 @@ class Shojaei_SEO_AI_Client {
 	 * @param array<string,mixed>  $data JSON.
 	 * @param string               $raw  Body.
 	 */
-	private static function http_error_message( int $code, array $data, string $raw ): string {
-		$api = '';
+	private static function http_error_message( int $code, array $data, string $raw, string $route = '' ): string {
+		$route = '' !== $route ? sanitize_key( $route ) : self::provider();
+		$api   = '';
 		if ( isset( $data['error']['message'] ) ) {
 			$api = (string) $data['error']['message'];
 		} elseif ( isset( $data['message'] ) ) {
 			$api = (string) $data['message'];
 		}
-		if ( 401 === $code ) {
+		$status = isset( $data['error']['status'] ) ? (string) $data['error']['status'] : '';
+		if ( 401 === $code || ( self::PROVIDER_GEMINI === $route && 'UNAUTHENTICATED' === $status ) ) {
+			if ( self::PROVIDER_GEMINI === $route ) {
+				return __( 'کلید Gemini نامعتبر است. کلید را از Google AI Studio بگیرید و دوباره ذخیره کنید.', 'shojaei-seo-for-woo' );
+			}
 			return __( 'کلید API نامعتبر است. Provider و کلید را در تنظیمات بررسی کنید.', 'shojaei-seo-for-woo' );
 		}
-		if ( 403 === $code ) {
+		if ( 403 === $code || ( self::PROVIDER_GEMINI === $route && 'PERMISSION_DENIED' === $status ) ) {
+			if ( self::PROVIDER_GEMINI === $route ) {
+				return __( 'دسترسی Gemini رد شد. کلید API یا محدودیت Free Tier را در Google AI Studio بررسی کنید.', 'shojaei-seo-for-woo' );
+			}
 			if ( self::PROVIDER_GROQ === self::provider() ) {
 				return __( 'Groq از IP سرور Relay دسترسی را مسدود کرده (403). OpenRouter را انتخاب کنید یا کلید OpenRouter بگیرید — همان مدل Llama روی OpenRouter موجود است.', 'shojaei-seo-for-woo' );
 			}
 			return __( 'سرور واسط درخواست را رد کرد (403). پیکربندی Relay را بررسی کنید.', 'shojaei-seo-for-woo' );
 		}
-		if ( 429 === $code ) {
+		if ( 429 === $code || 'RESOURCE_EXHAUSTED' === $status ) {
+			if ( self::PROVIDER_GEMINI === $route ) {
+				return __( 'سقف Free Tier Gemini پر شده. چند دقیقه صبر کنید یا مدل سبک‌تر (Flash Lite) انتخاب کنید.', 'shojaei-seo-for-woo' );
+			}
 			return __( 'سقف رایگان درخواست پر شده. چند دقیقه صبر کنید یا مدل سبک‌تر انتخاب کنید.', 'shojaei-seo-for-woo' );
+		}
+		if ( self::PROVIDER_GEMINI === $route && 'INVALID_ARGUMENT' === $status ) {
+			return __( 'درخواست Gemini نامعتبر است. مدل انتخاب‌شده یا محتوای درخواست را بررسی کنید.', 'shojaei-seo-for-woo' );
 		}
 		if ( $api ) {
 			return sprintf(
@@ -897,7 +1144,7 @@ class Shojaei_SEO_AI_Client {
 				$val = self::map_model_to_provider( $val, $prov );
 			}
 			if ( 'provider' === $k ) {
-				$val = self::PROVIDER_OPENROUTER === sanitize_key( $val ) ? self::PROVIDER_OPENROUTER : self::PROVIDER_GROQ;
+				$val = self::normalize_provider( $val );
 			}
 			update_option( $opt, sanitize_text_field( $val ), false );
 		}

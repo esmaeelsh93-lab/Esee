@@ -495,6 +495,21 @@ class Shojaei_SEO_Activator {
 		}
 
 		update_option( 'shojaei_seo_ai_migrated', 'yes', false );
+
+		if ( class_exists( 'Shojaei_SEO_AI_Client' ) ) {
+			$stored = sanitize_key( (string) get_option( 'shojaei_seo_ai_provider', '' ) );
+			if ( 'groq' === $stored ) {
+				update_option( 'shojaei_seo_ai_provider', 'openrouter', false );
+				$model = trim( (string) get_option( 'shojaei_seo_ai_model', '' ) );
+				if ( '' !== $model ) {
+					update_option(
+						'shojaei_seo_ai_model',
+						Shojaei_SEO_AI_Client::map_model_to_provider( $model, 'openrouter' ),
+						false
+					);
+				}
+			}
+		}
 	}
 
 	/**

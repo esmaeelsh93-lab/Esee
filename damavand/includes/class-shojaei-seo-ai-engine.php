@@ -85,6 +85,7 @@ class Shojaei_SEO_AI_Engine {
 				'nonce'   => wp_create_nonce( 'shojaei_ai' ),
 				'enabled'   => Shojaei_SEO_AI_Client::is_configured(),
 				'draftMode' => class_exists( 'Shojaei_SEO_Store_Profile' ) && Shojaei_SEO_Store_Profile::draft_mode(),
+				'modelPresets' => Shojaei_SEO_AI_Client::model_presets(),
 				'i18n'      => array(
 					'working'   => __( 'در حال تولید…', 'shojaei-seo-for-woo' ),
 					'error'     => __( 'خطا در ارتباط با سرور.', 'shojaei-seo-for-woo' ),

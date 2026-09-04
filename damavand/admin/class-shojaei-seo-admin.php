@@ -670,7 +670,7 @@ JS;
 				}
 				if ( 'shojaei_seo_ai_provider' === $key ) {
 					$value = sanitize_key( $value );
-					$value = in_array( $value, array( 'groq', 'openrouter' ), true ) ? $value : 'openrouter';
+					$value = Shojaei_SEO_AI_Client::normalize_provider( $value );
 					update_option( $key, $value, false );
 					continue;
 				}
