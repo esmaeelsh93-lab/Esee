@@ -858,7 +858,11 @@
 				action: 'damavand_seo_score_apply_tpl',
 				nonce: damavandSeoScore.nonce,
 				post_id: parseInt($b.data('post-id'), 10) || 0,
-				force: force ? 1 : 0
+				force: force ? 1 : 0,
+				title: ($('#title').val() || '').toString(),
+				focus: ($('#dm-score-focus').val() || '').toString(),
+				excerpt: clip(readExcerpt(), 8000),
+				content: clip(readContent(), 20000)
 			}).done(function (res) {
 				if (!res || !res.success || !res.data) {
 					$('#dm-score-status').text((res && res.data && res.data.message) || damavandSeoScore.i18n.error);

@@ -965,29 +965,15 @@ class Shojaei_SEO_AI_Client {
 	 */
 	public static function style_hint( int $seed = 0 ): string {
 		unset( $seed );
-		if ( class_exists( 'Shojaei_SEO_Store_Profile' ) ) {
-			return Shojaei_SEO_Store_Profile::writing_style_hint();
-		}
-		return 'لحن صمیمی فروشگاهی';
+		return '';
 	}
 
 	/**
 	 * System prompt for Persian SEO.
 	 */
 	public static function default_system_prompt(): string {
-		$base = 'تو کپی‌رایتر حرفه‌ای فروشگاه ایرانی و متخصص سئو ووکامرس هستی. '
-			. 'متن را مثل ChatGPT انسانی و متنوع بنویس؛ از کلیشه‌های تکراری فروشگاهی (مثل «بهترین انتخاب»، «با کیفیت عالی»، «همین حالا بخرید» در هر پاراگراف) پرهیز کن. '
-			. 'هر محصول باید ساختار و زاویه نوشتن مخصوص خودش را داشته باشد — کپی کردن اسکلت ثابت برای همه محصولات ممنوع است. '
-			. 'خروجی فقط فارسی روان. فرمت خواسته‌شده را دقیق رعایت کن. بدون توضیح اضافه؛ بدون markdown مگر صریحاً HTML خواسته شده باشد. '
-			. 'هرگز اطلاعات ساختگی درباره قیمت، گارانتی یا ارسال ننویس مگر در داده‌های محصول آمده باشد.';
-		if ( class_exists( 'Shojaei_SEO_Store_Profile' ) ) {
-			$base .= "\n\n" . Shojaei_SEO_Store_Profile::prompt_block();
-			$extras = Shojaei_SEO_Store_Profile::system_extras();
-			if ( '' !== $extras ) {
-				$base .= "\n\n" . $extras;
-			}
-		}
-		return $base;
+		return 'تو دستیار سئو فروشگاه ایرانی هستی. فقط Alt فارسی تصویر یا JSON کلمات مرتبط تولید کن. '
+			. 'خروجی دقیق، کوتاه و فارسی. بدون توضیح اضافه و بدون markdown.';
 	}
 
 	/**

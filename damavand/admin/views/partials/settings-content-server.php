@@ -26,68 +26,9 @@ foreach ( $presets as $rows ) {
 	}
 }
 $custom_model = in_array( $model, $known_ids, true ) ? '' : $model;
-$store_name   = Shojaei_SEO_Store_Profile::name();
-$store_city   = Shojaei_SEO_Store_Profile::city();
-$store_niche  = Shojaei_SEO_Store_Profile::niche();
-$store_about  = Shojaei_SEO_Store_Profile::about();
-$store_suffix = (string) Shojaei_SEO_Helpers::get_option( Shojaei_SEO_Store_Profile::OPT_SUFFIX, 'خرید از {store}' );
-$store_tone   = (string) Shojaei_SEO_Helpers::get_option( Shojaei_SEO_Store_Profile::OPT_TONE, 'friendly' );
-$store_voice  = Shojaei_SEO_Store_Profile::voice();
-$store_neg    = Shojaei_SEO_Store_Profile::negative_rules();
-$store_samples = Shojaei_SEO_Store_Profile::samples();
 $relay_https  = (string) Shojaei_SEO_Helpers::get_option( Shojaei_SEO_AI_Client::OPT_RELAY_HTTPS, '' );
 $relay_backup = (string) Shojaei_SEO_Helpers::get_option( Shojaei_SEO_AI_Client::OPT_RELAY_BACKUP, '' );
 ?>
-
-<div class="shojaei-content-server" id="shojaei-store-profile-fields" style="margin-bottom:24px;">
-	<h3 style="margin:0 0 8px;font-size:15px;"><?php esc_html_e( 'پروفایل فروشگاه', 'shojaei-seo-for-woo' ); ?></h3>
-	<p class="description"><?php esc_html_e( 'این اطلاعات در پرامپت‌های Alt و کلمات مرتبط استفاده می‌شود.', 'shojaei-seo-for-woo' ); ?></p>
-	<div class="shojaei-settings-grid" style="margin-top:12px;">
-		<div class="shojaei-form-group">
-			<label for="shojaei_seo_store_name"><?php esc_html_e( 'نام فروشگاه / برند', 'shojaei-seo-for-woo' ); ?></label>
-			<input type="text" id="shojaei_seo_store_name" name="shojaei_seo_store_name" value="<?php echo esc_attr( $store_name ); ?>" class="regular-text" />
-		</div>
-		<div class="shojaei-form-group">
-			<label for="shojaei_seo_store_city"><?php esc_html_e( 'شهر', 'shojaei-seo-for-woo' ); ?></label>
-			<input type="text" id="shojaei_seo_store_city" name="shojaei_seo_store_city" value="<?php echo esc_attr( $store_city ); ?>" class="regular-text" />
-		</div>
-		<div class="shojaei-form-group">
-			<label for="shojaei_seo_store_niche"><?php esc_html_e( 'حوزه کاری', 'shojaei-seo-for-woo' ); ?></label>
-			<input type="text" id="shojaei_seo_store_niche" name="shojaei_seo_store_niche" value="<?php echo esc_attr( $store_niche ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'مثلاً: پوشاک ورزشی، لوازم خانگی…', 'shojaei-seo-for-woo' ); ?>" />
-		</div>
-		<div class="shojaei-form-group">
-			<label for="shojaei_seo_store_tone"><?php esc_html_e( 'لحن محتوا', 'shojaei-seo-for-woo' ); ?></label>
-			<select id="shojaei_seo_store_tone" name="shojaei_seo_store_tone">
-				<option value="friendly" <?php selected( $store_tone, 'friendly' ); ?>><?php esc_html_e( 'صمیمی فروشگاهی', 'shojaei-seo-for-woo' ); ?></option>
-				<option value="formal" <?php selected( $store_tone, 'formal' ); ?>><?php esc_html_e( 'رسمی و حرفه‌ای', 'shojaei-seo-for-woo' ); ?></option>
-				<option value="expert" <?php selected( $store_tone, 'expert' ); ?>><?php esc_html_e( 'کارشناسی و دقیق', 'shojaei-seo-for-woo' ); ?></option>
-				<option value="comparison" <?php selected( $store_tone, 'comparison' ); ?>><?php esc_html_e( 'مقایسه‌ای و انتخابی', 'shojaei-seo-for-woo' ); ?></option>
-				<option value="guide" <?php selected( $store_tone, 'guide' ); ?>><?php esc_html_e( 'راهنمای خرید', 'shojaei-seo-for-woo' ); ?></option>
-			</select>
-		</div>
-	</div>
-	<div class="shojaei-form-group" style="margin-top:12px;">
-		<label for="shojaei_seo_store_voice"><?php esc_html_e( 'لحن و قوانین برند', 'shojaei-seo-for-woo' ); ?></label>
-		<textarea id="shojaei_seo_store_voice" name="shojaei_seo_store_voice" rows="4" class="large-text" placeholder="<?php esc_attr_e( 'مثلاً: با مشتری مثل آدم حرف بزن، از «شما» استفاده کن…', 'shojaei-seo-for-woo' ); ?>"><?php echo esc_textarea( $store_voice ); ?></textarea>
-	</div>
-	<div class="shojaei-form-group">
-		<label for="shojaei_seo_store_negative_rules"><?php esc_html_e( 'قوانین منفی (ممنوعیت‌ها)', 'shojaei-seo-for-woo' ); ?></label>
-		<textarea id="shojaei_seo_store_negative_rules" name="shojaei_seo_store_negative_rules" rows="3" class="large-text"><?php echo esc_textarea( $store_neg ); ?></textarea>
-	</div>
-	<div class="shojaei-form-group">
-		<label for="shojaei_seo_store_samples"><?php esc_html_e( 'نمونه متن واقعی (۱–۲ پارagraph)', 'shojaei-seo-for-woo' ); ?></label>
-		<textarea id="shojaei_seo_store_samples" name="shojaei_seo_store_samples" rows="5" class="large-text"><?php echo esc_textarea( $store_samples ); ?></textarea>
-	</div>
-	<div class="shojaei-form-group" style="margin-top:12px;">
-		<label for="shojaei_seo_store_meta_suffix"><?php esc_html_e( 'الگوی انتهای عنوان متا', 'shojaei-seo-for-woo' ); ?></label>
-		<input type="text" id="shojaei_seo_store_meta_suffix" name="shojaei_seo_store_meta_suffix" value="<?php echo esc_attr( $store_suffix ); ?>" class="regular-text" dir="rtl" />
-		<p class="description"><?php esc_html_e( 'توکن‌ها: {store} {city} {niche} {product} {site}', 'shojaei-seo-for-woo' ); ?></p>
-	</div>
-	<div class="shojaei-form-group">
-		<label for="shojaei_seo_store_about"><?php esc_html_e( 'درباره فروشگاه (اختیاری)', 'shojaei-seo-for-woo' ); ?></label>
-		<textarea id="shojaei_seo_store_about" name="shojaei_seo_store_about" rows="3" class="large-text"><?php echo esc_textarea( $store_about ); ?></textarea>
-	</div>
-</div>
 
 <div class="shojaei-content-server" id="shojaei-content-server-fields">
 	<div class="shojaei-gsc-status <?php echo $enabled && $configured ? ( $health_ok ? 'is-connected' : 'is-disconnected' ) : 'is-disconnected'; ?>" id="shojaei-ai-status-box" style="margin-bottom:16px;">
@@ -96,7 +37,7 @@ $relay_backup = (string) Shojaei_SEO_Helpers::get_option( Shojaei_SEO_AI_Client:
 			<strong id="shojaei-ai-status-label">
 				<?php
 				if ( ! $enabled ) {
-					esc_html_e( 'تولید محتوا خاموش است', 'shojaei-seo-for-woo' );
+					esc_html_e( 'هوش مصنوعی خاموش است', 'shojaei-seo-for-woo' );
 				} elseif ( ! $configured ) {
 					esc_html_e( 'کلید API ذخیره نشده', 'shojaei-seo-for-woo' );
 				} elseif ( $health_ok ) {

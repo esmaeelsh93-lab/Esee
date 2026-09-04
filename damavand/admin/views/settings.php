@@ -15,7 +15,7 @@ defined( 'ABSPATH' ) || exit;
 		<h3><?php esc_html_e( 'تنظیمات', 'shojaei-seo-for-woo' ); ?></h3>
 		<p class="shojaei-desc"><?php esc_html_e( 'هر بخش را باز کنید، سوئیچ‌ها را تنظیم کنید، پایین صفحه ذخیره کنید.', 'shojaei-seo-for-woo' ); ?></p>
 		<p class="shojaei-settings-jump" style="margin-top:8px;">
-			<a href="#shojaei-content-server"><strong><?php esc_html_e( 'سرور تولید محتوا', 'shojaei-seo-for-woo' ); ?></strong></a>
+			<a href="#shojaei-content-server"><strong><?php esc_html_e( 'هوش مصنوعی (OpenRouter)', 'shojaei-seo-for-woo' ); ?></strong></a>
 			<?php esc_html_e( ' — OpenRouter (Alt + کلمات مرتبط)', 'shojaei-seo-for-woo' ); ?>
 		</p>
 	</div>
@@ -193,7 +193,7 @@ defined( 'ABSPATH' ) || exit;
 		<div class="shojaei-accordion-item" data-accordion="set-content" id="shojaei-acc-content-server">
 			<button class="shojaei-accordion-header" type="button" aria-expanded="false">
 				<span class="shojaei-accordion-icon shojaei-icon-orange"><span class="dashicons dashicons-edit"></span></span>
-				<span class="shojaei-accordion-title"><?php esc_html_e( '۶ · سرور تولید محتوا', 'shojaei-seo-for-woo' ); ?></span>
+				<span class="shojaei-accordion-title"><?php esc_html_e( '۶ · هوش مصنوعی (Alt + کلمات مرتبط)', 'shojaei-seo-for-woo' ); ?></span>
 				<span class="shojaei-accordion-meta"><?php esc_html_e( 'دماوند', 'shojaei-seo-for-woo' ); ?></span>
 				<span class="shojaei-accordion-chevron dashicons dashicons-arrow-down-alt2"></span>
 			</button>
@@ -201,7 +201,7 @@ defined( 'ABSPATH' ) || exit;
 				<div class="shojaei-accordion-content">
 					<p class="shojaei-module-note"><?php esc_html_e( 'Alt تصاویر و کلمات مرتبط با OpenRouter (مدل‌های رایگان).', 'shojaei-seo-for-woo' ); ?></p>
 					<p class="shojaei-settings-jump">
-						<a href="#shojaei-content-server"><?php esc_html_e( 'تنظیم Provider، کلید API، تست اتصال و llms.txt ↓', 'shojaei-seo-for-woo' ); ?></a>
+						<a href="#shojaei-content-server"><?php esc_html_e( 'تنظیم OpenRouter، کلید API و تست اتصال ↓', 'shojaei-seo-for-woo' ); ?></a>
 					</p>
 				</div>
 			</div>
@@ -897,7 +897,7 @@ defined( 'ABSPATH' ) || exit;
 		<details class="shojaei-details" id="shojaei-content-server-details">
 			<summary class="shojaei-details-summary">
 				<span class="dashicons dashicons-edit"></span>
-				<?php esc_html_e( 'سرور تولید محتوا', 'shojaei-seo-for-woo' ); ?>
+				<?php esc_html_e( 'هوش مصنوعی (OpenRouter)', 'shojaei-seo-for-woo' ); ?>
 			</summary>
 			<div class="shojaei-details-body">
 				<?php require DAMAVAND_SEO_DIR . 'admin/views/partials/settings-content-server.php'; ?>

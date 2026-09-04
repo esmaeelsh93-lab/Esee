@@ -962,8 +962,9 @@ $serp_url  = (string) get_permalink( $post );
 				'i18n'    => array(
 					'error'       => __( 'خطا در محاسبه امتیاز.', 'shojaei-seo-for-woo' ),
 					'applied'     => __( 'فینگلیش اعمال شد. ذخیره کنید تا ۳۰۱ ساخته شود.', 'shojaei-seo-for-woo' ),
-					'tplOk'       => __( 'قالب در فیلدهای خالی قرار گرفت. ذخیره کنید.', 'shojaei-seo-for-woo' ),
+					'tplOk'       => __( 'پیشنهاد متا در فیلدهای خالی قرار گرفت. ذخیره کنید.', 'shojaei-seo-for-woo' ),
 					'tplFill'     => __( 'فیلدها پر بودند؛ برای جایگزینی دوباره کلیک کنید.', 'shojaei-seo-for-woo' ),
+					'tplNeedCopy' => __( 'ابتدا توضیح کوتاه یا توضیح کامل محصول را بنویسید.', 'shojaei-seo-for-woo' ),
 					'linkLoading' => __( 'در حال یافتن پیشنهاد…', 'shojaei-seo-for-woo' ),
 					'linkInject'  => __( 'در حال درج لینک…', 'shojaei-seo-for-woo' ),
 					'linkNone'    => __( 'پیشنهاد مرتبطی پیدا نشد.', 'shojaei-seo-for-woo' ),
@@ -1299,25 +1300,47 @@ $serp_url  = (string) get_permalink( $post );
 		if ( $post_id < 1 || ! current_user_can( 'edit_post', $post_id ) ) {
 			wp_send_json_error( array( 'message' => __( 'دسترسی ندارید.', 'shojaei-seo-for-woo' ) ), 403 );
 		}
-		if ( ! class_exists( 'Damavand_SEO_Templates' ) ) {
-			wp_send_json_error( array( 'message' => __( 'قالب‌ها در دسترس نیست.', 'shojaei-seo-for-woo' ) ) );
+		if ( ! class_exists( 'Damavand_Meta_Suggester' ) ) {
+			wp_send_json_error( array( 'message' => __( 'پیشنهاد سیستمی متا در دسترس نیست.', 'shojaei-seo-for-woo' ) ) );
 		}
 
-		$force = ! empty( $_POST['force'] );
-		$title_raw = Damavand_SEO_Templates::get_raw_template_for_post( $post_id, 'title' );
-		$desc_raw  = Damavand_SEO_Templates::get_raw_template_for_post( $post_id, 'desc' );
-		$preview   = array(
-			'title' => Damavand_SEO_Templates::expand( $title_raw, $post_id ),
-			'desc'  => Damavand_SEO_Templates::expand( $desc_raw, $post_id ),
-		);
+		$force   = ! empty( $_POST['force'] );
+		$title   = isset( $_POST['title'] ) ? sanitize_text_field( wp_unslash( $_POST['title'] ) ) : ''; // phpcs:ignore
+		$focus   = isset( $_POST['focus'] ) ? sanitize_text_field( wp_unslash( $_POST['focus'] ) ) : ''; // phpcs:ignore
+		$excerpt = isset( $_POST['excerpt'] ) ? wp_kses_post( wp_unslash( $_POST['excerpt'] ) ) : ''; // phpcs:ignore
+		$content = isset( $_POST['content'] ) ? wp_kses_post( wp_unslash( $_POST['content'] ) ) : ''; // phpcs:ignore
+
+		if ( '' === $title ) {
+			$title = (string) get_the_title( $post_id );
+		}
+		if ( '' === $excerpt ) {
+			$post = get_post( $post_id );
+			$excerpt = $post ? (string) $post->post_excerpt : '';
+		}
+		if ( '' === $content ) {
+			$post = get_post( $post_id );
+			$content = $post ? (string) $post->post_content : '';
+		}
+		if ( '' === $focus && class_exists( 'Damavand_SEO_Meta' ) ) {
+			$focus = Damavand_SEO_Meta::get_focus_keyword( $post_id, true );
+		}
+
+		$suggested = Damavand_Meta_Suggester::suggest( $post_id, $excerpt, $content, $focus, $title );
+		if ( '' === trim( $suggested['title'] ) && '' === trim( $suggested['desc'] ) ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'ابتدا توضیح کوتاه یا توضیح کامل محصول را بنویسید.', 'shojaei-seo-for-woo' ),
+				)
+			);
+		}
 
 		wp_send_json_success(
 			array(
-				'title_raw' => $title_raw,
-				'desc_raw'  => $desc_raw,
-				'preview'   => $preview,
+				'title_raw' => $suggested['title'],
+				'desc_raw'  => $suggested['desc'],
+				'preview'   => $suggested,
 				'force'     => $force,
-				'message'   => __( 'قالب آماده است.', 'shojaei-seo-for-woo' ),
+				'message'   => __( 'پیشنهاد سیستمی از توضیحات آماده است.', 'shojaei-seo-for-woo' ),
 			)
 		);
 	}

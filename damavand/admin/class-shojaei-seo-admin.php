@@ -716,10 +716,6 @@ JS;
 			update_option( Shojaei_SEO_AI_Client::OPT_RELAY_BACKUP, $lines, false );
 		}
 
-		if ( class_exists( 'Shojaei_SEO_Store_Profile' ) ) {
-			Shojaei_SEO_Store_Profile::save_from_post( wp_unslash( $_POST ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitized inside.
-		}
-
 		$textareas = array(
 			'shojaei_seo_link_keyword_blacklist',
 			'shojaei_seo_link_keyword_whitelist',

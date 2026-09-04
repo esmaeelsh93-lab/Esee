@@ -67,7 +67,8 @@ $focus_display = $focus !== '' ? $focus : (string) $post->post_title;
 				<?php endif; ?>
 
 				<p class="dm-score__tpl-row">
-					<button type="button" class="button" id="dm-score-apply-tpl"><?php esc_html_e( 'اعمال قالب پیش‌فرض', 'shojaei-seo-for-woo' ); ?></button>
+					<button type="button" class="button" id="dm-score-apply-tpl"><?php esc_html_e( 'پیشنهاد متا از توضیحات', 'shojaei-seo-for-woo' ); ?></button>
+					<em class="dm-score__meta"><?php esc_html_e( 'بدون هوش مصنوعی — از توضیح کوتاه/کامل محصول', 'shojaei-seo-for-woo' ); ?></em>
 				</p>
 				<p class="dm-score__status" id="dm-score-status" aria-live="polite"></p>
 			</div>

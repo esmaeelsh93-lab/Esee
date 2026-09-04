@@ -4,7 +4,7 @@ Tags: seo, woocommerce, redirect, inventory, out-of-stock, internal-links
 Requires at least: 6.0
 Tested up to: 6.7
 Requires PHP: 8.0
-Stable tag: 1.60.0
+Stable tag: 1.60.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -65,6 +65,11 @@ Inventory-aware SEO — تصمیم‌گیری سئو بر اساس موجودی 
 با آپلود فایل JSON مربوط به Service Account — بدون OAuth و بدون Refresh Token.
 
 == Changelog ==
+
+= 1.60.1 =
+* حذف کامل «پروفایل فروشگاه» از تنظیمات (لحن، نمونه متن، قوانین برند — دیگر برای AI استفاده نمی‌شود)
+* پیشنهاد سیستمی عنوان/توضیح متا از توضیح کوتاه و کامل محصول (بدون AI) — دکمه «پیشنهاد متا از توضیحات»
+* پرامپت AI فقط Alt + کلمات مرتبط؛ بدون پروفایل فروشگاه
 
 = 1.60.0 =
 * فقط OpenRouter با مدل‌های رایگان (:free) — Gemini و Groq از UI حذف شد
